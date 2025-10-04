@@ -30,8 +30,11 @@ public class Launcher extends Mechanism {
 	 * Aims the launcher at the target using feedback from the TrajectoryEngine.
 	 * This is invoked by the {@link Launcher#ready()} method which should be called
 	 * repeatedly in the main robot loop when aiming.
+	 * <p>
+	 * This method is public so it can be called independently when you want to
+	 * maintain aim and spin-up without controlling the spindex.
 	 */
-	private void aim() {
+	public void aim() {
 		TrajectoryEngine.AimingOffsets offsets = trajectoryEngine.getAimingOffsets();
 		
 		// If we don't have a target, do not adjust.
@@ -91,11 +94,25 @@ public class Launcher extends Mechanism {
 	
 	/**
 	 * Readies the launcher to fire.
+	 * This spins up the belt, aims, and prepares the spindex.
+	 * Call this when you want to prepare for a single shot.
 	 */
 	public void ready() {
 		belt.spinUp();
 		aim();
 		spindex.rotateNextArtifactToExit();
+	}
+	
+	/**
+	 * Maintains the launcher in a ready state without controlling the spindex.
+	 * This keeps the belt spinning and maintains aim, but leaves the spindex
+	 * free to be controlled by other commands (e.g., rapid fire).
+	 * <p>
+	 * Use this in loops when the spindex is being controlled separately.
+	 */
+	public void maintainReady() {
+		belt.spinUp(); // spinUp() is safe to call repeatedly - it checks internally
+		aim();
 	}
 	
 	public void stop() {
