@@ -9,6 +9,8 @@ import com.pedropathing.paths.PathChain;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 
+import java.util.ArrayList;
+
 /**
  * Centralized registry for all autonomous paths with automatic mirroring.
  * <p>
@@ -238,11 +240,11 @@ public class PathRegistry {
 	 */
 	private BezierCurve mirrorBezierCurve(BezierCurve curve) {
 		// Get the control points from the curve and mirror each one
-		Pose[] controlPoints = curve.getControlPoints();
-		Pose[] mirroredPoints = new Pose[controlPoints.length];
+		ArrayList<Pose> controlPoints = curve.getControlPoints();
+		Pose[] mirroredPoints = new Pose[controlPoints.size()];
 		
-		for (int i = 0; i < controlPoints.length; i++) {
-			mirroredPoints[i] = mirror(controlPoints[i]);
+		for (int i = 0; i < controlPoints.size(); i++) {
+			mirroredPoints[i] = mirror(controlPoints.get(i));
 		}
 		
 		return new BezierCurve(mirroredPoints);
