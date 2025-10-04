@@ -53,6 +53,12 @@ public class MainAuto extends OpMode {
 		
 		// Match settings will be configured by the driver during init_loop
 		matchSettings = new MatchSettings(blackboard);
+		
+		// Initialize blackboard with default values to ensure clean state
+		// This prevents stale data from previous runs from affecting the current run
+		matchSettings.setAllianceColor(MatchSettings.AllianceColor.BLUE);
+		matchSettings.setAutoStartingPosition(MatchSettings.AutoStartingPosition.CLOSE);
+		
 		wizard = new MatchConfigurationWizard(matchSettings, gamepad1, logging);
 		
 		// Initialize robot mechanisms
@@ -77,29 +83,31 @@ public class MainAuto extends OpMode {
 	 */
 	@Override
 	public void start() {
-		// Set up the drivetrain at the correct starting position
-		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getAutonomousStartingPose());
-		
 		// Initialize all mechanisms
 		mechanisms.init();
 		
+		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getAutonomousStartingPose());
 		// Build the autonomous sequence based on configuration
 		// This is where the magic happens - the path registry automatically
 		// handles alliance mirroring, and the sequence builder creates the
 		// entire autonomous routine declaratively
-		pathRegistry = new PathRegistry(mechanisms.drivetrain.follower, matchSettings);
 		
-		if (matchSettings.getAutoStartingPosition() == MatchSettings.AutoStartingPosition.FAR) {
+		pathRegistry = new PathRegistry(mechanisms.drivetrain.follower,
+				matchSettings);
+		
+		if (matchSettings.getAutoStartingPosition() ==
+				MatchSettings.AutoStartingPosition.FAR) {
 			autonomousSequence = SequenceBuilder.buildFarSequence(pathRegistry);
 		} else {
 			autonomousSequence = SequenceBuilder.buildCloseSequence(pathRegistry);
 		}
 		
+		
 		// Start the sequence
-		autonomousSequence.start(mechanisms);
+		// autonomousSequence.start(mechanisms);
 		
 		// Start the opmode timer
-		opmodeTimer.resetTimer();
+		// opmodeTimer.resetTimer();
 	}
 	
 	/**
@@ -107,6 +115,8 @@ public class MainAuto extends OpMode {
 	 */
 	@Override
 	public void loop() {
+		mechanisms.drivetrain.follower.update();
+		
 		// Update all mechanisms (sensors, motors, etc.)
 		mechanisms.update();
 		
@@ -147,8 +157,10 @@ public class MainAuto extends OpMode {
 		logging.addLine("=== SEQUENCE PROGRESS ===");
 		logging.addData("Current Action", autonomousSequence.getCurrentActionName());
 		logging.addData("Action",
-				(autonomousSequence.getCurrentActionIndex() + 1) + " / " + autonomousSequence.getTotalActions());
-		logging.addData("Progress", String.format(Locale.US, "%.1f%%", autonomousSequence.getProgressPercent()));
+				(autonomousSequence.getCurrentActionIndex() + 1) + " / " +
+						autonomousSequence.getTotalActions());
+		logging.addData("Progress", String.format(Locale.US, "%.1f%%",
+				autonomousSequence.getProgressPercent()));
 		
 		// Robot state
 		logging.addLine("");
@@ -157,7 +169,9 @@ public class MainAuto extends OpMode {
 		logging.addNumber("Heading (deg)", Math.toDegrees(mechanisms.drivetrain.follower.getPose().getHeading()));
 		
 		if (mechanisms.drivetrain.follower.isBusy()) {
-			logging.addData("Target Position", mechanisms.drivetrain.follower.getCurrentPath().endPose());
+			logging.addData("Path End Position", mechanisms.drivetrain.follower.getCurrentPath().endPose());
+			logging.addData("Path Beginning Position",
+					mechanisms.drivetrain.follower.getCurrentPath().getPoseInformation(0).getPose());
 		}
 		
 		// Timing

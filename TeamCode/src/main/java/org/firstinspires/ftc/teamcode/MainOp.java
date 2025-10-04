@@ -55,6 +55,9 @@ public class MainOp extends OpMode {
 		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower, matchSettings);
 		subController = new Controller(gamepad2, mechanisms.drivetrain.follower, matchSettings);
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
+		
+		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getTeleOpStartingPose());
+		mechanisms.drivetrain.switchToManual();
 	}
 	
 	/**
@@ -62,7 +65,6 @@ public class MainOp extends OpMode {
 	 */
 	@Override
 	public final void init_loop() {
-		// draw the robot at its starting position
 		logging.drawDebug(mechanisms.drivetrain.follower);
 	}
 	
@@ -71,6 +73,7 @@ public class MainOp extends OpMode {
 	 */
 	@Override
 	public final void start() {
+		// Initialize mechanisms and start teleop drive
 		ifMechanismValid(mechanisms, MechanismManager::init);
 		mechanisms.drivetrain.follower.startTeleopDrive();
 	}

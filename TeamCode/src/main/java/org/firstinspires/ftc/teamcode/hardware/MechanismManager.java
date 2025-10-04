@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.software.AlignmentEngine;
 import org.firstinspires.ftc.teamcode.software.Drivetrain;
 import org.firstinspires.ftc.teamcode.software.LimelightManager;
@@ -26,7 +25,7 @@ public class MechanismManager {
 	public final AlignmentEngine alignmentEngine;
 	
 	public MechanismManager(HardwareMap hw, MatchSettings match) {
-		drivetrain = new Drivetrain(hw, Constants.createFollower(hw), match);
+		drivetrain = new Drivetrain(hw, match);
 		
 		// Build mechanisms safely
 		Intake intake = createIntake(hw);

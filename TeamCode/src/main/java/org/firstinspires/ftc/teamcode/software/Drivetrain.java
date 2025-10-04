@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.hardware.Mechanism;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,14 +30,16 @@ public class Drivetrain extends Mechanism {
 	
 	/**
 	 * Initializes the Drivetrain and the PedroPathing Follower.
+	 * <p>
+	 * Note: Starting pose should be set by the OpMode (MainAuto or MainOp),
+	 * not in this constructor.
 	 *
 	 * @param hardwareMap The robot's hardware map.
 	 */
-	public Drivetrain(HardwareMap hardwareMap, Follower follower, MatchSettings matchSettings) {
+	public Drivetrain(HardwareMap hardwareMap, MatchSettings matchSettings) {
 		// The Constants class now holds all hardware and tuning configurations.
-		this.follower = follower;
-		follower.setStartingPose(matchSettings.getTeleOpStartingPose());
-		switchToManual(); // Start in manual control mode.
+		this.follower = Constants.createFollower(hardwareMap);
+		// Don't set starting pose here - let each OpMode handle it
 		
 		// Initialize the poses for each predefined position
 		positionPoses.put(Position.CLOSE_SHOOT, new Pose(60, 89, Math.toRadians(115)));
