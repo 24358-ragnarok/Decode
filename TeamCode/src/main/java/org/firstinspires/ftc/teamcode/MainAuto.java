@@ -13,6 +13,8 @@ import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 
+import java.util.Locale;
+
 /**
  * The main Autonomous script that makes the robot move by itself during the
  * Auto period of a match.
@@ -146,7 +148,7 @@ public class MainAuto extends OpMode {
 		logging.addData("Current Action", autonomousSequence.getCurrentActionName());
 		logging.addData("Action",
 				(autonomousSequence.getCurrentActionIndex() + 1) + " / " + autonomousSequence.getTotalActions());
-		logging.addData("Progress", String.format("%.1f%%", autonomousSequence.getProgressPercent()));
+		logging.addData("Progress", String.format(Locale.US, "%.1f%%", autonomousSequence.getProgressPercent()));
 		
 		// Robot state
 		logging.addLine("");

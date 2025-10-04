@@ -71,7 +71,7 @@ public class MainOp extends OpMode {
 	 */
 	@Override
 	public final void start() {
-		ifMechanismValid(mechanisms, m -> m.init());
+		ifMechanismValid(mechanisms, MechanismManager::init);
 		mechanisms.drivetrain.follower.startTeleopDrive();
 	}
 	

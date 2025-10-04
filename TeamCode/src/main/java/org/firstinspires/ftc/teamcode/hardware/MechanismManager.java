@@ -104,9 +104,9 @@ public class MechanismManager {
 		try {
 			DcMotor right = hw.get(DcMotor.class, Settings.HardwareIDs.LAUNCHER_RIGHT);
 			DcMotor left = hw.get(DcMotor.class, Settings.HardwareIDs.LAUNCHER_LEFT);
-			Servo horiz = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_HORIZONTAL_SERVO);
-			Servo vert = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_VERTICAL_SERVO);
-			return new Launcher(spindex, right, left, horiz, vert, traj);
+			Servo horizontal = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_HORIZONTAL_SERVO);
+			Servo vertical = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_VERTICAL_SERVO);
+			return new Launcher(spindex, right, left, horizontal, vertical, traj);
 		} catch (Exception e) {
 			return null;
 		}
