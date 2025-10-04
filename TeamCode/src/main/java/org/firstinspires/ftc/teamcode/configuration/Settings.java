@@ -20,8 +20,8 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Controls {
-		public static final EnumMap<Controller.Action, Controller.Control> actionControlMap =
-				new EnumMap<>(Controller.Action.class);
+		public static final EnumMap<Controller.Action, Controller.Control> actionControlMap = new EnumMap<>(
+				Controller.Action.class);
 		
 		static {
 			// Main Controller (Driver)
@@ -65,7 +65,8 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Drive {
-		// Multiplier applied to strafe movements to compensate for mechanical differences
+		// Multiplier applied to strafe movements to compensate for mechanical
+		// differences
 		public static final double STRAFE_POWER_COEFFICIENT = 1.2;
 	}
 	
@@ -76,13 +77,17 @@ public class Settings {
 	public static class Alignment {
 		// Translational control
 		public static double MAX_TRANSLATIONAL_SPEED = 0.5; // Max drive/strafe speed when far from target (0..1)
-		public static double FULL_SPEED_DISTANCE = 30.0;   // Distance (inches) outside of which translational speed hits max
-		public static double STOP_DISTANCE = 1.0;          // Distance (inches) inside which translational speed tapers to near zero
+		public static double FULL_SPEED_DISTANCE = 30.0; // Distance (inches) outside of which translational speed hits
+		// max
+		public static double STOP_DISTANCE = 1.0; // Distance (inches) inside which translational speed tapers to near
+		// zero
 		
 		// Rotational control
 		public static double MAX_ROTATION_SPEED = 0.5; // Max rotation speed (0..1)
-		public static double FULL_SPEED_HEADING_ERROR = Math.toRadians(90); // Heading error (radians) at which rotation is full speed
-		public static double HEADING_DEADBAND = Math.toRadians(2.5); // Deadband: don't rotate if error below this (radians)
+		public static double FULL_SPEED_HEADING_ERROR = Math.toRadians(90); // Heading error (radians) at which rotation
+		// is full speed
+		public static double HEADING_DEADBAND = Math.toRadians(2.5); // Deadband: don't rotate if error below this
+		// (radians)
 	}
 	
 	/**
@@ -101,7 +106,8 @@ public class Settings {
 		public static final String INTAKE_MOTOR = "intakeMotor";
 		public static final String LAUNCHER_RIGHT = "launcherRight";
 		public static final String LAUNCHER_LEFT = "launcherLeft";
-		public static final String[] INTAKE_SERVO_ARRAY = {"intakeServoLowerLeft", "intakeServoLowerRight", "intakeServoUpperLeft", "intakeServoUpperRight"};
+		public static final String[] INTAKE_SERVO_ARRAY = {"intakeServoLowerLeft", "intakeServoLowerRight",
+				"intakeServoUpperLeft", "intakeServoUpperRight"};
 		public static final String LAUNCHER_TRANSFER_SERVO = "launcherTransferServo";
 		public static final String INTAKE_TRANSFER_SERVO = "intakeTransferServo";
 		public static final String SPINDEX_SERVO = "spindexServo";
@@ -127,7 +133,8 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Spindex {
-		public static double[] SLOT_INTAKE_POSITIONS = {0.10, 0.43, 0.77}; // Calibrated servo positions for slots at intake
+		public static double[] SLOT_INTAKE_POSITIONS = {0.10, 0.43, 0.77}; // Calibrated servo positions for slots at
+		// intake
 		public static double EXIT_OFFSET = 0.25; // Offset from intake to exit alignment
 		public static double RAPID_FIRE_COOLDOWN_MS = 200;
 		public static long EJECT_EXIT_TIME_MS = 200; // ms for ball to fully leave the spindex after servo opens
@@ -152,7 +159,8 @@ public class Settings {
 		public static double MAX_YAW = 20; // degrees right when horizontal servo is max
 		
 		public static double AIM_YAW_KP = 0.05; // Proportional gain for yaw correction
-		public static double AIM_PITCH_KP = 0.05; // TODO tune; set up limelight launcher and increase these until oscillation occurs
+		public static double AIM_PITCH_KP = 0.05; // TODO tune; set up limelight launcher and increase these until
+		// oscillation occurs
 	}
 	
 	@Configurable
@@ -174,7 +182,8 @@ public class Settings {
 		public static double MUZZLE_HEIGHT = 5; // inches, TODO: tune
 		public static double GOAL_HEIGHT = 37.5; // inches
 		/**
-		 * Note that ROTATIONAL error refers to the chassis rotation relative to the goal.
+		 * Note that ROTATIONAL error refers to the chassis rotation relative to the
+		 * goal.
 		 * YAW refers to the launcher horizontal angle
 		 * PITCH refers to the launcher vertical angle
 		 */
@@ -188,6 +197,7 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Field {
+		public static double WIDTH = 144.0; // inches
 		public static Pose RESET_POSE = new Pose(72, 72, Math.toRadians(270));
 		public static Pose RED_GOAL_POSE = new Pose(131, 137.5, Math.toRadians(225));
 		public static Pose BLUE_GOAL_POSE = new Pose(12.5, 137.5, Math.toRadians(315));
@@ -217,32 +227,12 @@ public class Settings {
 	
 	// A static class to hold all pose constants for organization.
 	public static class Autonomous {
-		// TODO TUNE ALL
+		// NOTE: BLUE alliance paths are the reference (we have a blue field for
+		// tuning).
+		// RED alliance paths are automatically mirrored by the PathRegistry.
 		// Headings are in radians. 90 degrees = Math.toRadians(90)
 		
-		// Poses for the FAR side of the field, RED alliance
-		public static class RedFar {
-			public static Pose START = new Pose(65.533, 12.244, Math.toRadians(90));
-			public static Pose PRESET_1_PREP = new Pose(35.526, 28.455, Math.toRadians(180));
-			public static Pose PRESET_1_END = new Pose(18.453, 28.628, Math.toRadians(180));
-			public static BezierCurve BEZIER_LAUNCH_1 = new BezierCurve(
-					new Pose(18.453, 28.628),
-					new Pose(64.671, 44.493),
-					new Pose(63.808, 69.499)
-			);
-			
-			public static Pose ENDING_LAUNCH_1 = new Pose(63.808, 69.499, Math.toRadians(130));
-			
-			public static Pose PRESET_2_PREP = new Pose(38.802, 54.668, Math.toRadians(180));
-			public static Pose PRESET_2_END = new Pose(18.970, 54.496, Math.toRadians(180));
-			public static Pose LAUNCH_2 = new Pose(52, 80, Math.toRadians(135));
-			public static Pose PRESET_3_END = new Pose(19.143, 80.019, Math.toRadians(180));
-			public static Pose SCORE_3 = new Pose(40.354, 92.091, Math.toRadians(125));
-			public static Pose PARK = new Pose(40.354, 92.091, Math.toRadians(125));
-		}
-		
-		// Poses for the FAR side of the field, BLUE alliance
-		// TODO These are currently copied from the RED values.
+		// Poses for the FAR side of the field, BLUE alliance TODO (REFERENCE - tune these!)
 		public static class BlueFar {
 			public static Pose START = new Pose(65.533, 12.244, Math.toRadians(90));
 			public static Pose PRESET_1_PREP = new Pose(35.526, 28.455, Math.toRadians(180));
@@ -250,8 +240,7 @@ public class Settings {
 			public static BezierCurve BEZIER_LAUNCH_1 = new BezierCurve(
 					new Pose(18.453, 28.628),
 					new Pose(64.671, 44.493),
-					new Pose(63.808, 69.499)
-			);
+					new Pose(63.808, 69.499));
 			
 			public static Pose ENDING_LAUNCH_1 = new Pose(63.808, 69.499, Math.toRadians(130));
 			
@@ -263,33 +252,7 @@ public class Settings {
 			public static Pose PARK = new Pose(40.354, 92.091, Math.toRadians(125));
 		}
 		
-		// Poses for the CLOSE side of the field, RED alliance
-		// These are filler values and will need to be tuned.
-		public static class RedClose {
-			// Start near the backdrop, facing forward.
-			public static Pose START = new Pose(12, 60, Math.toRadians(90));
-			// Position for the center spike mark.
-			public static Pose PRESET_1_PREP = new Pose(12, 34, Math.toRadians(90));
-			// Scoring position on the backdrop. Robot is flush, facing left.
-			public static Pose PRESET_1_END = new Pose(48, 36, Math.toRadians(180));
-			// A middle waypoint to help navigate under the stage truss.
-			public static Pose LAUNCH_1 = new Pose(24, 12, Math.toRadians(180));
-			// Position to pick up pixels from the stack across the field.
-			public static Pose PRESET_2_PREP = new Pose(12, 34, Math.toRadians(90));
-			// Scoring position on the backdrop. Robot is flush, facing left.
-			public static Pose PRESET_2_END = new Pose(48, 36, Math.toRadians(180));
-			// A middle waypoint to help navigate under the stage truss.
-			public static Pose LAUNCH_2 = new Pose(24, 12, Math.toRadians(180));
-			public static Pose PRESET_3_PREP = new Pose(12, 34, Math.toRadians(90));
-			// Scoring position on the backdrop. Robot is flush, facing left.
-			public static Pose PRESET_3_END = new Pose(48, 36, Math.toRadians(180));
-			// A middle waypoint to help navigate under the stage truss.
-			public static Pose LAUNCH_3 = new Pose(24, 12, Math.toRadians(180));
-			public static Pose PARK = new Pose(24, 12, Math.toRadians(180));
-			
-		}
-		
-		// TODO These values are mirrored from the RedClose class.
+		// Poses for the CLOSE side of the field, BLUE alliance TODO (REFERENCE - tune these!)
 		public static class BlueClose {
 			// Start near the backdrop, facing forward.
 			public static Pose START = new Pose(60, 85, Math.toRadians(120));

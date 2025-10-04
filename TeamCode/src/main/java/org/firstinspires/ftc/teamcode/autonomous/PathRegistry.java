@@ -15,8 +15,8 @@ import java.util.ArrayList;
  * Centralized registry for all autonomous paths with automatic mirroring.
  * <p>
  * This class eliminates duplication by:
- * - Defining paths once for RED alliance
- * - Automatically mirroring them for BLUE alliance
+ * - Defining paths once for BLUE alliance (our reference field)
+ * - Automatically mirroring them for RED alliance
  * - Using descriptive enums instead of multiple variables
  * - Centralizing path construction logic
  */
@@ -49,77 +49,77 @@ public class PathRegistry {
 	
 	/**
 	 * Builds a far position path.
-	 * Uses Settings for RED, mirrors for BLUE.
+	 * Uses Settings for BLUE (reference), mirrors for RED.
 	 */
 	private PathChain buildFarPath(PathSegment segment) {
-		boolean isRed = alliance == MatchSettings.AllianceColor.RED;
+		boolean isBlue = alliance == MatchSettings.AllianceColor.BLUE;
 		
 		switch (segment) {
 			case FAR_PRESET_1_PREP:
 				return buildLinearPath(
-						isRed ? Settings.Autonomous.RedFar.START : mirror(Settings.Autonomous.RedFar.START),
-						isRed ? Settings.Autonomous.RedFar.PRESET_1_PREP
-								: mirror(Settings.Autonomous.RedFar.PRESET_1_PREP));
+						isBlue ? Settings.Autonomous.BlueFar.START : mirror(Settings.Autonomous.BlueFar.START),
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_1_PREP
+								: mirror(Settings.Autonomous.BlueFar.PRESET_1_PREP));
 			
 			case FAR_PRESET_1_END:
 				return buildLinearPath(
-						isRed ? Settings.Autonomous.RedFar.PRESET_1_PREP
-								: mirror(Settings.Autonomous.RedFar.PRESET_1_PREP),
-						isRed ? Settings.Autonomous.RedFar.PRESET_1_END
-								: mirror(Settings.Autonomous.RedFar.PRESET_1_END));
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_1_PREP
+								: mirror(Settings.Autonomous.BlueFar.PRESET_1_PREP),
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_1_END
+								: mirror(Settings.Autonomous.BlueFar.PRESET_1_END));
 			
 			case FAR_LAUNCH_1:
-				if (isRed) {
+				if (isBlue) {
 					return follower.pathBuilder()
-							.addPath(Settings.Autonomous.RedFar.BEZIER_LAUNCH_1)
+							.addPath(Settings.Autonomous.BlueFar.BEZIER_LAUNCH_1)
 							.setLinearHeadingInterpolation(
-									Settings.Autonomous.RedFar.PRESET_1_END.getHeading(),
-									Settings.Autonomous.RedFar.ENDING_LAUNCH_1.getHeading())
+									Settings.Autonomous.BlueFar.PRESET_1_END.getHeading(),
+									Settings.Autonomous.BlueFar.ENDING_LAUNCH_1.getHeading())
 							.build();
 				} else {
-					BezierCurve mirrored = mirrorBezierCurve(Settings.Autonomous.RedFar.BEZIER_LAUNCH_1);
+					BezierCurve mirrored = mirrorBezierCurve(Settings.Autonomous.BlueFar.BEZIER_LAUNCH_1);
 					return follower.pathBuilder()
 							.addPath(mirrored)
 							.setLinearHeadingInterpolation(
-									mirror(Settings.Autonomous.RedFar.PRESET_1_END).getHeading(),
-									mirror(Settings.Autonomous.RedFar.ENDING_LAUNCH_1).getHeading())
+									mirror(Settings.Autonomous.BlueFar.PRESET_1_END).getHeading(),
+									mirror(Settings.Autonomous.BlueFar.ENDING_LAUNCH_1).getHeading())
 							.build();
 				}
 			
 			case FAR_PRESET_2_PREP:
 				return buildLinearPath(
-						isRed ? Settings.Autonomous.RedFar.ENDING_LAUNCH_1
-								: mirror(Settings.Autonomous.RedFar.ENDING_LAUNCH_1),
-						isRed ? Settings.Autonomous.RedFar.PRESET_2_PREP
-								: mirror(Settings.Autonomous.RedFar.PRESET_2_PREP));
+						isBlue ? Settings.Autonomous.BlueFar.ENDING_LAUNCH_1
+								: mirror(Settings.Autonomous.BlueFar.ENDING_LAUNCH_1),
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_2_PREP
+								: mirror(Settings.Autonomous.BlueFar.PRESET_2_PREP));
 			
 			case FAR_PRESET_2_END:
 				return buildLinearPath(
-						isRed ? Settings.Autonomous.RedFar.PRESET_2_PREP
-								: mirror(Settings.Autonomous.RedFar.PRESET_2_PREP),
-						isRed ? Settings.Autonomous.RedFar.PRESET_2_END
-								: mirror(Settings.Autonomous.RedFar.PRESET_2_END));
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_2_PREP
+								: mirror(Settings.Autonomous.BlueFar.PRESET_2_PREP),
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_2_END
+								: mirror(Settings.Autonomous.BlueFar.PRESET_2_END));
 			
 			case FAR_LAUNCH_2:
 				return buildCurvedPath(
-						isRed ? Settings.Autonomous.RedFar.PRESET_2_END
-								: mirror(Settings.Autonomous.RedFar.PRESET_2_END),
-						isRed ? Settings.Autonomous.RedFar.LAUNCH_2 : mirror(Settings.Autonomous.RedFar.LAUNCH_2));
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_2_END
+								: mirror(Settings.Autonomous.BlueFar.PRESET_2_END),
+						isBlue ? Settings.Autonomous.BlueFar.LAUNCH_2 : mirror(Settings.Autonomous.BlueFar.LAUNCH_2));
 			
 			case FAR_PRESET_3:
 				return buildLinearPath(
-						isRed ? Settings.Autonomous.RedFar.LAUNCH_2 : mirror(Settings.Autonomous.RedFar.LAUNCH_2),
-						isRed ? Settings.Autonomous.RedFar.PRESET_3_END
-								: mirror(Settings.Autonomous.RedFar.PRESET_3_END));
+						isBlue ? Settings.Autonomous.BlueFar.LAUNCH_2 : mirror(Settings.Autonomous.BlueFar.LAUNCH_2),
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_3_END
+								: mirror(Settings.Autonomous.BlueFar.PRESET_3_END));
 			
 			case FAR_LAUNCH_3:
 				return buildCurvedPath(
-						isRed ? Settings.Autonomous.RedFar.PRESET_3_END
-								: mirror(Settings.Autonomous.RedFar.PRESET_3_END),
-						isRed ? Settings.Autonomous.RedFar.PARK : mirror(Settings.Autonomous.RedFar.PARK));
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_3_END
+								: mirror(Settings.Autonomous.BlueFar.PRESET_3_END),
+						isBlue ? Settings.Autonomous.BlueFar.PARK : mirror(Settings.Autonomous.BlueFar.PARK));
 			
 			case FAR_PARK:
-				Pose park = isRed ? Settings.Autonomous.RedFar.PARK : mirror(Settings.Autonomous.RedFar.PARK);
+				Pose park = isBlue ? Settings.Autonomous.BlueFar.PARK : mirror(Settings.Autonomous.BlueFar.PARK);
 				return buildLinearPath(park, park);
 			
 			default:
@@ -129,73 +129,79 @@ public class PathRegistry {
 	
 	/**
 	 * Builds a close position path.
-	 * Uses Settings for RED, mirrors for BLUE.
+	 * Uses Settings for BLUE (reference), mirrors for RED.
 	 */
 	private PathChain buildClosePath(PathSegment segment) {
-		boolean isRed = alliance == MatchSettings.AllianceColor.RED;
+		boolean isBlue = alliance == MatchSettings.AllianceColor.BLUE;
 		
 		switch (segment) {
 			case CLOSE_PRESET_1_PREP:
 				return buildLinearPath(
-						isRed ? Settings.Autonomous.RedClose.START : mirror(Settings.Autonomous.RedClose.START),
-						isRed ? Settings.Autonomous.RedClose.PRESET_1_PREP
-								: mirror(Settings.Autonomous.RedClose.PRESET_1_PREP));
+						isBlue ? Settings.Autonomous.BlueClose.START : mirror(Settings.Autonomous.BlueClose.START),
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_1_PREP
+								: mirror(Settings.Autonomous.BlueClose.PRESET_1_PREP));
 			
 			case CLOSE_PRESET_1_END:
 				return buildLinearPath(
-						isRed ? Settings.Autonomous.RedClose.PRESET_1_PREP
-								: mirror(Settings.Autonomous.RedClose.PRESET_1_PREP),
-						isRed ? Settings.Autonomous.RedClose.PRESET_1_END
-								: mirror(Settings.Autonomous.RedClose.PRESET_1_END));
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_1_PREP
+								: mirror(Settings.Autonomous.BlueClose.PRESET_1_PREP),
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_1_END
+								: mirror(Settings.Autonomous.BlueClose.PRESET_1_END));
 			
 			case CLOSE_LAUNCH_1:
 				return buildLinearPath(
-						isRed ? Settings.Autonomous.RedClose.PRESET_1_END
-								: mirror(Settings.Autonomous.RedClose.PRESET_1_END),
-						isRed ? Settings.Autonomous.RedClose.LAUNCH_1 : mirror(Settings.Autonomous.RedClose.LAUNCH_1));
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_1_END
+								: mirror(Settings.Autonomous.BlueClose.PRESET_1_END),
+						isBlue ? Settings.Autonomous.BlueClose.LAUNCH_1
+								: mirror(Settings.Autonomous.BlueClose.LAUNCH_1));
 			
 			case CLOSE_PRESET_2_PREP:
 				return buildLinearPath(
-						isRed ? Settings.Autonomous.RedClose.LAUNCH_1 : mirror(Settings.Autonomous.RedClose.LAUNCH_1),
-						isRed ? Settings.Autonomous.RedClose.PRESET_2_PREP
-								: mirror(Settings.Autonomous.RedClose.PRESET_2_PREP));
+						isBlue ? Settings.Autonomous.BlueClose.LAUNCH_1
+								: mirror(Settings.Autonomous.BlueClose.LAUNCH_1),
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_2_PREP
+								: mirror(Settings.Autonomous.BlueClose.PRESET_2_PREP));
 			
 			case CLOSE_PRESET_2_END:
 				return buildLinearPath(
-						isRed ? Settings.Autonomous.RedClose.PRESET_2_PREP
-								: mirror(Settings.Autonomous.RedClose.PRESET_2_PREP),
-						isRed ? Settings.Autonomous.RedClose.PRESET_2_END
-								: mirror(Settings.Autonomous.RedClose.PRESET_2_END));
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_2_PREP
+								: mirror(Settings.Autonomous.BlueClose.PRESET_2_PREP),
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_2_END
+								: mirror(Settings.Autonomous.BlueClose.PRESET_2_END));
 			
 			case CLOSE_LAUNCH_2:
 				return buildCurvedPath(
-						isRed ? Settings.Autonomous.RedClose.PRESET_2_END
-								: mirror(Settings.Autonomous.RedClose.PRESET_2_END),
-						isRed ? Settings.Autonomous.RedClose.LAUNCH_2 : mirror(Settings.Autonomous.RedClose.LAUNCH_2));
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_2_END
+								: mirror(Settings.Autonomous.BlueClose.PRESET_2_END),
+						isBlue ? Settings.Autonomous.BlueClose.LAUNCH_2
+								: mirror(Settings.Autonomous.BlueClose.LAUNCH_2));
 			
 			case CLOSE_PRESET_3_PREP:
 				return buildLinearPath(
-						isRed ? Settings.Autonomous.RedClose.LAUNCH_2 : mirror(Settings.Autonomous.RedClose.LAUNCH_2),
-						isRed ? Settings.Autonomous.RedClose.PRESET_3_PREP
-								: mirror(Settings.Autonomous.RedClose.PRESET_3_PREP));
+						isBlue ? Settings.Autonomous.BlueClose.LAUNCH_2
+								: mirror(Settings.Autonomous.BlueClose.LAUNCH_2),
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_3_PREP
+								: mirror(Settings.Autonomous.BlueClose.PRESET_3_PREP));
 			
 			case CLOSE_PRESET_3_END:
 				return buildLinearPath(
-						isRed ? Settings.Autonomous.RedClose.PRESET_3_PREP
-								: mirror(Settings.Autonomous.RedClose.PRESET_3_PREP),
-						isRed ? Settings.Autonomous.RedClose.PRESET_3_END
-								: mirror(Settings.Autonomous.RedClose.PRESET_3_END));
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_3_PREP
+								: mirror(Settings.Autonomous.BlueClose.PRESET_3_PREP),
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_3_END
+								: mirror(Settings.Autonomous.BlueClose.PRESET_3_END));
 			
 			case CLOSE_LAUNCH_3:
 				return buildCurvedPath(
-						isRed ? Settings.Autonomous.RedClose.PRESET_3_END
-								: mirror(Settings.Autonomous.RedClose.PRESET_3_END),
-						isRed ? Settings.Autonomous.RedClose.LAUNCH_3 : mirror(Settings.Autonomous.RedClose.LAUNCH_3));
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_3_END
+								: mirror(Settings.Autonomous.BlueClose.PRESET_3_END),
+						isBlue ? Settings.Autonomous.BlueClose.LAUNCH_3
+								: mirror(Settings.Autonomous.BlueClose.LAUNCH_3));
 			
 			case CLOSE_PARK:
 				return buildLinearPath(
-						isRed ? Settings.Autonomous.RedClose.LAUNCH_3 : mirror(Settings.Autonomous.RedClose.LAUNCH_3),
-						isRed ? Settings.Autonomous.RedClose.PARK : mirror(Settings.Autonomous.RedClose.PARK));
+						isBlue ? Settings.Autonomous.BlueClose.LAUNCH_3
+								: mirror(Settings.Autonomous.BlueClose.LAUNCH_3),
+						isBlue ? Settings.Autonomous.BlueClose.PARK : mirror(Settings.Autonomous.BlueClose.PARK));
 			
 			default:
 				throw new IllegalArgumentException("Invalid close path segment: " + segment);
@@ -223,20 +229,21 @@ public class PathRegistry {
 	}
 	
 	/**
-	 * Mirrors a pose across the field centerline for blue alliance.
+	 * Mirrors a pose across the field centerline for red alliance.
 	 * Field width is 144 inches (standard FTC field).
+	 * Takes a BLUE pose and returns the mirrored RED pose.
 	 */
-	private Pose mirror(Pose redPose) {
-		double fieldWidth = 144.0;
+	private Pose mirror(Pose bluePose) {
 		return new Pose(
-				fieldWidth - redPose.getX(), // Mirror X coordinate
-				redPose.getY(), // Y stays the same
-				Math.PI - redPose.getHeading() // Mirror heading
+				Settings.Field.WIDTH - bluePose.getX(), // Mirror X coordinate
+				bluePose.getY(), // Y stays the same
+				Math.PI - bluePose.getHeading() // Mirror heading
 		);
 	}
 	
 	/**
-	 * Mirrors a BezierCurve for blue alliance.
+	 * Mirrors a BezierCurve for red alliance.
+	 * Takes a BLUE curve and returns the mirrored RED curve.
 	 */
 	private BezierCurve mirrorBezierCurve(BezierCurve curve) {
 		// Get the control points from the curve and mirror each one
