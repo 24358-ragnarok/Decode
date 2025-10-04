@@ -17,12 +17,12 @@ import org.firstinspires.ftc.teamcode.autonomous.actions.WaitAction;
  *
  * <pre>
  * AutonomousSequence sequence = new SequenceBuilder(pathRegistry)
- *         .followPath(PathSegment.FAR_PRESET_1_PREP)
- *         .startIntake()
- *         .followPath(PathSegment.FAR_PRESET_1_END)
- *         .stopIntake()
- *         .launch()
- *         .build();
+ * 		.followPath(PathSegment.FAR_PRESET_1_PREP)
+ * 		.startIntake()
+ * 		.followPath(PathSegment.FAR_PRESET_1_END)
+ * 		.stopIntake()
+ * 		.launch()
+ * 		.build();
  * </pre>
  */
 public class SequenceBuilder {
@@ -45,17 +45,23 @@ public class SequenceBuilder {
 	 */
 	public static AutonomousSequence buildFarSequence(PathRegistry pathRegistry) {
 		return new SequenceBuilder(pathRegistry)
-				// Cycle 1: First sample
-				.launchAndMove(PathRegistry.PathSegment.FAR_PRESET_1_PREP)
-				.intakeCycle(PathRegistry.PathSegment.FAR_PRESET_1_PREP, PathRegistry.PathSegment.FAR_PRESET_1_END)
+				// Cycle 1: Launch preload, go to sample, intake
+				.launch()
+				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_PREP)
+				.startIntake()
+				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_END)
+				.stopIntake()
 				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_1)
 				
-				// Cycle 2: Second sample
-				.launchAndMove(PathRegistry.PathSegment.FAR_PRESET_2_PREP)
-				.intakeCycle(PathRegistry.PathSegment.FAR_PRESET_2_PREP, PathRegistry.PathSegment.FAR_PRESET_2_END)
+				// Cycle 2: Launch, go to sample, intake
+				.launch()
+				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_PREP)
+				.startIntake()
+				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_END)
+				.stopIntake()
 				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_2)
 				
-				// Cycle 3: Third sample
+				// Cycle 3: Launch, go to sample, intake
 				.launch()
 				.startIntake()
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_3)
@@ -63,7 +69,8 @@ public class SequenceBuilder {
 				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_3)
 				
 				// Final launch and park
-				.launchAndMove(PathRegistry.PathSegment.FAR_PARK)
+				.launch()
+				.followPath(PathRegistry.PathSegment.FAR_PARK)
 				.build();
 	}
 	
@@ -72,23 +79,33 @@ public class SequenceBuilder {
 	 */
 	public static AutonomousSequence buildCloseSequence(PathRegistry pathRegistry) {
 		return new SequenceBuilder(pathRegistry)
-				// Cycle 1: First sample
-				.launchAndMove(PathRegistry.PathSegment.CLOSE_PRESET_1_PREP)
-				.intakeCycle(PathRegistry.PathSegment.CLOSE_PRESET_1_PREP, PathRegistry.PathSegment.CLOSE_PRESET_1_END)
+				// Cycle 1: Launch preload, go to sample, intake
+				.launch()
+				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_1_PREP)
+				.startIntake()
+				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_1_END)
+				.stopIntake()
 				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_1)
 				
-				// Cycle 2: Second sample
-				.launchAndMove(PathRegistry.PathSegment.CLOSE_PRESET_2_PREP)
-				.intakeCycle(PathRegistry.PathSegment.CLOSE_PRESET_2_PREP, PathRegistry.PathSegment.CLOSE_PRESET_2_END)
+				// Cycle 2: Launch, go to sample, intake
+				.launch()
+				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_2_PREP)
+				.startIntake()
+				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_2_END)
+				.stopIntake()
 				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_2)
 				
-				// Cycle 3: Third sample
-				.launchAndMove(PathRegistry.PathSegment.CLOSE_PRESET_3_PREP)
-				.intakeCycle(PathRegistry.PathSegment.CLOSE_PRESET_3_PREP, PathRegistry.PathSegment.CLOSE_PRESET_3_END)
+				// Cycle 3: Launch, go to sample, intake
+				.launch()
+				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_PREP)
+				.startIntake()
+				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_END)
+				.stopIntake()
 				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_3)
 				
 				// Final launch and park
-				.launchAndMove(PathRegistry.PathSegment.CLOSE_PARK)
+				.launch()
+				.followPath(PathRegistry.PathSegment.CLOSE_PARK)
 				.build();
 	}
 	

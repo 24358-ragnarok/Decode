@@ -44,12 +44,15 @@ public class LaunchAction implements AutonomousAction {
 		Launcher launcher = mechanisms.get(Launcher.class);
 		Spindex spindex = mechanisms.get(Spindex.class);
 		
-		// Keep the launcher ready (maintains spin-up and aiming)
+		// Maintain launcher ready state (spin-up and aim) WITHOUT touching spindex
+		// This is critical: we use maintainReady() instead of ready() to avoid
+		// interfering with the spindex's rapid fire sequence
 		if (hasLauncher && launcher != null) {
-			launcher.ready();
+			launcher.maintainReady();
 		}
 		
 		// Once ready, trigger rapid fire (only once)
+		// After this, the spindex's RapidFireCommand takes full control
 		if (!rapidFireTriggered) {
 			boolean readyToFire = !hasLauncher || (launcher != null && launcher.okayToLaunch());
 			if (readyToFire && spindex != null) {
