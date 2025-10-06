@@ -11,17 +11,14 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.PoseHistory;
 
 public class Drawing {
-	public static final double ROBOT_RADIUS = 7.5;
-	public static final Style targetLook = new Style(
-			"", "#8FA3AD", 0.75
-	);
+	public static final double ROBOT_RADIUS = 8.25;
 	private static final FieldManager panelsField = PanelsField.INSTANCE.getField();
-	public static Style blueLook = new Style(
-			"", "#2124FF", 1.25
+	
+	private static final Style followerLook = new Style(
+			"", "#FFD40C", 0.75
 	);
-	public static final Style robotLook = blueLook;
-	public static Style redLook = new Style(
-			"", "#FF1F27", 1.25
+	private static final Style robotLook = new Style(
+			"", "#4CAF50", 0.75
 	);
 	
 	/**
@@ -40,9 +37,9 @@ public class Drawing {
 	 */
 	public static void drawDebug(Follower follower) {
 		if (follower.getCurrentPath() != null) {
-			drawPath(follower.getCurrentPath(), targetLook);
+			drawPath(follower.getCurrentPathChain(), followerLook);
 			Pose closestPoint = follower.getPointFromPath(follower.getCurrentPath().getClosestPointTValue());
-			drawRobot(new Pose(closestPoint.getX(), closestPoint.getY(), follower.getCurrentPath().getHeadingGoal(follower.getCurrentPath().getClosestPointTValue())), targetLook);
+			drawRobot(new Pose(closestPoint.getX(), closestPoint.getY(), follower.getCurrentPath().getHeadingGoal(follower.getCurrentPath().getClosestPointTValue())), followerLook);
 		}
 		drawPoseHistory(follower.getPoseHistory(), robotLook);
 		drawRobot(follower.getPose(), robotLook);
@@ -101,8 +98,10 @@ public class Drawing {
 		}
 		
 		panelsField.setStyle(style);
-		panelsField.moveCursor(points[0][0], points[0][1]);
-		panelsField.line(points[1][0], points[1][1]);
+		for (int i = 0; i < points[0].length - 1; i++) {
+			panelsField.moveCursor(points[0][i], points[1][i]);
+			panelsField.line(points[0][i + 1], points[1][i + 1]);
+		}
 	}
 	
 	/**
@@ -119,6 +118,15 @@ public class Drawing {
 	}
 	
 	/**
+	 * This draws a path chain.
+	 *
+	 * @param pathChain the PathChain to draw
+	 */
+	public static void drawPath(PathChain pathChain) {
+		drawPath(pathChain, robotLook);
+	}
+	
+	/**
 	 * This draws the pose history of the robot.
 	 *
 	 * @param poseTracker the PoseHistory to get the pose history from
@@ -129,7 +137,6 @@ public class Drawing {
 		
 		int size = poseTracker.getXPositionsArray().length;
 		for (int i = 0; i < size - 1; i++) {
-			
 			panelsField.moveCursor(poseTracker.getXPositionsArray()[i], poseTracker.getYPositionsArray()[i]);
 			panelsField.line(poseTracker.getXPositionsArray()[i + 1], poseTracker.getYPositionsArray()[i + 1]);
 		}

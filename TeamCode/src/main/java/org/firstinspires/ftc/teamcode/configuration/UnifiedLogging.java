@@ -45,11 +45,10 @@ public class UnifiedLogging {
 	
 	public void drawDebug(Follower follower) {
 		Drawing.drawDebug(follower);
-		panels.addData("panels first drawing point", follower.getCurrentPath().getPanelsDrawingPoints()[0][0]);
 	}
 	
 	public void drawPath(PathChain path) {
-		Drawing.drawPath(path, Drawing.targetLook);
+		Drawing.drawPath(path);
 	}
 	
 	public void update() {

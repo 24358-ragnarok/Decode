@@ -75,6 +75,8 @@ public class MainAuto extends OpMode {
 		
 		// Allow driver to select match settings using the wizard
 		wizard.refresh();
+		
+		logging.update();
 	}
 	
 	/**

@@ -91,7 +91,5 @@ public class MatchConfigurationWizard {
 		}
 		
 		logging.addData("Starting Pose", matchSettings.getAutonomousStartingPose());
-		
-		logging.update();
 	}
 }
