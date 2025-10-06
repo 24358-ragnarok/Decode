@@ -32,24 +32,24 @@ public class MatchConfigurationWizard {
 	 */
 	public void refresh() {
 		// Detect rising edge of dpad_up (just pressed)
-		if (gamepad1.dpadUpWasPressed()) {
-			matchSettings.setAllianceColor(MatchSettings.AllianceColor.BLUE);
-		}
-		
-		// Detect rising edge of dpad_down (just pressed)
-		if (gamepad1.dpadDownWasPressed()) {
+		if (gamepad1.bWasPressed()) {
 			matchSettings.setAllianceColor(MatchSettings.AllianceColor.RED);
 		}
 		
-		if (gamepad1.dpadLeftWasPressed()) {
+		// Detect rising edge of dpad_down (just pressed)
+		if (gamepad1.xWasPressed()) {
+			matchSettings.setAllianceColor(MatchSettings.AllianceColor.BLUE);
+		}
+		
+		if (gamepad1.aWasPressed()) {
 			matchSettings.setAutoStartingPosition(MatchSettings.AutoStartingPosition.CLOSE);
 		}
 		
-		if (gamepad1.dpadRightWasPressed()) {
+		if (gamepad1.yWasPressed()) {
 			matchSettings.setAutoStartingPosition(MatchSettings.AutoStartingPosition.FAR);
 		}
 		
-		if (gamepad1.crossWasPressed()) {
+		if (gamepad1.startWasPressed()) {
 			confirmed = !confirmed;
 		}
 		
@@ -66,14 +66,14 @@ public class MatchConfigurationWizard {
 		
 		if (!confirmed) {
 			logging.addLine("=== MATCH CONFIGURATION ===");
-			logging.addLine("  D-Pad UP    → BLUE Alliance");
-			logging.addLine("  D-Pad DOWN  → RED Alliance");
-			logging.addLine("  D-Pad LEFT  → Close Starting Position");
-			logging.addLine("  D-Pad RIGHT → Far Starting Position");
-			logging.addLine("  CROSS       → Confirm Configuration");
+			logging.addLine("  X           → BLUE Alliance");
+			logging.addLine("  B           → RED Alliance");
+			logging.addLine("  A           → Close Starting Position");
+			logging.addLine("  Y           → Far Starting Position");
+			logging.addLine("  START       → Confirm Configuration");
 		} else {
 			logging.addLine("=== CONFIGURATION CONFIRMED ===");
-			logging.addLine("❎ Press cross to cancel");
+			logging.addLine("❎ Press start to cancel");
 		}
 		
 		logging.addLine("");
@@ -91,7 +91,5 @@ public class MatchConfigurationWizard {
 		}
 		
 		logging.addData("Starting Pose", matchSettings.getAutonomousStartingPose());
-		
-		logging.update();
 	}
 }

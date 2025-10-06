@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.software.AlignmentEngine;
 import org.firstinspires.ftc.teamcode.software.Drivetrain;
 import org.firstinspires.ftc.teamcode.software.LimelightManager;
@@ -26,7 +25,7 @@ public class MechanismManager {
 	public final AlignmentEngine alignmentEngine;
 	
 	public MechanismManager(HardwareMap hw, MatchSettings match) {
-		drivetrain = new Drivetrain(hw, Constants.createFollower(hw), match);
+		drivetrain = new Drivetrain(hw, match);
 		
 		// Build mechanisms safely
 		Intake intake = createIntake(hw);
@@ -104,9 +103,9 @@ public class MechanismManager {
 		try {
 			DcMotor right = hw.get(DcMotor.class, Settings.HardwareIDs.LAUNCHER_RIGHT);
 			DcMotor left = hw.get(DcMotor.class, Settings.HardwareIDs.LAUNCHER_LEFT);
-			Servo horiz = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_HORIZONTAL_SERVO);
-			Servo vert = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_VERTICAL_SERVO);
-			return new Launcher(spindex, right, left, horiz, vert, traj);
+			Servo horizontal = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_HORIZONTAL_SERVO);
+			Servo vertical = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_VERTICAL_SERVO);
+			return new Launcher(spindex, right, left, horizontal, vertical, traj);
 		} catch (Exception e) {
 			return null;
 		}

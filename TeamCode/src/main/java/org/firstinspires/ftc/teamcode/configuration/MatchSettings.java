@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A persistent object that stores everything we know about the current match state.
+ * A persistent object that stores everything we know about the current match
+ * state.
  *
  * @noinspection unchecked, we know what the blackboard is storing
  */
@@ -70,7 +71,10 @@ public class MatchSettings {
 	}
 	
 	/**
-	 * Gets the Autonomous starting position for the robot based on the match settings.
+	 * Gets the Autonomous starting position for the robot based on the match
+	 * settings.
+	 * <p>
+	 * Uses BLUE poses as reference and mirrors for RED alliance.
 	 *
 	 * @return A Pose of the starting position
 	 */
@@ -78,25 +82,31 @@ public class MatchSettings {
 		AllianceColor allianceColor = getAllianceColor();
 		AutoStartingPosition startingPosition = getAutoStartingPosition();
 		
+		// Get BLUE pose (our reference)
+		Pose bluePose = startingPosition == AutoStartingPosition.CLOSE
+				? Settings.Autonomous.BlueClose.START
+				: Settings.Autonomous.BlueFar.START;
+		
+		// Mirror for RED alliance
 		if (allianceColor == AllianceColor.RED) {
-			return startingPosition == AutoStartingPosition.CLOSE
-					? Settings.Autonomous.RedClose.START
-					: Settings.Autonomous.RedFar.START;
-		} else { // Assumes BLUE if not RED
-			return startingPosition == AutoStartingPosition.CLOSE
-					? Settings.Autonomous.BlueClose.START
-					: Settings.Autonomous.BlueFar.START;
+			return mirrorPose(bluePose);
+		} else {
+			return bluePose;
 		}
 	}
 	
 	/**
-	 * Gets the TeleOp starting position for the robot based on the end of the Autonomous period.
+	 * Gets the TeleOp starting position for the robot based on the end of the
+	 * Autonomous period.
+	 * <p>
+	 * Uses BLUE poses as reference and mirrors for RED alliance.
 	 *
 	 * @return A Pose of the starting position
 	 */
 	public Pose getTeleOpStartingPose() {
 		// If either of these values are unset, Auto has not yet been run,
-		// so we have nothing to base starting position on. Instead, assume the robot is on the center of the field,
+		// so we have nothing to base starting position on. Instead, assume the robot is
+		// on the center of the field,
 		// our designated resetting position during testing.
 		if (blackboard.get(ALLIANCE_COLOR_KEY) == null || blackboard.get(AUTO_KEY) == null) {
 			return Settings.Field.RESET_POSE;
@@ -105,14 +115,16 @@ public class MatchSettings {
 		AllianceColor allianceColor = getAllianceColor();
 		AutoStartingPosition startingPosition = getAutoStartingPosition();
 		
+		// Get BLUE pose (our reference)
+		Pose bluePose = startingPosition == AutoStartingPosition.CLOSE
+				? Settings.Autonomous.BlueClose.PARK
+				: Settings.Autonomous.BlueFar.PARK;
+		
+		// Mirror for RED alliance
 		if (allianceColor == AllianceColor.RED) {
-			return startingPosition == AutoStartingPosition.CLOSE
-					? Settings.Autonomous.RedClose.PARK
-					: Settings.Autonomous.RedFar.PARK;
+			return mirrorPose(bluePose);
 		} else {
-			return startingPosition == AutoStartingPosition.CLOSE
-					? Settings.Autonomous.BlueClose.PARK
-					: Settings.Autonomous.BlueFar.PARK;
+			return bluePose;
 		}
 	}
 	
@@ -156,7 +168,8 @@ public class MatchSettings {
 	// Append artifact
 	public void addArtifact(ArtifactColor artifact) {
 		List<ArtifactColor> state = getClassifierState();
-		if (state.size() >= 9) return;
+		if (state.size() >= 9)
+			return;
 		state.add(artifact);
 		blackboard.put(CLASSIFIER_STATE_KEY, state);
 	}
@@ -167,18 +180,21 @@ public class MatchSettings {
 	
 	public void incrementClassifier() {
 		List<ArtifactColor> state = getClassifierState();
-		if (state.size() >= 9) return;
+		if (state.size() >= 9)
+			return;
 		state.add(ArtifactColor.UNKNOWN);
 		blackboard.put(CLASSIFIER_STATE_KEY, state);
 	}
 	
 	public ArtifactColor nextArtifactNeeded() {
 		Motif motif = getMotif();
-		if (motif == null || motif == Motif.UNKNOWN) return ArtifactColor.UNKNOWN;
+		if (motif == null || motif == Motif.UNKNOWN)
+			return ArtifactColor.UNKNOWN;
 		
 		List<ArtifactColor> state = getClassifierState();
 		ArtifactColor[] motifColors = motifToArtifactColors(motif);
-		if (motifColors == null || motifColors.length == 0) return ArtifactColor.UNKNOWN;
+		if (motifColors == null || motifColors.length == 0)
+			return ArtifactColor.UNKNOWN;
 		
 		int index = state.size() % motifColors.length;
 		return motifColors[index];
@@ -210,6 +226,22 @@ public class MatchSettings {
 		}
 		
 		return nextThree;
+	}
+	
+	/**
+	 * Mirrors a pose across the field centerline for red alliance.
+	 * Field width is 144 inches (standard FTC field).
+	 * Takes a BLUE pose and returns the mirrored RED pose.
+	 * <p>
+	 * This is a duplicate of the method in PathRegistry to keep MatchSettings
+	 * independent.
+	 */
+	private Pose mirrorPose(Pose bluePose) {
+		return new Pose(
+				Settings.Field.WIDTH - bluePose.getX(), // Mirror X coordinate
+				bluePose.getY(), // Y stays the same
+				Math.PI - bluePose.getHeading() // Mirror heading
+		);
 	}
 	
 	public enum AllianceColor {

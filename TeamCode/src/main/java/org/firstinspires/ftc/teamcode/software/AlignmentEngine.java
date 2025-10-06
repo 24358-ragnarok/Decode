@@ -64,7 +64,7 @@ public class AlignmentEngine extends Mechanism {
 	
 	/**
 	 * Calculates the cross product for point-in-triangle testing.
-	 * Reference: https://stackoverflow.com/questions/2049582
+	 * Reference: <a href="https://stackoverflow.com/questions/2049582">...</a>
 	 */
 	public static double crossProduct(Pose A, Pose B, Pose C) {
 		return (B.getX() - A.getX()) * (C.getY() - A.getY()) - (B.getY() - A.getY()) * (C.getX() - A.getX());
