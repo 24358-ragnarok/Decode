@@ -12,13 +12,10 @@ import com.pedropathing.util.PoseHistory;
 
 public class Drawing {
 	public static final double ROBOT_RADIUS = 7.5;
-	public static final Style pathLook = new Style(
-			"", "#4FFF2B", 1.0
+	public static final Style targetLook = new Style(
+			"", "#8FA3AD", 0.75
 	);
 	private static final FieldManager panelsField = PanelsField.INSTANCE.getField();
-	private static final Style targetLook = new Style(
-			"", "#3B3534", 0.75
-	);
 	public static Style blueLook = new Style(
 			"", "#2124FF", 1.25
 	);
@@ -83,7 +80,7 @@ public class Drawing {
 	 * @param pose the Pose to draw the robot at
 	 */
 	public static void drawRobot(Pose pose) {
-		drawRobot(pose, targetLook);
+		drawRobot(pose, robotLook);
 	}
 	
 	/**

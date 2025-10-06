@@ -55,6 +55,15 @@ def group_by_prototype(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def limit_shots(df: pd.DataFrame, shot_limit: int = None) -> pd.DataFrame:
+    """Limits each prototype group to the first N shots."""
+    if shot_limit is None or shot_limit <= 0:
+        return df
+
+    limited = df.groupby("prototype_id").head(shot_limit).reset_index(drop=True)
+    return limited
+
+
 def apply_weights(df: pd.DataFrame, max_weight: float) -> pd.DataFrame:
     """Assigns linear weights to shots within each prototype group."""
 
@@ -92,6 +101,11 @@ def summarize(df: pd.DataFrame) -> pd.DataFrame:
 
 def interactive_plot(df: pd.DataFrame, summary: pd.DataFrame):
     """Generates and displays the interactive Plotly figure."""
+    # Set renderer to browser to avoid printing raw HTML/JS to console
+    import plotly.io as pio
+
+    pio.renderers.default = "browser"
+
     fig = go.Figure()
 
     summary = summary.sort_values("prototype_id").reset_index(drop=True)
@@ -174,6 +188,18 @@ def interactive_plot(df: pd.DataFrame, summary: pd.DataFrame):
         legend_title_text="Trace Type",
         xaxis={"categoryorder": "array", "categoryarray": prototype_order},
     )
+
+    fig.update_layout(
+        template=None,
+        font=dict(family="Inter, Helvetica, sans-serif", size=14),
+        plot_bgcolor="rgba(255,255,255,0)",
+        paper_bgcolor="rgba(255,255,255,0)",
+        title=dict(x=0.02, font=dict(size=22, color="#222")),
+        yaxis=dict(gridcolor="rgba(200,200,200,0.3)", zeroline=False),
+        xaxis=dict(showline=True, linewidth=1, linecolor="#444", mirror=True),
+    )
+
+
     fig.show()
 
 
@@ -187,6 +213,20 @@ def main():
         input("Enter max weight for last shot (e.g., 1.0 or 1.0/5.0): ").strip()
         or "1.0/5.0"
     )
+    shot_limit_input = (
+            input("Enter shot limit per prototype (default: none): ").strip() or ""
+    )
+
+    shot_limit = None
+    if shot_limit_input:
+        try:
+            shot_limit = int(shot_limit_input)
+            if shot_limit <= 0:
+                print("[WARN] Shot limit must be positive. Ignoring.")
+                shot_limit = None
+        except ValueError:
+            print("[WARN] Invalid shot limit. Using all shots.")
+            shot_limit = None
 
     midpoint_weight, low_weight, high_weight, has_error = 0.0, 0.0, 0.0, False
 
@@ -212,13 +252,18 @@ def main():
         return
 
     df_grouped = group_by_prototype(df)
-    df_weighted = apply_weights(df_grouped.copy(), midpoint_weight)
+    df_limited = limit_shots(df_grouped, shot_limit)
+
+    if shot_limit is not None:
+        print(f"[INFO] Limiting analysis to first {shot_limit} shots per prototype.")
+
+    df_weighted = apply_weights(df_limited.copy(), midpoint_weight)
     summary = summarize(df_weighted)
     summary["hit_pct_error"] = 0.0
 
     if has_error:
-        summary_low = summarize(apply_weights(df_grouped.copy(), low_weight))
-        summary_high = summarize(apply_weights(df_grouped.copy(), high_weight))
+        summary_low = summarize(apply_weights(df_limited.copy(), low_weight))
+        summary_high = summarize(apply_weights(df_limited.copy(), high_weight))
         summary = summary.merge(
             summary_low[["prototype_id", "hit_pct"]],
             on="prototype_id",

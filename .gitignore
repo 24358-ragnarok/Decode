@@ -92,3 +92,4 @@ lint/tmp/
 
 # data collection venv
 /TeamCode/src/main/java/org/firstinspires/ftc/teamcode/testing/data/.venv/
+flourish**.csv

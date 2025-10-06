@@ -234,7 +234,7 @@ public class Settings {
 		
 		// Poses for the FAR side of the field, BLUE alliance TODO (REFERENCE - tune these!)
 		public static class BlueFar {
-			public static Pose START = new Pose(65.533, 12.244, Math.toRadians(90));
+			public static Pose START = new Pose(65.533, 12.244, Math.toRadians(135));
 			public static Pose PRESET_1_PREP = new Pose(35.526, 28.455, Math.toRadians(180));
 			public static Pose PRESET_1_END = new Pose(18.453, 28.628, Math.toRadians(180));
 			public static BezierCurve BEZIER_LAUNCH_1 = new BezierCurve(
@@ -255,7 +255,7 @@ public class Settings {
 		// Poses for the CLOSE side of the field, BLUE alliance TODO (REFERENCE - tune these!)
 		public static class BlueClose {
 			// Start near the backdrop, facing forward.
-			public static Pose START = new Pose(60, 85, Math.toRadians(120));
+			public static Pose START = new Pose(60, 85, Math.toRadians(135));
 			// Position for the center spike mark.
 			public static Pose PRESET_1_PREP = new Pose(37, 82.5, Math.toRadians(180));
 			// Scoring position on the backdrop. Robot is flush, facing left.

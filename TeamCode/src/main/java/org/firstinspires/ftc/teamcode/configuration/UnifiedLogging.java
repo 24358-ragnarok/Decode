@@ -24,11 +24,6 @@ public class UnifiedLogging {
 		Drawing.init();
 	}
 	
-	public void update() {
-		driverStation.update();
-		panels.update();
-	}
-	
 	public void addLine(String line) {
 		driverStation.addLine(line);
 		panels.addLine(line);
@@ -46,16 +41,20 @@ public class UnifiedLogging {
 	
 	public void drawRobot(Pose pose) {
 		Drawing.drawRobot(pose);
-		Drawing.update();
 	}
 	
 	public void drawDebug(Follower follower) {
 		Drawing.drawDebug(follower);
-		Drawing.update();
+		panels.addData("panels first drawing point", follower.getCurrentPath().getPanelsDrawingPoints()[0][0]);
 	}
 	
 	public void drawPath(PathChain path) {
-		Drawing.drawPath(path, Drawing.pathLook);
+		Drawing.drawPath(path, Drawing.targetLook);
 	}
 	
+	public void update() {
+		Drawing.update();
+		panels.update();
+		driverStation.update();
+	}
 }

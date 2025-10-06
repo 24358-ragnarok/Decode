@@ -70,11 +70,11 @@ public class MainAuto extends OpMode {
 	 */
 	@Override
 	public void init_loop() {
+		// Draw the initial pose of the robot
+		logging.drawRobot(matchSettings.getAutonomousStartingPose());
+		
 		// Allow driver to select match settings using the wizard
 		wizard.refresh();
-		
-		// Draw the initial pose of the robot
-		logging.drawDebug(mechanisms.drivetrain.follower);
 	}
 	
 	/**
@@ -104,10 +104,10 @@ public class MainAuto extends OpMode {
 		
 		
 		// Start the sequence
-		// autonomousSequence.start(mechanisms);
+		autonomousSequence.start(mechanisms);
 		
 		// Start the opmode timer
-		// opmodeTimer.resetTimer();
+		opmodeTimer.resetTimer();
 	}
 	
 	/**
