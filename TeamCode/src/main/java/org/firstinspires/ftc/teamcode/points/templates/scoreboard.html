@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Scoreboard{% endblock %}
+
+{% block content %}
+<style>
+    .scoreboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .filter-form select {
+        padding: 10px;
+        border-radius: 8px;
+        border: 2px solid #ddd;
+        font-size: 1em;
+    }
+    .scoreboard-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .scoreboard-table th, .scoreboard-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    .scoreboard-table th {
+        background-color: #f9f9f9;
+        font-weight: 600;
+        color: #555;
+    }
+    .scoreboard-table tr:hover { background-color: #fafafa; }
+    .rank { font-size: 1.2em; font-weight: bold; color: var(--secondary-color); text-align: center; width: 5%;}
+    .name { font-size: 1.2em; font-weight: 600; }
+    .points { font-size: 1.5em; font-weight: bold; color: var(--primary-color); text-align: right; width: 15%;}
+</style>
+
+<div class="card">
+    <div class="scoreboard-header">
+        <h2>🏆 Scoreboard</h2>
+        <form action="{{ url_for('scoreboard') }}" class="filter-form" method="GET">
+            <label for="pclass">Filter by:</label>
+            <select id="pclass" name="pclass" onchange="this.form.submit()">
+                <option if selected_pclass== value="combined" {%
+                'combined' %}selected{% endif %}>Combined</option>
+                {% for pclass in pclasses %}
+                <option %} %}selected{% endif if pclass selected_pclass== value="{{ pclass }}" {%>{{
+                    pclass|capitalize }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    <table class="scoreboard-table">
+        <thead>
+        <tr>
+            <th class="rank">#</th>
+            <th class="name">Name</th>
+            <th class="points">Points</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for entry in scoreboard_data %}
+        <tr>
+            <td class="rank">{{ loop.index }}</td>
+            <td class="name">{{ entry.name }}</td>
+            <td class="points">
+                {% if selected_pclass == 'combined' %}
+                {{ entry.combined }}
+                {% else %}
+                {{ entry.points_by_class.get(selected_pclass, 0) }}
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3" style="text-align: center; padding: 40px;">No data available. Add people
+                and points in the other tabs.
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

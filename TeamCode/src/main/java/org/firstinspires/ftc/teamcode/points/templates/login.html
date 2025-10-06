@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Points Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+    }
+    .login-box {
+        background: white;
+        padding: 50px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+    }
+    .error { color: var(--danger-color); margin-top: 15px; font-weight: bold; }
+</style>
+<div class="login-container">
+    <div class="login-box">
+        <h2>🔐 Points DB Login</h2>
+        <form action="{{ url_for('login') }}" method="POST">
+            <div class="form-group">
+                <input autofocus name="password" placeholder="Master Password" required
+                       type="password">
+            </div>
+            <button type="submit">Unlock</button>
+        </form>
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

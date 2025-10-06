@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Management{% endblock %}
+
+{% block content %}
+<style>
+    .management-form { max-width: 600px; margin: 0 auto; }
+    small { color: #7f8c8d; display: block; margin-top: 5px; }
+</style>
+
+<div class="card management-form">
+    <h2>⚙️ Point Management</h2>
+    <form id="updateForm">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input id="name" list="people-list" name="name" placeholder="Select or type a name"
+                   required
+                   type="text">
+        </div>
+
+        <div class="form-group">
+            <label for="change">Point Change:</label>
+            <input id="change" name="change" placeholder="e.g., +5 or -3" required type="number">
+        </div>
+
+        <div class="form-group">
+            <label for="pclass">Point Class:</label>
+            <input id="pclass" name="pclass" placeholder="Default: 'regular'" type="text">
+        </div>
+
+        <div class="form-group">
+            <label for="recipient">Transfer Partner (Optional):</label>
+            <input id="recipient" list="people-list" name="recipient"
+                   placeholder="Select or type a name"
+                   type="text">
+            <small>If change is positive, takes points from this person. If negative, gives points
+                to this person.</small>
+        </div>
+
+        <button class="btn-success" type="submit">✅ Apply Change</button>
+    </form>
+</div>
+
+<datalist id="people-list">
+    {% for person in people %}
+    <option value="{{ person }}">
+        {% endfor %}
+</datalist>
+
+<script>
+    // Pre-populate name field if passed in URL
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('name');
+        if (name) {
+            document.getElementById('name').value = name;
+        }
+    });
+
+    document.getElementById('updateForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        const data = {
+            name: formData.get('name').trim(),
+            change: parseInt(formData.get('change')),
+            pclass: formData.get('pclass').trim() || 'regular',
+            recipient: formData.get('recipient').trim() || null
+        };
+
+        if (!data.name || isNaN(data.change)) {
+            alert('Name and a numeric point change are required.');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+
+            alert(result.message);
+            if (result.success) {
+                e.target.reset();
+            }
+        } catch (err) {
+            alert('An unexpected error occurred: ' + err.message);
+        }
+    });
+</script>
+{% endblock %}

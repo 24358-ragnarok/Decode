@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Manage People{% endblock %}
+
+{% block content %}
+<style>
+    .people-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+    }
+    .people-list {
+        list-style: none;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    .person-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    .person-item:last-child { border-bottom: none; }
+    .person-name {
+        font-weight: 600;
+        color: var(--dark-text);
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    .person-name:hover { color: var(--primary-color); }
+
+    @media (max-width: 768px) {
+        .people-container { grid-template-columns: 1fr; }
+    }
+</style>
+
+<div class="people-container">
+    <div class="card">
+        <h2>Add New Person</h2>
+        <form id="addPersonForm">
+            <div class="form-group">
+                <label for="newName">Name:</label>
+                <input id="newName" placeholder="Enter new name" required type="text">
+            </div>
+            <button class="btn-success" type="submit">Add Person</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Existing People</h2>
+        <ul class="people-list">
+            {% for person in people %}
+            <li class="person-item" data-name="{{ person }}">
+                <a class="person-name" href="{{ url_for('management', name=person) }}">{{ person
+                    }}</a>
+                <button class="btn-danger" onclick="removePerson('{{ person }}')">Remove</button>
+            </li>
+            {% else %}
+            <li style="text-align: center; padding: 20px;">No people found.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<script>
+    const addPersonForm = document.getElementById('addPersonForm');
+    addPersonForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nameInput = document.getElementById('newName');
+        const name = nameInput.value.trim();
+
+        if (!name) {
+            alert('Please enter a name.');
+            return;
+        }
+
+        const response = await fetch('/api/person', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name })
+        });
+        const result = await response.json();
+
+        alert(result.message);
+        if (result.success) {
+            location.reload();
+        }
+    });
+
+    async function removePerson(name) {
+        if (!confirm(`Are you sure you want to remove '${name}'? This action cannot be undone.`)) {
+            return;
+        }
+
+        const response = await fetch('/api/person', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name })
+        });
+        const result = await response.json();
+
+        alert(result.message);
+        if (result.success) {
+            document.querySelector(`.person-item[data-name="${name}"]`).remove();
+        }
+    }
+</script>
+{% endblock %}

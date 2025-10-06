@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>{% block title %}Points Dashboard{% endblock %}</title>
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --danger-color: #e74c3c;
+            --success-color: #2ecc71;
+            --light-gray: #f4f7f6;
+            --dark-text: #2c3e50;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-gray);
+            color: var(--dark-text);
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .main-header {
+            background: white;
+            padding: 15px 30px;
+            margin-bottom: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .main-header h1 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 10px;
+        }
+        nav a, .logout-btn {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 600;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background-color 0.2s, color 0.2s;
+            background: none;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        nav a:hover, .logout-btn:hover {
+            background-color: var(--light-gray);
+        }
+        nav a.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+        .logout-btn { color: var(--danger-color); }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        /* Form Styles */
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; }
+        input[type="password"], input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        input:focus { outline: none; border-color: var(--primary-color); }
+        button {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .btn-danger { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .btn-success { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+    </style>
+</head>
+<body>
+{% if session['password'] %}
+<header class="main-header">
+    <h1>📊 Points Dashboard</h1>
+    <nav>
+        <ul>
+            <li><a class="{{ 'active' if request.endpoint == 'scoreboard' else '' }}"
+                   href="{{ url_for('scoreboard') }}">Scoreboard</a>
+            </li>
+            <li><a class="{{ 'active' if request.endpoint == 'management' else '' }}"
+                   href="{{ url_for('management') }}">Management</a>
+            </li>
+            <li><a class="{{ 'active' if request.endpoint == 'people' else '' }}"
+                   href="{{ url_for('people') }}">People</a></li>
+            <li>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </li>
+        </ul>
+    </nav>
+</header>
+{% endif %}
+
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
+
+<script>
+    async function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            await fetch('/logout', { method: 'POST' });
+            window.location.href = '/login';
+        }
+    }
+</script>
+</body>
+</html>
