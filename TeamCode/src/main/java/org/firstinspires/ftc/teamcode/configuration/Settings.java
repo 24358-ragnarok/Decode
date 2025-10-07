@@ -158,6 +158,9 @@ public class Settings {
 		public static double MIN_YAW = -20; // degrees left when horizontal servo is min
 		public static double MAX_YAW = 20; // degrees right when horizontal servo is max
 		
+		public static boolean CORRECT_YAW = false;
+		public static boolean CORRECT_PITCH = true;
+		
 		public static double AIM_YAW_KP = 0.05; // Proportional gain for yaw correction
 		public static double AIM_PITCH_KP = 0.05; // TODO tune; set up limelight launcher and increase these until
 		// oscillation occurs

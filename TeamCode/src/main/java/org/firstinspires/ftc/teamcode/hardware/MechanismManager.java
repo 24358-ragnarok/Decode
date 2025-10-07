@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.software.Drivetrain;
 import org.firstinspires.ftc.teamcode.software.LimelightManager;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
+import java.lang.reflect.Proxy;
+
 public class MechanismManager {
 	public final Drivetrain drivetrain;
 	public final Mechanism[] mechanisms;
@@ -103,12 +105,28 @@ public class MechanismManager {
 		try {
 			DcMotor right = hw.get(DcMotor.class, Settings.HardwareIDs.LAUNCHER_RIGHT);
 			DcMotor left = hw.get(DcMotor.class, Settings.HardwareIDs.LAUNCHER_LEFT);
-			Servo horizontal = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_HORIZONTAL_SERVO);
+			Servo horizontal;
+			if (Settings.Launcher.CORRECT_YAW) {
+				horizontal = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_HORIZONTAL_SERVO);
+			} else {
+				// make a dummy servo instead
+				horizontal = dummyServo();
+			}
 			Servo vertical = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_VERTICAL_SERVO);
 			return new Launcher(spindex, right, left, horizontal, vertical, traj);
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	public Servo dummyServo() {
+		return (Servo) Proxy.newProxyInstance(
+				Servo.class.getClassLoader(),
+				new Class[]{Servo.class},
+				(proxy, method, args) -> {
+					return null; // swallow exceptions
+				}
+		);
 	}
 	
 	@SuppressWarnings("unchecked")

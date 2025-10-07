@@ -43,8 +43,8 @@ public class Launcher extends Mechanism {
 		}
 		
 		// 1. Read the current physical orientation from the servos
-		double currentYaw = servoToYaw(horizontalServo.getPosition());
-		double currentPitch = servoToPitch(verticalServo.getPosition());
+		double currentYaw = getYaw();
+		double currentPitch = getPitch();
 		
 		// 2. Calculate the correction needed. The error is the offset from the camera.
 		// We add the error multiplied by a gain (Kp) to the current position.
@@ -119,12 +119,32 @@ public class Launcher extends Mechanism {
 		belt.spinDown();
 	}
 	
+	public double getYaw() {
+		if (Settings.Launcher.CORRECT_YAW) {
+			return servoToYaw(horizontalServo.getPosition());
+		} else {
+			return 0;
+		}
+	}
+	
 	public void setYaw(double yaw) {
-		horizontalServo.setPosition(yawToServo(yaw));
+		if (Settings.Launcher.CORRECT_YAW) {
+			horizontalServo.setPosition(yawToServo(yaw));
+		}
+	}
+	
+	public double getPitch() {
+		if (Settings.Launcher.CORRECT_PITCH) {
+			return servoToPitch(verticalServo.getPosition());
+		} else {
+			return 0;
+		}
 	}
 	
 	public void setPitch(double pitch) {
-		verticalServo.setPosition(pitchToServo(pitch));
+		if (Settings.Launcher.CORRECT_PITCH) {
+			verticalServo.setPosition(pitchToServo(pitch));
+		}
 	}
 	
 	private double yawToServo(double yawDegrees) {
