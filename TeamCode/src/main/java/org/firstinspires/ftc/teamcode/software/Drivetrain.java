@@ -20,7 +20,6 @@ import java.util.Map;
  * both manual (tele-op) and autonomous movement.
  */
 public class Drivetrain extends Mechanism {
-	
 	public final Follower follower;
 	// Define field-centric poses for autonomous targets.
 	// TODO: Tune these coordinates for your actual field and alliance.
@@ -140,6 +139,14 @@ public class Drivetrain extends Mechanism {
 				.setLinearHeadingInterpolation(follower.getHeading(), targetPose.getHeading())
 				.build();
 		follower.followPath(path);
+	}
+	
+	public void rotateTo(double angle) {
+		this.state = State.PATHING;
+		
+		if (!follower.isBusy() || follower.getCurrentPath().getHeadingGoal(1) != angle) {
+			follower.turnTo(angle);
+		}
 	}
 	
 	/**

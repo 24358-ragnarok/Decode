@@ -102,7 +102,7 @@ public class AlignmentEngine extends Mechanism {
 		
 		double angleError = angleToTarget(newPose, targetPose);
 		
-		drivetrain.goTo(newPose.withHeading(angleError));
+		drivetrain.rotateTo(angleError);
 	}
 	
 	public void update() {

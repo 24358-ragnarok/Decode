@@ -160,7 +160,7 @@ public class MainOp extends OpMode {
 		}
 		
 		// Alignment & Launcher
-		if (subController.wasJustPressed(Controller.Action.AIM) &&
+		if (subController.getProcessedValue(Controller.Action.AIM) > 0.1 &&
 				mechanisms.alignmentEngine.isInLaunchZone(mechanisms.drivetrain.follower.getPose())) {
 			mechanisms.alignmentEngine.run();
 			ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::ready);
@@ -173,6 +173,11 @@ public class MainOp extends OpMode {
 				ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::launch);
 			}
 		}
+		logging.addData("Aim Condition - Button", subController.getProcessedValue(Controller.Action.AIM) > 0.1);
+		logging.addData("Aim Condition - Zone", mechanisms.alignmentEngine.isInLaunchZone(mechanisms.drivetrain.getPose()));
+		ifMechanismValid(mechanisms.get(HorizontalLauncher.class), hl ->
+				logging.addData("Aim Condition - Mechanism", true)
+		);
 		
 		// Intake & Spindex
 		if (subController.getProcessedValue(Controller.Action.INTAKE) > 0) {

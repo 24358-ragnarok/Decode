@@ -11,17 +11,15 @@ public class HorizontalLauncher extends Mechanism {
 	private final TrajectoryEngine trajectoryEngine;
 	private final Servo horizontalServo;
 	private final Servo verticalServo;
-	private final Spindex spindex;
 	private final SyncBelt belt;
 	private final MatchSettings matchSettings;
 	
-	public HorizontalLauncher(Spindex spindex,
-	                          DcMotor beltRight,
-	                          DcMotor beltLeft,
-	                          Servo horizontalServo,
-	                          Servo verticalServo,
-	                          TrajectoryEngine trajectoryEngine, MatchSettings matchSettings) {
-		this.spindex = spindex;
+	public HorizontalLauncher(
+			DcMotor beltRight,
+			DcMotor beltLeft,
+			Servo horizontalServo,
+			Servo verticalServo,
+			TrajectoryEngine trajectoryEngine, MatchSettings matchSettings) {
 		this.trajectoryEngine = trajectoryEngine;
 		this.horizontalServo = horizontalServo;
 		this.verticalServo = verticalServo;
@@ -98,18 +96,17 @@ public class HorizontalLauncher extends Mechanism {
 	 */
 	public boolean okayToLaunch() {
 		return trajectoryEngine.isAimed() &&
-				belt.atSpeed() &&
-				spindex.isNextArtifactAtExit();
+				belt.atSpeed();
 	}
 	
 	/**
 	 * Launches the artifact if possible.
 	 */
 	public void launch() {
-		if (!okayToLaunch())
-			return;
+		if (!okayToLaunch()) {
+		}
 		
-		spindex.eject();
+		// TODO kicker?
 	}
 	
 	/**
@@ -120,7 +117,6 @@ public class HorizontalLauncher extends Mechanism {
 	public void ready() {
 		belt.spinUp();
 		aim();
-		spindex.rotateNextArtifactToExit();
 	}
 	
 	/**

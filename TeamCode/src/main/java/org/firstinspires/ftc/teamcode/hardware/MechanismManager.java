@@ -35,7 +35,7 @@ public class MechanismManager {
 		LimelightManager ll = createLimelight(hw, match);
 		TrajectoryEngine traj = createTrajectory(ll, match);
 		AlignmentEngine align = createAlignment(match, drivetrain, ll);
-		HorizontalLauncher launcher = createLauncher(hw, spindex, traj, match);
+		HorizontalLauncher launcher = createLauncher(hw, traj, match);
 		
 		mechanisms = new Mechanism[]{intake, spindex, launcher};
 		
@@ -100,7 +100,7 @@ public class MechanismManager {
 		}
 	}
 	
-	private HorizontalLauncher createLauncher(HardwareMap hw, Spindex spindex, TrajectoryEngine traj, MatchSettings matchSettings) {
+	private HorizontalLauncher createLauncher(HardwareMap hw, TrajectoryEngine traj, MatchSettings matchSettings) {
 		if (!Settings.Deploy.LAUNCHER) return null;
 		try {
 			DcMotor right = hw.get(DcMotor.class, Settings.HardwareIDs.LAUNCHER_RIGHT);
@@ -113,7 +113,7 @@ public class MechanismManager {
 				horizontal = dummyServo();
 			}
 			Servo vertical = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
-			return new HorizontalLauncher(spindex, right, left, horizontal, vertical, traj, matchSettings);
+			return new HorizontalLauncher(right, left, horizontal, vertical, traj, matchSettings);
 		} catch (Exception e) {
 			return null;
 		}

@@ -17,14 +17,14 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
 
 public class Constants {
 	public static final FollowerConstants followerConstants = new FollowerConstants()
-			.mass(4)
+			.mass(6)
 			.forwardZeroPowerAcceleration(-33.78)
 			.lateralZeroPowerAcceleration(-58.36)
 			
 			.translationalPIDFCoefficients(new PIDFCoefficients(0.045, 0, 0.005, 0.04))
 			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.12, 0, 0.01, 0.02))
-			.headingPIDFCoefficients(new PIDFCoefficients(0.9, 0, 0.05, 0.035))
-			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.5, 0, 0.08, 0.02))
+			.headingPIDFCoefficients(new PIDFCoefficients(1.2, 0, 0.05, 0.035))
+			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(3.0, 0, 0.1, 0.02))
 			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.04, 0, 0.00035, 0.6, 0.015))
 			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.02, 0, 0.000005, 0.6, 0.01))
 			.useSecondaryDrivePIDF(true)
@@ -62,7 +62,7 @@ public class Constants {
 			0.995,
 			0.1,
 			0.1,
-			0.009,
+			Math.toRadians(2), // heading must be within 2 degrees TODO sharpen later
 			50,
 			0.1,
 			10,
