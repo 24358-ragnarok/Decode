@@ -30,8 +30,12 @@ public class HorizontalLauncher extends Mechanism {
 	/**
 	 * Aims the launcher at the target using feedback from the TrajectoryEngine.
 	 * This is invoked by the {@link HorizontalLauncher#ready()} method which should
-	 * be called
-	 * repeatedly in the main robot loop when aiming.
+	 * be called repeatedly in the main robot loop when aiming.
+	 * <p>
+	 * The TrajectoryEngine provides a standardized AimingSolution with:
+	 * - Yaw offset from camera center (-10° to +10°)
+	 * - Absolute pitch launch angle (0° to 90°)
+	 * - Required launch velÎocity
 	 * <p>
 	 * This method is public so it can be called independently when you want to
 	 * maintain aim and spin-up without controlling the spindex.
@@ -48,55 +52,51 @@ public class HorizontalLauncher extends Mechanism {
 		double requiredRPM = solution.getRequiredWheelSpeedRPM();
 		belt.setTargetSpeed(requiredRPM);
 		
-		if (Settings.Aiming.USE_COMPLEX_AIMING) {
-			// Complex aiming: directly set the calculated angles
-			double targetYaw = Math.max(Settings.Launcher.MIN_YAW,
-					Math.min(Settings.Launcher.MAX_YAW, solution.horizontalOffsetDegrees));
-			double targetPitch = Math.max(Settings.Launcher.MIN_PITCH,
-					Math.min(Settings.Launcher.MAX_PITCH, solution.verticalOffsetDegrees));
-			
-			setYaw(targetYaw);
-			setPitch(targetPitch);
-		} else {
-			// Simple aiming: use proportional correction based on offsets
-			// 1. Read the current physical orientation from the servos
+		// Apply yaw correction: horizontalOffsetDegrees is the offset from center
+		// A positive value means target is right, negative means left
+		// We apply a proportional gain to smooth the correction
+		if (Settings.Launcher.CORRECT_YAW) {
+			double yawError = solution.horizontalOffsetDegrees;
+			// Apply correction by adjusting current yaw position
 			double currentYaw = getYaw();
-			double currentPitch = getPitch();
-			
-			// 2. Calculate the correction needed. The error is the offset from the camera.
-			// We add the error multiplied by a gain (Kp) to the current position.
-			// For yaw, a positive offset (tx) means the target is to the right, so we
-			// increase yaw.
-			// For pitch, a positive offset (ty) means the target is up, so we increase
-			// pitch.
-			double yawCorrection = solution.horizontalOffsetDegrees * Settings.Launcher.AIM_YAW_KP;
-			double pitchCorrection = solution.verticalOffsetDegrees * Settings.Launcher.AIM_PITCH_KP;
-			
-			// 3. Calculate the new target orientation and adjust
-			// If the amount of correction is outside the acceptable range, adjust.
-			if (Math.abs(yawCorrection) > Settings.Aiming.MAX_YAW_ERROR) {
-				double targetYaw = Math.max(Settings.Launcher.MIN_YAW,
-						Math.min(Settings.Launcher.MAX_YAW, currentYaw + yawCorrection));
-				setYaw(targetYaw);
-			}
-			
-			if (Math.abs(pitchCorrection) > Settings.Aiming.MAX_PITCH_ERROR) {
-				double targetPitch = Math.max(Settings.Launcher.MIN_PITCH,
-						Math.min(Settings.Launcher.MAX_PITCH, currentPitch + pitchCorrection));
-				setPitch(targetPitch);
-			}
+			double targetYaw = currentYaw + yawError;
+			setYaw(targetYaw);
 		}
+		
+		// Set pitch directly: verticalOffsetDegrees is the absolute launch angle
+		// No proportional correction needed - just set it
+		setPitch(solution.verticalOffsetDegrees);
 	}
 	
 	/**
 	 * Checks if all conditions are met for a successful launch.
+	 * <p>
+	 * Verifies:
+	 * - Target is detected by vision system
+	 * - Yaw is centered on target (horizontal offset within tolerance)
+	 * - Pitch servo has reached target launch angle
+	 * - Belt is spun up to target speed
 	 *
-	 * @return True if the launcher is aimed, up to speed, and a game piece is
-	 * ready.
+	 * @return True if the launcher is aimed, up to speed, and ready to launch.
 	 */
 	public boolean okayToLaunch() {
-		return trajectoryEngine.isAimed() &&
-				belt.atSpeed();
+		TrajectoryEngine.AimingSolution solution = trajectoryEngine.getAimingOffsets(matchSettings.getAllianceColor());
+		
+		if (!solution.hasTarget) {
+			return false;
+		}
+		
+		// Check yaw alignment (horizontal offset from camera)
+		boolean yawAligned = Math.abs(solution.horizontalOffsetDegrees) < Settings.Aiming.MAX_YAW_ERROR;
+		
+		// Check pitch alignment (servo has reached target angle)
+		double pitchError = Math.abs(getPitch() - solution.verticalOffsetDegrees);
+		boolean pitchAligned = pitchError < Settings.Aiming.MAX_PITCH_ERROR;
+		
+		// Check belt speed
+		boolean beltReady = belt.atSpeed();
+		
+		return yawAligned && pitchAligned && beltReady;
 	}
 	
 	/**
@@ -104,6 +104,7 @@ public class HorizontalLauncher extends Mechanism {
 	 */
 	public void launch() {
 		if (!okayToLaunch()) {
+			// Don't launch if not ready
 		}
 		
 		// TODO kicker?
@@ -133,56 +134,64 @@ public class HorizontalLauncher extends Mechanism {
 	
 	public void stop() {
 		belt.spinDown();
+		setPitch(Settings.Launcher.DETECTION_PITCH);
 	}
 	
+	/**
+	 * Gets the current yaw angle in degrees.
+	 * Yaw is centered at 0° for offset-based aiming.
+	 * Range: [YAW_MIN_ANGLE, YAW_MAX_ANGLE] (e.g., -10° to +10°).
+	 */
 	public double getYaw() {
 		if (Settings.Launcher.CORRECT_YAW) {
-			return servoToYaw(horizontalServo.getPosition());
+			return Settings.Launcher.servoToYaw(horizontalServo.getPosition());
 		} else {
-			return 0;
+			return 0; // Center position
 		}
 	}
 	
-	public void setYaw(double yaw) {
+	/**
+	 * Sets the yaw angle in degrees.
+	 * Yaw is centered at 0° for offset-based aiming.
+	 * Range: [YAW_MIN_ANGLE, YAW_MAX_ANGLE] (e.g., -10° to +10°).
+	 * Clamping is handled by the conversion function.
+	 */
+	public void setYaw(double yawDegrees) {
 		if (Settings.Launcher.CORRECT_YAW) {
-			horizontalServo.setPosition(yawToServo(yaw));
+			horizontalServo.setPosition(Settings.Launcher.yawToServo(yawDegrees));
 		}
 	}
 	
+	/**
+	 * Gets the current pitch angle in degrees.
+	 * Pitch uses absolute launch angles from horizontal.
+	 * Range: [PITCH_MIN_ANGLE, PITCH_MAX_ANGLE] (e.g., 0° to 90°).
+	 * 0° = horizontal, 45° = 45° launch angle, 90° = straight up.
+	 */
 	public double getPitch() {
 		if (Settings.Launcher.CORRECT_PITCH) {
-			return servoToPitch(verticalServo.getPosition());
+			return Settings.Launcher.servoToPitch(verticalServo.getPosition());
 		} else {
-			return 0;
+			return 45; // Default launch angle
 		}
 	}
 	
-	public void setPitch(double pitch) {
+	/**
+	 * Sets the pitch angle in degrees.
+	 * Pitch uses absolute launch angles from horizontal.
+	 * Range: [PITCH_MIN_ANGLE, PITCH_MAX_ANGLE] (e.g., 0° to 90°).
+	 * 0° = horizontal, 45° = 45° launch angle, 90° = straight up.
+	 * Clamping is handled by the conversion function.
+	 */
+	public void setPitch(double pitchDegrees) {
 		if (Settings.Launcher.CORRECT_PITCH) {
-			verticalServo.setPosition(pitchToServo(pitch));
+			verticalServo.setPosition(Settings.Launcher.pitchToServo(pitchDegrees));
 		}
-	}
-	
-	private double yawToServo(double yawDegrees) {
-		return (yawDegrees - Settings.Launcher.MIN_YAW) / (Settings.Launcher.MAX_YAW - Settings.Launcher.MIN_YAW);
-	}
-	
-	private double pitchToServo(double pitchDegrees) {
-		return (pitchDegrees - Settings.Launcher.MIN_PITCH)
-				/ (Settings.Launcher.MAX_PITCH - Settings.Launcher.MIN_PITCH);
-	}
-	
-	private double servoToYaw(double servoPos) {
-		return Settings.Launcher.MIN_YAW + servoPos * (Settings.Launcher.MAX_YAW - Settings.Launcher.MIN_YAW);
-	}
-	
-	private double servoToPitch(double servoPos) {
-		return Settings.Launcher.MIN_PITCH + servoPos * (Settings.Launcher.MAX_PITCH - Settings.Launcher.MIN_PITCH);
 	}
 	
 	public final void init() {
-		setYaw(0);
-		setPitch(0);
+		setYaw(0); // 0° yaw (center/forward)
+		setPitch(Settings.Launcher.DETECTION_PITCH);
 	}
 	
 	public final void update() {

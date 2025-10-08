@@ -13,7 +13,7 @@ import java.util.List;
 // Note: Ensure your Limelight 3a is configured via its web interface to use the AprilTag pipeline
 // and is named "limelight" in your robot's hardware configuration.
 
-@TeleOp(name = "Limelight AprilTag Test", group = "Tests")
+@TeleOp(name = "Test: limelight", group = "Tests")
 public class LimelightAimingTest extends LinearOpMode {
 	
 	// Define the specific AprilTag ID we are looking for.

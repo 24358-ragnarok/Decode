@@ -42,9 +42,14 @@ public class TrajectoryEngine {
 	 * offset.
 	 * This method aims at a point offset from the AprilTag without physics
 	 * calculations.
+	 * <p>
+	 * Uses trigonometry with the vertical angle (ty) instead of 3D pose data.
 	 *
 	 * @param allianceColor The alliance color to determine target ID
-	 * @return An {@link AimingSolution} with angle offsets
+	 * @return An {@link AimingSolution} with:
+	 * - horizontal: yaw offset from camera center (degrees, -10 to +10)
+	 * - vertical: absolute launch angle from horizontal (degrees, 0 to 90)
+	 * - velocity: default wheel speed
 	 */
 	private AimingSolution aimSimple(MatchSettings.AllianceColor allianceColor) {
 		LLResult limelightResult = limelightManager.detectGoal();
@@ -57,33 +62,56 @@ public class TrajectoryEngine {
 		
 		for (LLResultTypes.FiducialResult fiducial : limelightResult.getFiducialResults()) {
 			if (fiducial.getFiducialId() == targetId) {
-				// Horizontal angle remains the same.
-				double horizontal = fiducial.getTargetXDegrees();
+				// Horizontal: yaw offset from camera center (tx)
+				// This is the error that needs to be corrected
+				double yawOffset = fiducial.getTargetXDegrees();
 				
-				// Get the 3D pose of the tag in camera space (units are meters).
-				// +X is right, +Y is down, +Z is forward.
-				Pose3D cameraToTarget = fiducial.getTargetPoseCameraSpace();
-				double forwardDistanceMeters = cameraToTarget.getPosition().z;
+				// Get vertical angle from camera to target (ty)
+				// Positive = target is above camera horizontal
+				// Negative = target is below camera horizontal
+				double verticalAngleDegrees = fiducial.getTargetYDegrees();
 				
-				// Current vertical displacement of the tag from the camera's axis.
-				// We negate Y because +Y is down.
-				double currentVerticalDispMeters = -cameraToTarget.getPosition().y;
+				// Skip if angle is too small (would cause numerical issues)
+				if (Math.abs(verticalAngleDegrees) < 0.5) {
+					// Target is essentially at camera level, use a minimum angle
+					verticalAngleDegrees = 0.5;
+				}
 				
-				// Calculate the desired vertical displacement by adding our net offset.
-				double desiredVerticalDispMeters = currentVerticalDispMeters
-						+ Settings.Aiming.getNetVerticalOffsetMeters();
+				double verticalAngleRadians = Math.toRadians(verticalAngleDegrees);
 				
-				// Calculate the new vertical angle using arctangent.
-				// Math.atan2(y, x) computes the angle for the point (x, y).
-				double newVerticalAngleRadians = Math.atan2(desiredVerticalDispMeters, forwardDistanceMeters);
+				// Calculate height difference from camera/launcher to AprilTag
+				// This assumes camera and launcher are at same height (or close enough)
+				double heightDiffToTagInches = Settings.Aiming.GOAL_HEIGHT_INCHES
+						- Settings.Aiming.LAUNCHER_HEIGHT_INCHES;
 				
-				// Convert the result from radians to degrees for consistency.
-				double vertical = Math.toDegrees(newVerticalAngleRadians);
+				// Use trigonometry to find horizontal distance:
+				// tan(ty) = heightDiff / distance
+				// distance = heightDiff / tan(ty)
+				double horizontalDistanceInches = heightDiffToTagInches / Math.tan(verticalAngleRadians);
+				
+				// Ensure we have a valid distance (positive and reasonable)
+				if (horizontalDistanceInches <= 0 || horizontalDistanceInches > 300) {
+					// Invalid geometry, skip this solution
+					continue;
+				}
+				
+				// Calculate desired aim point: AprilTag + vertical offset
+				double desiredHeightInches = Settings.Aiming.GOAL_HEIGHT_INCHES
+						+ Settings.Aiming.TARGET_HEIGHT_OFFSET_INCHES;
+				
+				// Calculate height difference from launcher to desired aim point
+				double heightDiffToAimPointInches = desiredHeightInches
+						- Settings.Aiming.LAUNCHER_HEIGHT_INCHES;
+				
+				// Calculate the launch angle to reach the aim point
+				// atan2(height, distance) gives us the angle from horizontal
+				double launchAngleRadians = Math.atan2(heightDiffToAimPointInches, horizontalDistanceInches);
+				double launchAngleDegrees = Math.toDegrees(launchAngleRadians);
 				
 				// Simple aiming uses default wheel speed
 				double launchSpeed = Settings.Aiming.wheelRpmToVelocity(Settings.Aiming.WHEEL_SPEED_RPM);
 				
-				return new AimingSolution(horizontal, vertical, launchSpeed, true);
+				return new AimingSolution(yawOffset, launchAngleDegrees, launchSpeed, true);
 			}
 		}
 		
@@ -97,7 +125,10 @@ public class TrajectoryEngine {
 	 * velocity.
 	 *
 	 * @param allianceColor The alliance color to determine target ID
-	 * @return An {@link AimingSolution} with optimized trajectory parameters
+	 * @return An {@link AimingSolution} with:
+	 * - horizontal: yaw offset from camera center (degrees, -10 to +10)
+	 * - vertical: optimal launch angle from horizontal (degrees, 0 to 90)
+	 * - velocity: calculated optimal launch velocity
 	 */
 	private AimingSolution aimComplex(MatchSettings.AllianceColor allianceColor) {
 		LLResult limelightResult = limelightManager.detectGoal();
@@ -113,11 +144,12 @@ public class TrajectoryEngine {
 				// Get the 3D pose of the tag in camera space (meters)
 				Pose3D cameraToTarget = fiducial.getTargetPoseCameraSpace();
 				
+				// Horizontal: yaw offset from camera center (tx)
+				// This is the error that needs to be corrected
+				double yawOffset = fiducial.getTargetXDegrees();
+				
 				// Convert to inches for our calculations
 				double horizontalDistanceInches = cameraToTarget.getPosition().z * 39.3701;
-				
-				// Calculate horizontal angle (yaw)
-				double yawDegrees = fiducial.getTargetXDegrees();
 				
 				// Calculate height difference (launcher to goal)
 				double heightDifferenceInches = Settings.Aiming.GOAL_HEIGHT_INCHES -
@@ -133,7 +165,7 @@ public class TrajectoryEngine {
 				}
 				
 				return new AimingSolution(
-						yawDegrees,
+						yawOffset,
 						trajectory.launchAngleDegrees,
 						trajectory.launchVelocity,
 						true);
@@ -274,31 +306,26 @@ public class TrajectoryEngine {
 	}
 	
 	/**
-	 * Determines if the launcher is currently aimed at the target within acceptable
-	 * tolerance.
-	 *
-	 * @return True if aimed correctly, false otherwise.
-	 */
-	public boolean isAimed() {
-		AimingSolution solution = getAimingOffsets(matchSettings.getAllianceColor());
-		if (!solution.hasTarget) {
-			return false;
-		}
-		
-		boolean yawAligned = Math.abs(solution.horizontalOffsetDegrees) < Settings.Aiming.MAX_YAW_ERROR;
-		boolean pitchAligned = Math.abs(solution.verticalOffsetDegrees) < Settings.Aiming.MAX_PITCH_ERROR;
-		
-		return yawAligned && pitchAligned;
-	}
-	
-	/**
 	 * Data class to hold the complete aiming solution including angles and launch
 	 * velocity.
+	 * <p>
+	 * Coordinate System:
+	 * - horizontalOffsetDegrees: Yaw offset from camera center (-10° to +10°)
+	 * * 0° = perfectly centered on target
+	 * * Positive = target is to the right, need to rotate right
+	 * * Negative = target is to the left, need to rotate left
+	 * <p>
+	 * - verticalOffsetDegrees: Absolute launch angle from horizontal (0° to 90°)
+	 * * 0° = horizontal/parallel to ground
+	 * * 45° = 45° launch angle
+	 * * 90° = straight up
+	 * <p>
+	 * - launchVelocityInchesPerSec: Required launch velocity for the shot
 	 */
 	public static class AimingSolution {
 		public final boolean hasTarget;
-		public final double horizontalOffsetDegrees; // Yaw angle
-		public final double verticalOffsetDegrees; // Pitch angle
+		public final double horizontalOffsetDegrees; // Yaw offset from center
+		public final double verticalOffsetDegrees; // Absolute launch angle
 		public final double launchVelocityInchesPerSec; // Required launch velocity
 		
 		/**

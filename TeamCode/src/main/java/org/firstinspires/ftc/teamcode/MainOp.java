@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.Spindex;
 import org.firstinspires.ftc.teamcode.software.Controller;
 import org.firstinspires.ftc.teamcode.software.Drivetrain;
+import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
 import java.util.function.Consumer;
 
@@ -173,11 +174,33 @@ public class MainOp extends OpMode {
 				ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::launch);
 			}
 		}
-		logging.addData("Aim Condition - Button", subController.getProcessedValue(Controller.Action.AIM) > 0.1);
-		logging.addData("Aim Condition - Zone", mechanisms.alignmentEngine.isInLaunchZone(mechanisms.drivetrain.getPose()));
-		ifMechanismValid(mechanisms.get(HorizontalLauncher.class), hl ->
-				logging.addData("Aim Condition - Mechanism", true)
-		);
+		
+		// Debug telemetry for aiming system
+		logging.addLine("=== AIM DEBUG ===");
+		logging.addData("Aim Button", subController.getProcessedValue(Controller.Action.AIM) > 0.1);
+		logging.addData("In Launch Zone", mechanisms.alignmentEngine.isInLaunchZone(mechanisms.drivetrain.getPose()));
+		logging.addData("Alliance", matchSettings.getAllianceColor());
+		logging.addData("Target Tag ID",
+				matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE ? 20 : 24);
+		
+		// Get aiming solution for debugging
+		if (mechanisms.trajectoryEngine != null) {
+			TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine.getAimingOffsets(matchSettings.getAllianceColor());
+			logging.addData("Has Target", solution.hasTarget);
+			if (solution.hasTarget) {
+				logging.addData("Yaw Offset°", "%.2f", solution.horizontalOffsetDegrees);
+				logging.addData("Launch Angle°", "%.2f", solution.verticalOffsetDegrees);
+				logging.addData("Launch Velocity in/s", "%.1f", solution.launchVelocityInchesPerSec);
+				logging.addData("Required RPM", "%.0f", solution.getRequiredWheelSpeedRPM());
+			}
+		}
+		
+		// Launcher mechanism status
+		ifMechanismValid(mechanisms.get(HorizontalLauncher.class), hl -> {
+			logging.addData("Launcher Ready", hl.okayToLaunch());
+			logging.addData("Current Pitch°", "%.2f", hl.getPitch());
+			logging.addData("Current Yaw°", "%.2f", hl.getYaw());
+		});
 		
 		// Intake & Spindex
 		if (subController.getProcessedValue(Controller.Action.INTAKE) > 0) {

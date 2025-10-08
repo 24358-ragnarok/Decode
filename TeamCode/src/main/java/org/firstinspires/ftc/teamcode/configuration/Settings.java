@@ -147,23 +147,105 @@ public class Settings {
 	
 	/**
 	 * Settings for the Launcher mechanism.
+	 * <p>
+	 * Servo Angle System:
+	 * - Yaw: 20° window (-10° to +10°), centered at 0° for camera offset
+	 * corrections
+	 * * 0° = center, -10° = left, +10° = right
+	 * * Used for fine horizontal aiming adjustments
+	 * <p>
+	 * - Pitch: 90° window (0° to 90°), absolute angles from horizontal for launch
+	 * physics
+	 * * 0° = horizontal/parallel to ground
+	 * * 45° = 45° launch angle
+	 * * 90° = straight up
+	 * * Matches projectile motion calculations in TrajectoryEngine
+	 * <p>
+	 * - Physical servo calibration points map these angle ranges to servo positions
 	 */
 	@Configurable
 	public static class Launcher {
 		public static double BELT_MOTOR_SPEED = 1.0; // Launcher motor speed (0..1)
 		public static long BELT_SPINUP_TIME_MS = 500;
 		public static double BELT_SYNC_KP = 0.05; // Proportional gain for synchronizing belt speeds
-		public static double MIN_PITCH = 0; // degrees from horizontal when vert servo is min
-		public static double MAX_PITCH = 30; // degrees from horizontal when vert servo is max
-		public static double MIN_YAW = -20; // degrees left when horizontal servo is min
-		public static double MAX_YAW = 20; // degrees right when horizontal servo is max
+		
+		// Pitch servo calibration (physical limits)
+		public static double PITCH_SERVO_AT_MIN = 0.75; // Servo position at minimum pitch angle
+		public static double PITCH_SERVO_AT_MAX = 0.45; // Servo position at maximum pitch angle
+		public static double DETECTION_PITCH = 25; // degrees from horizontal
+		
+		// Pitch angle window (absolute angles from horizontal, for launch physics)
+		public static double PITCH_MIN_ANGLE = 0.0; // Minimum pitch angle in degrees (horizontal)
+		public static double PITCH_MAX_ANGLE = 90.0; // Maximum pitch angle in degrees (straight up, 90° total window)
+		
+		// Yaw servo calibration (physical limits)
+		public static double YAW_SERVO_AT_MIN = 0.0; // Servo position at minimum yaw angle
+		public static double YAW_SERVO_AT_MAX = 1.0; // Servo position at maximum yaw angle
+		
+		// Yaw angle window (centered around 0°)
+		public static double YAW_MIN_ANGLE = -10.0; // Minimum yaw angle in degrees
+		public static double YAW_MAX_ANGLE = 10.0; // Maximum yaw angle in degrees (20° total window)
 		
 		public static boolean CORRECT_YAW = false;
 		public static boolean CORRECT_PITCH = true;
 		
-		public static double AIM_YAW_KP = 0.05; // Proportional gain for yaw correction
-		public static double AIM_PITCH_KP = 0.05; // TODO tune; set up limelight launcher and increase these until
-		// oscillation occurs
+		/**
+		 * Converts pitch angle (degrees) to servo position using calibration points.
+		 * Maps angle range [PITCH_MIN_ANGLE, PITCH_MAX_ANGLE] to servo range
+		 * [PITCH_SERVO_AT_MIN, PITCH_SERVO_AT_MAX].
+		 */
+		public static double pitchToServo(double pitchDegrees) {
+			// Clamp to valid angle range
+			pitchDegrees = Math.max(PITCH_MIN_ANGLE, Math.min(PITCH_MAX_ANGLE, pitchDegrees));
+			
+			// Linear mapping: angle range to servo range
+			double angleRange = PITCH_MAX_ANGLE - PITCH_MIN_ANGLE;
+			double servoRange = PITCH_SERVO_AT_MAX - PITCH_SERVO_AT_MIN;
+			double normalizedAngle = (pitchDegrees - PITCH_MIN_ANGLE) / angleRange;
+			
+			return PITCH_SERVO_AT_MIN + normalizedAngle * servoRange;
+		}
+		
+		/**
+		 * Converts servo position to pitch angle (degrees) using calibration points.
+		 */
+		public static double servoToPitch(double servoPosition) {
+			// Inverse mapping: servo range to angle range
+			double angleRange = PITCH_MAX_ANGLE - PITCH_MIN_ANGLE;
+			double servoRange = PITCH_SERVO_AT_MAX - PITCH_SERVO_AT_MIN;
+			double normalizedServo = (servoPosition - PITCH_SERVO_AT_MIN) / servoRange;
+			
+			return PITCH_MIN_ANGLE + normalizedServo * angleRange;
+		}
+		
+		/**
+		 * Converts yaw angle (degrees) to servo position using calibration points.
+		 * Maps angle range [YAW_MIN_ANGLE, YAW_MAX_ANGLE] to servo range
+		 * [YAW_SERVO_AT_MIN, YAW_SERVO_AT_MAX].
+		 */
+		public static double yawToServo(double yawDegrees) {
+			// Clamp to valid angle range
+			yawDegrees = Math.max(YAW_MIN_ANGLE, Math.min(YAW_MAX_ANGLE, yawDegrees));
+			
+			// Linear mapping: angle range to servo range
+			double angleRange = YAW_MAX_ANGLE - YAW_MIN_ANGLE;
+			double servoRange = YAW_SERVO_AT_MAX - YAW_SERVO_AT_MIN;
+			double normalizedAngle = (yawDegrees - YAW_MIN_ANGLE) / angleRange;
+			
+			return YAW_SERVO_AT_MIN + normalizedAngle * servoRange;
+		}
+		
+		/**
+		 * Converts servo position to yaw angle (degrees) using calibration points.
+		 */
+		public static double servoToYaw(double servoPosition) {
+			// Inverse mapping: servo range to angle range
+			double angleRange = YAW_MAX_ANGLE - YAW_MIN_ANGLE;
+			double servoRange = YAW_SERVO_AT_MAX - YAW_SERVO_AT_MIN;
+			double normalizedServo = (servoPosition - YAW_SERVO_AT_MIN) / servoRange;
+			
+			return YAW_MIN_ANGLE + normalizedServo * angleRange;
+		}
 	}
 	
 	@Configurable
@@ -196,23 +278,23 @@ public class Settings {
 		 * PITCH refers to the launcher vertical angle
 		 */
 		public static double MAX_ROTATIONAL_ERROR = Math.toRadians(20);
-		public static double MAX_YAW_ERROR = Math.toRadians(3);
-		public static double MAX_PITCH_ERROR = Math.toRadians(1);
+		public static double MAX_YAW_ERROR = 3.0; // degrees
+		public static double MAX_PITCH_ERROR = 1.0; // degrees
 		
 		// ===== Complex Aiming Constants (Physics-Based) =====
 		// Physical constants
 		public static double GRAVITY_INCHES_PER_SEC_SQ = 386.4; // Standard gravity in inches/s²
 		
 		// Launcher specifications
-		public static double WHEEL_DIAMETER_INCHES = 4.0; // Diameter of launcher wheels
+		public static double WHEEL_DIAMETER_INCHES = 2.83; // Diameter of launcher wheels
 		public static double WHEEL_SPEED_RPM = 3000; // Default wheel speed in RPM
 		public static double MIN_WHEEL_SPEED_RPM = 1500; // Minimum safe wheel speed
 		public static double MAX_WHEEL_SPEED_RPM = 5000; // Maximum safe wheel speed
 		public static double LAUNCH_EFFICIENCY = 0.85; // Energy transfer efficiency (0-1)
 		
 		// Launch geometry
-		public static double LAUNCHER_HEIGHT_INCHES = 18.0; // Height of launcher exit above field
-		public static double GOAL_HEIGHT_INCHES = 48.0; // Height of goal center above field
+		public static double LAUNCHER_HEIGHT_INCHES = 13.25; // Height of launcher exit above field
+		public static double GOAL_HEIGHT_INCHES = 41.0; // Height of goal center above field
 		
 		// Optimization preferences
 		public static double PREFERRED_IMPACT_ANGLE_DEG = 60; // Preferred angle of entry (from horizontal)
@@ -268,14 +350,17 @@ public class Settings {
 	/**
 	 * Flags to enable or disable major robot subsystems.
 	 * Useful for testing and debugging.
+	 *
+	 * @noinspection ConstantValue, PointlessBooleanExpression
 	 */
 	@Configurable
 	public static class Deploy {
 		public static boolean INTAKE = false;
-		public static boolean LAUNCHER = false;
 		public static boolean LIMELIGHT = true;
 		public static boolean SPINDEX = false;
-		public static boolean TRAJECTORY_ENGINE = false;
+		public static boolean TRAJECTORY_ENGINE = true;
+		public static boolean LAUNCHER = TRAJECTORY_ENGINE && true;
+		
 		public static boolean ALIGNMENT_ENGINE = true;
 	}
 	
