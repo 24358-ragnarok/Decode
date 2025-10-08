@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.bylazar:fullpanels:1.0.6'
+    implementation 'com.bylazar:fullpanels:1.0.7'
     implementation 'org.firstinspires.ftc:Inspection:11.0.0'
     implementation 'org.firstinspires.ftc:Blocks:11.0.0'
     //noinspection Aligned16KB (idk what that is)
