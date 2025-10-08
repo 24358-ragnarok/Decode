@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
-import org.firstinspires.ftc.teamcode.hardware.Launcher;
+import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
 
 /**
  * An enhanced TeleOp for testing launcher motor performance and angle.
@@ -26,7 +26,7 @@ public class ProjectileMotionTest extends LinearOpMode {
 	// Motor Configuration
 	final double TICKS_PER_REVOLUTION = 1120;
 	// Hardware
-	private Launcher.SyncBelt syncBelt;
+	private HorizontalLauncher.SyncBelt syncBelt;
 	private DcMotorEx rightLauncherMotor;
 	private DcMotorEx leftLauncherMotor;
 	private IMU imu; // The Inertial Measurement Unit
@@ -42,7 +42,7 @@ public class ProjectileMotionTest extends LinearOpMode {
 		rightLauncherMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 		leftLauncherMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 		
-		syncBelt = new Launcher.SyncBelt(rightLauncherMotor, leftLauncherMotor);
+		syncBelt = new HorizontalLauncher.SyncBelt(rightLauncherMotor, leftLauncherMotor);
 		
 		// --- IMU Initialization ---
 		imu = hardwareMap.get(IMU.class, "imu");

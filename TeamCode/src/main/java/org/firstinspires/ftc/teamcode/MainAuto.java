@@ -13,8 +13,6 @@ import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 
-import java.util.Locale;
-
 /**
  * The main Autonomous script that makes the robot move by itself during the
  * Auto period of a match.
@@ -63,6 +61,9 @@ public class MainAuto extends OpMode {
 		
 		// Initialize robot mechanisms
 		mechanisms = new MechanismManager(hardwareMap, matchSettings);
+		
+		// Enable retained mode for efficient telemetry during autonomous
+		logging.enableRetainedMode();
 	}
 	
 	/**
@@ -97,13 +98,11 @@ public class MainAuto extends OpMode {
 		pathRegistry = new PathRegistry(mechanisms.drivetrain.follower,
 				matchSettings);
 		
-		if (matchSettings.getAutoStartingPosition() ==
-				MatchSettings.AutoStartingPosition.FAR) {
+		if (matchSettings.getAutoStartingPosition() == MatchSettings.AutoStartingPosition.FAR) {
 			autonomousSequence = SequenceBuilder.buildFarSequence(pathRegistry);
 		} else {
 			autonomousSequence = SequenceBuilder.buildCloseSequence(pathRegistry);
 		}
-		
 		
 		// Start the sequence
 		autonomousSequence.start(mechanisms);
@@ -126,7 +125,8 @@ public class MainAuto extends OpMode {
 		// This single line replaces the entire state machine logic!
 		autonomousSequence.update(mechanisms);
 		
-		// Telemetry - much cleaner than before
+		// Clear dynamic telemetry and log updated data
+		logging.clearDynamic();
 		logTelemetry();
 	}
 	
@@ -143,42 +143,47 @@ public class MainAuto extends OpMode {
 	}
 	
 	/**
-	 * Comprehensive telemetry logging.
+	 * Comprehensive telemetry logging - optimized with lazy evaluation.
 	 */
 	private void logTelemetry() {
 		// Debug visualization
 		logging.drawDebug(mechanisms.drivetrain.follower);
 		
-		// Configuration info
+		// Configuration info (static, retained)
 		logging.addData("Alliance", matchSettings.getAllianceColor());
 		logging.addData("Starting Position", matchSettings.getAutoStartingPosition());
 		logging.addData("Initial Position", matchSettings.getAutonomousStartingPose());
 		
-		// Sequence progress
+		// Sequence progress - use lazy evaluation to avoid unnecessary string
+		// operations
 		logging.addLine("");
 		logging.addLine("=== SEQUENCE PROGRESS ===");
-		logging.addData("Current Action", autonomousSequence.getCurrentActionName());
-		logging.addData("Action",
-				(autonomousSequence.getCurrentActionIndex() + 1) + " / " +
+		logging.addDataLazy("Current Action", () -> autonomousSequence.getCurrentActionName());
+		logging.addDataLazy("Action",
+				() -> (autonomousSequence.getCurrentActionIndex() + 1) + " / " +
 						autonomousSequence.getTotalActions());
-		logging.addData("Progress", String.format(Locale.US, "%.1f%%",
-				autonomousSequence.getProgressPercent()));
+		logging.addDataLazy("Progress", "%.1f%%",
+				() -> autonomousSequence.getProgressPercent());
 		
-		// Robot state
+		// Robot state - use lazy evaluation for pose calculations
 		logging.addLine("");
 		logging.addLine("=== ROBOT STATE ===");
-		logging.addData("Current Position", mechanisms.drivetrain.follower.getPose());
-		logging.addNumber("Heading (deg)", Math.toDegrees(mechanisms.drivetrain.follower.getPose().getHeading()));
+		logging.addDataLazy("Current Position", () -> mechanisms.drivetrain.follower.getPose());
+		logging.addDataLazy("Heading (deg)", "%.2f",
+				() -> Math.toDegrees(mechanisms.drivetrain.follower.getPose().getHeading()));
 		
+		// Conditional telemetry for path info (dynamic)
 		if (mechanisms.drivetrain.follower.isBusy()) {
-			logging.addData("Path End Position", mechanisms.drivetrain.follower.getCurrentPath().endPose());
-			logging.addData("Path Beginning Position",
-					mechanisms.drivetrain.follower.getCurrentPath().getPoseInformation(0).getPose());
+			logging.addDataLazy("Path End Position",
+					() -> mechanisms.drivetrain.follower.getCurrentPath().endPose());
+			logging.addDataLazy("Path Beginning Position",
+					() -> mechanisms.drivetrain.follower.getCurrentPath().getPoseInformation(0).getPose());
 		}
 		
-		// Timing
+		// Timing - use lazy evaluation
 		logging.addLine("");
-		logging.addNumber("Elapsed Time (s)", opmodeTimer.getElapsedTimeSeconds());
+		logging.addDataLazy("Elapsed Time (s)", "%.2f",
+				() -> opmodeTimer.getElapsedTimeSeconds());
 		
 		// Update the display
 		logging.update();

@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
+import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
 import org.firstinspires.ftc.teamcode.hardware.Intake;
-import org.firstinspires.ftc.teamcode.hardware.Launcher;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.Spindex;
 import org.firstinspires.ftc.teamcode.software.Controller;
@@ -56,6 +56,15 @@ public class MainOp extends OpMode {
 		subController = new Controller(gamepad2, mechanisms.drivetrain.follower, matchSettings);
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
 		
+		// Enable retained mode for efficient telemetry updates
+		logging.enableRetainedMode();
+		
+		// Set up lazy evaluation for frequently-accessed but expensive operations
+		// These are only evaluated when telemetry is actually transmitted
+		logging.addDataLazy("Heading°", () -> Math.toDegrees(mechanisms.drivetrain.follower.getHeading()));
+		logging.addDataLazy("X", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getX());
+		logging.addDataLazy("Y", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getY());
+		
 		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getTeleOpStartingPose());
 		mechanisms.drivetrain.switchToManual();
 	}
@@ -86,14 +95,15 @@ public class MainOp extends OpMode {
 	public final void loop() {
 		mechanisms.update();
 		
+		// Clear dynamic (non-retained) telemetry from previous loop
+		logging.clearDynamic();
+		
 		processControllerInputs();
 		setControllerLEDs();
 		
-		// Log everything that happened
+		// Draw debug visualization (retained items like Heading, X, Y are auto-updated
+		// via Func)
 		logging.drawDebug(mechanisms.drivetrain.follower);
-		logging.addNumber("Heading°", Math.toDegrees(mechanisms.drivetrain.follower.getHeading()));
-		logging.addNumber("X", mechanisms.drivetrain.follower.getPose().getX());
-		logging.addNumber("Y", mechanisms.drivetrain.follower.getPose().getY());
 		logging.update();
 	}
 	
@@ -153,14 +163,14 @@ public class MainOp extends OpMode {
 		if (subController.wasJustPressed(Controller.Action.AIM) &&
 				mechanisms.alignmentEngine.isInLaunchZone(mechanisms.drivetrain.follower.getPose())) {
 			mechanisms.alignmentEngine.run();
-			ifMechanismValid(mechanisms.get(Launcher.class), Launcher::ready);
+			ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::ready);
 		} else {
-			ifMechanismValid(mechanisms.get(Launcher.class), Launcher::stop);
+			ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::stop);
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
 			if (mechanisms.alignmentEngine.isInLaunchZone(mechanisms.drivetrain.getPose())) {
-				ifMechanismValid(mechanisms.get(Launcher.class), Launcher::launch);
+				ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::launch);
 			}
 		}
 		
@@ -172,6 +182,7 @@ public class MainOp extends OpMode {
 			ifMechanismValid(mechanisms.get(Intake.class), Intake::stop);
 		}
 		
+		// Dynamic telemetry - only shown when conditions are met
 		if (mechanisms.drivetrain.getState() == Drivetrain.State.PATHING) {
 			logging.addData("headed to", mechanisms.drivetrain.follower.getCurrentPath().endPose());
 			logging.addData("from", mechanisms.drivetrain.follower.getPose());
@@ -179,12 +190,15 @@ public class MainOp extends OpMode {
 		if (mechanisms.drivetrain.follower.isBusy()) {
 			logging.addLine("FOLLOWER IS BUSY");
 		}
+		
+		// Use lazy evaluation for expensive angle calculation - only computed when
+		// transmitted
 		Pose targetPose = (matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE)
 				? Settings.Field.BLUE_GOAL_POSE
 				: Settings.Field.RED_GOAL_POSE;
-		logging.addNumber("angle to goal",
-				Math.toDegrees(mechanisms.alignmentEngine.angleToTarget(mechanisms.drivetrain.getPose(),
-						targetPose)));
+		logging.addDataLazy("angle to goal", "%.2f",
+				() -> Math.toDegrees(mechanisms.alignmentEngine.angleToTarget(
+						mechanisms.drivetrain.getPose(), targetPose)));
 		
 		// Classifier controls
 		if (subController.getProcessedValue(Controller.Action.EMPTY_CLASSIFIER_STATE) > 0)

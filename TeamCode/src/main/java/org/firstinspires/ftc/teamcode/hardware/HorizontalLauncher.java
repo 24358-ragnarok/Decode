@@ -3,70 +3,90 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
-public class Launcher extends Mechanism {
+public class HorizontalLauncher extends Mechanism {
 	private final TrajectoryEngine trajectoryEngine;
 	private final Servo horizontalServo;
 	private final Servo verticalServo;
 	private final Spindex spindex;
 	private final SyncBelt belt;
+	private final MatchSettings matchSettings;
 	
-	public Launcher(Spindex spindex,
-	                DcMotor beltRight,
-	                DcMotor beltLeft,
-	                Servo horizontalServo,
-	                Servo verticalServo,
-	                TrajectoryEngine trajectoryEngine) {
+	public HorizontalLauncher(Spindex spindex,
+	                          DcMotor beltRight,
+	                          DcMotor beltLeft,
+	                          Servo horizontalServo,
+	                          Servo verticalServo,
+	                          TrajectoryEngine trajectoryEngine, MatchSettings matchSettings) {
 		this.spindex = spindex;
 		this.trajectoryEngine = trajectoryEngine;
 		this.horizontalServo = horizontalServo;
 		this.verticalServo = verticalServo;
 		this.belt = new SyncBelt(beltRight, beltLeft);
+		this.matchSettings = matchSettings;
 	}
 	
 	/**
 	 * Aims the launcher at the target using feedback from the TrajectoryEngine.
-	 * This is invoked by the {@link Launcher#ready()} method which should be called
+	 * This is invoked by the {@link HorizontalLauncher#ready()} method which should
+	 * be called
 	 * repeatedly in the main robot loop when aiming.
 	 * <p>
 	 * This method is public so it can be called independently when you want to
 	 * maintain aim and spin-up without controlling the spindex.
 	 */
 	public void aim() {
-		TrajectoryEngine.AimingOffsets offsets = trajectoryEngine.getAimingOffsets();
+		TrajectoryEngine.AimingSolution solution = trajectoryEngine.getAimingOffsets(matchSettings.getAllianceColor());
 		
 		// If we don't have a target, do not adjust.
-		if (!offsets.hasTarget) {
+		if (!solution.hasTarget) {
 			return;
 		}
 		
-		// 1. Read the current physical orientation from the servos
-		double currentYaw = getYaw();
-		double currentPitch = getPitch();
+		// Update belt speed based on the required launch velocity
+		double requiredRPM = solution.getRequiredWheelSpeedRPM();
+		belt.setTargetSpeed(requiredRPM);
 		
-		// 2. Calculate the correction needed. The error is the offset from the camera.
-		// We add the error multiplied by a gain (Kp) to the current position.
-		// For yaw, a positive offset (tx) means the target is to the right, so we
-		// increase yaw.
-		// For pitch, a positive offset (ty) means the target is up, so we increase
-		// pitch.
-		double yawCorrection = offsets.horizontalOffsetDegrees * Settings.Launcher.AIM_YAW_KP;
-		double pitchCorrection = offsets.verticalOffsetDegrees * Settings.Launcher.AIM_PITCH_KP;
-		
-		// 3. Calculate the new target orientation and adjust
-		// If the amount of correction is outside the acceptable range, adjust.
-		if (Math.abs(yawCorrection) > Settings.Aiming.MAX_YAW_ERROR) {
+		if (Settings.Aiming.USE_COMPLEX_AIMING) {
+			// Complex aiming: directly set the calculated angles
 			double targetYaw = Math.max(Settings.Launcher.MIN_YAW,
-					Math.min(Settings.Launcher.MAX_YAW, currentYaw + yawCorrection));
-			setYaw(targetYaw);
-		}
-		
-		if (Math.abs(pitchCorrection) > Settings.Aiming.MAX_PITCH_ERROR) {
+					Math.min(Settings.Launcher.MAX_YAW, solution.horizontalOffsetDegrees));
 			double targetPitch = Math.max(Settings.Launcher.MIN_PITCH,
-					Math.min(Settings.Launcher.MAX_PITCH, currentPitch + pitchCorrection));
+					Math.min(Settings.Launcher.MAX_PITCH, solution.verticalOffsetDegrees));
+			
+			setYaw(targetYaw);
 			setPitch(targetPitch);
+		} else {
+			// Simple aiming: use proportional correction based on offsets
+			// 1. Read the current physical orientation from the servos
+			double currentYaw = getYaw();
+			double currentPitch = getPitch();
+			
+			// 2. Calculate the correction needed. The error is the offset from the camera.
+			// We add the error multiplied by a gain (Kp) to the current position.
+			// For yaw, a positive offset (tx) means the target is to the right, so we
+			// increase yaw.
+			// For pitch, a positive offset (ty) means the target is up, so we increase
+			// pitch.
+			double yawCorrection = solution.horizontalOffsetDegrees * Settings.Launcher.AIM_YAW_KP;
+			double pitchCorrection = solution.verticalOffsetDegrees * Settings.Launcher.AIM_PITCH_KP;
+			
+			// 3. Calculate the new target orientation and adjust
+			// If the amount of correction is outside the acceptable range, adjust.
+			if (Math.abs(yawCorrection) > Settings.Aiming.MAX_YAW_ERROR) {
+				double targetYaw = Math.max(Settings.Launcher.MIN_YAW,
+						Math.min(Settings.Launcher.MAX_YAW, currentYaw + yawCorrection));
+				setYaw(targetYaw);
+			}
+			
+			if (Math.abs(pitchCorrection) > Settings.Aiming.MAX_PITCH_ERROR) {
+				double targetPitch = Math.max(Settings.Launcher.MIN_PITCH,
+						Math.min(Settings.Launcher.MAX_PITCH, currentPitch + pitchCorrection));
+				setPitch(targetPitch);
+			}
 		}
 	}
 	
@@ -176,6 +196,7 @@ public class Launcher extends Mechanism {
 	/**
 	 * A synchronous combination of two motors that maintains equal speeds using
 	 * a proportional feedback controller.
+	 * Supports variable target speeds for physics-based aiming.
 	 * <p>
 	 * TODO: Implement differential speeds to control topspin/backspin on launched
 	 * artifacts
@@ -186,6 +207,7 @@ public class Launcher extends Mechanism {
 		
 		private long spinupTimestamp = 0;
 		private boolean active = false;
+		private double targetSpeedRPM = Settings.Aiming.WHEEL_SPEED_RPM;
 		
 		// For smoothing
 		private int lastRightPos = 0;
@@ -201,6 +223,36 @@ public class Launcher extends Mechanism {
 			left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 		}
 		
+		/**
+		 * Sets the target wheel speed in RPM.
+		 * This is used by complex aiming to achieve the calculated launch velocity.
+		 */
+		public void setTargetSpeed(double rpm) {
+			// Clamp to safe range
+			this.targetSpeedRPM = Math.max(Settings.Aiming.MIN_WHEEL_SPEED_RPM,
+					Math.min(Settings.Aiming.MAX_WHEEL_SPEED_RPM, rpm));
+			
+			// If we're already spinning, adjust immediately
+			if (active) {
+				// Restart spinup timer if speed changed significantly
+				spinupTimestamp = System.currentTimeMillis();
+			}
+		}
+		
+		/**
+		 * Calculates motor power from target RPM.
+		 * This is a simple linear mapping that should be calibrated for your motors.
+		 */
+		private double rpmToPower(double rpm) {
+			// Simple linear mapping - adjust based on motor characteristics
+			// Assumes max motor RPM at full power is around 6000 RPM
+			double maxMotorRPM = 6000.0;
+			double power = rpm / maxMotorRPM;
+			
+			// Clamp to valid motor power range
+			return Math.max(0.0, Math.min(1.0, power));
+		}
+		
 		public final void spinUp(double motorSpeed) {
 			if (active)
 				return;
@@ -210,7 +262,13 @@ public class Launcher extends Mechanism {
 		}
 		
 		public final void spinUp() {
-			spinUp(Settings.Launcher.BELT_MOTOR_SPEED);
+			if (!active) {
+				active = true;
+				spinupTimestamp = System.currentTimeMillis();
+			}
+			// Use target speed instead of fixed speed
+			double targetPower = rpmToPower(targetSpeedRPM);
+			setBasePower(targetPower);
 		}
 		
 		public final void spinDown() {
@@ -227,8 +285,7 @@ public class Launcher extends Mechanism {
 		
 		/**
 		 * Continuously try to match the actual speeds of the motors so they have the
-		 * same
-		 * tangential speed.
+		 * same tangential speed.
 		 */
 		public void update() {
 			if (!active)
@@ -254,7 +311,8 @@ public class Launcher extends Mechanism {
 			// Proportional correction
 			double correction = Settings.Launcher.BELT_SYNC_KP * error;
 			
-			double base = Settings.Launcher.BELT_MOTOR_SPEED;
+			// Use target speed instead of fixed speed
+			double base = rpmToPower(targetSpeedRPM);
 			beltRight.setPower(base * (1 - correction));
 			beltLeft.setPower(base * (1 + correction));
 		}

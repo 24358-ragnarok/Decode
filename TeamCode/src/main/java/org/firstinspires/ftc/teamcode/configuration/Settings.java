@@ -111,8 +111,8 @@ public class Settings {
 		public static final String LAUNCHER_TRANSFER_SERVO = "launcherTransferServo";
 		public static final String INTAKE_TRANSFER_SERVO = "intakeTransferServo";
 		public static final String SPINDEX_SERVO = "spindexServo";
-		public static final String LAUNCHER_HORIZONTAL_SERVO = "launcherHorizontalServo";
-		public static final String LAUNCHER_VERTICAL_SERVO = "launcherVerticalServo";
+		public static final String LAUNCHER_YAW_SERVO = "launcherYawServo";
+		public static final String LAUNCHER_PITCH_SERVO = "launcherPitchServo";
 		
 		// Sensors
 		public static final String SPINDEX_COLOR_SENSOR = "spindexColorSensor";
@@ -180,19 +180,70 @@ public class Settings {
 	
 	@Configurable
 	public static class Aiming {
-		public static final double GRAVITY = 9.81;
-		public static double MUZZLE_TANGENTIAL_MAX_SPEED; // m/s, TODO: tune
-		public static double MUZZLE_HEIGHT = 5; // inches, TODO: tune
-		public static double GOAL_HEIGHT = 37.5; // inches
+		// ===== Simple Aiming Constants =====
+		public static final double LAUNCHER_HEIGHT_OFFSET_INCHES = 5.0; // vertical inches from limelight to launcher
+		// Toggle between simple offset-based aiming and complex physics-based aiming
+		public static boolean USE_COMPLEX_AIMING = false;
+		// outtake
+		public static double TARGET_HEIGHT_OFFSET_INCHES = 15; // inches from apriltag to target ball pos
+		public static final double NET_VERTICAL_OFFSET_INCHES = TARGET_HEIGHT_OFFSET_INCHES
+				- LAUNCHER_HEIGHT_OFFSET_INCHES;
+		
 		/**
 		 * Note that ROTATIONAL error refers to the chassis rotation relative to the
 		 * goal.
 		 * YAW refers to the launcher horizontal angle
 		 * PITCH refers to the launcher vertical angle
 		 */
-		public static double MAX_ROTATIONAL_ERROR = Math.toRadians(10);
-		public static double MAX_YAW_ERROR = Math.toRadians(5);
-		public static double MAX_PITCH_ERROR = Math.toRadians(2);
+		public static double MAX_ROTATIONAL_ERROR = Math.toRadians(20);
+		public static double MAX_YAW_ERROR = Math.toRadians(3);
+		public static double MAX_PITCH_ERROR = Math.toRadians(1);
+		
+		// ===== Complex Aiming Constants (Physics-Based) =====
+		// Physical constants
+		public static double GRAVITY_INCHES_PER_SEC_SQ = 386.4; // Standard gravity in inches/s²
+		
+		// Launcher specifications
+		public static double WHEEL_DIAMETER_INCHES = 4.0; // Diameter of launcher wheels
+		public static double WHEEL_SPEED_RPM = 3000; // Default wheel speed in RPM
+		public static double MIN_WHEEL_SPEED_RPM = 1500; // Minimum safe wheel speed
+		public static double MAX_WHEEL_SPEED_RPM = 5000; // Maximum safe wheel speed
+		public static double LAUNCH_EFFICIENCY = 0.85; // Energy transfer efficiency (0-1)
+		
+		// Launch geometry
+		public static double LAUNCHER_HEIGHT_INCHES = 18.0; // Height of launcher exit above field
+		public static double GOAL_HEIGHT_INCHES = 48.0; // Height of goal center above field
+		
+		// Optimization preferences
+		public static double PREFERRED_IMPACT_ANGLE_DEG = 60; // Preferred angle of entry (from horizontal)
+		public static double MAX_FLIGHT_TIME_SEC = 3.0; // Maximum acceptable flight time
+		public static double MIN_LAUNCH_ANGLE_DEG = 15; // Minimum launch angle for clearance
+		public static double MAX_LAUNCH_ANGLE_DEG = 75; // Maximum launch angle before it's impractical
+		
+		// Air resistance (simplified model)
+		public static double AIR_RESISTANCE_FACTOR = 0.02; // Velocity reduction factor (0 = no resistance)
+		
+		public static double getNetVerticalOffsetMeters() {
+			return NET_VERTICAL_OFFSET_INCHES * 0.0254;
+		}
+		
+		/**
+		 * Calculates tangential velocity in inches/second from wheel RPM.
+		 */
+		public static double wheelRpmToVelocity(double rpm) {
+			// Circumference = π * diameter
+			// Velocity = (RPM / 60) * circumference * efficiency
+			double circumference = Math.PI * WHEEL_DIAMETER_INCHES;
+			return (rpm / 60.0) * circumference * LAUNCH_EFFICIENCY;
+		}
+		
+		/**
+		 * Calculates required wheel RPM from desired launch velocity.
+		 */
+		public static double velocityToWheelRpm(double velocityInchesPerSec) {
+			double circumference = Math.PI * WHEEL_DIAMETER_INCHES;
+			return (velocityInchesPerSec * 60.0) / (circumference * LAUNCH_EFFICIENCY);
+		}
 	}
 	
 	/**
@@ -235,7 +286,8 @@ public class Settings {
 		// RED alliance paths are automatically mirrored by the PathRegistry.
 		// Headings are in radians. 90 degrees = Math.toRadians(90)
 		
-		// Poses for the FAR side of the field, BLUE alliance TODO (REFERENCE - tune these!)
+		// Poses for the FAR side of the field, BLUE alliance TODO (REFERENCE - tune
+		// these!)
 		public static class BlueFar {
 			public static Pose START = new Pose(65.533, 12.244, Math.toRadians(135));
 			public static Pose PRESET_1_PREP = new Pose(35.526, 28.455, Math.toRadians(180));
@@ -255,7 +307,8 @@ public class Settings {
 			public static Pose PARK = new Pose(40.354, 92.091, Math.toRadians(125));
 		}
 		
-		// Poses for the CLOSE side of the field, BLUE alliance TODO (REFERENCE - tune these!)
+		// Poses for the CLOSE side of the field, BLUE alliance TODO (REFERENCE - tune
+		// these!)
 		public static class BlueClose {
 			// Start near the backdrop, facing forward.
 			public static Pose START = new Pose(60, 85, Math.toRadians(135));

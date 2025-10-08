@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous.actions;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
-import org.firstinspires.ftc.teamcode.hardware.Launcher;
+import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.Spindex;
 
@@ -23,13 +23,13 @@ public class LaunchAction implements AutonomousAction {
 	
 	@Override
 	public void initialize(MechanismManager mechanisms) {
-		hasLauncher = mechanisms.get(Launcher.class) != null;
+		hasLauncher = mechanisms.get(HorizontalLauncher.class) != null;
 		hasSpindex = mechanisms.get(Spindex.class) != null;
 		rapidFireTriggered = false;
 		
 		// Start the launcher ready sequence (spin up, aim)
 		if (hasLauncher) {
-			Launcher launcher = mechanisms.get(Launcher.class);
+			HorizontalLauncher launcher = mechanisms.get(HorizontalLauncher.class);
 			launcher.ready();
 		}
 	}
@@ -41,7 +41,7 @@ public class LaunchAction implements AutonomousAction {
 			return true;
 		}
 		
-		Launcher launcher = mechanisms.get(Launcher.class);
+		HorizontalLauncher launcher = mechanisms.get(HorizontalLauncher.class);
 		Spindex spindex = mechanisms.get(Spindex.class);
 		
 		// Maintain launcher ready state (spin-up and aim) WITHOUT touching spindex
@@ -69,7 +69,7 @@ public class LaunchAction implements AutonomousAction {
 	public void end(MechanismManager mechanisms, boolean interrupted) {
 		// If interrupted, stop the launcher
 		if (interrupted && hasLauncher) {
-			Launcher launcher = mechanisms.get(Launcher.class);
+			HorizontalLauncher launcher = mechanisms.get(HorizontalLauncher.class);
 			if (launcher != null) {
 				launcher.stop();
 			}
