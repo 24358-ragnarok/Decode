@@ -46,7 +46,8 @@ public class MechanismManager {
 	}
 	
 	private Intake createIntake(HardwareMap hw) {
-		if (!Settings.Deploy.INTAKE) return null;
+		if (!Settings.Deploy.INTAKE)
+			return null;
 		try {
 			ColorSensor sensor = new ColorSensor(hw.get(RevColorSensorV3.class, Settings.HardwareIDs.COLOR_SENSOR));
 			DcMotor motor = hw.get(DcMotor.class, Settings.HardwareIDs.INTAKE_MOTOR);
@@ -61,12 +62,14 @@ public class MechanismManager {
 	}
 	
 	private Spindex createSpindex(HardwareMap hw, MatchSettings match) {
-		if (!Settings.Deploy.SPINDEX) return null;
+		if (!Settings.Deploy.SPINDEX)
+			return null;
 		try {
 			Servo spindexServo = hw.get(Servo.class, Settings.HardwareIDs.SPINDEX_SERVO);
 			Servo launcherTransfer = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_TRANSFER_SERVO);
 			Servo intakeTransfer = hw.get(Servo.class, Settings.HardwareIDs.INTAKE_TRANSFER_SERVO);
-			ColorSensor sensor = new ColorSensor(hw.get(RevColorSensorV3.class, Settings.HardwareIDs.SPINDEX_COLOR_SENSOR));
+			ColorSensor sensor = new ColorSensor(
+					hw.get(RevColorSensorV3.class, Settings.HardwareIDs.SPINDEX_COLOR_SENSOR));
 			return new Spindex(spindexServo, launcherTransfer, intakeTransfer, sensor, match);
 		} catch (Exception e) {
 			return null;
@@ -74,7 +77,8 @@ public class MechanismManager {
 	}
 	
 	private LimelightManager createLimelight(HardwareMap hw, MatchSettings match) {
-		if (!Settings.Deploy.LIMELIGHT) return null;
+		if (!Settings.Deploy.LIMELIGHT)
+			return null;
 		try {
 			return new LimelightManager(hw.get(Limelight3A.class, Settings.HardwareIDs.LIMELIGHT), match);
 		} catch (Exception e) {
@@ -83,16 +87,18 @@ public class MechanismManager {
 	}
 	
 	private TrajectoryEngine createTrajectory(LimelightManager ll, MatchSettings match) {
-		if (ll == null || !Settings.Deploy.TRAJECTORY_ENGINE) return null;
+		if (ll == null || !Settings.Deploy.TRAJECTORY_ENGINE)
+			return null;
 		try {
-			return new TrajectoryEngine(ll, match);
+			return new TrajectoryEngine(ll, match, drivetrain);
 		} catch (Exception e) {
 			return null;
 		}
 	}
 	
 	private AlignmentEngine createAlignment(MatchSettings match, Drivetrain dt, LimelightManager ll) {
-		if (ll == null || !Settings.Deploy.ALIGNMENT_ENGINE) return null;
+		if (ll == null || !Settings.Deploy.ALIGNMENT_ENGINE)
+			return null;
 		try {
 			return new AlignmentEngine(match, dt, ll);
 		} catch (Exception e) {
@@ -101,7 +107,8 @@ public class MechanismManager {
 	}
 	
 	private HorizontalLauncher createLauncher(HardwareMap hw, TrajectoryEngine traj, MatchSettings matchSettings) {
-		if (!Settings.Deploy.LAUNCHER) return null;
+		if (!Settings.Deploy.LAUNCHER)
+			return null;
 		try {
 			DcMotor right = hw.get(DcMotor.class, Settings.HardwareIDs.LAUNCHER_RIGHT);
 			DcMotor left = hw.get(DcMotor.class, Settings.HardwareIDs.LAUNCHER_LEFT);
@@ -125,8 +132,7 @@ public class MechanismManager {
 				new Class[]{Servo.class},
 				(proxy, method, args) -> {
 					return null; // swallow exceptions
-				}
-		);
+				});
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -140,15 +146,21 @@ public class MechanismManager {
 	}
 	
 	public void init() {
-		for (Mechanism m : mechanisms) if (m != null) m.init();
+		for (Mechanism m : mechanisms)
+			if (m != null)
+				m.init();
 	}
 	
 	public void update() {
-		for (Mechanism m : mechanisms) if (m != null) m.update();
+		for (Mechanism m : mechanisms)
+			if (m != null)
+				m.update();
 		drivetrain.update();
 	}
 	
 	public void stop() {
-		for (Mechanism m : mechanisms) if (m != null) m.stop();
+		for (Mechanism m : mechanisms)
+			if (m != null)
+				m.stop();
 	}
 }

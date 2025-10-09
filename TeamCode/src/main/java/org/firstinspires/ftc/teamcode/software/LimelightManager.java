@@ -91,18 +91,20 @@ public class LimelightManager extends Mechanism {
 	 * Switches the current pipeline to a new pipeline
 	 *
 	 * @param newPipeline The new pipeline to switch to:
-	 *                    APRILTAG (2), GREEN (3), PURPLE (4), RED_GOAL (5),
-	 *                    BLUE_GOAL (6)
+	 *                    APRILTAG (1), GREEN (2), PURPLE (3)
 	 */
 	public void setCurrentPipeline(Pipeline newPipeline) {
+		if (newPipeline == currentPipeline) {
+			return;
+		}
 		currentPipeline = newPipeline;
 		limelight.pipelineSwitch(currentPipeline.ordinal() + 1);
 	}
 	
 	public enum Pipeline {
-		APRILTAG, // pipe 2
-		GREEN, // pipe 3
-		PURPLE, // pipe 4
+		APRILTAG, // pipe 1
+		GREEN, // pipe 2
+		PURPLE, // pipe 3
 		UNKNOWN
 	}
 }

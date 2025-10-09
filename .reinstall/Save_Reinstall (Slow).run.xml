@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration name="Reinstall (Slow)" activateToolWindowBeforeRun="false" default="false"
+    <configuration name="Save/Reinstall (Slow)" activateToolWindowBeforeRun="false" default="false"
         factoryName="Android App" type="AndroidRunConfigurationType">
         <module name="Decode.TeamCode" />
         <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />

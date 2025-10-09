@@ -28,6 +28,30 @@ public class HorizontalLauncher extends Mechanism {
 	}
 	
 	/**
+	 * Static helper method for testing pitch control without full launcher setup.
+	 * Sets the pitch angle directly on a servo using the launcher's conversion
+	 * logic.
+	 */
+	public static void setPitchDirect(Servo servo, double pitchDegrees) {
+		if (Settings.Launcher.CORRECT_PITCH) {
+			servo.setPosition(Settings.Launcher.pitchToServo(pitchDegrees));
+		}
+	}
+	
+	/**
+	 * Static helper method for testing pitch control without full launcher setup.
+	 * Gets the current pitch angle from a servo using the launcher's conversion
+	 * logic.
+	 */
+	public static double getPitchDirect(Servo servo) {
+		if (Settings.Launcher.CORRECT_PITCH) {
+			return Settings.Launcher.servoToPitch(servo.getPosition());
+		} else {
+			return 45; // Default launch angle
+		}
+	}
+	
+	/**
 	 * Aims the launcher at the target using feedback from the TrajectoryEngine.
 	 * This is invoked by the {@link HorizontalLauncher#ready()} method which should
 	 * be called repeatedly in the main robot loop when aiming.
@@ -41,7 +65,11 @@ public class HorizontalLauncher extends Mechanism {
 	 * maintain aim and spin-up without controlling the spindex.
 	 */
 	public void aim() {
-		TrajectoryEngine.AimingSolution solution = trajectoryEngine.getAimingOffsets(matchSettings.getAllianceColor());
+		// Pass current pitch angle to trajectory engine so it can account for limelight
+		// rotation
+		double currentPitch = getPitch();
+		TrajectoryEngine.AimingSolution solution = trajectoryEngine.getAimingOffsets(
+				matchSettings.getAllianceColor(), currentPitch);
 		
 		// If we don't have a target, do not adjust.
 		if (!solution.hasTarget) {
@@ -65,7 +93,7 @@ public class HorizontalLauncher extends Mechanism {
 		
 		// Set pitch directly: verticalOffsetDegrees is the absolute launch angle
 		// No proportional correction needed - just set it
-		setPitch(solution.verticalOffsetDegrees);
+		setPitch(getPitch() + solution.verticalOffsetDegrees);
 	}
 	
 	/**
@@ -80,7 +108,9 @@ public class HorizontalLauncher extends Mechanism {
 	 * @return True if the launcher is aimed, up to speed, and ready to launch.
 	 */
 	public boolean okayToLaunch() {
-		TrajectoryEngine.AimingSolution solution = trajectoryEngine.getAimingOffsets(matchSettings.getAllianceColor());
+		double currentPitch = getPitch();
+		TrajectoryEngine.AimingSolution solution = trajectoryEngine.getAimingOffsets(
+				matchSettings.getAllianceColor(), currentPitch);
 		
 		if (!solution.hasTarget) {
 			return false;
@@ -90,7 +120,7 @@ public class HorizontalLauncher extends Mechanism {
 		boolean yawAligned = Math.abs(solution.horizontalOffsetDegrees) < Settings.Aiming.MAX_YAW_ERROR;
 		
 		// Check pitch alignment (servo has reached target angle)
-		double pitchError = Math.abs(getPitch() - solution.verticalOffsetDegrees);
+		double pitchError = Math.abs(currentPitch - solution.verticalOffsetDegrees);
 		boolean pitchAligned = pitchError < Settings.Aiming.MAX_PITCH_ERROR;
 		
 		// Check belt speed
@@ -188,6 +218,8 @@ public class HorizontalLauncher extends Mechanism {
 			verticalServo.setPosition(Settings.Launcher.pitchToServo(pitchDegrees));
 		}
 	}
+	
+	// ========== Testing/Utility Methods ==========
 	
 	public final void init() {
 		setYaw(0); // 0° yaw (center/forward)

@@ -6,15 +6,20 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes.FiducialResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
+import org.firstinspires.ftc.teamcode.software.LimelightManager;
+import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
 import java.util.List;
 
 /**
  * Test OpMode to verify the angle-based aiming calculations.
- * Shows raw Limelight data and the calculated trajectory values.
+ * Shows raw Limelight data and the calculated trajectory values using the
+ * actual TrajectoryEngine.
  */
 @TeleOp(name = "Test: Aiming Calculations", group = "Tests")
 public class AimingCalculationTest extends LinearOpMode {
@@ -22,33 +27,59 @@ public class AimingCalculationTest extends LinearOpMode {
 	// Define the specific AprilTag ID we are looking for.
 	private static final int TARGET_TAG_ID = 20; // Blue alliance basket
 	
-	// Declare the Limelight hardware object.
+	// Declare hardware objects
 	private Limelight3A limelight;
+	private Servo pitchServo;
+	private TrajectoryEngine trajectoryEngine;
+	private MatchSettings matchSettings;
 	
 	@Override
 	public void runOpMode() {
 		UnifiedLogging logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
+		logging.enableRetainedMode();
 		logging.addLine("Aiming Calculation Test Ready");
 		logging.addLine("Point camera at AprilTag " + TARGET_TAG_ID);
+		logging.addLine("Uses actual TrajectoryEngine + real servo readings");
 		logging.update();
 		
-		// Initialize the Limelight hardware object.
+		// Initialize hardware
 		limelight = hardwareMap.get(Limelight3A.class, "limelight");
-		
-		waitForStart();
+		limelight.setPollRateHz(11);
 		limelight.pipelineSwitch(1);
 		
+		pitchServo = hardwareMap.get(Servo.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
+		
+		// Initialize trajectory engine
+		matchSettings = new MatchSettings(blackboard);
+		matchSettings.setAllianceColor(MatchSettings.AllianceColor.BLUE); // Testing with blue alliance
+		LimelightManager limelightManager = new LimelightManager(limelight, matchSettings);
+		
+		// Create minimal drivetrain for trajectory engine (test only)
+		org.firstinspires.ftc.teamcode.software.Drivetrain drivetrain = new org.firstinspires.ftc.teamcode.software.Drivetrain(
+				hardwareMap, matchSettings);
+		
+		trajectoryEngine = new TrajectoryEngine(limelightManager, matchSettings, drivetrain);
+		
+		waitForStart();
+		
 		while (opModeIsActive()) {
-			// Get the latest vision results from the Limelight.
+			// Get current pitch angle from servo
+			double currentPitchDegrees = Settings.Launcher.servoToPitch(pitchServo.getPosition());
+			
+			// Get aiming solution from trajectory engine
+			TrajectoryEngine.AimingSolution solution = trajectoryEngine.getAimingOffsets(
+					matchSettings.getAllianceColor(), currentPitchDegrees);
+			
+			// Get the latest vision results from the Limelight for display
 			LLResult result = limelight.getLatestResult();
 			
-			// Check if the result is valid.
-			if (!result.getFiducialResults().isEmpty()) {
+			// Check if the result is valid
+			if (result != null && result.isValid()) {
 				List<FiducialResult> fiducials = result.getFiducialResults();
 				
 				boolean tagFound = false;
 				for (FiducialResult fiducial : fiducials) {
-					// Check if the current fiducial's ID matches our target.
+					// Check if the current fiducial's ID matches our target
 					if (fiducial.getFiducialId() == TARGET_TAG_ID) {
 						tagFound = true;
 						
@@ -61,68 +92,72 @@ public class AimingCalculationTest extends LinearOpMode {
 						logging.addData("TY (Vertical Angle)°", "%.2f", ty);
 						logging.addData("Area %%", "%.2f", fiducial.getTargetArea());
 						
-						// ===== CONFIGURATION VALUES =====
-						logging.addLine("=== CONFIGURATION ===");
-						logging.addData("Launcher Height", "%.1f in", Settings.Aiming.LAUNCHER_HEIGHT_INCHES);
-						logging.addData("Goal/Tag Height", "%.1f in", Settings.Aiming.GOAL_HEIGHT_INCHES);
-						logging.addData("Target Offset", "%.1f in", Settings.Aiming.TARGET_HEIGHT_OFFSET_INCHES);
+						// ===== SERVO & CONFIGURATION =====
+						logging.addLine("=== SERVO & CONFIGURATION ===");
+						logging.addData("Pitch Servo Position", "%.3f", pitchServo.getPosition());
+						logging.addData("Current Pitch Angle", "%.1f°", currentPitchDegrees);
+						logging.addData("Pitch Axis Height", "%.2f in", Settings.Aiming.PITCH_AXIS_HEIGHT_INCHES);
+						logging.addData("AprilTag Height", "%.2f in", Settings.Aiming.APRILTAG_CENTER_HEIGHT_INCHES);
+						logging.addData("Target Offset Above Tag", "%.1f in",
+								Settings.Aiming.TARGET_HEIGHT_OFFSET_INCHES);
 						logging.addData("Wheel Speed", "%.0f RPM", Settings.Aiming.WHEEL_SPEED_RPM);
 						
-						// ===== CALCULATIONS =====
-						logging.addLine("=== CALCULATIONS ===");
+						// ===== TRAJECTORY ENGINE SOLUTION =====
+						logging.addLine("=== TRAJECTORY ENGINE SOLUTION ===");
 						
-						// Prevent division by zero
-						double tyActual = ty;
-						if (Math.abs(ty) < 0.5) {
-							tyActual = 0.5;
-							logging.addData("Warning", "TY too small, using 0.5°");
+						if (solution.hasTarget) {
+							logging.addData("✓ Target Acquired", true);
+							logging.addData("Yaw Correction", "%.2f°", solution.horizontalOffsetDegrees);
+							logging.addData("Required Launch Angle", "%.2f°", solution.verticalOffsetDegrees);
+							logging.addData("Launch Velocity", "%.1f in/s", solution.launchVelocityInchesPerSec);
+							logging.addData("Required RPM", "%.0f", solution.getRequiredWheelSpeedRPM());
+							
+							// Calculate estimated flight time
+							double launchAngleRad = Math.toRadians(solution.verticalOffsetDegrees);
+							double vx = solution.launchVelocityInchesPerSec * Math.cos(launchAngleRad);
+							
+							// Estimate distance (rough calculation for display only)
+							double tyActual = Math.abs(ty) < 0.5 ? Math.signum(ty) * 0.5 : ty;
+							double absoluteAngle = currentPitchDegrees + tyActual;
+							double pitchRad = Math.toRadians(currentPitchDegrees);
+							
+							// Rough position calculation for flight time estimate
+							double llRelY = -Settings.Aiming.LIMELIGHT_FROM_PITCH_AXIS_DOWN_INCHES;
+							double llRelX = Settings.Aiming.LIMELIGHT_FROM_PITCH_AXIS_FORWARD_INCHES;
+							double rotLLY = llRelX * Math.sin(pitchRad) + llRelY * Math.cos(pitchRad);
+							double actualLLY = Settings.Aiming.PITCH_AXIS_HEIGHT_INCHES + rotLLY;
+							
+							double heightToTag = Settings.Aiming.APRILTAG_CENTER_HEIGHT_INCHES - actualLLY;
+							double distFromLL = heightToTag / Math.tan(Math.toRadians(absoluteAngle));
+							
+							if (distFromLL > 0 && vx > 0) {
+								double flightTime = distFromLL / vx;
+								logging.addData("Est. Flight Time", "%.2f sec", flightTime);
+								logging.addData("Est. Distance", "%.1f in", distFromLL);
+							}
+							
+							// Servo command info
+							double targetServoPos = Settings.Launcher.pitchToServo(solution.verticalOffsetDegrees);
+							logging.addData("Target Servo Pos", "%.3f", targetServoPos);
+							logging.addData("Pitch Change Needed", "%.1f°",
+									solution.verticalOffsetDegrees - currentPitchDegrees);
+							
+							// Alignment status
+							logging.addLine("=== ALIGNMENT STATUS ===");
+							boolean yawAligned = Math
+									.abs(solution.horizontalOffsetDegrees) < Settings.Aiming.MAX_YAW_ERROR;
+							boolean pitchAligned = Math.abs(solution.verticalOffsetDegrees
+									- currentPitchDegrees) < Settings.Aiming.MAX_PITCH_ERROR;
+							
+							logging.addData("Yaw Aligned", yawAligned ? "✓ YES" : "✗ NO");
+							logging.addData("Pitch Aligned", pitchAligned ? "✓ YES" : "✗ NO");
+							logging.addData("Ready to Fire", (yawAligned && pitchAligned) ? "✓ YES" : "✗ NO");
+							
+						} else {
+							logging.addData("✗ No Target", "Check alignment");
 						}
 						
-						// Calculate horizontal distance
-						double heightDiffToTag = Settings.Aiming.GOAL_HEIGHT_INCHES
-								- Settings.Aiming.LAUNCHER_HEIGHT_INCHES;
-						double tyRadians = Math.toRadians(tyActual);
-						double horizontalDistance = heightDiffToTag / Math.tan(tyRadians);
-						
-						logging.addData("Height to Tag", "%.1f in", heightDiffToTag);
-						logging.addData("Horizontal Distance", "%.1f in", horizontalDistance);
-						
-						// Validate distance
-						if (horizontalDistance <= 0) {
-							logging.addData("ERROR", "Negative distance! Check heights");
-						} else if (horizontalDistance > 300) {
-							logging.addData("WARNING", "Distance > 300 in (very far)");
-						}
-						
-						// Calculate aim point
-						double desiredHeight = Settings.Aiming.GOAL_HEIGHT_INCHES
-								+ Settings.Aiming.TARGET_HEIGHT_OFFSET_INCHES;
-						double heightToAimPoint = desiredHeight
-								- Settings.Aiming.LAUNCHER_HEIGHT_INCHES;
-						
-						logging.addData("Target Height", "%.1f in", desiredHeight);
-						logging.addData("Height to Aim Point", "%.1f in", heightToAimPoint);
-						
-						// Calculate launch angle
-						double launchAngleRad = Math.atan2(heightToAimPoint, horizontalDistance);
-						double launchAngleDeg = Math.toDegrees(launchAngleRad);
-						
-						logging.addLine("=== AIMING SOLUTION ===");
-						logging.addData("Yaw Correction", "%.2f°", tx);
-						logging.addData("Launch Angle", "%.2f°", launchAngleDeg);
-						
-						// Calculate velocity
-						double launchVelocity = Settings.Aiming.wheelRpmToVelocity(
-								Settings.Aiming.WHEEL_SPEED_RPM);
-						logging.addData("Launch Velocity", "%.1f in/s", launchVelocity);
-						logging.addData("Required RPM", "%.0f", Settings.Aiming.WHEEL_SPEED_RPM);
-						
-						// Estimated flight time (simplified)
-						double vx = launchVelocity * Math.cos(launchAngleRad);
-						double flightTime = horizontalDistance / vx;
-						logging.addData("Est. Flight Time", "%.2f sec", flightTime);
-						
-						// We've found the target, so no need to continue looping.
+						// We've found the target, so no need to continue looping
 						break;
 					}
 				}
@@ -133,9 +168,23 @@ public class AimingCalculationTest extends LinearOpMode {
 					if (!fiducials.isEmpty()) {
 						logging.addData("Visible IDs", getVisibleIds(fiducials));
 					}
+					
+					// Still show current pitch even if tag not found
+					logging.addLine("=== SERVO STATUS ===");
+					logging.addData("Pitch Servo Position", "%.3f", pitchServo.getPosition());
+					logging.addData("Current Pitch Angle", "%.1f°", currentPitchDegrees);
 				}
 			} else {
 				logging.addData("Status", "Waiting for Limelight data...");
+				if (result != null) {
+					logging.addData("LL Valid", result.isValid());
+				}
+				logging.addData("LL Status", limelight.getStatus());
+				
+				// Still show current pitch even if no limelight data
+				logging.addLine("=== SERVO STATUS ===");
+				logging.addData("Pitch Servo Position", "%.3f", pitchServo.getPosition());
+				logging.addData("Current Pitch Angle", "%.1f°", currentPitchDegrees);
 			}
 			
 			logging.update();

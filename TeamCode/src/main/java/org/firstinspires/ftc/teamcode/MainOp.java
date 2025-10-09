@@ -184,16 +184,16 @@ public class MainOp extends OpMode {
 				matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE ? 20 : 24);
 		
 		// Get aiming solution for debugging
-		if (mechanisms.trajectoryEngine != null) {
-			TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine.getAimingOffsets(matchSettings.getAllianceColor());
-			logging.addData("Has Target", solution.hasTarget);
-			if (solution.hasTarget) {
-				logging.addData("Yaw Offset°", "%.2f", solution.horizontalOffsetDegrees);
-				logging.addData("Launch Angle°", "%.2f", solution.verticalOffsetDegrees);
-				logging.addData("Launch Velocity in/s", "%.1f", solution.launchVelocityInchesPerSec);
-				logging.addData("Required RPM", "%.0f", solution.getRequiredWheelSpeedRPM());
-			}
-		}
+		ifMechanismValid(mechanisms.get(HorizontalLauncher.class),
+				launcher -> {
+					TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine
+							.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
+					if (solution.hasTarget) {
+						logging.addData("Yaw Offset°", "%.2f", solution.horizontalOffsetDegrees);
+						logging.addData("Pitch Offset°", "%.2f", solution.verticalOffsetDegrees);
+						logging.addData("Required RPM", "%.0f", solution.getRequiredWheelSpeedRPM());
+					}
+				});
 		
 		// Launcher mechanism status
 		ifMechanismValid(mechanisms.get(HorizontalLauncher.class), hl -> {

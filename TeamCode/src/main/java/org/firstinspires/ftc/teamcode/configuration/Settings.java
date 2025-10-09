@@ -170,8 +170,8 @@ public class Settings {
 		public static double BELT_SYNC_KP = 0.05; // Proportional gain for synchronizing belt speeds
 		
 		// Pitch servo calibration (physical limits)
-		public static double PITCH_SERVO_AT_MIN = 0.75; // Servo position at minimum pitch angle
-		public static double PITCH_SERVO_AT_MAX = 0.45; // Servo position at maximum pitch angle
+		public static double PITCH_SERVO_AT_MIN = 0.745; // Servo position at minimum pitch angle
+		public static double PITCH_SERVO_AT_MAX = 0.43; // Servo position at maximum pitch angle
 		public static double DETECTION_PITCH = 25; // degrees from horizontal
 		
 		// Pitch angle window (absolute angles from horizontal, for launch physics)
@@ -262,14 +262,39 @@ public class Settings {
 	
 	@Configurable
 	public static class Aiming {
-		// ===== Simple Aiming Constants =====
-		public static final double LAUNCHER_HEIGHT_OFFSET_INCHES = 5.0; // vertical inches from limelight to launcher
-		// Toggle between simple offset-based aiming and complex physics-based aiming
-		public static boolean USE_COMPLEX_AIMING = false;
+		// ===== Physical Measurements =====
+		public static double LIMELIGHT_HEIGHT_INCHES = 8.25; // Height of limelight camera above field (when horizontal)
+		public static double LAUNCHER_HEIGHT_INCHES = 12.25; // Height of launcher outtake above field
+		public static double APRILTAG_CENTER_HEIGHT_INCHES = 29.5; // Height of AprilTag center above field
+		public static double LIMELIGHT_FORWARD_OFFSET_INCHES = 1.5; // Limelight is 1.5 inches in front of launcher when
+		// at horizontal
+		public static double LIMELIGHT_VERTICAL_OFFSET_INCHES = 4.0; // Limelight is 4.0 inches below launcher when at
+		// horizontal
+		
+		// ===== Pitch Axis Geometry =====
+		// The launcher rotates around a pitch axis. Positions are relative to this
+		// axis.
+		public static double PITCH_AXIS_HEIGHT_INCHES = 10.5; // Height of pitch axis above field
+		public static double PITCH_AXIS_FORWARD_OFFSET_INCHES = 0; // Pitch axis is directly below of launcher
 		// outtake
-		public static double TARGET_HEIGHT_OFFSET_INCHES = 15; // inches from apriltag to target ball pos
-		public static final double NET_VERTICAL_OFFSET_INCHES = TARGET_HEIGHT_OFFSET_INCHES
-				- LAUNCHER_HEIGHT_OFFSET_INCHES;
+		
+		// Limelight position relative to pitch axis (rotates with launcher)
+		public static double LIMELIGHT_FROM_PITCH_AXIS_FORWARD_INCHES = 1.5; // Limelight is 1.5 inches forward of pitch
+		// when at horizontal
+		// axis
+		public static double LIMELIGHT_FROM_PITCH_AXIS_DOWN_INCHES = 2.2; // Limelight is 2.2 inches below pitch axis
+		// when at horizontal
+		
+		// Launcher position relative to pitch axis (the outtake point)
+		public static double LAUNCHER_FROM_PITCH_AXIS_BACK_INCHES = 0; // Launcher is directly on top axis when at 0°
+		// from horizontal
+		public static double LAUNCHER_FROM_PITCH_AXIS_UP_INCHES = 2.25; // Launcher is 2.25 inches above pitch axis
+		// (radius from pitch axis)
+		
+		// ===== Simple Aiming Constants =====
+		// Toggle between simple pose-based aiming and complex rotation-aware aiming
+		public static boolean USE_COMPLEX_AIMING = false; // Use simple pose-based aiming by default
+		public static double TARGET_HEIGHT_OFFSET_INCHES = 50; // inches above apriltag to aim for
 		
 		/**
 		 * Note that ROTATIONAL error refers to the chassis rotation relative to the
@@ -279,7 +304,7 @@ public class Settings {
 		 */
 		public static double MAX_ROTATIONAL_ERROR = Math.toRadians(20);
 		public static double MAX_YAW_ERROR = 3.0; // degrees
-		public static double MAX_PITCH_ERROR = 1.0; // degrees
+		public static double MAX_PITCH_ERROR = 0.5; // degrees
 		
 		// ===== Complex Aiming Constants (Physics-Based) =====
 		// Physical constants
@@ -292,8 +317,7 @@ public class Settings {
 		public static double MAX_WHEEL_SPEED_RPM = 5000; // Maximum safe wheel speed
 		public static double LAUNCH_EFFICIENCY = 0.85; // Energy transfer efficiency (0-1)
 		
-		// Launch geometry
-		public static double LAUNCHER_HEIGHT_INCHES = 13.25; // Height of launcher exit above field
+		// Launch geometry (legacy - kept for backwards compatibility)
 		public static double GOAL_HEIGHT_INCHES = 41.0; // Height of goal center above field
 		
 		// Optimization preferences
@@ -304,10 +328,6 @@ public class Settings {
 		
 		// Air resistance (simplified model)
 		public static double AIR_RESISTANCE_FACTOR = 0.02; // Velocity reduction factor (0 = no resistance)
-		
-		public static double getNetVerticalOffsetMeters() {
-			return NET_VERTICAL_OFFSET_INCHES * 0.0254;
-		}
 		
 		/**
 		 * Calculates tangential velocity in inches/second from wheel RPM.
@@ -335,8 +355,8 @@ public class Settings {
 	public static class Field {
 		public static double WIDTH = 144.0; // inches
 		public static Pose RESET_POSE = new Pose(72, 72, Math.toRadians(270));
-		public static Pose RED_GOAL_POSE = new Pose(131, 137.5, Math.toRadians(225));
-		public static Pose BLUE_GOAL_POSE = new Pose(12.5, 137.5, Math.toRadians(315));
+		public static Pose RED_GOAL_POSE = new Pose(137.5, 137.5, Math.toRadians(225));
+		public static Pose BLUE_GOAL_POSE = new Pose(6.5, 137.5, Math.toRadians(315));
 		public static Pose FAR_LAUNCH_ZONE_FRONT_CORNER = new Pose(72, 24);
 		public static Pose FAR_LAUNCH_ZONE_LEFT_CORNER = new Pose(50, 0);
 		public static Pose FAR_LAUNCH_ZONE_RIGHT_CORNER = new Pose(95, 0);
