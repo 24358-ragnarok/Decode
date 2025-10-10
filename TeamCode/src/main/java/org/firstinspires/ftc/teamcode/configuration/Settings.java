@@ -165,6 +165,8 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Launcher {
+		public static double LAUNCHER_SHOT_EFFICIENCY_COEFFICIENT = 1.0; // TODO linearize for
+		public static double WHEEL_MASS_KG = .085;
 		public static double BELT_MOTOR_SPEED = 1.0; // Launcher motor speed (0..1)
 		public static long BELT_SPINUP_TIME_MS = 500;
 		public static double BELT_SYNC_KP = 0.05; // Proportional gain for synchronizing belt speeds
@@ -293,7 +295,7 @@ public class Settings {
 		
 		// ===== Simple Aiming Constants =====
 		// Toggle between simple pose-based aiming and complex rotation-aware aiming
-		public static boolean USE_COMPLEX_AIMING = false; // Use simple pose-based aiming by default
+		public static boolean USE_COMPLEX_AIMING = true; // use conner's massive beautiful brain
 		public static double TARGET_HEIGHT_OFFSET_INCHES = 50; // inches above apriltag to aim for
 		
 		/**
@@ -313,26 +315,17 @@ public class Settings {
 		// Launcher specifications
 		public static double WHEEL_DIAMETER_INCHES = 2.83; // Diameter of launcher wheels
 		public static double WHEEL_SPEED_RPM = 3000; // Default wheel speed in RPM
-		public static double MIN_WHEEL_SPEED_RPM = 1500; // Minimum safe wheel speed
+		public static double MIN_WHEEL_SPEED_RPM = 2500; // Minimum useful wheel speed
 		public static double MAX_WHEEL_SPEED_RPM = 5000; // Maximum safe wheel speed
 		public static double LAUNCH_EFFICIENCY = 0.85; // Energy transfer efficiency (0-1)
 		
 		// Launch geometry (legacy - kept for backwards compatibility)
-		public static double GOAL_HEIGHT_INCHES = 41.0; // Height of goal center above field
-		
-		// Optimization preferences
-		public static double PREFERRED_IMPACT_ANGLE_DEG = 60; // Preferred angle of entry (from horizontal)
-		public static double MAX_FLIGHT_TIME_SEC = 3.0; // Maximum acceptable flight time
-		public static double MIN_LAUNCH_ANGLE_DEG = 15; // Minimum launch angle for clearance
-		public static double MAX_LAUNCH_ANGLE_DEG = 75; // Maximum launch angle before it's impractical
-		
-		// Air resistance (simplified model)
-		public static double AIR_RESISTANCE_FACTOR = 0.02; // Velocity reduction factor (0 = no resistance)
+		public static double GOAL_HEIGHT_INCHES = 37.5; // Height of goal center above field
 		
 		/**
 		 * Calculates tangential velocity in inches/second from wheel RPM.
 		 */
-		public static double wheelRpmToVelocity(double rpm) {
+		public static double wheelRpmToTangentialWheelVelocity(double rpm) {
 			// Circumference = π * diameter
 			// Velocity = (RPM / 60) * circumference * efficiency
 			double circumference = Math.PI * WHEEL_DIAMETER_INCHES;
@@ -354,9 +347,15 @@ public class Settings {
 	@Configurable
 	public static class Field {
 		public static double WIDTH = 144.0; // inches
+		public static double BALL_MASS_KG = .076; // kg
 		public static Pose RESET_POSE = new Pose(72, 72, Math.toRadians(270));
 		public static Pose RED_GOAL_POSE = new Pose(137.5, 137.5, Math.toRadians(225));
+		public static double[] RED_GOAL_AIM_3D =
+				new double[]{RED_GOAL_POSE.getX(), RED_GOAL_POSE.getY(), 5 + Aiming.GOAL_HEIGHT_INCHES};
+		
 		public static Pose BLUE_GOAL_POSE = new Pose(6.5, 137.5, Math.toRadians(315));
+		public static double[] BLUE_GOAL_AIM_3D =
+				new double[]{BLUE_GOAL_POSE.getX(), BLUE_GOAL_POSE.getY(), 5 + Aiming.GOAL_HEIGHT_INCHES};
 		public static Pose FAR_LAUNCH_ZONE_FRONT_CORNER = new Pose(72, 24);
 		public static Pose FAR_LAUNCH_ZONE_LEFT_CORNER = new Pose(50, 0);
 		public static Pose FAR_LAUNCH_ZONE_RIGHT_CORNER = new Pose(95, 0);
