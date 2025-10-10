@@ -34,7 +34,7 @@ public class MechanismManager {
 		Spindex spindex = createSpindex(hw, match);
 		LimelightManager ll = createLimelight(hw, match);
 		TrajectoryEngine traj = createTrajectory(ll, match);
-		AlignmentEngine align = createAlignment(match, drivetrain, ll);
+		AlignmentEngine align = createAlignment(match, drivetrain);
 		HorizontalLauncher launcher = createLauncher(hw, traj, match);
 		
 		mechanisms = new Mechanism[]{intake, spindex, launcher};
@@ -87,7 +87,7 @@ public class MechanismManager {
 	}
 	
 	private TrajectoryEngine createTrajectory(LimelightManager ll, MatchSettings match) {
-		if (ll == null || !Settings.Deploy.TRAJECTORY_ENGINE)
+		if (!Settings.Deploy.TRAJECTORY_ENGINE)
 			return null;
 		try {
 			return new TrajectoryEngine(ll, match, drivetrain);
@@ -96,11 +96,11 @@ public class MechanismManager {
 		}
 	}
 	
-	private AlignmentEngine createAlignment(MatchSettings match, Drivetrain dt, LimelightManager ll) {
-		if (ll == null || !Settings.Deploy.ALIGNMENT_ENGINE)
+	private AlignmentEngine createAlignment(MatchSettings match, Drivetrain dt) {
+		if (!Settings.Deploy.ALIGNMENT_ENGINE)
 			return null;
 		try {
-			return new AlignmentEngine(match, dt, ll);
+			return new AlignmentEngine(match, dt);
 		} catch (Exception e) {
 			return null;
 		}

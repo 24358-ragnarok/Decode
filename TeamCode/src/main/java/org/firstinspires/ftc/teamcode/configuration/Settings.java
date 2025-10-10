@@ -162,10 +162,12 @@ public class Settings {
 	 * * Matches projectile motion calculations in TrajectoryEngine
 	 * <p>
 	 * - Physical servo calibration points map these angle ranges to servo positions
+	 *
+	 * @noinspection PointlessBooleanExpression
 	 */
 	@Configurable
 	public static class Launcher {
-		public static double LAUNCHER_SHOT_EFFICIENCY_COEFFICIENT = 1.0; // TODO linearize for
+		public static double LAUNCHER_SHOT_EFFICIENCY_COEFFICIENT = 0.8; // TODO linearize for
 		public static double WHEEL_MASS_KG = .085;
 		public static double BELT_MOTOR_SPEED = 1.0; // Launcher motor speed (0..1)
 		public static long BELT_SPINUP_TIME_MS = 500;
@@ -188,7 +190,7 @@ public class Settings {
 		public static double YAW_MIN_ANGLE = -10.0; // Minimum yaw angle in degrees
 		public static double YAW_MAX_ANGLE = 10.0; // Maximum yaw angle in degrees (20° total window)
 		
-		public static boolean CORRECT_YAW = false;
+		public static boolean CORRECT_YAW = false && Deploy.LIMELIGHT;
 		public static boolean CORRECT_PITCH = true;
 		
 		/**

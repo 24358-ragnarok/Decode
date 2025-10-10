@@ -49,12 +49,16 @@ public class TrajectoryEngine {
 		return Settings.Aiming.PITCH_AXIS_HEIGHT_INCHES + rotatedLauncherY;
 	}
 	
+	public static double launcherExitSpeedInchesPerSecond(double rpm) {
+		return Math.PI * Settings.Aiming.WHEEL_DIAMETER_INCHES * rpm / 60; // 60 sec/min
+	}
+	
 	/**
 	 * Solves for the launch angle(s) required to hit a target.
 	 *
-	 * @param V0 The initial speed of the projectile (m/s).
-	 * @param r  The horizontal distance to the target (m).
-	 * @param h  The vertical height of the target (m).
+	 * @param V0 The initial speed of the projectile (in/s).
+	 * @param r  The horizontal distance to the target (in).
+	 * @param h  The vertical height of the target (in).
 	 * @return A List of possible launch angles in radians. The list will contain:
 	 * - 2 solutions (high and low arc)
 	 * - 1 solution (minimum energy launch)
@@ -199,7 +203,7 @@ public class TrajectoryEngine {
 						: Settings.Field.RED_GOAL_POSE);
 		
 		// find the yaw offset)
-		Double bestAngle = Double.NaN;
+		double bestAngle = Double.NaN;
 		double bestRPM = Double.NaN;
 		double maxRatio = Double.NEGATIVE_INFINITY;
 		
@@ -208,7 +212,7 @@ public class TrajectoryEngine {
 		for (double rpm = Settings.Aiming.MIN_WHEEL_SPEED_RPM;
 		     rpm <= Settings.Aiming.MAX_WHEEL_SPEED_RPM;
 		     rpm += 100) {
-			double initialBallSpeed = initialBallSpeedFromRPM(rpm);
+			double initialBallSpeed = launcherExitSpeedInchesPerSecond(rpm);
 			double currentLauncherHeight = calculateLauncherHeight(currentPitchDegrees);
 			List<Double> launchAngles = solveForTheta(initialBallSpeed, radiusFromGoal, Settings.Field.BLUE_GOAL_AIM_3D[2] - currentLauncherHeight);
 			for (Double theta : launchAngles) {
@@ -241,16 +245,6 @@ public class TrajectoryEngine {
 		double deltaY = goalPose.getY() - robotPose.getY();
 		
 		return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-	}
-	
-	private double initialBallSpeedFromRPM(double rpm) {
-		// mass of wheel times radius of wheel squared times rpm of motor, quantity divided by mass of ball, times coefficient we linearize for
-		double numerator = Settings.Launcher.WHEEL_MASS_KG
-				* Math.pow(Settings.Aiming.WHEEL_DIAMETER_INCHES / 2, 2)
-				* Math.pow(rpm, 2);
-		double denominator = Settings.Field.BALL_MASS_KG;
-		
-		return Settings.Launcher.LAUNCHER_SHOT_EFFICIENCY_COEFFICIENT * (numerator / denominator);
 	}
 	
 	private Double getYawOffset(MatchSettings.AllianceColor allianceColor) {

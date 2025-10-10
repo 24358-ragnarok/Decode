@@ -29,13 +29,10 @@ import org.firstinspires.ftc.teamcode.hardware.Mechanism;
 public class AlignmentEngine extends Mechanism {
 	private final Drivetrain drivetrain;
 	private final MatchSettings matchSettings;
-	@SuppressWarnings("FieldCanBeLocal") // Reserved for future visual alignment features
-	private final LimelightManager limelightManager;
 	
-	public AlignmentEngine(MatchSettings matchSettings, Drivetrain drivetrain, LimelightManager limelightManager) {
+	public AlignmentEngine(MatchSettings matchSettings, Drivetrain drivetrain) {
 		this.drivetrain = drivetrain;
 		this.matchSettings = matchSettings;
-		this.limelightManager = limelightManager;
 	}
 	
 	/**
