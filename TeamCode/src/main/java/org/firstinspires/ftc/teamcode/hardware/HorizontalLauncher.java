@@ -76,8 +76,8 @@ public class HorizontalLauncher extends Mechanism {
 			return;
 		}
 		
-		// Update belt speed based on the required launch velocity
-		double requiredRPM = solution.getRequiredWheelSpeedRPM();
+		// Update belt speed based on the required launch rpm
+		double requiredRPM = solution.rpm;
 		belt.setTargetSpeed(requiredRPM);
 		
 		// Apply yaw correction: horizontalOffsetDegrees is the offset from center
@@ -244,7 +244,7 @@ public class HorizontalLauncher extends Mechanism {
 		
 		private long spinupTimestamp = 0;
 		private boolean active = false;
-		private double targetSpeedRPM = Settings.Aiming.WHEEL_SPEED_RPM;
+		private double targetSpeedRPM = Settings.Aiming.DEFAULT_WHEEL_SPEED_RPM;
 		
 		// For smoothing
 		private int lastRightPos = 0;

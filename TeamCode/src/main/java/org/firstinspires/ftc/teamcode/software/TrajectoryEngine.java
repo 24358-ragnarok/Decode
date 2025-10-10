@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.software;
 
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Aiming.GRAVITY_INCHES_PER_SEC_SQ;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Aiming.LAUNCH_EFFICIENCY;
+
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
@@ -50,7 +53,7 @@ public class TrajectoryEngine {
 	}
 	
 	public static double launcherExitSpeedInchesPerSecond(double rpm) {
-		return Math.PI * Settings.Aiming.WHEEL_DIAMETER_INCHES * rpm / 60; // 60 sec/min
+		return LAUNCH_EFFICIENCY * Math.PI * Settings.Aiming.WHEEL_DIAMETER_INCHES * rpm / 60; // 60 sec/min
 	}
 	
 	/**
@@ -65,7 +68,7 @@ public class TrajectoryEngine {
 	 * - 0 solutions (target is unreachable with the given V0)
 	 */
 	public List<Double> solveForTheta(double V0, double r, double h) {
-		final double g = 386.2; // in/s/s
+		final double g = GRAVITY_INCHES_PER_SEC_SQ; // in/s/s
 		List<Double> angles = new ArrayList<>();
 		
 		// Define the coefficients for the quadratic equation Au^2 + Bu + C = 0,
@@ -163,10 +166,7 @@ public class TrajectoryEngine {
 		double launchAngleRadians = Math.atan2(heightDifference, radiusFromGoal);
 		double launchAngleDegrees = Math.toDegrees(launchAngleRadians);
 		
-		// Simple aiming uses default wheel speed and no yaw correction
-		double launchSpeed = Settings.Aiming.wheelRpmToTangentialWheelVelocity(Settings.Aiming.WHEEL_SPEED_RPM);
-		
-		return new AimingSolution(getYawOffset(allianceColor), launchAngleDegrees - currentPitchDegrees, launchSpeed, true);
+		return new AimingSolution(getYawOffset(allianceColor), launchAngleDegrees - currentPitchDegrees, Settings.Aiming.DEFAULT_WHEEL_SPEED_RPM, true);
 	}
 	
 	/**
@@ -193,52 +193,52 @@ public class TrajectoryEngine {
 	 */
 	private AimingSolution aimComplex(MatchSettings.AllianceColor allianceColor, double currentPitchDegrees) {
 		double yawOffset = getYawOffset(allianceColor);
-		if (Double.isNaN(yawOffset)) {
-			return AimingSolution.invalid();
-		}
+		if (Double.isNaN(yawOffset)) return AimingSolution.invalid();
 		
 		double radiusFromGoal = getDistanceFromGoal(drivetrain.getPose(),
 				(allianceColor == MatchSettings.AllianceColor.BLUE)
 						? Settings.Field.BLUE_GOAL_POSE
 						: Settings.Field.RED_GOAL_POSE);
 		
-		// find the yaw offset)
 		double bestAngle = Double.NaN;
 		double bestRPM = Double.NaN;
-		double maxRatio = Double.NEGATIVE_INFINITY;
+		double minRPM = Double.POSITIVE_INFINITY;
 		
-		
-		// for each relatively possible launcher RPM
 		for (double rpm = Settings.Aiming.MIN_WHEEL_SPEED_RPM;
 		     rpm <= Settings.Aiming.MAX_WHEEL_SPEED_RPM;
-		     rpm += 100) {
+		     rpm += Settings.Aiming.WHEEL_SPEED_OPTIMIZATION_STEP_RPM) {
+			
 			double initialBallSpeed = launcherExitSpeedInchesPerSecond(rpm);
 			double currentLauncherHeight = calculateLauncherHeight(currentPitchDegrees);
-			List<Double> launchAngles = solveForTheta(initialBallSpeed, radiusFromGoal, Settings.Field.BLUE_GOAL_AIM_3D[2] - currentLauncherHeight);
+			
+			List<Double> launchAngles = solveForTheta(initialBallSpeed,
+					radiusFromGoal,
+					Settings.Field.BLUE_GOAL_AIM_3D[2] - currentLauncherHeight);
+			
 			for (Double theta : launchAngles) {
-				double finalVelocityX = initialBallSpeed * Math.cos(theta);
-				double t = radiusFromGoal / finalVelocityX;
-				double finalVelocityY = initialBallSpeed * Math.sin(theta) - 386.2 * t;
+				double vx = initialBallSpeed * Math.cos(theta);
+				double t = radiusFromGoal / vx;
+				double vyFinal = initialBallSpeed * Math.sin(theta) - GRAVITY_INCHES_PER_SEC_SQ * t;
+				double entryAngle = Math.toDegrees(Math.abs(Math.atan2(vyFinal, vx)));
 				
-				// calculate the ratio
-				double currentRatio = Math.abs(finalVelocityY / finalVelocityX);
-				
-				if (currentRatio > maxRatio) {
-					maxRatio = currentRatio;
+				if (entryAngle >= Settings.Aiming.MIN_ENTRY_ANGLE_DEGREES && rpm < minRPM) {
+					minRPM = rpm;
 					bestAngle = Math.toDegrees(theta);
 					bestRPM = rpm;
 				}
-				
 			}
-			
 		}
 		
-		if (Double.isNaN(bestAngle) || Double.isNaN(bestRPM)) {
-			return AimingSolution.invalid();
-		}
+		if (Double.isNaN(bestAngle) || Double.isNaN(bestRPM)) return AimingSolution.invalid();
 		
-		return new AimingSolution(yawOffset, bestAngle - currentPitchDegrees, Settings.Aiming.wheelRpmToTangentialWheelVelocity(bestRPM), true);
+		return new AimingSolution(
+				yawOffset,
+				bestAngle - currentPitchDegrees,
+				bestRPM,
+				true
+		);
 	}
+	
 	
 	private double getDistanceFromGoal(Pose robotPose, Pose goalPose) {
 		double deltaX = goalPose.getX() - robotPose.getX();
@@ -289,17 +289,17 @@ public class TrajectoryEngine {
 		public final boolean hasTarget;
 		public final double horizontalOffsetDegrees; // Yaw offset from center
 		public final double verticalOffsetDegrees; // Absolute launch angle
-		public final double launchVelocityInchesPerSec; // Required launch velocity
+		public final double rpm; // Required launch velocity
 		
 		/**
 		 * Constructor for a valid aiming solution.
 		 */
 		public AimingSolution(double horizontalOffset, double verticalOffset,
-		                      double launchVelocity, boolean hasTarget) {
+		                      double rpm, boolean hasTarget) {
 			this.hasTarget = hasTarget;
 			this.horizontalOffsetDegrees = horizontalOffset;
 			this.verticalOffsetDegrees = verticalOffset;
-			this.launchVelocityInchesPerSec = launchVelocity;
+			this.rpm = rpm;
 		}
 		
 		/**
@@ -307,13 +307,6 @@ public class TrajectoryEngine {
 		 */
 		public static AimingSolution invalid() {
 			return new AimingSolution(Double.NaN, Double.NaN, Double.NaN, false);
-		}
-		
-		/**
-		 * Gets the required wheel speed in RPM for this solution.
-		 */
-		public double getRequiredWheelSpeedRPM() {
-			return Settings.Aiming.velocityToWheelRpm(launchVelocityInchesPerSec);
 		}
 	}
 }

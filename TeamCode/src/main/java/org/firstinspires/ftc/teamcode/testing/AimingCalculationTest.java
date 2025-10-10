@@ -161,7 +161,7 @@ public class AimingCalculationTest extends LinearOpMode {
 				logging.addLine("=== 5. FINAL ENGINE RESULT ===");
 				if (solution.hasTarget) {
 					logging.addData("Required Launch Angle", "%.2f°", solution.verticalOffsetDegrees);
-					logging.addData("Required RPM", "%.0f", solution.getRequiredWheelSpeedRPM());
+					logging.addData("Required RPM", "%.0f", solution.rpm);
 					logging.addData("Pitch Change Needed", "%.2f°",
 							solution.verticalOffsetDegrees - currentPitchDegrees);
 				} else {

@@ -191,7 +191,7 @@ public class MainOp extends OpMode {
 					if (solution.hasTarget) {
 						logging.addData("Yaw Offset°", "%.2f", solution.horizontalOffsetDegrees);
 						logging.addData("Pitch Offset°", "%.2f", solution.verticalOffsetDegrees);
-						logging.addData("Required RPM", "%.0f", solution.getRequiredWheelSpeedRPM());
+						logging.addData("Required RPM", "%.0f", solution.rpm);
 					}
 				});
 		

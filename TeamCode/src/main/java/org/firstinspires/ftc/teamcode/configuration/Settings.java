@@ -167,9 +167,6 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Launcher {
-		public static double LAUNCHER_SHOT_EFFICIENCY_COEFFICIENT = 0.8; // TODO linearize for
-		public static double WHEEL_MASS_KG = .085;
-		public static double BELT_MOTOR_SPEED = 1.0; // Launcher motor speed (0..1)
 		public static long BELT_SPINUP_TIME_MS = 500;
 		public static double BELT_SYNC_KP = 0.05; // Proportional gain for synchronizing belt speeds
 		
@@ -266,6 +263,8 @@ public class Settings {
 	
 	@Configurable
 	public static class Aiming {
+		public static final double WHEEL_SPEED_OPTIMIZATION_STEP_RPM = 100.0;
+		public static double MIN_ENTRY_ANGLE_DEGREES = 15.0;
 		// ===== Physical Measurements =====
 		public static double LIMELIGHT_HEIGHT_INCHES = 8.25; // Height of limelight camera above field (when horizontal)
 		public static double LAUNCHER_HEIGHT_INCHES = 12.25; // Height of launcher outtake above field
@@ -316,31 +315,13 @@ public class Settings {
 		
 		// Launcher specifications
 		public static double WHEEL_DIAMETER_INCHES = 2.83; // Diameter of launcher wheels
-		public static double WHEEL_SPEED_RPM = 3000; // Default wheel speed in RPM
+		public static double DEFAULT_WHEEL_SPEED_RPM = 3000; // Default wheel speed in RPM
 		public static double MIN_WHEEL_SPEED_RPM = 2500; // Minimum useful wheel speed
 		public static double MAX_WHEEL_SPEED_RPM = 5000; // Maximum safe wheel speed
 		public static double LAUNCH_EFFICIENCY = 0.85; // Energy transfer efficiency (0-1)
 		
 		// Launch geometry (legacy - kept for backwards compatibility)
 		public static double GOAL_HEIGHT_INCHES = 37.5; // Height of goal center above field
-		
-		/**
-		 * Calculates tangential velocity in inches/second from wheel RPM.
-		 */
-		public static double wheelRpmToTangentialWheelVelocity(double rpm) {
-			// Circumference = π * diameter
-			// Velocity = (RPM / 60) * circumference * efficiency
-			double circumference = Math.PI * WHEEL_DIAMETER_INCHES;
-			return (rpm / 60.0) * circumference * LAUNCH_EFFICIENCY;
-		}
-		
-		/**
-		 * Calculates required wheel RPM from desired launch velocity.
-		 */
-		public static double velocityToWheelRpm(double velocityInchesPerSec) {
-			double circumference = Math.PI * WHEEL_DIAMETER_INCHES;
-			return (velocityInchesPerSec * 60.0) / (circumference * LAUNCH_EFFICIENCY);
-		}
 	}
 	
 	/**
