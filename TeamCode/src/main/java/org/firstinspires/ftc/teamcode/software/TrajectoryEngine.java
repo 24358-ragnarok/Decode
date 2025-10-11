@@ -13,14 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Trajectory Engine uses a launcher-mounted Limelight to calculate optimal
+ * The Trajectory Engine uses a launcher-mounted Launcher along with the
+ * Launcher's tilt and motor information and the robot pose to calculate optimal
  * aiming solutions.
- * Supports both simple offset-based aiming and complex physics-based projectile
- * calculations.
+ * Supports complex physics-based projectile calculations.
  */
 public class TrajectoryEngine {
 	
-	public static final MonotoneHermite curve = new MonotoneHermite(Settings.Launcher.OUTTAKE_DATA_X, Settings.Launcher.OUTTAKE_DATA_Y);
+	public static final MonotoneHermiteCurve curve = new MonotoneHermiteCurve(Settings.Launcher.OUTTAKE_DATA_X, Settings.Launcher.OUTTAKE_DATA_Y);
 	private final LimelightManager limelightManager;
 	private final MatchSettings matchSettings;
 	private final Drivetrain drivetrain;
@@ -107,70 +107,6 @@ public class TrajectoryEngine {
 	}
 	
 	/**
-	 * Gets the current aiming solution from the Limelight camera.
-	 * Routes to either simple or complex aiming based on settings.
-	 *
-	 * @param allianceColor       The alliance color to determine target ID
-	 * @param currentPitchDegrees The current pitch angle of the launcher in degrees
-	 * @return An {@link AimingSolution} object containing the targeting data.
-	 */
-	public AimingSolution getAimingOffsets(MatchSettings.AllianceColor allianceColor, double currentPitchDegrees) {
-		if (Settings.Aiming.USE_COMPLEX_AIMING) {
-			return aimComplex(allianceColor, currentPitchDegrees);
-		} else {
-			return aimSimple(allianceColor, currentPitchDegrees);
-		}
-	}
-	
-	/**
-	 * Simple aiming: uses robot pose and goal pose to calculate launch angle.
-	 * Much simpler than complex aiming - just uses geometry based on known
-	 * positions.
-	 *
-	 * @param allianceColor       The alliance color to determine target goal
-	 * @param currentPitchDegrees The current pitch angle of the launcher
-	 * @return An {@link AimingSolution} with:
-	 * - horizontal: 0 (no yaw correction - assumes robot is positioned
-	 * correctly)
-	 * - vertical: calculated launch angle from robot position to goal
-	 * - velocity: default wheel speed
-	 */
-	private AimingSolution aimSimple(MatchSettings.AllianceColor allianceColor, double currentPitchDegrees) {
-		// Get robot's current position
-		com.pedropathing.geometry.Pose robotPose = drivetrain.getPose();
-		
-		// Get target goal pose based on alliance
-		com.pedropathing.geometry.Pose goalPose = (allianceColor == MatchSettings.AllianceColor.BLUE)
-				? Settings.Field.BLUE_GOAL_POSE
-				: Settings.Field.RED_GOAL_POSE;
-		
-		// Calculate horizontal distance from robot to goal
-		double radiusFromGoal = getDistanceFromGoal(drivetrain.getPose(),
-				(allianceColor == MatchSettings.AllianceColor.BLUE)
-						? Settings.Field.BLUE_GOAL_POSE
-						: Settings.Field.RED_GOAL_POSE);
-		
-		// Calculate launcher height (accounting for current pitch rotation)
-		
-		// Calculate launcher height (accounting for current pitch rotation)
-		double actualLauncherHeight = calculateLauncherHeight(currentPitchDegrees);
-		
-		// Calculate target height (AprilTag)
-		// Calculate target height (AprilTag + offset)
-		double targetHeight = Settings.Aiming.APRILTAG_CENTER_HEIGHT_INCHES
-				+ Settings.Aiming.TARGET_HEIGHT_OFFSET_INCHES;
-		
-		// Calculate height difference
-		double heightDifference = targetHeight - actualLauncherHeight;
-		
-		// Calculate launch angle using simple trigonometry
-		double launchAngleRadians = Math.atan2(heightDifference, radiusFromGoal);
-		double launchAngleDegrees = Math.toDegrees(launchAngleRadians);
-		
-		return new AimingSolution(getYawOffset(allianceColor), launchAngleDegrees - currentPitchDegrees, Settings.Aiming.DEFAULT_WHEEL_SPEED_RPM, true);
-	}
-	
-	/**
 	 * Complex aiming: accounts for launcher rotation and calculates the required
 	 * launch angle.
 	 * The limelight is mounted on the launcher and rotates with it around the pitch
@@ -192,7 +128,7 @@ public class TrajectoryEngine {
 	 * - vertical: absolute launch angle from horizontal (degrees, 0 to 90)
 	 * - velocity: default wheel speed
 	 */
-	private AimingSolution aimComplex(MatchSettings.AllianceColor allianceColor, double currentPitchDegrees) {
+	public AimingSolution getAimingOffsets(MatchSettings.AllianceColor allianceColor, double currentPitchDegrees) {
 		double yawOffset = getYawOffset(allianceColor);
 		if (Double.isNaN(yawOffset)) return AimingSolution.invalid();
 		
@@ -205,6 +141,7 @@ public class TrajectoryEngine {
 		double bestRPM = Double.NaN;
 		double minRPM = Double.POSITIVE_INFINITY;
 		
+		// iterate through each possible RPM and check if can launch the ball at the best speed and angle
 		for (double rpm = Settings.Aiming.MIN_WHEEL_SPEED_RPM;
 		     rpm <= Settings.Aiming.MAX_WHEEL_SPEED_RPM;
 		     rpm += Settings.Aiming.WHEEL_SPEED_OPTIMIZATION_STEP_RPM) {
@@ -212,6 +149,7 @@ public class TrajectoryEngine {
 			double initialBallSpeed = launcherExitSpeedInchesPerSecond(rpm);
 			double currentLauncherHeight = calculateLauncherHeight(currentPitchDegrees);
 			
+			// get all possible angles we can shoot at where the ball will go in the goal
 			List<Double> launchAngles = solveForTheta(initialBallSpeed,
 					radiusFromGoal,
 					Settings.Field.BLUE_GOAL_AIM_3D[2] - currentLauncherHeight);
@@ -222,11 +160,13 @@ public class TrajectoryEngine {
 				double vyFinal = initialBallSpeed * Math.sin(theta) - GRAVITY_INCHES_PER_SEC_SQ * t;
 				double entryAngle = Math.toDegrees(Math.abs(Math.atan2(vyFinal, vx)));
 				
-				// constraint one: ball must enter goal from above
-				// contraint two: motors must have a reasonable angle for balls to enter it
-				if (entryAngle >= Settings.Aiming.MIN_ENTRY_ANGLE_DEGREES && rpm < minRPM &&
-						bestAngle > Settings.Aiming.MAX_LAUNCHER_ANGLE_DEGREES_FROM_HORIZONTAL
+				// constraint one: ball must enter goal from above (so it doesn't hit the goal bottom)
+				// constraint two: motors must launch from a reasonable angle, so balls can enter it
+				if (entryAngle >= Settings.Aiming.MIN_ENTRY_ANGLE_DEGREES &&
+						theta > Settings.Aiming.MAX_LAUNCHER_ANGLE_DEGREES_FROM_HORIZONTAL &&
+						rpm < minRPM
 				) {
+					// this is now the best calculated launch
 					minRPM = rpm;
 					bestAngle = Math.toDegrees(theta);
 					bestRPM = rpm;
@@ -234,6 +174,7 @@ public class TrajectoryEngine {
 			}
 		}
 		
+		// if we have not found an angle, there is no solution
 		if (Double.isNaN(bestAngle) || Double.isNaN(bestRPM)) return AimingSolution.invalid();
 		
 		return new AimingSolution(
@@ -244,7 +185,7 @@ public class TrajectoryEngine {
 		);
 	}
 	
-	
+	// pythagorean theorem
 	private double getDistanceFromGoal(Pose robotPose, Pose goalPose) {
 		double deltaX = goalPose.getX() - robotPose.getX();
 		double deltaY = goalPose.getY() - robotPose.getY();
@@ -252,6 +193,13 @@ public class TrajectoryEngine {
 		return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 	}
 	
+	/**
+	 * Gets the yaw offset from the camera center.
+	 * Safely handles the Nullable limelight based on settings.
+	 *
+	 * @param allianceColor The alliance color to determine target ID
+	 * @return The yaw offset from the camera center in degrees
+	 */
 	private Double getYawOffset(MatchSettings.AllianceColor allianceColor) {
 		if (!Settings.Launcher.CORRECT_YAW) {
 			return 0.0;
@@ -293,8 +241,8 @@ public class TrajectoryEngine {
 	public static class AimingSolution {
 		public final boolean hasTarget;
 		public final double horizontalOffsetDegrees; // Yaw offset from center
-		public final double verticalOffsetDegrees; // Absolute launch angle
-		public final double rpm; // Required launch velocity
+		public final double verticalOffsetDegrees; // Vertical offset from current position
+		public final double rpm; // Required launch motor rpm
 		
 		/**
 		 * Constructor for a valid aiming solution.
@@ -315,13 +263,15 @@ public class TrajectoryEngine {
 		}
 	}
 	
-	
-	public static class MonotoneHermite {
+	/**
+	 * Creates a smooth curve using a limited dataset.
+	 */
+	public static class MonotoneHermiteCurve {
 		private final double[] xs;
 		private final double[] ys;
 		private final double[] m; // slopes at knots
 		
-		public MonotoneHermite(double[] xs, double[] ys) {
+		public MonotoneHermiteCurve(double[] xs, double[] ys) {
 			if (xs.length != ys.length) throw new IllegalArgumentException("lengths differ");
 			if (xs.length < 2) throw new IllegalArgumentException("need >=2 points");
 			this.xs = xs.clone();
