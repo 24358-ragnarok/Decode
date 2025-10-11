@@ -166,6 +166,9 @@ public class MainOp extends OpMode {
 			ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::ready);
 		} else {
 			ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::stop);
+			if (subController.wasJustReleased(Controller.Action.AIM)) {
+				mechanisms.drivetrain.switchToManual();
+			}
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.LAUNCH)) {

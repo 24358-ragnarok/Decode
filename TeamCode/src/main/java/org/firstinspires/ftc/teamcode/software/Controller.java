@@ -67,6 +67,28 @@ public class Controller extends Gamepad {
 	}
 	
 	/**
+	 * Checks if an control was just released.
+	 *
+	 * @param control The control to check
+	 * @return True if that control was pressed last frame and not this frame, False
+	 * otherwise
+	 */
+	public final boolean wasJustReleased(Control control) {
+		return getRawValue(control) == 0.0 && previousControlState.getOrDefault(control, 0.0) != 0;
+	}
+	
+	/**
+	 * Checks if an action was just released.
+	 *
+	 * @param action The action to check
+	 * @return True if that action was pressed last frame and not this frame, False
+	 * otherwise
+	 */
+	public final boolean wasJustReleased(Action action) {
+		return wasJustReleased(getControlForAction(action));
+	}
+	
+	/**
 	 * Maps each action to a control. This allows us to ask if the action "Spin" was
 	 * pressed instead
 	 * of hard-coding what control makes it spin.

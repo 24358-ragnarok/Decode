@@ -154,6 +154,9 @@ public class Drivetrain extends Mechanism {
 	 * This will stop any active path following.
 	 */
 	public void switchToManual() {
+		if (state == State.MANUAL) {
+			return;
+		}
 		this.state = State.MANUAL;
 		follower.startTeleopDrive();
 	}
