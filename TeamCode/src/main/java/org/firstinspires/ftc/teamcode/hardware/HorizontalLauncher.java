@@ -268,7 +268,6 @@ public class HorizontalLauncher extends Mechanism {
 			// Clamp to safe range
 			this.targetSpeedRPM = Math.max(Settings.Aiming.MIN_WHEEL_SPEED_RPM,
 					Math.min(Settings.Aiming.MAX_WHEEL_SPEED_RPM, rpm));
-			
 			// If we're already spinning, adjust immediately
 			if (active) {
 				// Restart spinup timer if speed changed significantly

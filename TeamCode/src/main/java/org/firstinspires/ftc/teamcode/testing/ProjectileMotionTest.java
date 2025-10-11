@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
@@ -43,6 +44,8 @@ public class ProjectileMotionTest extends LinearOpMode {
 		leftLauncherMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 		
 		syncBelt = new HorizontalLauncher.SyncBelt(rightLauncherMotor, leftLauncherMotor);
+		Servo servo = hardwareMap.get(Servo.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
+		servo.setPosition(Settings.Launcher.PITCH_SERVO_AT_MIN);
 		
 		// --- IMU Initialization ---
 		imu = hardwareMap.get(IMU.class, "imu");

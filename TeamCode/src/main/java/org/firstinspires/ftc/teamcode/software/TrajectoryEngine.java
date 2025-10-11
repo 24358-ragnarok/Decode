@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.software;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Aiming.GRAVITY_INCHES_PER_SEC_SQ;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Aiming.LAUNCH_EFFICIENCY;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -21,6 +20,7 @@ import java.util.List;
  */
 public class TrajectoryEngine {
 	
+	public static final MonotoneHermite curve = new MonotoneHermite(Settings.Launcher.OUTTAKE_DATA_X, Settings.Launcher.OUTTAKE_DATA_Y);
 	private final LimelightManager limelightManager;
 	private final MatchSettings matchSettings;
 	private final Drivetrain drivetrain;
@@ -52,8 +52,9 @@ public class TrajectoryEngine {
 		return Settings.Aiming.PITCH_AXIS_HEIGHT_INCHES + rotatedLauncherY;
 	}
 	
-	public static double launcherExitSpeedInchesPerSecond(double rpm) {
-		return LAUNCH_EFFICIENCY * Math.PI * Settings.Aiming.WHEEL_DIAMETER_INCHES * rpm / 60; // 60 sec/min
+	public double launcherExitSpeedInchesPerSecond(double rpm) {
+		// return LAUNCH_EFFICIENCY * Math.PI * Settings.Aiming.WHEEL_DIAMETER_INCHES * rpm / 60; // 60 sec/min
+		return curve.evaluate(rpm / 7250); // approximate using a MonotoneHermite curve. curve undershoots so 7500 instead of 6000
 	}
 	
 	/**
@@ -221,7 +222,11 @@ public class TrajectoryEngine {
 				double vyFinal = initialBallSpeed * Math.sin(theta) - GRAVITY_INCHES_PER_SEC_SQ * t;
 				double entryAngle = Math.toDegrees(Math.abs(Math.atan2(vyFinal, vx)));
 				
-				if (entryAngle >= Settings.Aiming.MIN_ENTRY_ANGLE_DEGREES && rpm < minRPM) {
+				// constraint one: ball must enter goal from above
+				// contraint two: motors must have a reasonable angle for balls to enter it
+				if (entryAngle >= Settings.Aiming.MIN_ENTRY_ANGLE_DEGREES && rpm < minRPM &&
+						bestAngle > Settings.Aiming.MAX_LAUNCHER_ANGLE_DEGREES_FROM_HORIZONTAL
+				) {
 					minRPM = rpm;
 					bestAngle = Math.toDegrees(theta);
 					bestRPM = rpm;
@@ -307,6 +312,82 @@ public class TrajectoryEngine {
 		 */
 		public static AimingSolution invalid() {
 			return new AimingSolution(Double.NaN, Double.NaN, Double.NaN, false);
+		}
+	}
+	
+	
+	public static class MonotoneHermite {
+		private final double[] xs;
+		private final double[] ys;
+		private final double[] m; // slopes at knots
+		
+		public MonotoneHermite(double[] xs, double[] ys) {
+			if (xs.length != ys.length) throw new IllegalArgumentException("lengths differ");
+			if (xs.length < 2) throw new IllegalArgumentException("need >=2 points");
+			this.xs = xs.clone();
+			this.ys = ys.clone();
+			this.m = computeSlopes(xs, ys);
+		}
+		
+		private double[] computeSlopes(double[] x, double[] y) {
+			int n = x.length;
+			double[] delta = new double[n - 1];
+			for (int i = 0; i < n - 1; i++) delta[i] = (y[i + 1] - y[i]) / (x[i + 1] - x[i]);
+			
+			double[] m = new double[n];
+			// Endpoints: use one-sided slopes
+			m[0] = delta[0];
+			m[n - 1] = delta[n - 2];
+			// Interior initial slopes: average of adjacent secants
+			for (int i = 1; i < n - 1; i++) m[i] = (delta[i - 1] + delta[i]) * 0.5;
+			
+			// Enforce monotonicity (Fritsch-Carlson)
+			for (int i = 0; i < n - 1; i++) {
+				if (delta[i] == 0.0) {
+					m[i] = 0.0;
+					m[i + 1] = 0.0;
+				} else {
+					double a = m[i] / delta[i];
+					double b = m[i + 1] / delta[i];
+					double s = a * a + b * b;
+					if (s > 9.0) {
+						double tau = 3.0 / Math.sqrt(s);
+						m[i] = tau * a * delta[i];
+						m[i + 1] = tau * b * delta[i];
+					}
+				}
+			}
+			return m;
+		}
+		
+		public double evaluate(double x) {
+			// clamp
+			if (x <= xs[0]) return ys[0];
+			if (x >= xs[xs.length - 1]) return ys[ys.length - 1];
+			
+			// find interval
+			int i = 0;
+			int j = xs.length - 1;
+			while (j - i > 1) {
+				int mid = (i + j) >>> 1;
+				if (xs[mid] <= x) i = mid;
+				else j = mid;
+			}
+			
+			double x0 = xs[i], x1 = xs[i + 1];
+			double y0 = ys[i], y1 = ys[i + 1];
+			double m0 = m[i], m1 = m[i + 1];
+			double h = x1 - x0;
+			double t = (x - x0) / h;
+			
+			double t2 = t * t;
+			double t3 = t2 * t;
+			double h00 = 2 * t3 - 3 * t2 + 1;
+			double h10 = t3 - 2 * t2 + t;
+			double h01 = -2 * t3 + 3 * t2;
+			double h11 = t3 - t2;
+			
+			return h00 * y0 + h10 * h * m0 + h01 * y1 + h11 * h * m1;
 		}
 	}
 }

@@ -169,26 +169,23 @@ public class Settings {
 	public static class Launcher {
 		public static long BELT_SPINUP_TIME_MS = 500;
 		public static double BELT_SYNC_KP = 0.05; // Proportional gain for synchronizing belt speeds
-		
 		// Pitch servo calibration (physical limits)
-		public static double PITCH_SERVO_AT_MIN = 0.745; // Servo position at minimum pitch angle
-		public static double PITCH_SERVO_AT_MAX = 0.43; // Servo position at maximum pitch angle
+		public static double PITCH_SERVO_AT_MIN = 0.692; // Servo position at minimum pitch angle
+		public static double PITCH_SERVO_AT_MAX = 0.415; // Servo position at maximum pitch angle
 		public static double DETECTION_PITCH = 25; // degrees from horizontal
-		
 		// Pitch angle window (absolute angles from horizontal, for launch physics)
 		public static double PITCH_MIN_ANGLE = 0.0; // Minimum pitch angle in degrees (horizontal)
 		public static double PITCH_MAX_ANGLE = 90.0; // Maximum pitch angle in degrees (straight up, 90° total window)
-		
 		// Yaw servo calibration (physical limits)
 		public static double YAW_SERVO_AT_MIN = 0.0; // Servo position at minimum yaw angle
 		public static double YAW_SERVO_AT_MAX = 1.0; // Servo position at maximum yaw angle
-		
 		// Yaw angle window (centered around 0°)
 		public static double YAW_MIN_ANGLE = -10.0; // Minimum yaw angle in degrees
 		public static double YAW_MAX_ANGLE = 10.0; // Maximum yaw angle in degrees (20° total window)
-		
 		public static boolean CORRECT_YAW = false && Deploy.LIMELIGHT;
 		public static boolean CORRECT_PITCH = true;
+		public static double[] OUTTAKE_DATA_X = {0.0, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0};
+		public static double[] OUTTAKE_DATA_Y = {0.0, 90, 180, 257, 340, 423, 660};
 		
 		/**
 		 * Converts pitch angle (degrees) to servo position using calibration points.
@@ -264,7 +261,8 @@ public class Settings {
 	@Configurable
 	public static class Aiming {
 		public static final double WHEEL_SPEED_OPTIMIZATION_STEP_RPM = 100.0;
-		public static double MIN_ENTRY_ANGLE_DEGREES = 15.0;
+		public static double MIN_ENTRY_ANGLE_DEGREES = 20.0;
+		public static double MAX_LAUNCHER_ANGLE_DEGREES_FROM_HORIZONTAL = 75.0;
 		// ===== Physical Measurements =====
 		public static double LIMELIGHT_HEIGHT_INCHES = 8.25; // Height of limelight camera above field (when horizontal)
 		public static double LAUNCHER_HEIGHT_INCHES = 12.25; // Height of launcher outtake above field
@@ -332,13 +330,13 @@ public class Settings {
 		public static double WIDTH = 144.0; // inches
 		public static double BALL_MASS_KG = .076; // kg
 		public static Pose RESET_POSE = new Pose(72, 72, Math.toRadians(270));
-		public static Pose RED_GOAL_POSE = new Pose(137.5, 137.5, Math.toRadians(225));
+		public static Pose RED_GOAL_POSE = new Pose(130.0, 130.0, Math.toRadians(225));
 		public static double[] RED_GOAL_AIM_3D =
-				new double[]{RED_GOAL_POSE.getX(), RED_GOAL_POSE.getY(), 5 + Aiming.GOAL_HEIGHT_INCHES};
+				new double[]{RED_GOAL_POSE.getX(), RED_GOAL_POSE.getY(), 7 + Aiming.GOAL_HEIGHT_INCHES};
 		
-		public static Pose BLUE_GOAL_POSE = new Pose(6.5, 137.5, Math.toRadians(315));
+		public static Pose BLUE_GOAL_POSE = new Pose(14.0, 130.0, Math.toRadians(315));
 		public static double[] BLUE_GOAL_AIM_3D =
-				new double[]{BLUE_GOAL_POSE.getX(), BLUE_GOAL_POSE.getY(), 5 + Aiming.GOAL_HEIGHT_INCHES};
+				new double[]{BLUE_GOAL_POSE.getX(), BLUE_GOAL_POSE.getY(), 7 + Aiming.GOAL_HEIGHT_INCHES};
 		public static Pose FAR_LAUNCH_ZONE_FRONT_CORNER = new Pose(72, 24);
 		public static Pose FAR_LAUNCH_ZONE_LEFT_CORNER = new Pose(50, 0);
 		public static Pose FAR_LAUNCH_ZONE_RIGHT_CORNER = new Pose(95, 0);

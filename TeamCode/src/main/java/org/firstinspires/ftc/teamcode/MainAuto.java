@@ -71,6 +71,7 @@ public class MainAuto extends OpMode {
 	 */
 	@Override
 	public void init_loop() {
+		logging.clearDynamic();
 		// Draw the initial pose of the robot
 		logging.drawRobot(matchSettings.getAutonomousStartingPose());
 		

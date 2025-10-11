@@ -161,8 +161,7 @@ public class MainOp extends OpMode {
 		}
 		
 		// Alignment & Launcher
-		if (subController.getProcessedValue(Controller.Action.AIM) > 0.1 &&
-				mechanisms.alignmentEngine.isInLaunchZone(mechanisms.drivetrain.follower.getPose())) {
+		if (subController.getProcessedValue(Controller.Action.AIM) > 0.1) {
 			mechanisms.alignmentEngine.run();
 			ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::ready);
 		} else {

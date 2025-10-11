@@ -24,7 +24,6 @@ import java.util.List;
  */
 @TeleOp(name = "Test: Deep Aiming Debug", group = "Tests")
 public class AimingCalculationTest extends LinearOpMode {
-	
 	@Override
 	public void runOpMode() {
 		UnifiedLogging logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
@@ -32,6 +31,7 @@ public class AimingCalculationTest extends LinearOpMode {
 		
 		// --- HARDWARE & ENGINE INITIALIZATION ---
 		Servo pitchServo = hardwareMap.get(Servo.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
+		pitchServo.setPosition(Settings.Launcher.PITCH_SERVO_AT_MIN);
 		MatchSettings matchSettings = new MatchSettings(blackboard);
 		matchSettings.setAllianceColor(MatchSettings.AllianceColor.BLUE);
 		matchSettings.setAutoStartingPosition(MatchSettings.AutoStartingPosition.FAR);
@@ -47,15 +47,15 @@ public class AimingCalculationTest extends LinearOpMode {
 		// --- REFLECTION SETUP ---
 		// Get handles to the private methods we want to inspect
 		Method getDistanceFromGoalMethod = null;
-		Method initialBallSpeedFromRPMMethod = null;
+		Method launcherExitSpeedInchesPerSecondMethod = null;
 		try {
 			getDistanceFromGoalMethod = TrajectoryEngine.class.getDeclaredMethod("getDistanceFromGoal", Pose.class,
 					Pose.class);
 			getDistanceFromGoalMethod.setAccessible(true);
 			
-			initialBallSpeedFromRPMMethod = TrajectoryEngine.class.getDeclaredMethod("initialBallSpeedFromRPM",
+			launcherExitSpeedInchesPerSecondMethod = TrajectoryEngine.class.getDeclaredMethod("launcherExitSpeedInchesPerSecond",
 					double.class);
-			initialBallSpeedFromRPMMethod.setAccessible(true);
+			launcherExitSpeedInchesPerSecondMethod.setAccessible(true);
 			
 		} catch (NoSuchMethodException e) {
 			logging.addLine("Reflection setup failed: " + e.getMessage());
@@ -67,10 +67,10 @@ public class AimingCalculationTest extends LinearOpMode {
 		logging.addLine("Deep Aiming Debug Ready");
 		logging.addLine("Shows internal TrajectoryEngine calculations");
 		logging.update();
-		
 		waitForStart();
 		
 		while (opModeIsActive()) {
+			logging.clearDynamic();
 			drivetrain.update();
 			// --- 1. GET CURRENT STATE ---
 			double currentPitchDegrees = Settings.Launcher.servoToPitch(pitchServo.getPosition());
@@ -110,8 +110,8 @@ public class AimingCalculationTest extends LinearOpMode {
 				// Iterate through the same RPM range as the actual engine
 				for (double rpm = Settings.Aiming.MIN_WHEEL_SPEED_RPM; rpm <= Settings.Aiming.MAX_WHEEL_SPEED_RPM; rpm += 500) { // Larger step for readability
 					
-					// Call the private initialBallSpeedFromRPM method
-					double initialBallSpeed = (double) initialBallSpeedFromRPMMethod.invoke(trajectoryEngine, rpm);
+					// Call the private launcherExitSpeedInchesPerSecond method
+					double initialBallSpeed = (double) launcherExitSpeedInchesPerSecondMethod.invoke(trajectoryEngine, rpm);
 					
 					logging.addLine(String.format("--- RPM: %.0f ---", rpm));
 					logging.addData("  -> Initial Speed (V0)", "%.2f in/s", initialBallSpeed);
