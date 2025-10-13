@@ -31,7 +31,7 @@ public class Drawing {
 	
 	/**
 	 * This draws everything that will be used in the Follower's telemetryDebug() method. This takes
-	 * a Follower as an input, so an instance of the DashbaordDrawingHandler class is not needed.
+	 * a Follower as an input, so an instance of the DashboardDrawingHandler class is not needed.
 	 *
 	 * @param follower Pedro Follower instance.
 	 */
@@ -89,6 +89,7 @@ public class Drawing {
 	 *
 	 * @param path  the Path to draw
 	 * @param style the parameters used to draw the Path with
+	 * @noinspection MethodWithMultipleLoops
 	 */
 	public static void drawPath(Path path, Style style) {
 		double[][] points = path.getPanelsDrawingPoints();

@@ -120,6 +120,7 @@ public class MainOp extends OpMode {
 	
 	/**
 	 * Process controller inputs
+	 * @noinspection OverlyLongMethod, OverlyComplexMethod, OverlyLongLambda
 	 */
 	private void processControllerInputs() {
 		// Drivetrain

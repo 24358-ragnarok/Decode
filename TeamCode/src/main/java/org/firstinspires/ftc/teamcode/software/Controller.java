@@ -106,7 +106,7 @@ public class Controller extends Gamepad {
 	 * This should be used to normalize controls, not to modify them.
 	 * In this example, the left stick Y is inverted so that it follows the
 	 * normalized Y-axis of the robot.
-	 * This does not cause a change in function of the how the value operates, which
+	 * This does not cause a change in function of how the value operates, which
 	 * should be done in postprocessing.
 	 *
 	 * @param control The control to get the value for

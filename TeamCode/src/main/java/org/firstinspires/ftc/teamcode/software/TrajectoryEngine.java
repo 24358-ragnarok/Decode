@@ -127,6 +127,7 @@ public class TrajectoryEngine {
 	 * - horizontal: yaw offset from camera center (degrees, -10 to +10)
 	 * - vertical: absolute launch angle from horizontal (degrees, 0 to 90)
 	 * - velocity: default wheel speed
+	 * @noinspection MethodWithMultipleLoops, ConstantValue
 	 */
 	public AimingSolution getAimingOffsets(MatchSettings.AllianceColor allianceColor, double currentPitchDegrees) {
 		double yawOffset = getYawOffset(allianceColor);
@@ -279,6 +280,9 @@ public class TrajectoryEngine {
 			this.m = computeSlopes(xs, ys);
 		}
 		
+		/**
+		 * @noinspection MethodWithMultipleLoops
+		 */
 		private double[] computeSlopes(double[] x, double[] y) {
 			int n = x.length;
 			double[] delta = new double[n - 1];

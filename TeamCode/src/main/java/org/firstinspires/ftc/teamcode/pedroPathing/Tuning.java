@@ -33,6 +33,7 @@ import java.util.List;
  *
  * @author Baron Henderson - 20077 The Indubitables
  * @version 1.0, 6/26/2025
+ * @noinspection OverlyLongLambda
  */
 @Configurable
 @TeleOp(name = "Tuning", group = "Pedro Pathing")
@@ -378,6 +379,7 @@ class ForwardVelocityTuner extends OpMode {
 	 * game pad 1 will stop the OpMode. This continuously records the RECORD_NUMBER most recent
 	 * velocities, and when the robot has run forward enough, these last velocities recorded are
 	 * averaged and printed.
+	 * @noinspection MethodWithMultipleLoops
 	 */
 	@Override
 	public void loop() {
@@ -409,6 +411,7 @@ class ForwardVelocityTuner extends OpMode {
 			}
 			average /= velocities.size();
 			telemetryM.debug("Forward Velocity: " + average);
+			//noinspection HardcodedLineSeparator
 			telemetryM.debug("\n");
 			telemetryM.debug("Press A to set the Forward Velocity temporarily (while robot remains on).");
 			
@@ -442,6 +445,7 @@ class ForwardVelocityTuner extends OpMode {
  * @author Harrison Womack - 10158 Scott's Bots
  * @author Baron Henderson - 20077 The Indubitables
  * @version 1.0, 3/13/2024
+ * @noinspection HardcodedLineSeparator
  */
 class LateralVelocityTuner extends OpMode {
 	public static double DISTANCE = 48;
@@ -543,6 +547,7 @@ class LateralVelocityTuner extends OpMode {
  * @author Aaron Yang - 10158 Scott's Bots
  * @author Harrison Womack - 10158 Scott's Bots
  * @version 1.0, 3/13/2024
+ * @noinspection ALL
  */
 class ForwardZeroPowerAccelerationTuner extends OpMode {
 	private static final double VELOCITY = 30;
@@ -588,6 +593,7 @@ class ForwardZeroPowerAccelerationTuner extends OpMode {
 	 * game pad 1 will stop the OpMode. When the robot hits the specified velocity, the robot will
 	 * record its deceleration / negative acceleration until it stops. Then, it will average all the
 	 * recorded deceleration / negative acceleration and print that value.
+	 * @noinspection OverlyLongMethod
 	 */
 	@Override
 	public void loop() {
@@ -695,6 +701,7 @@ class LateralZeroPowerAccelerationTuner extends OpMode {
 	 * game pad 1 will stop the OpMode. When the robot hits the specified velocity, the robot will
 	 * record its deceleration / negative acceleration until it stops. Then, it will average all the
 	 * recorded deceleration / negative acceleration and print that value.
+	 * @noinspection OverlyLongMethod, HardcodedLineSeparator
 	 */
 	@Override
 	public void loop() {

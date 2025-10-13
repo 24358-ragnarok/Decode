@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.testing;
 
+import android.annotation.SuppressLint;
+
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -21,9 +23,14 @@ import java.util.List;
  * TrajectoryEngine,
  * allowing for a deep debug of its internal calculations without modifying the
  * engine itself.
+ * @noinspection UnusedAssignment
  */
 @TeleOp(name = "Test: Deep Aiming Debug", group = "Tests")
 public class AimingCalculationTest extends LinearOpMode {
+	/**
+	 * @noinspection MethodWithMultipleLoops, OverlyLongMethod , DataFlowIssue
+	 */
+	@SuppressLint("DefaultLocale")
 	@Override
 	public void runOpMode() {
 		UnifiedLogging logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());

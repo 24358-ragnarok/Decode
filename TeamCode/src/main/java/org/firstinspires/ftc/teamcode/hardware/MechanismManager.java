@@ -127,6 +127,7 @@ public class MechanismManager {
 	}
 	
 	public Servo dummyServo() {
+		//noinspection SuspiciousInvocationHandlerImplementation
 		return (Servo) Proxy.newProxyInstance(
 				Servo.class.getClassLoader(),
 				new Class[]{Servo.class},

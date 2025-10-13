@@ -133,6 +133,7 @@ public class UnifiedLogging {
 	 * Adds data using a Func supplier - only evaluated when telemetry is
 	 * transmitted.
 	 * This is ideal for expensive operations like pose calculations.
+	 * @noinspection IfStatementWithIdenticalBranches
 	 */
 	public <T> void addDataLazy(String key, Func<T> valueProducer) {
 		Telemetry.Item item = itemCache.get(key);
@@ -151,6 +152,7 @@ public class UnifiedLogging {
 	
 	/**
 	 * Adds formatted data using a Func supplier with custom formatting.
+	 * @noinspection IfStatementWithIdenticalBranches
 	 */
 	public <T> void addDataLazy(String key, String format, Func<T> valueProducer) {
 		Telemetry.Item item = itemCache.get(key);

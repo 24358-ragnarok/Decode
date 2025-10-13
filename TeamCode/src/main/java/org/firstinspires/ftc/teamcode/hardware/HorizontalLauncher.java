@@ -59,7 +59,7 @@ public class HorizontalLauncher extends Mechanism {
 	 * The TrajectoryEngine provides a standardized AimingSolution with:
 	 * - Yaw offset from camera center (-10° to +10°)
 	 * - Absolute pitch launch angle (0° to 90°)
-	 * - Required launch velÎocity
+	 * - Required launch velocity
 	 * <p>
 	 * This method is public so it can be called independently when you want to
 	 * maintain aim and spin-up without controlling the spindex.
@@ -131,6 +131,7 @@ public class HorizontalLauncher extends Mechanism {
 	
 	/**
 	 * Launches the artifact if possible.
+	 * @noinspection StatementWithEmptyBody
 	 */
 	public void launch() {
 		if (!okayToLaunch()) {
