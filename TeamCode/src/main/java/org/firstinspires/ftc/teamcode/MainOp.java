@@ -85,7 +85,7 @@ public class MainOp extends OpMode {
 	public final void start() {
 		// Initialize mechanisms and start teleop drive
 		ifMechanismValid(mechanisms, MechanismManager::init);
-		mechanisms.drivetrain.follower.startTeleopDrive();
+		mechanisms.drivetrain.follower.startTeleopDrive(); // or pass in true to enable braking
 	}
 	
 	/**
@@ -135,7 +135,11 @@ public class MainOp extends OpMode {
 			ifMechanismValid(mechanisms.drivetrain, dt -> dt.follower.setPose(RESET_POSE));
 		}
 		
-		ifMechanismValid(mechanisms.drivetrain, dt -> dt.mecanumDrive(drive, strafe, rotate));
+		// TODO test; this should automatically switch the perspective for field-centric driving based on the side we start on
+		double perspectiveRotation = matchSettings.getAllianceColor()
+				== MatchSettings.AllianceColor.BLUE ?
+				Math.toRadians(90) : Math.toRadians(270);
+		ifMechanismValid(mechanisms.drivetrain, dt -> dt.manual(drive, strafe, rotate, perspectiveRotation));
 		
 		// Go-to actions
 		Controller.Action[] gotoActions = {
