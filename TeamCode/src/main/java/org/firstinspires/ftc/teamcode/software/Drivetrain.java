@@ -82,12 +82,12 @@ public class Drivetrain extends Mechanism {
 	 * @param strafePower Left/right strafe power (-1.0 to 1.0).
 	 * @param rotation    Rotational power (-1.0 to 1.0).
 	 */
-	public void mecanumDrive(double drivePower, double strafePower, double rotation) {
+	public void manual(double drivePower, double strafePower, double rotation, double offsetHeading) {
 		if (state != State.MANUAL) {
 			return; // Automation is handling driving, so ignore manual input.
 		}
 		// The Follower expects a standard coordinate system (forward is positive).
-		follower.setTeleOpDrive(drivePower, strafePower, -rotation, robotCentric);
+		follower.setTeleOpDrive(drivePower, strafePower, -rotation, robotCentric, offsetHeading);
 	}
 	
 	/**
