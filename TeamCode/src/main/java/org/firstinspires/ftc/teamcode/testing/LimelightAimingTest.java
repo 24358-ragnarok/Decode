@@ -22,6 +22,9 @@ public class LimelightAimingTest extends LinearOpMode {
 	// Declare the Limelight hardware object.
 	private Limelight3A limelight;
 	
+	/**
+	 * @noinspection MethodWithMultipleLoops, OverlyLongMethod
+	 */
 	@Override
 	public void runOpMode() {
 		telemetry.log().setCapacity(10);

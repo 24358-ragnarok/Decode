@@ -84,6 +84,7 @@ public class MainAuto extends OpMode {
 	/**
 	 * Runs once, when the driver presses PLAY after having pressed INIT and
 	 * configured the robot.
+	 * @noinspection SpellCheckingInspection
 	 */
 	@Override
 	public void start() {

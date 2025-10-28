@@ -28,6 +28,7 @@ import java.util.List;
  * The Spindex's main loop simply executes the current command, making the
  * system
  * highly scalable, readable, and robust against interruptions.
+ * @noinspection MethodWithMultipleLoops
  */
 public class Spindex extends Mechanism {
 	// Hardware & Config (public for Command access)
@@ -151,6 +152,7 @@ public class Spindex extends Mechanism {
 	 *
 	 * @return Returns true if an intake command was started, false if the spindex
 	 * is full.
+	 * @noinspection UnusedReturnValue
 	 */
 	public boolean prepareForIntake() {
 		// First, check if there's an empty slot without locking, for a quick exit.
@@ -326,6 +328,7 @@ public class Spindex extends Mechanism {
 /**
  * Defines the interface for a command that the Spindex can execute.
  * Each command is a self-contained state machine for a specific task.
+ * @noinspection ALL
  */
 abstract class Command {
 	protected Spindex spindex; // Reference to the spindex hardware

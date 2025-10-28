@@ -12,6 +12,7 @@ import java.util.EnumMap;
  * The Settings class houses all constants and configurations for the robot.
  * This centralized approach makes tuning and adjustments more efficient.
  * The class is organized into logical static inner classes for clarity.
+ * @noinspection ALL
  */
 @Configurable
 public class Settings {
@@ -371,7 +372,9 @@ public class Settings {
 		// RED alliance paths are automatically mirrored by the PathRegistry.
 		// Headings are in radians. 90 degrees = Math.toRadians(90)
 		
-		// Poses for the FAR side of the field, BLUE alliance TODO (REFERENCE - tune
+		/**
+		 * @noinspection InnerClassTooDeeplyNested
+		 */ // Poses for the FAR side of the field, BLUE alliance TODO (REFERENCE - tune
 		// these!)
 		public static class BlueFar {
 			public static Pose START = new Pose(65.533, 12.244, Math.toRadians(135));

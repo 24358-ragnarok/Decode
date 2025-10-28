@@ -129,7 +129,9 @@ public class AlignmentEngine extends Mechanism {
 		return inFarZone || inCloseZone;
 	}
 	
-	// returns signed smallest angle to face target
+	/**
+	 * @noinspection MethodWithMultipleLoops
+	 */ // returns signed smallest angle to face target
 	public double angleToTarget(Pose currentPose, Pose targetPose) {
 		double dx = targetPose.getX() - currentPose.getX();
 		double dy = targetPose.getY() - currentPose.getY();
