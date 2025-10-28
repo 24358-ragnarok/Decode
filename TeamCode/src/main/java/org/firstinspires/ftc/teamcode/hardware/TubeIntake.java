@@ -7,7 +7,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 
-public class Intake extends Mechanism {
+@Deprecated
+public class TubeIntake extends Mechanism {
 	public final DcMotor intakeMotor;
 	
 	public final ColorSensor colorSensor;
@@ -16,7 +17,7 @@ public class Intake extends Mechanism {
 	
 	public MatchSettings.ArtifactColor expectation;
 	
-	public Intake(DcMotor intakeMotor, Servo[] tubeServoArray, ColorSensor intakeColorSensor) {
+	public TubeIntake(DcMotor intakeMotor, Servo[] tubeServoArray, ColorSensor intakeColorSensor) {
 		this.intakeMotor = intakeMotor;
 		this.servoArray = tubeServoArray;
 		this.colorSensor = intakeColorSensor;

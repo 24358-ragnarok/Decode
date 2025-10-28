@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="Our Code" pattern="src[Decode.TeamCode.main]:org.firstinspires.ftc.teamcode..*&amp;&amp;!src[Decode.TeamCode.main]:org.firstinspires.ftc.teamcode.pedroPathing.Tuning" />
+  <scope name="Our Code" pattern="src[Decode.TeamCode.main]:org.firstinspires.ftc.teamcode..*&amp;&amp;!src[Decode.TeamCode.main]:org.firstinspires.ftc.teamcode.pedroPathing.Tuning&amp;&amp;!src[Decode.TeamCode.main]:org.firstinspires.ftc.teamcode.testing.data.*&amp;&amp;!src[Decode.TeamCode.main]:org.firstinspires.ftc.teamcode.points.*" />
 </component>

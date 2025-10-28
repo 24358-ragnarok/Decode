@@ -10,10 +10,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
+import org.firstinspires.ftc.teamcode.hardware.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
-import org.firstinspires.ftc.teamcode.hardware.Intake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
-import org.firstinspires.ftc.teamcode.hardware.Spindex;
+import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 import org.firstinspires.ftc.teamcode.software.Controller;
 import org.firstinspires.ftc.teamcode.software.Drivetrain;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
@@ -135,10 +135,11 @@ public class MainOp extends OpMode {
 			ifMechanismValid(mechanisms.drivetrain, dt -> dt.follower.setPose(RESET_POSE));
 		}
 		
-		// TODO test; this should automatically switch the perspective for field-centric driving based on the side we start on
-		double perspectiveRotation = matchSettings.getAllianceColor()
-				== MatchSettings.AllianceColor.BLUE ?
-				Math.toRadians(90) : Math.toRadians(270);
+		// TODO test; this should automatically switch the perspective for field-centric
+		// driving based on the side we start on
+		double perspectiveRotation = matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE
+				? Math.toRadians(90)
+				: Math.toRadians(270);
 		ifMechanismValid(mechanisms.drivetrain, dt -> dt.manual(drive, strafe, rotate, perspectiveRotation));
 		
 		// Go-to actions
@@ -177,7 +178,13 @@ public class MainOp extends OpMode {
 		
 		if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
 			if (mechanisms.alignmentEngine.isInLaunchZone(mechanisms.drivetrain.getPose())) {
-				ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::launch);
+				// Fire the transfer when launcher is ready
+				HorizontalLauncher launcher = mechanisms.get(HorizontalLauncher.class);
+				boolean launcherReady = launcher == null || launcher.okayToLaunch();
+				
+				if (launcherReady) {
+					ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::fire);
+				}
 			}
 		}
 		
@@ -208,13 +215,55 @@ public class MainOp extends OpMode {
 			logging.addData("Current Yaw°", "%.2f", hl.getYaw());
 		});
 		
-		// Intake & Spindex
+		// Intake & Transfer
 		if (subController.getProcessedValue(Controller.Action.INTAKE) > 0) {
-			ifMechanismValid(mechanisms.get(Spindex.class), Spindex::prepareForIntake);
-			ifMechanismValid(mechanisms.get(Intake.class), Intake::in);
+			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::in);
 		} else {
-			ifMechanismValid(mechanisms.get(Intake.class), Intake::stop);
+			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::stop);
 		}
+		
+		// Manual transfer controls
+		if (subController.wasJustPressed(Controller.Action.RELEASE_EXTRAS)) {
+			// Advance next ball to kicker position
+			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::advance);
+		}
+		
+		// Color-specific ball advancement
+		if (subController.wasJustPressed(Controller.Action.RELEASE_GREEN)) {
+			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
+				int greenIndex = transfer.indexOf(MatchSettings.ArtifactColor.GREEN);
+				if (greenIndex >= 0) {
+					transfer.moveSlotToKicker(greenIndex);
+				}
+			});
+		}
+		
+		if (subController.wasJustPressed(Controller.Action.RELEASE_PURPLE)) {
+			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
+				int purpleIndex = transfer.indexOf(MatchSettings.ArtifactColor.PURPLE);
+				if (purpleIndex >= 0) {
+					transfer.moveSlotToKicker(purpleIndex);
+				}
+			});
+		}
+		
+		// Transfer telemetry
+		ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
+			logging.addLine("=== TRANSFER STATUS ===");
+			logging.addData("Next at Kicker", transfer.getNextBallToKicker());
+			logging.addData("Full", transfer.isFull());
+			logging.addData("Empty", transfer.isEmpty());
+			logging.addData("Wheel Running", transfer.isWheelRunning());
+			logging.addData("Kicker Open", transfer.isKickerOpen());
+			
+			// Show slot contents
+			MatchSettings.ArtifactColor[] slots = transfer.getSlotsSnapshot();
+			StringBuilder slotsDisplay = new StringBuilder();
+			for (int i = 0; i < slots.length; i++) {
+				slotsDisplay.append(i).append(":").append(slots[i]).append(" ");
+			}
+			logging.addData("Slots", slotsDisplay.toString());
+		});
 		
 		// Dynamic telemetry - only shown when conditions are met
 		if (mechanisms.drivetrain.getState() == Drivetrain.State.PATHING) {

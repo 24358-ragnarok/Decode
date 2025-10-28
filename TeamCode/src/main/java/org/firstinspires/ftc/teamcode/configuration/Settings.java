@@ -114,6 +114,11 @@ public class Settings {
 		public static final String LAUNCHER_YAW_SERVO = "launcherYawServo";
 		public static final String LAUNCHER_PITCH_SERVO = "launcherPitchServo";
 		
+		// Transfer mechanism
+		public static final String TRANSFER_WHEEL_SERVO = "transferWheelServo";
+		public static final String TRANSFER_KICKER_SERVO = "transferKickerServo";
+		public static final String TRANSFER_COLOR_SENSOR = "transferColorSensor";
+		
 		// Sensors
 		public static final String SPINDEX_COLOR_SENSOR = "spindexColorSensor";
 		public static final String LIMELIGHT = "limelight";
@@ -143,6 +148,20 @@ public class Settings {
 		public static double INTAKE_SERVO_CLOSED_POSITION = 1.0;
 		public static double INTAKE_SERVO_OPEN_POSITION = 0.0;
 		public static double TOLERANCE = 5.0 / 360.0; // how close a slot must be to the exit to launch
+	}
+	
+	/**
+	 * Settings for a simple direct transfer mechanism.
+	 */
+	public static class Transfer {
+		public static final double BLIND_WINDOW_MS = 200.0;
+		public static final int MAX_CAPACITY = 3;
+		public static final double WHEEL_INTAKE_POWER = 0.5;
+		public static final double WHEEL_OUTTAKE_POWER = -0.5;
+		public static final long TRANSFER_TIME_MS = 450; // time to run wheel to move one ball
+		public static final long KICK_DURATION_MS = 300; // kicker open time
+		public static final double KICKER_LOCK_POS = 0.0; // closed
+		public static final double KICKER_UNLOCK_POS = 0.4; // open
 	}
 	
 	/**
@@ -260,7 +279,7 @@ public class Settings {
 	
 	@Configurable
 	public static class Aiming {
-		public static final double WHEEL_SPEED_OPTIMIZATION_STEP_RPM = 100.0;
+		public static double WHEEL_SPEED_OPTIMIZATION_STEP_RPM = 100.0;
 		public static double MIN_ENTRY_ANGLE_DEGREES = 20.0;
 		public static double MAX_LAUNCHER_ANGLE_DEGREES_FROM_HORIZONTAL = 75.0;
 		// ===== Physical Measurements =====
@@ -331,12 +350,12 @@ public class Settings {
 		public static double BALL_MASS_KG = .076; // kg
 		public static Pose RESET_POSE = new Pose(72, 72, Math.toRadians(270));
 		public static Pose RED_GOAL_POSE = new Pose(130.0, 130.0, Math.toRadians(225));
-		public static double[] RED_GOAL_AIM_3D =
-				new double[]{RED_GOAL_POSE.getX(), RED_GOAL_POSE.getY(), 7 + Aiming.GOAL_HEIGHT_INCHES};
+		public static double[] RED_GOAL_AIM_3D = new double[]{RED_GOAL_POSE.getX(), RED_GOAL_POSE.getY(),
+				7 + Aiming.GOAL_HEIGHT_INCHES};
 		
 		public static Pose BLUE_GOAL_POSE = new Pose(14.0, 130.0, Math.toRadians(315));
-		public static double[] BLUE_GOAL_AIM_3D =
-				new double[]{BLUE_GOAL_POSE.getX(), BLUE_GOAL_POSE.getY(), 7 + Aiming.GOAL_HEIGHT_INCHES};
+		public static double[] BLUE_GOAL_AIM_3D = new double[]{BLUE_GOAL_POSE.getX(), BLUE_GOAL_POSE.getY(),
+				7 + Aiming.GOAL_HEIGHT_INCHES};
 		public static Pose FAR_LAUNCH_ZONE_FRONT_CORNER = new Pose(72, 24);
 		public static Pose FAR_LAUNCH_ZONE_LEFT_CORNER = new Pose(50, 0);
 		public static Pose FAR_LAUNCH_ZONE_RIGHT_CORNER = new Pose(95, 0);
@@ -358,6 +377,7 @@ public class Settings {
 		public static boolean INTAKE = false;
 		public static boolean LIMELIGHT = true;
 		public static boolean SPINDEX = false;
+		public static boolean TRANSFER = false;
 		public static boolean TRAJECTORY_ENGINE = true;
 		public static boolean LAUNCHER = TRAJECTORY_ENGINE && true;
 		

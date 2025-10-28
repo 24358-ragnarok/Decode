@@ -59,10 +59,10 @@ public class HorizontalLauncher extends Mechanism {
 	 * The TrajectoryEngine provides a standardized AimingSolution with:
 	 * - Yaw offset from camera center (-10° to +10°)
 	 * - Absolute pitch launch angle (0° to 90°)
-	 * - Required launch velÎocity
+	 * - Required launch velocity
 	 * <p>
 	 * This method is public so it can be called independently when you want to
-	 * maintain aim and spin-up without controlling the spindex.
+	 * maintain aim and spin-up without controlling the transfer.
 	 */
 	public void aim() {
 		// Pass current pitch angle to trajectory engine so it can account for limelight
@@ -130,20 +130,29 @@ public class HorizontalLauncher extends Mechanism {
 	}
 	
 	/**
-	 * Launches the artifact if possible.
+	 * Checks if launcher is ready to fire.
+	 * <p>
+	 * Note: This method only verifies launcher readiness. The actual firing
+	 * of balls is handled by the SingleWheelTransfer mechanism, which should
+	 * be controlled separately in autonomous or teleop code.
+	 *
+	 * @deprecated Use {@link #okayToLaunch()} to check readiness and control
+	 * SingleWheelTransfer directly for firing.
 	 */
+	@Deprecated
 	public void launch() {
-		if (!okayToLaunch()) {
-			// Don't launch if not ready
-		}
-		
-		// TODO kicker?
+		// This method is deprecated. Firing is now handled by SingleWheelTransfer.
+		// In teleop: Call transfer.fire() when ready
+		// In autonomous: LaunchAction coordinates launcher + transfer
 	}
 	
 	/**
 	 * Readies the launcher to fire.
-	 * This spins up the belt, aims, and prepares the spindex.
+	 * This spins up the belt and aims at the target.
 	 * Call this when you want to prepare for a single shot.
+	 * <p>
+	 * Note: This only prepares the launcher mechanism. The transfer must be
+	 * controlled separately to actually fire balls.
 	 */
 	public void ready() {
 		belt.spinUp();
@@ -151,11 +160,11 @@ public class HorizontalLauncher extends Mechanism {
 	}
 	
 	/**
-	 * Maintains the launcher in a ready state without controlling the spindex.
-	 * This keeps the belt spinning and maintains aim, but leaves the spindex
-	 * free to be controlled by other commands (e.g., rapid fire).
+	 * Maintains the launcher in a ready state without controlling the transfer.
+	 * This keeps the belt spinning and maintains aim, but leaves the transfer
+	 * free to be controlled by other commands (e.g., sequential firing).
 	 * <p>
-	 * Use this in loops when the spindex is being controlled separately.
+	 * Use this in loops when the transfer is being controlled separately.
 	 */
 	public void maintainReady() {
 		belt.spinUp(); // spinUp() is safe to call repeatedly - it checks internally

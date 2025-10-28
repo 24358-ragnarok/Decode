@@ -29,7 +29,8 @@ import java.util.List;
  * system
  * highly scalable, readable, and robust against interruptions.
  */
-public class Spindex extends Mechanism {
+@Deprecated
+public class SpindexTransfer extends Mechanism {
 	// Hardware & Config (public for Command access)
 	public final Servo spindexServo;
 	public final Servo exitSealServo;
@@ -48,8 +49,8 @@ public class Spindex extends Mechanism {
 	// --- Command Pattern Implementation ---
 	private Command currentCommand = new Command.IdleCommand();
 	
-	public Spindex(Servo spindexServo, Servo exitSealServo, Servo intakeSealServo, ColorSensor spindexColorSensor,
-	               MatchSettings matchSettings) {
+	public SpindexTransfer(Servo spindexServo, Servo exitSealServo, Servo intakeSealServo, ColorSensor spindexColorSensor,
+	                       MatchSettings matchSettings) {
 		this.spindexServo = spindexServo;
 		this.exitSealServo = exitSealServo;
 		this.intakeSealServo = intakeSealServo;
@@ -328,9 +329,9 @@ public class Spindex extends Mechanism {
  * Each command is a self-contained state machine for a specific task.
  */
 abstract class Command {
-	protected Spindex spindex; // Reference to the spindex hardware
+	protected SpindexTransfer spindex; // Reference to the spindex hardware
 	
-	public Command(Spindex spindex) {
+	public Command(SpindexTransfer spindex) {
 		this.spindex = spindex;
 	}
 	
@@ -394,13 +395,13 @@ abstract class Command {
 		private State state = State.SEALING;
 		private double targetPosition;
 		
-		public RotateCommand(Spindex spindex, double targetPosition, Runnable onCompleteAction) {
+		public RotateCommand(SpindexTransfer spindex, double targetPosition, Runnable onCompleteAction) {
 			super(spindex);
 			this.targetPosition = targetPosition;
 			this.onCompleteAction = onCompleteAction;
 		}
 		
-		public RotateCommand(Spindex spindex, double targetPosition) {
+		public RotateCommand(SpindexTransfer spindex, double targetPosition) {
 			this(spindex, targetPosition, null);
 		}
 		
@@ -468,7 +469,7 @@ abstract class Command {
 		private final Deque<Integer> targetQueue;
 		private State state = State.SEALING;
 		
-		public RapidFireCommand(Spindex spindex, Deque<Integer> targetQueue) {
+		public RapidFireCommand(SpindexTransfer spindex, Deque<Integer> targetQueue) {
 			super(spindex);
 			this.targetQueue = targetQueue;
 		}
@@ -521,7 +522,7 @@ abstract class Command {
 	public static class EjectCommand extends Command {
 		private State state = State.READY_TO_FIRE;
 		
-		public EjectCommand(Spindex spindex) {
+		public EjectCommand(SpindexTransfer spindex) {
 			super(spindex);
 		}
 		
@@ -562,7 +563,7 @@ abstract class Command {
 		private State state = State.START;
 		private int targetSlot = -1;
 		
-		public IntakeCommand(Spindex spindex) {
+		public IntakeCommand(SpindexTransfer spindex) {
 			super(spindex);
 		}
 		
@@ -651,7 +652,7 @@ abstract class Command {
 		private final Deque<Command> commandQueue = new ArrayDeque<>();
 		private Command currentCommand;
 		
-		public SequentialCommand(Spindex spindex, Command... commands) {
+		public SequentialCommand(SpindexTransfer spindex, Command... commands) {
 			super(spindex);
 			Collections.addAll(this.commandQueue, commands);
 		}

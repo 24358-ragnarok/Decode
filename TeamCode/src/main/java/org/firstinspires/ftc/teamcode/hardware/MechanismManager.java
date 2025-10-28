@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -25,19 +26,21 @@ public class MechanismManager {
 	public final LimelightManager limelightManager;
 	public final TrajectoryEngine trajectoryEngine;
 	public final AlignmentEngine alignmentEngine;
+	public final MatchSettings matchSettings;
 	
 	public MechanismManager(HardwareMap hw, MatchSettings match) {
 		drivetrain = new Drivetrain(hw, match);
+		matchSettings = match;
 		
 		// Build mechanisms safely
-		Intake intake = createIntake(hw);
-		Spindex spindex = createSpindex(hw, match);
+		FlywheelIntake intake = createIntake(hw);
+		SingleWheelTransfer transfer = createTransfer(hw);
 		LimelightManager ll = createLimelight(hw, match);
 		TrajectoryEngine traj = createTrajectory(ll, match);
 		AlignmentEngine align = createAlignment(match, drivetrain);
 		HorizontalLauncher launcher = createLauncher(hw, traj, match);
 		
-		mechanisms = new Mechanism[]{intake, spindex, launcher};
+		mechanisms = new Mechanism[]{intake, transfer, launcher};
 		
 		// Save helpers
 		limelightManager = ll;
@@ -45,32 +48,25 @@ public class MechanismManager {
 		alignmentEngine = align;
 	}
 	
-	private Intake createIntake(HardwareMap hw) {
+	private FlywheelIntake createIntake(HardwareMap hw) {
 		if (!Settings.Deploy.INTAKE)
 			return null;
 		try {
-			ColorSensor sensor = new ColorSensor(hw.get(RevColorSensorV3.class, Settings.HardwareIDs.COLOR_SENSOR));
 			DcMotor motor = hw.get(DcMotor.class, Settings.HardwareIDs.INTAKE_MOTOR);
-			Servo[] servos = new Servo[4];
-			for (int i = 0; i < 4; i++) {
-				servos[i] = hw.get(Servo.class, Settings.HardwareIDs.INTAKE_SERVO_ARRAY[i]);
-			}
-			return new Intake(motor, servos, sensor);
+			return new FlywheelIntake(motor);
 		} catch (Exception e) {
 			return null;
 		}
 	}
 	
-	private Spindex createSpindex(HardwareMap hw, MatchSettings match) {
-		if (!Settings.Deploy.SPINDEX)
+	private SingleWheelTransfer createTransfer(HardwareMap hw) {
+		if (!Settings.Deploy.TRANSFER)
 			return null;
 		try {
-			Servo spindexServo = hw.get(Servo.class, Settings.HardwareIDs.SPINDEX_SERVO);
-			Servo launcherTransfer = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_TRANSFER_SERVO);
-			Servo intakeTransfer = hw.get(Servo.class, Settings.HardwareIDs.INTAKE_TRANSFER_SERVO);
-			ColorSensor sensor = new ColorSensor(
-					hw.get(RevColorSensorV3.class, Settings.HardwareIDs.SPINDEX_COLOR_SENSOR));
-			return new Spindex(spindexServo, launcherTransfer, intakeTransfer, sensor, match);
+			CRServo wheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_WHEEL_SERVO);
+			Servo kicker = hw.get(Servo.class, Settings.HardwareIDs.TRANSFER_KICKER_SERVO);
+			RevColorSensorV3 colorSensor = hw.get(RevColorSensorV3.class, Settings.HardwareIDs.TRANSFER_COLOR_SENSOR);
+			return new SingleWheelTransfer(wheel, kicker, colorSensor);
 		} catch (Exception e) {
 			return null;
 		}
