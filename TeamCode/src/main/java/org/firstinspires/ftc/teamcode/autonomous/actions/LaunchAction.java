@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.actions;
 
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.KICK_DURATION_MS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_FIRE_DURATION_MS;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
@@ -105,8 +105,8 @@ public class LaunchAction implements AutonomousAction {
 			case WAITING_TO_FIRE:
 				// Wait for wheel to stop running and cooldown period
 				long now = System.currentTimeMillis();
-				boolean wheelStopped = !transfer.isWheelRunning();
-				boolean cooldownPassed = (now - lastFireTimeMs) > KICK_DURATION_MS;
+				boolean wheelStopped = !transfer.isTransferWheelRunning();
+				boolean cooldownPassed = (now - lastFireTimeMs) > EXIT_FIRE_DURATION_MS;
 				
 				if (wheelStopped && cooldownPassed) {
 					// Ball should be at kicker now, check if there's something to fire

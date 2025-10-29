@@ -63,10 +63,11 @@ public class MechanismManager {
 		if (!Settings.Deploy.TRANSFER)
 			return null;
 		try {
-			CRServo wheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_WHEEL_SERVO);
-			Servo kicker = hw.get(Servo.class, Settings.HardwareIDs.TRANSFER_KICKER_SERVO);
+			CRServo transferWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_WHEEL_SERVO);
+			CRServo entranceWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_ENTRANCE_WHEEL);
+			CRServo exitWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_EXIT_WHEEL);
 			RevColorSensorV3 colorSensor = hw.get(RevColorSensorV3.class, Settings.HardwareIDs.TRANSFER_COLOR_SENSOR);
-			return new SingleWheelTransfer(wheel, kicker, colorSensor);
+			return new SingleWheelTransfer(transferWheel, entranceWheel, exitWheel, colorSensor);
 		} catch (Exception e) {
 			return null;
 		}

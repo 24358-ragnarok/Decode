@@ -116,7 +116,8 @@ public class Settings {
 		
 		// Transfer mechanism
 		public static final String TRANSFER_WHEEL_SERVO = "transferWheelServo";
-		public static final String TRANSFER_KICKER_SERVO = "transferKickerServo";
+		public static final String TRANSFER_ENTRANCE_WHEEL = "transferEntranceWheel"; // CR wheel at color sensor
+		public static final String TRANSFER_EXIT_WHEEL = "transferExitWheel"; // CR wheel at kicker position
 		public static final String TRANSFER_COLOR_SENSOR = "transferColorSensor";
 		
 		// Sensors
@@ -151,17 +152,32 @@ public class Settings {
 	}
 	
 	/**
-	 * Settings for a simple direct transfer mechanism.
+	 * Settings for the transfer mechanism with CR management wheels.
+	 * <p>
+	 * The transfer has three wheels:
+	 * - Main transfer wheel: moves balls through the transfer
+	 * - Entrance wheel: CR wheel at color sensor that lets balls in
+	 * - Exit wheel: CR wheel at kicker that fires balls out
 	 */
 	public static class Transfer {
-		public static final double BLIND_WINDOW_MS = 200.0;
-		public static final int MAX_CAPACITY = 3;
-		public static final double WHEEL_INTAKE_POWER = 0.5;
-		public static final double WHEEL_OUTTAKE_POWER = -0.5;
-		public static final long TRANSFER_TIME_MS = 450; // time to run wheel to move one ball
-		public static final long KICK_DURATION_MS = 300; // kicker open time
-		public static final double KICKER_LOCK_POS = 0.0; // closed
-		public static final double KICKER_UNLOCK_POS = 0.4; // open
+		// Detection settings
+		public static final double BLIND_WINDOW_MS = 200.0; // Time after detection to ignore new detections
+		public static final int MAX_CAPACITY = 3; // Number of ball slots
+		
+		// Main transfer wheel settings
+		public static final double TRANSFER_WHEEL_FORWARD_POWER = 0.5; // Power when advancing balls
+		public static final double TRANSFER_WHEEL_REVERSE_POWER = -0.5; // Power when reversing
+		public static final long TRANSFER_TIME_MS = 450; // Time to run wheel to move one ball slot
+		
+		// Entrance wheel settings (at color sensor position)
+		public static final double ENTRANCE_WHEEL_INTAKE_POWER = 0.6; // Power when letting balls in
+		public static final double ENTRANCE_WHEEL_HOLD_POWER = -0.15; // Small reverse to hold closed
+		public static final long ENTRANCE_OPEN_DURATION_MS = 500; // How long to open entrance when intaking
+		
+		// Exit wheel settings (at kicker position)
+		public static final double EXIT_WHEEL_FIRE_POWER = 1.0; // Full power when firing
+		public static final double EXIT_WHEEL_HOLD_POWER = -0.15; // Small reverse to hold closed
+		public static final long EXIT_FIRE_DURATION_MS = 300; // How long to spin exit wheel when firing
 	}
 	
 	/**

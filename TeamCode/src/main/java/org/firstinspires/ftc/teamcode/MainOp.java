@@ -135,11 +135,12 @@ public class MainOp extends OpMode {
 			ifMechanismValid(mechanisms.drivetrain, dt -> dt.follower.setPose(RESET_POSE));
 		}
 		
-		// TODO test; this should automatically switch the perspective for field-centric
+		// automatically switch the perspective for field-centric
 		// driving based on the side we start on
 		double perspectiveRotation = matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE
-				? Math.toRadians(90)
-				: Math.toRadians(270);
+				? Math.toRadians(0)
+				: Math.toRadians(180);
+		
 		ifMechanismValid(mechanisms.drivetrain, dt -> dt.manual(drive, strafe, rotate, perspectiveRotation));
 		
 		// Go-to actions
@@ -250,11 +251,12 @@ public class MainOp extends OpMode {
 		// Transfer telemetry
 		ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
 			logging.addLine("=== TRANSFER STATUS ===");
-			logging.addData("Next at Kicker", transfer.getNextBallToKicker());
+			logging.addData("Next at Exit", transfer.getNextBallToKicker());
 			logging.addData("Full", transfer.isFull());
 			logging.addData("Empty", transfer.isEmpty());
-			logging.addData("Wheel Running", transfer.isWheelRunning());
-			logging.addData("Kicker Open", transfer.isKickerOpen());
+			logging.addData("Transfer Wheel", transfer.isTransferWheelRunning() ? "RUNNING" : "STOPPED");
+			logging.addData("Entrance Wheel", transfer.isEntranceWheelOpen() ? "OPEN" : "CLOSED");
+			logging.addData("Exit Wheel", transfer.isExitWheelFiring() ? "FIRING" : "CLOSED");
 			
 			// Show slot contents
 			MatchSettings.ArtifactColor[] slots = transfer.getSlotsSnapshot();

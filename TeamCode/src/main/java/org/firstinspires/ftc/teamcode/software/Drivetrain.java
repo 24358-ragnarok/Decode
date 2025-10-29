@@ -86,6 +86,9 @@ public class Drivetrain extends Mechanism {
 		if (state != State.MANUAL) {
 			return; // Automation is handling driving, so ignore manual input.
 		}
+		if (robotCentric) {
+			offsetHeading = Math.toRadians(0); // do not rotate movement if now
+		}
 		// The Follower expects a standard coordinate system (forward is positive).
 		follower.setTeleOpDrive(drivePower, strafePower, -rotation, robotCentric, offsetHeading);
 	}
