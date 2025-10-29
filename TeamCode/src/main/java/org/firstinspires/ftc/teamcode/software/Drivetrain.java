@@ -145,9 +145,9 @@ public class Drivetrain extends Mechanism {
 	}
 	
 	public void rotateTo(double angle) {
-		this.state = State.PATHING;
-		
-		if (!follower.isBusy() || Math.round(follower.getCurrentPath().getHeadingGoal(1)) != Math.round(angle)) {
+		if (!follower.isTurning()) {
+			
+			this.state = State.PATHING;
 			follower.turnTo(angle);
 		}
 	}

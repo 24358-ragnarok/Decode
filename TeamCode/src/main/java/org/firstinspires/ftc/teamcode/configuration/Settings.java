@@ -103,21 +103,16 @@ public class Settings {
 		public static final String PINPOINT = "pinpoint"; // Assuming this is a drive motor or odometry pod
 		
 		// Subsystem motors and servos
-		public static final String INTAKE_MOTOR = "intakeMotor";
+		public static final String INTAKE_SERVO = "intakeServo";
 		public static final String LAUNCHER_RIGHT = "launcherRight";
 		public static final String LAUNCHER_LEFT = "launcherLeft";
-		public static final String[] INTAKE_SERVO_ARRAY = {"intakeServoLowerLeft", "intakeServoLowerRight",
-				"intakeServoUpperLeft", "intakeServoUpperRight"};
-		public static final String LAUNCHER_TRANSFER_SERVO = "launcherTransferServo";
-		public static final String INTAKE_TRANSFER_SERVO = "intakeTransferServo";
-		public static final String SPINDEX_SERVO = "spindexServo";
 		public static final String LAUNCHER_YAW_SERVO = "launcherYawServo";
 		public static final String LAUNCHER_PITCH_SERVO = "launcherPitchServo";
 		
 		// Transfer mechanism
-		public static final String TRANSFER_WHEEL_SERVO = "transferWheelServo";
-		public static final String TRANSFER_ENTRANCE_WHEEL = "transferEntranceWheel"; // CR wheel at color sensor
-		public static final String TRANSFER_EXIT_WHEEL = "transferExitWheel"; // CR wheel at kicker position
+		public static final String TRANSFER_WHEEL_SERVO = "transferMainServo";
+		public static final String TRANSFER_ENTRANCE_WHEEL = "transferEntranceServo"; // CR wheel at color sensor
+		public static final String TRANSFER_EXIT_WHEEL = "transferExitServo"; // CR wheel at kicker position
 		public static final String TRANSFER_COLOR_SENSOR = "transferColorSensor";
 		
 		// Sensors

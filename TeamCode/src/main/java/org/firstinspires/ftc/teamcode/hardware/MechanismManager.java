@@ -52,8 +52,8 @@ public class MechanismManager {
 		if (!Settings.Deploy.INTAKE)
 			return null;
 		try {
-			DcMotor motor = hw.get(DcMotor.class, Settings.HardwareIDs.INTAKE_MOTOR);
-			return new FlywheelIntake(motor);
+			CRServo intakeServo = hw.get(CRServo.class, Settings.HardwareIDs.INTAKE_SERVO);
+			return new FlywheelIntake(intakeServo);
 		} catch (Exception e) {
 			return null;
 		}

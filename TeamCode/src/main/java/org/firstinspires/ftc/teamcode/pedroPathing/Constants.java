@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
 
 public class Constants {
 	public static final FollowerConstants followerConstants = new FollowerConstants()
-			.mass(6)
+			.mass(6) // TODO weigh
 			.forwardZeroPowerAcceleration(-33.78)
 			.lateralZeroPowerAcceleration(-58.36)
 			
