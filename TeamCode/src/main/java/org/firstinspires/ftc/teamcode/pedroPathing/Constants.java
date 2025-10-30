@@ -17,16 +17,19 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
 
 public class Constants {
 	public static final FollowerConstants followerConstants = new FollowerConstants()
-			.mass(6) // TODO weigh
-			.forwardZeroPowerAcceleration(-33.78)
-			.lateralZeroPowerAcceleration(-58.36)
+			.mass(10.5)
+			.forwardZeroPowerAcceleration(-36.0)
+			.lateralZeroPowerAcceleration(-57.0)
 			
-			.translationalPIDFCoefficients(new PIDFCoefficients(0.045, 0, 0.005, 0.04))
-			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.12, 0, 0.01, 0.02))
-			.headingPIDFCoefficients(new PIDFCoefficients(1.2, 0, 0.05, 0.035))
-			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(3.0, 0, 0.1, 0.02))
-			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.04, 0, 0.00035, 0.6, 0.015))
+			.translationalPIDFCoefficients(new PIDFCoefficients(0.06, 0, 0.007, 0.075))
+			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.01, 0.03))
+			
+			.headingPIDFCoefficients(new PIDFCoefficients(1.1, 0, 0.05, 0.06))
+			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.8, 0, 0.07, 0.03))
+			
+			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.01, 0, 0.00035, 0.6, 0.015))
 			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.02, 0, 0.000005, 0.6, 0.01))
+			
 			.useSecondaryDrivePIDF(true)
 			.useSecondaryHeadingPIDF(true)
 			.useSecondaryTranslationalPIDF(true);
@@ -41,7 +44,7 @@ public class Constants {
 			.leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
 			.rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
 			.rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-			.xVelocity(65.46).yVelocity(56.47);
+			.xVelocity(53.2).yVelocity(43.3);
 	
 	public static PinpointConstants localizerConstants = new PinpointConstants()
 			.forwardPodY(6)
@@ -62,11 +65,11 @@ public class Constants {
 			0.995,
 			0.1,
 			0.1,
-			Math.toRadians(2), // heading must be within 2 degrees TODO sharpen later
+			0.009,
 			50,
-			0.1,
+			1,
 			10,
-			0.1
+			1
 	);
 	
 	public static Follower createFollower(HardwareMap hardwareMap) {
