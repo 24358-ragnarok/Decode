@@ -46,6 +46,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	private final CRServo transferWheel; // Main wheel that moves balls through transfer
 	private final CRServo entranceWheel; // CR wheel at color sensor that lets balls in
 	private final CRServo exitWheel; // CR wheel at kicker that fires balls out
+	private final FlywheelIntake intake;
 	
 	// Detection gating
 	private long lastDetectTimeMs = 0;
@@ -64,11 +65,12 @@ public final class SingleWheelTransfer extends Mechanism {
 	private long exitFireStartTimeMs = 0;
 	
 	public SingleWheelTransfer(CRServo transferWheel, CRServo entranceWheel, CRServo exitWheel,
-	                           RevColorSensorV3 colorSensor) {
+	                           RevColorSensorV3 colorSensor, FlywheelIntake intake) {
 		this.colorSensor = new ColorSensor(colorSensor);
 		this.transferWheel = transferWheel;
 		this.entranceWheel = entranceWheel;
 		this.exitWheel = exitWheel;
+		this.intake = intake;
 		Arrays.fill(slots, MatchSettings.ArtifactColor.UNKNOWN);
 	}
 	
@@ -85,6 +87,11 @@ public final class SingleWheelTransfer extends Mechanism {
 		
 		// Auto-close entrance wheel after open duration
 		if (entranceWheelOpen && now - entranceOpenStartTimeMs > ENTRANCE_OPEN_DURATION_MS) {
+			holdEntranceClosed();
+		}
+		
+		// Do not allow intake when we have 3 balls (violation)
+		if (isFull()) {
 			holdEntranceClosed();
 		}
 		
@@ -264,6 +271,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	 */
 	private void openEntrance() {
 		entranceWheel.setPower(ENTRANCE_WHEEL_INTAKE_POWER);
+		intake.in();
 		entranceWheelOpen = true;
 		entranceOpenStartTimeMs = System.currentTimeMillis();
 	}
@@ -273,6 +281,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	 */
 	private void holdEntranceClosed() {
 		entranceWheel.setPower(ENTRANCE_WHEEL_HOLD_POWER);
+		intake.out();
 		entranceWheelOpen = false;
 	}
 	
@@ -302,6 +311,9 @@ public final class SingleWheelTransfer extends Mechanism {
 		exitWheel.setPower(EXIT_WHEEL_FIRE_POWER);
 		exitWheelFiring = true;
 		exitFireStartTimeMs = System.currentTimeMillis();
+		
+		// Spin main wheel as well
+		advance();
 	}
 	
 	/**

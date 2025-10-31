@@ -34,7 +34,7 @@ public class MechanismManager {
 		
 		// Build mechanisms safely
 		FlywheelIntake intake = createIntake(hw);
-		SingleWheelTransfer transfer = createTransfer(hw);
+		SingleWheelTransfer transfer = createTransfer(hw, intake);
 		LimelightManager ll = createLimelight(hw, match);
 		TrajectoryEngine traj = createTrajectory(ll, match);
 		AlignmentEngine align = createAlignment(match, drivetrain);
@@ -59,7 +59,7 @@ public class MechanismManager {
 		}
 	}
 	
-	private SingleWheelTransfer createTransfer(HardwareMap hw) {
+	private SingleWheelTransfer createTransfer(HardwareMap hw, FlywheelIntake intake) {
 		if (!Settings.Deploy.TRANSFER)
 			return null;
 		try {
@@ -67,7 +67,7 @@ public class MechanismManager {
 			CRServo entranceWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_ENTRANCE_WHEEL);
 			CRServo exitWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_EXIT_WHEEL);
 			RevColorSensorV3 colorSensor = hw.get(RevColorSensorV3.class, Settings.HardwareIDs.TRANSFER_COLOR_SENSOR);
-			return new SingleWheelTransfer(transferWheel, entranceWheel, exitWheel, colorSensor);
+			return new SingleWheelTransfer(transferWheel, entranceWheel, exitWheel, colorSensor, intake);
 		} catch (Exception e) {
 			return null;
 		}

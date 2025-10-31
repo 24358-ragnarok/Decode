@@ -194,7 +194,7 @@ public class MainOp extends OpMode {
 			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::advance);
 		}
 		if (subController.wasJustPressed(Controller.Control.DPAD_RIGHT)) {
-			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::in);
+			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::fire);
 		}
 		
 		ifMechanismValid(mechanisms.get(FlywheelIntake.class),
@@ -230,35 +230,10 @@ public class MainOp extends OpMode {
 		});
 		
 		// Intake & Transfer
-		if (subController.getProcessedValue(Controller.Action.INTAKE) > 0) {
-			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::in);
-		} else {
+		if (subController.getProcessedValue(Controller.Action.STOP_INTAKE) > 0) {
 			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::stop);
-		}
-		
-		// Manual transfer controls
-		if (subController.wasJustPressed(Controller.Action.RELEASE_EXTRAS)) {
-			// Advance next ball to kicker position
-			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::advance);
-		}
-		
-		// Color-specific ball advancement
-		if (subController.wasJustPressed(Controller.Action.RELEASE_GREEN)) {
-			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
-				int greenIndex = transfer.indexOf(MatchSettings.ArtifactColor.GREEN);
-				if (greenIndex >= 0) {
-					transfer.moveSlotToKicker(greenIndex);
-				}
-			});
-		}
-		
-		if (subController.wasJustPressed(Controller.Action.RELEASE_PURPLE)) {
-			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
-				int purpleIndex = transfer.indexOf(MatchSettings.ArtifactColor.PURPLE);
-				if (purpleIndex >= 0) {
-					transfer.moveSlotToKicker(purpleIndex);
-				}
-			});
+		} else {
+			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::in);
 		}
 		
 		// Transfer telemetry

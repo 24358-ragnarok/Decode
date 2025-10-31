@@ -47,7 +47,7 @@ public class HorizontalLauncher extends Mechanism {
 		if (Settings.Launcher.CORRECT_PITCH) {
 			return Settings.Launcher.servoToPitch(servo.getPosition());
 		} else {
-			return 45; // Default launch angle
+			return Settings.Launcher.DEFAULT_PITCH; // Default launch angle
 		}
 	}
 	
@@ -173,7 +173,7 @@ public class HorizontalLauncher extends Mechanism {
 	
 	public void stop() {
 		belt.spinDown();
-		setPitch(Settings.Launcher.DETECTION_PITCH);
+		setPitch(Settings.Launcher.DEFAULT_PITCH);
 	}
 	
 	/**
@@ -211,7 +211,7 @@ public class HorizontalLauncher extends Mechanism {
 		if (Settings.Launcher.CORRECT_PITCH) {
 			return Settings.Launcher.servoToPitch(verticalServo.getPosition());
 		} else {
-			return 45; // Default launch angle
+			return Settings.Launcher.DEFAULT_PITCH; // Default launch angle
 		}
 	}
 	
@@ -232,7 +232,7 @@ public class HorizontalLauncher extends Mechanism {
 	
 	public final void init() {
 		setYaw(0); // 0° yaw (center/forward)
-		setPitch(Settings.Launcher.DETECTION_PITCH);
+		setPitch(Settings.Launcher.DEFAULT_PITCH);
 	}
 	
 	public final void update() {

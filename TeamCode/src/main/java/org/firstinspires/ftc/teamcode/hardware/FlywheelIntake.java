@@ -30,7 +30,7 @@ public class FlywheelIntake extends Mechanism {
 	}
 	
 	public void init() {
-		intakeServo.setPower(0);
+		in();
 	}
 	
 	public void update() {

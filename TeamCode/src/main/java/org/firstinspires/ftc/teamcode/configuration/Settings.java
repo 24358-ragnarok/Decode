@@ -47,7 +47,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.LAUNCH, Controller.Control.RIGHT_TRIGGER);
 			actionControlMap.put(Controller.Action.LAUNCHER_STEEPNESS_AXIS, Controller.Control.RIGHT_STICK_Y);
 			actionControlMap.put(Controller.Action.LAUNCHER_ROTATION_AXIS, Controller.Control.RIGHT_STICK_X);
-			actionControlMap.put(Controller.Action.INTAKE, Controller.Control.SQUARE);
+			actionControlMap.put(Controller.Action.STOP_INTAKE, Controller.Control.SQUARE);
 			actionControlMap.put(Controller.Action.RELEASE_EXTRAS, Controller.Control.CIRCLE);
 			actionControlMap.put(Controller.Action.RELEASE_PURPLE, Controller.Control.TRIANGLE);
 			actionControlMap.put(Controller.Action.RELEASE_GREEN, Controller.Control.CROSS);
@@ -124,7 +124,7 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Intake {
-		public static double SPEED = 0.5;
+		public static double SPEED = -1.0;
 	}
 	
 	/**
@@ -154,23 +154,23 @@ public class Settings {
 	 */
 	public static class Transfer {
 		// Detection settings
-		public static final double BLIND_WINDOW_MS = 200.0; // Time after detection to ignore new detections
+		public static final double BLIND_WINDOW_MS = 2000.0; // Time after detection to ignore new detections
 		public static final int MAX_CAPACITY = 3; // Number of ball slots
 		
 		// Main transfer wheel settings
 		public static final double TRANSFER_WHEEL_FORWARD_POWER = 0.5; // Power when advancing balls
 		public static final double TRANSFER_WHEEL_REVERSE_POWER = -0.5; // Power when reversing
-		public static final long TRANSFER_TIME_MS = 450; // Time to run wheel to move one ball slot
+		public static final long TRANSFER_TIME_MS = 850; // Time to run wheel to move one ball slot
 		
 		// Entrance wheel settings (at color sensor position)
-		public static final double ENTRANCE_WHEEL_INTAKE_POWER = -0.6; // Power when letting balls in
-		public static final double ENTRANCE_WHEEL_HOLD_POWER = 0.15; // Small reverse to hold closed
-		public static final long ENTRANCE_OPEN_DURATION_MS = 500; // How long to open entrance when intaking
+		public static final double ENTRANCE_WHEEL_INTAKE_POWER = 1.0; // Power when letting balls in
+		public static final double ENTRANCE_WHEEL_HOLD_POWER = 0.0; // No reverse to hold closed
+		public static final long ENTRANCE_OPEN_DURATION_MS = 1250; // How long to open entrance when intaking
 		
 		// Exit wheel settings (at kicker position)
 		public static final double EXIT_WHEEL_FIRE_POWER = 1.0; // Full power when firing
-		public static final double EXIT_WHEEL_HOLD_POWER = -0.15; // Small reverse to hold closed
-		public static final long EXIT_FIRE_DURATION_MS = 300; // How long to spin exit wheel when firing
+		public static final double EXIT_WHEEL_HOLD_POWER = 0.0; // No reverse to hold closed
+		public static final long EXIT_FIRE_DURATION_MS = 1500; // How long to spin exit wheel when firing
 	}
 	
 	/**
@@ -200,10 +200,10 @@ public class Settings {
 		// Pitch servo calibration (physical limits)
 		public static double PITCH_SERVO_AT_MIN = 0.692; // Servo position at minimum pitch angle
 		public static double PITCH_SERVO_AT_MAX = 0.415; // Servo position at maximum pitch angle
-		public static double DETECTION_PITCH = 25; // degrees from horizontal
+		public static double DEFAULT_PITCH = 45.0; // degrees from horizontal
 		// Pitch angle window (absolute angles from horizontal, for launch physics)
-		public static double PITCH_MIN_ANGLE = 0.0; // Minimum pitch angle in degrees (horizontal)
-		public static double PITCH_MAX_ANGLE = 90.0; // Maximum pitch angle in degrees (straight up, 90° total window)
+		public static double PITCH_MIN_ANGLE = 30.0; // Minimum pitch angle in degrees (horizontal)
+		public static double PITCH_MAX_ANGLE = 80.0; // Maximum pitch angle in degrees (straight up, 90° total window)
 		// Yaw servo calibration (physical limits)
 		public static double YAW_SERVO_AT_MIN = 0.0; // Servo position at minimum yaw angle
 		public static double YAW_SERVO_AT_MAX = 1.0; // Servo position at maximum yaw angle
@@ -341,7 +341,7 @@ public class Settings {
 		
 		// Launcher specifications
 		public static double WHEEL_DIAMETER_INCHES = 2.83; // Diameter of launcher wheels
-		public static double DEFAULT_WHEEL_SPEED_RPM = 3000; // Default wheel speed in RPM
+		public static double DEFAULT_WHEEL_SPEED_RPM = 5000; // Default wheel speed in RPM
 		public static double MIN_WHEEL_SPEED_RPM = 2500; // Minimum useful wheel speed
 		public static double MAX_WHEEL_SPEED_RPM = 5000; // Maximum safe wheel speed
 		public static double LAUNCH_EFFICIENCY = 0.85; // Energy transfer efficiency (0-1)
