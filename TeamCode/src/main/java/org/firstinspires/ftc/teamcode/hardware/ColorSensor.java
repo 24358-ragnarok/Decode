@@ -56,7 +56,7 @@ public class ColorSensor {
 	/**
 	 * Euclidean distance between measured RGB and target RGB
 	 */
-	private double computeDistance(double[] measured, double[] target) {
+	public double computeDistance(double[] measured, double[] target) {
 		double dr = measured[0] - target[0];
 		double dg = measured[1] - target[1];
 		double db = measured[2] - target[2];

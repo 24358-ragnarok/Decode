@@ -189,6 +189,19 @@ public class MainOp extends OpMode {
 			}
 		}
 		
+		// TODO REMOVE debug experimental subsystem commands
+		if (subController.wasJustPressed(Controller.Control.DPAD_UP)) {
+			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::advance);
+		}
+		if (subController.wasJustPressed(Controller.Control.DPAD_RIGHT)) {
+			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::in);
+		}
+		
+		ifMechanismValid(mechanisms.get(FlywheelIntake.class),
+				fwi -> {
+					logging.addLine("Intake valid");
+				});
+		
 		// Debug telemetry for aiming system
 		logging.addLine("=== AIM DEBUG ===");
 		logging.addData("Aim Button", subController.getProcessedValue(Controller.Action.AIM) > 0.1);

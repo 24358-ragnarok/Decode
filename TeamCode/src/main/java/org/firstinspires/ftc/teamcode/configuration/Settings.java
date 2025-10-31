@@ -113,12 +113,10 @@ public class Settings {
 		public static final String TRANSFER_WHEEL_SERVO = "transferMainServo";
 		public static final String TRANSFER_ENTRANCE_WHEEL = "transferEntranceServo"; // CR wheel at color sensor
 		public static final String TRANSFER_EXIT_WHEEL = "transferExitServo"; // CR wheel at kicker position
-		public static final String TRANSFER_COLOR_SENSOR = "transferColorSensor";
 		
 		// Sensors
-		public static final String SPINDEX_COLOR_SENSOR = "spindexColorSensor";
+		public static final String TRANSFER_COLOR_SENSOR = "transferColorSensor";
 		public static final String LIMELIGHT = "limelight";
-		public static final String COLOR_SENSOR = "colorSensor";
 	}
 	
 	/**
@@ -165,8 +163,8 @@ public class Settings {
 		public static final long TRANSFER_TIME_MS = 450; // Time to run wheel to move one ball slot
 		
 		// Entrance wheel settings (at color sensor position)
-		public static final double ENTRANCE_WHEEL_INTAKE_POWER = 0.6; // Power when letting balls in
-		public static final double ENTRANCE_WHEEL_HOLD_POWER = -0.15; // Small reverse to hold closed
+		public static final double ENTRANCE_WHEEL_INTAKE_POWER = -0.6; // Power when letting balls in
+		public static final double ENTRANCE_WHEEL_HOLD_POWER = 0.15; // Small reverse to hold closed
 		public static final long ENTRANCE_OPEN_DURATION_MS = 500; // How long to open entrance when intaking
 		
 		// Exit wheel settings (at kicker position)
@@ -283,8 +281,8 @@ public class Settings {
 	
 	@Configurable
 	public static class ColorSensor {
-		public static double[] GREEN_TARGET = {0, 200, 0};
-		public static double[] PURPLE_TARGET = {200, 0, 200};
+		public static double[] GREEN_TARGET = {70, 200, 150};
+		public static double[] PURPLE_TARGET = {120, 150, 220};
 		public static double CONFIDENCE_THRESHOLD = 60.0; // Acceptable distance threshold
 	}
 	
@@ -385,10 +383,9 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Deploy {
-		public static boolean INTAKE = false;
+		public static boolean INTAKE = true;
 		public static boolean LIMELIGHT = true;
-		public static boolean SPINDEX = false;
-		public static boolean TRANSFER = false;
+		public static boolean TRANSFER = true;
 		public static boolean TRAJECTORY_ENGINE = true;
 		public static boolean LAUNCHER = TRAJECTORY_ENGINE && true;
 		
