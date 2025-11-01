@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.AUTO_ADVANCE_ENABLED;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.AUTO_ADVANCE_GRACE_PERIOD_MS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.BLIND_WINDOW_MS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.ENTRANCE_OPEN_DURATION_MS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.ENTRANCE_WHEEL_HOLD_POWER;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.ENTRANCE_WHEEL_INTAKE_POWER;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_FIRE_DURATION_MS;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_WHEEL_FIRE_POWER;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_WHEEL_HOLD_POWER;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_KICK_POSITION;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_LOCK_POSITION;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.MAX_CAPACITY;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.TRANSFER_TIME_MS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.TRANSFER_WHEEL_FORWARD_POWER;
@@ -14,6 +16,7 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.TRA
 
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 
@@ -36,6 +39,15 @@ import java.util.Arrays;
  * wheel briefly to allow entry. Advances shift slots toward the exit. Detection
  * uses a
  * blind window to avoid duplicate reads.
+ * <p>
+ * Automatic advance feature: The system automatically moves balls forward to
+ * keep
+ * one ready at the exit position when possible. This happens without
+ * interfering
+ * with intake operations - if a new ball is detected, it will be pulled in
+ * before
+ * continuing the advance. A grace period after detection ensures new balls have
+ * time to enter the system.
  */
 public final class SingleWheelTransfer extends Mechanism {
 	// Positional model: slots[0] is entrance, slots[n-1] is at exit
@@ -45,7 +57,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	private final ColorSensor colorSensor;
 	private final CRServo transferWheel; // Main wheel that moves balls through transfer
 	private final CRServo entranceWheel; // CR wheel at color sensor that lets balls in
-	private final CRServo exitWheel; // CR wheel at kicker that fires balls out
+	private final Servo exitWheel; // CR wheel at kicker that fires balls out
 	private final FlywheelIntake intake;
 	
 	// Detection gating
@@ -64,7 +76,10 @@ public final class SingleWheelTransfer extends Mechanism {
 	private boolean exitWheelFiring = false;
 	private long exitFireStartTimeMs = 0;
 	
-	public SingleWheelTransfer(CRServo transferWheel, CRServo entranceWheel, CRServo exitWheel,
+	// Automatic advance timing
+	private long lastAutoAdvanceCheckMs = 0;
+	
+	public SingleWheelTransfer(CRServo transferWheel, CRServo entranceWheel, Servo exitWheel,
 	                           RevColorSensorV3 colorSensor, FlywheelIntake intake) {
 		this.colorSensor = new ColorSensor(colorSensor);
 		this.transferWheel = transferWheel;
@@ -123,6 +138,11 @@ public final class SingleWheelTransfer extends Mechanism {
 			lastDetectTimeMs = now;
 			onBallDetected(detected);
 		}
+		
+		// Automatic advance logic - keep a ball ready at exit if possible
+		if (AUTO_ADVANCE_ENABLED) {
+			checkAndPerformAutoAdvance(now);
+		}
 	}
 	
 	@Override
@@ -146,7 +166,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	 * If the transfer is full, the detection is ignored.
 	 * Opens the entrance wheel briefly to let the ball in.
 	 */
-	private void onBallDetected(MatchSettings.ArtifactColor color) {
+	public void onBallDetected(MatchSettings.ArtifactColor color) {
 		// Place into the earliest UNKNOWN slot starting from entrance (0).
 		for (int i = 0; i < slots.length; i++) {
 			if (slots[i] == MatchSettings.ArtifactColor.UNKNOWN) {
@@ -252,6 +272,50 @@ public final class SingleWheelTransfer extends Mechanism {
 	}
 	
 	/**
+	 * Check conditions and automatically advance balls to keep one ready at exit.
+	 * This ensures optimal firing readiness while respecting intake operations.
+	 */
+	private void checkAndPerformAutoAdvance(long now) {
+		// Don't auto-advance if:
+		// - Transfer wheel is already running
+		// - Entrance wheel is open (intaking)
+		// - Exit wheel is firing
+		// - Not enough time since last detection (grace period)
+		if (transferWheelRunning || entranceWheelOpen || exitWheelFiring) {
+			return;
+		}
+		
+		// Check if we need a grace period after detection
+		if (now - lastDetectTimeMs < AUTO_ADVANCE_GRACE_PERIOD_MS) {
+			return;
+		}
+		
+		// Check if exit slot is empty
+		if (slots[MAX_CAPACITY - 1] != MatchSettings.ArtifactColor.UNKNOWN) {
+			return; // Exit already has a ball
+		}
+		
+		// Find the closest ball to the exit that can be moved
+		int closestBallIndex = -1;
+		for (int i = MAX_CAPACITY - 2; i >= 0; i--) {
+			if (slots[i] != MatchSettings.ArtifactColor.UNKNOWN) {
+				closestBallIndex = i;
+				break;
+			}
+		}
+		
+		// If we found a ball, calculate steps needed and advance
+		if (closestBallIndex >= 0) {
+			int stepsNeeded = (MAX_CAPACITY - 1) - closestBallIndex;
+			if (stepsNeeded > 0) {
+				// Record this auto-advance check time
+				lastAutoAdvanceCheckMs = now;
+				advanceSteps(stepsNeeded);
+			}
+		}
+	}
+	
+	/**
 	 * Immediately stop the transfer wheel and reset running flag.
 	 */
 	private void stopTransferWheelImmediate() {
@@ -301,14 +365,12 @@ public final class SingleWheelTransfer extends Mechanism {
 		int exitIndex = MAX_CAPACITY - 1;
 		if (exitWheelFiring)
 			return; // already firing
-		if (slots[exitIndex] == MatchSettings.ArtifactColor.UNKNOWN)
-			return; // nothing to fire
 		
 		// Remove from model immediately so subsequent logic sees empty exit slot
 		slots[exitIndex] = MatchSettings.ArtifactColor.UNKNOWN;
 		
 		// Spin exit wheel to kick ball out
-		exitWheel.setPower(EXIT_WHEEL_FIRE_POWER);
+		exitWheel.setPosition(EXIT_KICK_POSITION);
 		exitWheelFiring = true;
 		exitFireStartTimeMs = System.currentTimeMillis();
 		
@@ -320,7 +382,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	 * Hold exit closed with slight reverse power.
 	 */
 	private void holdExitClosed() {
-		exitWheel.setPower(EXIT_WHEEL_HOLD_POWER);
+		exitWheel.setPosition(EXIT_LOCK_POSITION);
 		exitWheelFiring = false;
 	}
 	

@@ -190,11 +190,16 @@ public class MainOp extends OpMode {
 		}
 		
 		// TODO REMOVE debug experimental subsystem commands
-		if (subController.wasJustPressed(Controller.Control.DPAD_UP)) {
+		if (subController.wasJustPressed(Controller.Action.OVERRIDE_ADVANCE)) {
 			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::advance);
 		}
-		if (subController.wasJustPressed(Controller.Control.DPAD_RIGHT)) {
+		if (subController.wasJustPressed(Controller.Action.OVERRIDE_LAUNCH)) {
 			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::fire);
+		}
+		if (subController.wasJustPressed(Controller.Action.OVERRIDE_BALL_DETECTION)) {
+			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), swt -> {
+				swt.onBallDetected(MatchSettings.ArtifactColor.PURPLE);
+			});
 		}
 		
 		ifMechanismValid(mechanisms.get(FlywheelIntake.class),
@@ -230,10 +235,12 @@ public class MainOp extends OpMode {
 		});
 		
 		// Intake & Transfer
-		if (subController.getProcessedValue(Controller.Action.STOP_INTAKE) > 0) {
-			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::stop);
-		} else {
-			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::in);
+		if (subController.wasJustPressed(Controller.Action.INTAKE_IN)) {
+			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::toggleIn);
+		}
+		
+		if (subController.wasJustPressed(Controller.Action.INTAKE_OUT)) {
+			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::toggleOut);
 		}
 		
 		// Transfer telemetry

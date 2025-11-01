@@ -52,7 +52,7 @@ public class MechanismManager {
 		if (!Settings.Deploy.INTAKE)
 			return null;
 		try {
-			CRServo intakeServo = hw.get(CRServo.class, Settings.HardwareIDs.INTAKE_SERVO);
+			DcMotor intakeServo = hw.get(DcMotor.class, Settings.HardwareIDs.INTAKE_MOTOR);
 			return new FlywheelIntake(intakeServo);
 		} catch (Exception e) {
 			return null;
@@ -65,7 +65,7 @@ public class MechanismManager {
 		try {
 			CRServo transferWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_WHEEL_SERVO);
 			CRServo entranceWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_ENTRANCE_WHEEL);
-			CRServo exitWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_EXIT_WHEEL);
+			Servo exitWheel = hw.get(Servo.class, Settings.HardwareIDs.TRANSFER_EXIT_KICKER);
 			RevColorSensorV3 colorSensor = hw.get(RevColorSensorV3.class, Settings.HardwareIDs.TRANSFER_COLOR_SENSOR);
 			return new SingleWheelTransfer(transferWheel, entranceWheel, exitWheel, colorSensor, intake);
 		} catch (Exception e) {

@@ -47,13 +47,11 @@ public class Settings {
 			actionControlMap.put(Controller.Action.LAUNCH, Controller.Control.RIGHT_TRIGGER);
 			actionControlMap.put(Controller.Action.LAUNCHER_STEEPNESS_AXIS, Controller.Control.RIGHT_STICK_Y);
 			actionControlMap.put(Controller.Action.LAUNCHER_ROTATION_AXIS, Controller.Control.RIGHT_STICK_X);
-			actionControlMap.put(Controller.Action.STOP_INTAKE, Controller.Control.SQUARE);
-			actionControlMap.put(Controller.Action.RELEASE_EXTRAS, Controller.Control.CIRCLE);
-			actionControlMap.put(Controller.Action.RELEASE_PURPLE, Controller.Control.TRIANGLE);
-			actionControlMap.put(Controller.Action.RELEASE_GREEN, Controller.Control.CROSS);
-			actionControlMap.put(Controller.Action.INCREMENT_CLASSIFIER_STATE, Controller.Control.DPAD_UP);
-			actionControlMap.put(Controller.Action.EMPTY_CLASSIFIER_STATE, Controller.Control.DPAD_DOWN);
-			
+			actionControlMap.put(Controller.Action.INTAKE_IN, Controller.Control.SQUARE);
+			actionControlMap.put(Controller.Action.INTAKE_OUT, Controller.Control.CROSS);
+			actionControlMap.put(Controller.Action.OVERRIDE_ADVANCE, Controller.Control.DPAD_UP);
+			actionControlMap.put(Controller.Action.OVERRIDE_LAUNCH, Controller.Control.DPAD_RIGHT);
+			actionControlMap.put(Controller.Action.OVERRIDE_BALL_DETECTION, Controller.Control.DPAD_DOWN);
 			for (Controller.Action action : Controller.Action.values()) {
 				actionControlMap.putIfAbsent(action, Controller.Control.UNKNOWN);
 			}
@@ -103,7 +101,7 @@ public class Settings {
 		public static final String PINPOINT = "pinpoint"; // Assuming this is a drive motor or odometry pod
 		
 		// Subsystem motors and servos
-		public static final String INTAKE_SERVO = "intakeServo";
+		public static final String INTAKE_MOTOR = "intakeMotor";
 		public static final String LAUNCHER_RIGHT = "launcherRight";
 		public static final String LAUNCHER_LEFT = "launcherLeft";
 		public static final String LAUNCHER_YAW_SERVO = "launcherYawServo";
@@ -112,7 +110,7 @@ public class Settings {
 		// Transfer mechanism
 		public static final String TRANSFER_WHEEL_SERVO = "transferMainServo";
 		public static final String TRANSFER_ENTRANCE_WHEEL = "transferEntranceServo"; // CR wheel at color sensor
-		public static final String TRANSFER_EXIT_WHEEL = "transferExitServo"; // CR wheel at kicker position
+		public static final String TRANSFER_EXIT_KICKER = "transferExitServo"; // CR wheel at kicker position
 		
 		// Sensors
 		public static final String TRANSFER_COLOR_SENSOR = "transferColorSensor";
@@ -168,9 +166,13 @@ public class Settings {
 		public static final long ENTRANCE_OPEN_DURATION_MS = 1250; // How long to open entrance when intaking
 		
 		// Exit wheel settings (at kicker position)
-		public static final double EXIT_WHEEL_FIRE_POWER = 1.0; // Full power when firing
-		public static final double EXIT_WHEEL_HOLD_POWER = 0.0; // No reverse to hold closed
-		public static final long EXIT_FIRE_DURATION_MS = 1500; // How long to spin exit wheel when firing
+		public static final double EXIT_KICK_POSITION = 1.0; // Launch
+		public static final double EXIT_LOCK_POSITION = 0.0; // Closed
+		public static final long EXIT_FIRE_DURATION_MS = 500; // How long it needs to fire
+		
+		// Automatic advance settings
+		public static final boolean AUTO_ADVANCE_ENABLED = true; // Enable automatic ball advancement
+		public static final long AUTO_ADVANCE_GRACE_PERIOD_MS = 300; // Wait time after detection before auto-advancing
 	}
 	
 	/**
@@ -341,7 +343,7 @@ public class Settings {
 		
 		// Launcher specifications
 		public static double WHEEL_DIAMETER_INCHES = 2.83; // Diameter of launcher wheels
-		public static double DEFAULT_WHEEL_SPEED_RPM = 5000; // Default wheel speed in RPM
+		public static double DEFAULT_WHEEL_SPEED_RPM = 3000; // Default wheel speed in RPM
 		public static double MIN_WHEEL_SPEED_RPM = 2500; // Minimum useful wheel speed
 		public static double MAX_WHEEL_SPEED_RPM = 5000; // Maximum safe wheel speed
 		public static double LAUNCH_EFFICIENCY = 0.85; // Energy transfer efficiency (0-1)
