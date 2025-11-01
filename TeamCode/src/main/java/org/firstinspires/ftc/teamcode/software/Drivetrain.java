@@ -185,6 +185,16 @@ public class Drivetrain extends Mechanism {
 		return follower.getPose();
 	}
 	
+	/**
+	 * Gets the pose for a predefined position.
+	 *
+	 * @param position The position to get the pose for
+	 * @return The pose for that position
+	 */
+	public Pose getPositionPose(Position position) {
+		return positionPoses.get(position);
+	}
+	
 	public enum Position {
 		CLOSE_SHOOT,
 		FAR_SHOOT,

@@ -52,6 +52,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.OVERRIDE_ADVANCE, Controller.Control.DPAD_UP);
 			actionControlMap.put(Controller.Action.OVERRIDE_LAUNCH, Controller.Control.DPAD_RIGHT);
 			actionControlMap.put(Controller.Action.OVERRIDE_BALL_DETECTION, Controller.Control.DPAD_DOWN);
+			actionControlMap.put(Controller.Action.OVERRIDE_SPINUP, Controller.Control.LEFT_BUMPER);
 			for (Controller.Action action : Controller.Action.values()) {
 				actionControlMap.putIfAbsent(action, Controller.Control.UNKNOWN);
 			}
@@ -122,7 +123,7 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Intake {
-		public static double SPEED = -1.0;
+		public static double SPEED = 0.8;
 	}
 	
 	/**
@@ -166,8 +167,8 @@ public class Settings {
 		public static final long ENTRANCE_OPEN_DURATION_MS = 1250; // How long to open entrance when intaking
 		
 		// Exit wheel settings (at kicker position)
-		public static final double EXIT_KICK_POSITION = 1.0; // Launch
-		public static final double EXIT_LOCK_POSITION = 0.0; // Closed
+		public static final double EXIT_KICK_POSITION = 0.0; // Launch
+		public static final double EXIT_LOCK_POSITION = 1.0; // Closed
 		public static final long EXIT_FIRE_DURATION_MS = 500; // How long it needs to fire
 		
 		// Automatic advance settings
@@ -290,46 +291,19 @@ public class Settings {
 	
 	@Configurable
 	public static class Aiming {
-		public static double WHEEL_SPEED_OPTIMIZATION_STEP_RPM = 100.0;
-		public static double MIN_ENTRY_ANGLE_DEGREES = 20.0;
-		public static double MAX_LAUNCHER_ANGLE_DEGREES_FROM_HORIZONTAL = 75.0;
-		// ===== Physical Measurements =====
-		public static double LIMELIGHT_HEIGHT_INCHES = 8.25; // Height of limelight camera above field (when horizontal)
-		public static double LAUNCHER_HEIGHT_INCHES = 12.25; // Height of launcher outtake above field
-		public static double APRILTAG_CENTER_HEIGHT_INCHES = 29.5; // Height of AprilTag center above field
-		public static double LIMELIGHT_FORWARD_OFFSET_INCHES = 1.5; // Limelight is 1.5 inches in front of launcher when
-		// at horizontal
-		public static double LIMELIGHT_VERTICAL_OFFSET_INCHES = 4.0; // Limelight is 4.0 inches below launcher when at
-		// horizontal
+		/**
+		 * Preset launch angles and RPM for each shooting position.
+		 * These values are used when AIM is called based on which position is closer.
+		 */
+		public static double CLOSE_SHOOT_PITCH_DEGREES = 45.0; // Launch angle from horizontal for close position
+		public static double CLOSE_SHOOT_RPM = 4000.0; // Wheel RPM for close position
 		
-		// ===== Pitch Axis Geometry =====
-		// The launcher rotates around a pitch axis. Positions are relative to this
-		// axis.
-		public static double PITCH_AXIS_HEIGHT_INCHES = 10.5; // Height of pitch axis above field
-		public static double PITCH_AXIS_FORWARD_OFFSET_INCHES = 0; // Pitch axis is directly below of launcher
-		// outtake
-		
-		// Limelight position relative to pitch axis (rotates with launcher)
-		public static double LIMELIGHT_FROM_PITCH_AXIS_FORWARD_INCHES = 1.5; // Limelight is 1.5 inches forward of pitch
-		// when at horizontal
-		// axis
-		public static double LIMELIGHT_FROM_PITCH_AXIS_DOWN_INCHES = 2.2; // Limelight is 2.2 inches below pitch axis
-		// when at horizontal
-		
-		// Launcher position relative to pitch axis (the outtake point)
-		public static double LAUNCHER_FROM_PITCH_AXIS_BACK_INCHES = 0; // Launcher is directly on top axis when at 0°
-		// from horizontal
-		public static double LAUNCHER_FROM_PITCH_AXIS_UP_INCHES = 2.25; // Launcher is 2.25 inches above pitch axis
-		// (radius from pitch axis)
-		
-		// ===== Simple Aiming Constants =====
-		// Toggle between simple pose-based aiming and complex rotation-aware aiming
-		public static boolean USE_COMPLEX_AIMING = true; // use conner's massive beautiful brain
-		public static double TARGET_HEIGHT_OFFSET_INCHES = 50; // inches above apriltag to aim for
+		public static double FAR_SHOOT_PITCH_DEGREES = 55.0; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 4500.0; // Wheel RPM for far position
 		
 		/**
-		 * Note that ROTATIONAL error refers to the chassis rotation relative to the
-		 * goal.
+		 * Alignment tolerances.
+		 * ROTATIONAL error refers to the chassis rotation relative to the goal.
 		 * YAW refers to the launcher horizontal angle
 		 * PITCH refers to the launcher vertical angle
 		 */
@@ -337,18 +311,12 @@ public class Settings {
 		public static double MAX_YAW_ERROR = 3.0; // degrees
 		public static double MAX_PITCH_ERROR = 0.5; // degrees
 		
-		// ===== Complex Aiming Constants (Physics-Based) =====
-		// Physical constants
-		public static double GRAVITY_INCHES_PER_SEC_SQ = 386.4; // Standard gravity in inches/s²
-		
-		// Launcher specifications
-		public static double WHEEL_DIAMETER_INCHES = 2.83; // Diameter of launcher wheels
-		public static double DEFAULT_WHEEL_SPEED_RPM = 3000; // Default wheel speed in RPM
+		// Legacy constants kept for compatibility
+		public static double DEFAULT_WHEEL_SPEED_RPM = 4000; // Default wheel speed in RPM
 		public static double MIN_WHEEL_SPEED_RPM = 2500; // Minimum useful wheel speed
 		public static double MAX_WHEEL_SPEED_RPM = 5000; // Maximum safe wheel speed
-		public static double LAUNCH_EFFICIENCY = 0.85; // Energy transfer efficiency (0-1)
 		
-		// Launch geometry (legacy - kept for backwards compatibility)
+		// Legacy constant for field geometry (used by Field class)
 		public static double GOAL_HEIGHT_INCHES = 37.5; // Height of goal center above field
 	}
 	

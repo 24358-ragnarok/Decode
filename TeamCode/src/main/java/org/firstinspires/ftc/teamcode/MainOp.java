@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
 import org.firstinspires.ftc.teamcode.hardware.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
+import org.firstinspires.ftc.teamcode.hardware.Mechanism;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 import org.firstinspires.ftc.teamcode.software.Controller;
@@ -65,6 +66,10 @@ public class MainOp extends OpMode {
 		logging.addDataLazy("Heading°", () -> Math.toDegrees(mechanisms.drivetrain.follower.getHeading()));
 		logging.addDataLazy("X", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getX());
 		logging.addDataLazy("Y", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getY());
+		
+		for (Mechanism m : mechanisms.mechanismArray) {
+			logging.addData(m.getClass().toString(), "✅");
+		}
 		
 		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getTeleOpStartingPose());
 		mechanisms.drivetrain.switchToManual();
@@ -201,6 +206,9 @@ public class MainOp extends OpMode {
 				swt.onBallDetected(MatchSettings.ArtifactColor.PURPLE);
 			});
 		}
+		if (subController.getProcessedValue(Controller.Action.OVERRIDE_SPINUP) > 0.0) {
+			ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::spinUp);
+		}
 		
 		ifMechanismValid(mechanisms.get(FlywheelIntake.class),
 				fwi -> {
@@ -222,7 +230,7 @@ public class MainOp extends OpMode {
 							.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
 					if (solution.hasTarget) {
 						logging.addData("Yaw Offset°", "%.2f", solution.horizontalOffsetDegrees);
-						logging.addData("Pitch Offset°", "%.2f", solution.verticalOffsetDegrees);
+						logging.addData("Target Pitch°", "%.2f", solution.verticalOffsetDegrees);
 						logging.addData("Required RPM", "%.0f", solution.rpm);
 					}
 				});

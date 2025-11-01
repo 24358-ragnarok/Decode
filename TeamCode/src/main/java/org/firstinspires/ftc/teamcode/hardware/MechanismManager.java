@@ -20,7 +20,7 @@ import java.lang.reflect.Proxy;
 
 public class MechanismManager {
 	public final Drivetrain drivetrain;
-	public final Mechanism[] mechanisms;
+	public final Mechanism[] mechanismArray;
 	
 	// Optional non-mechanism helpers
 	public final LimelightManager limelightManager;
@@ -40,7 +40,7 @@ public class MechanismManager {
 		AlignmentEngine align = createAlignment(match, drivetrain);
 		HorizontalLauncher launcher = createLauncher(hw, traj, match);
 		
-		mechanisms = new Mechanism[]{intake, transfer, launcher};
+		mechanismArray = new Mechanism[]{intake, transfer, launcher};
 		
 		// Save helpers
 		limelightManager = ll;
@@ -134,7 +134,7 @@ public class MechanismManager {
 	
 	@SuppressWarnings("unchecked")
 	public <T extends Mechanism> @Nullable T get(Class<T> type) {
-		for (Mechanism m : mechanisms) {
+		for (Mechanism m : mechanismArray) {
 			if (m != null && type.isInstance(m)) {
 				return (T) m;
 			}
@@ -143,20 +143,20 @@ public class MechanismManager {
 	}
 	
 	public void init() {
-		for (Mechanism m : mechanisms)
+		for (Mechanism m : mechanismArray)
 			if (m != null)
 				m.init();
 	}
 	
 	public void update() {
-		for (Mechanism m : mechanisms)
+		for (Mechanism m : mechanismArray)
 			if (m != null)
 				m.update();
 		drivetrain.update();
 	}
 	
 	public void stop() {
-		for (Mechanism m : mechanisms)
+		for (Mechanism m : mechanismArray)
 			if (m != null)
 				m.stop();
 	}

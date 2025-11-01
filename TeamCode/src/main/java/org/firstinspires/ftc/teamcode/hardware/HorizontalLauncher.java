@@ -92,8 +92,8 @@ public class HorizontalLauncher extends Mechanism {
 		}
 		
 		// Set pitch directly: verticalOffsetDegrees is the absolute launch angle
-		// No proportional correction needed - just set it
-		setPitch(getPitch() + solution.verticalOffsetDegrees);
+		// No proportional correction needed - just set it to the target angle
+		setPitch(solution.verticalOffsetDegrees);
 	}
 	
 	/**
@@ -155,8 +155,12 @@ public class HorizontalLauncher extends Mechanism {
 	 * controlled separately to actually fire balls.
 	 */
 	public void ready() {
-		belt.spinUp();
+		spinUp();
 		aim();
+	}
+	
+	public void spinUp() {
+		belt.spinUp();
 	}
 	
 	/**
@@ -167,7 +171,7 @@ public class HorizontalLauncher extends Mechanism {
 	 * Use this in loops when the transfer is being controlled separately.
 	 */
 	public void maintainReady() {
-		belt.spinUp(); // spinUp() is safe to call repeatedly - it checks internally
+		spinUp(); // spinUp() is safe to call repeatedly - it checks internally
 		aim();
 	}
 	
