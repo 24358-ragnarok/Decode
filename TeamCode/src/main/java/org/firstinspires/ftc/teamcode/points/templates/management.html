@@ -1,64 +1,569 @@
 {% extends "base.html" %}
 
-{% block title %}Management{% endblock %}
+{% block title %}⚙️ Management - Points Dashboard{% endblock %}
 
 {% block content %}
 <style>
-    .management-form { max-width: 600px; margin: 0 auto; }
-    small { color: #7f8c8d; display: block; margin-top: 5px; }
+    .management-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .management-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .management-title {
+        font-size: 2.8em;
+        font-weight: 700;
+        background: var(--primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .gear-icon {
+        animation: rotate 8s linear infinite;
+        filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.3));
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .management-subtitle {
+        color: var(--text-secondary);
+        font-size: 1.2em;
+        font-weight: 400;
+    }
+
+    .form-container {
+        background: var(--bg-glass);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border-glass);
+        border-radius: var(--border-radius-lg);
+        padding: 40px;
+        box-shadow: var(--shadow-glass);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .form-container::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, 
+            rgba(102, 126, 234, 0.3), 
+            rgba(118, 75, 162, 0.3), 
+            rgba(102, 126, 234, 0.3));
+        border-radius: var(--border-radius-lg);
+        z-index: -1;
+        animation: borderGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes borderGlow {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        position: relative;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 0.95em;
+    }
+
+    .form-group label i {
+        color: rgba(102, 126, 234, 0.7);
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 16px 20px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px solid var(--border-glass);
+        border-radius: var(--border-radius);
+        font-size: 1em;
+        color: var(--text-primary);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(10px);
+    }
+
+    .form-group input:focus, .form-group select:focus {
+        outline: none;
+        border-color: rgba(102, 126, 234, 0.6);
+        box-shadow: 0 0 25px rgba(102, 126, 234, 0.3);
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateY(-2px);
+    }
+
+    .form-group input::placeholder {
+        color: var(--text-muted);
+    }
+
+    .input-icon {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 1.1em;
+        pointer-events: none;
+        transition: color 0.3s ease;
+    }
+
+    .form-group input:focus + .input-icon {
+        color: rgba(102, 126, 234, 0.8);
+    }
+
+    .point-change-group {
+        position: relative;
+    }
+
+    .point-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .point-btn {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid var(--border-glass);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-secondary);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9em;
+        font-weight: 500;
+    }
+
+    .point-btn:hover {
+        background: rgba(102, 126, 234, 0.2);
+        border-color: rgba(102, 126, 234, 0.5);
+        color: var(--text-primary);
+    }
+
+    .point-btn.positive {
+        background: rgba(79, 172, 254, 0.1);
+        border-color: rgba(79, 172, 254, 0.3);
+        color: #4facfe;
+    }
+
+    .point-btn.negative {
+        background: rgba(250, 112, 154, 0.1);
+        border-color: rgba(250, 112, 154, 0.3);
+        color: #fa709a;
+    }
+
+    .help-text {
+        font-size: 0.85em;
+        color: var(--text-muted);
+        margin-top: 8px;
+        line-height: 1.4;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .help-text i {
+        margin-top: 2px;
+        color: rgba(79, 172, 254, 0.7);
+    }
+
+    .submit-section {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 40px;
+    }
+
+    .submit-btn {
+        padding: 18px 40px;
+        font-size: 1.1em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background: var(--success);
+        border: none;
+        border-radius: var(--border-radius);
+        color: var(--text-primary);
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .submit-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(79, 172, 254, 0.4);
+    }
+
+    .submit-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .submit-btn.loading {
+        pointer-events: none;
+    }
+
+    .submit-btn.loading .btn-icon {
+        animation: spin 1s linear infinite;
+    }
+
+    .reset-btn {
+        padding: 18px 30px;
+        font-size: 1.1em;
+        font-weight: 500;
+        background: transparent;
+        border: 2px solid var(--border-glass);
+        border-radius: var(--border-radius);
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .reset-btn:hover {
+        border-color: rgba(250, 112, 154, 0.5);
+        color: #fa709a;
+        background: rgba(250, 112, 154, 0.1);
+    }
+
+    .success-animation {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--bg-glass);
+        backdrop-filter: blur(30px);
+        border: 1px solid var(--border-glass);
+        border-radius: var(--border-radius-lg);
+        padding: 40px;
+        text-align: center;
+        z-index: 1000;
+        animation: successPop 0.5s ease-out;
+        box-shadow: var(--shadow-hover);
+    }
+
+    @keyframes successPop {
+        0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+        100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+
+    .success-animation i {
+        font-size: 3em;
+        color: #4facfe;
+        margin-bottom: 15px;
+        animation: checkmark 0.6s ease-in-out 0.2s both;
+    }
+
+    @keyframes checkmark {
+        0% { transform: scale(0); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+    }
+
+    .success-animation h3 {
+        color: var(--text-primary);
+        margin-bottom: 10px;
+        font-size: 1.5em;
+    }
+
+    .success-animation p {
+        color: var(--text-secondary);
+        font-size: 1em;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .management-title {
+            font-size: 2.2em;
+        }
+
+        .form-container {
+            padding: 25px;
+        }
+
+        .submit-section {
+            flex-direction: column;
+        }
+
+        .point-buttons {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* Floating labels effect */
+    .floating-label {
+        position: relative;
+    }
+
+    .floating-label input:focus + label,
+    .floating-label input:not(:placeholder-shown) + label {
+        transform: translateY(-25px) scale(0.8);
+        color: rgba(102, 126, 234, 0.8);
+    }
+
+    .floating-label label {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--bg-primary);
+        padding: 0 8px;
+        transition: all 0.3s ease;
+        pointer-events: none;
+        z-index: 1;
+    }
 </style>
 
-<div class="card management-form">
-    <h2>⚙️ Point Management</h2>
-    <form id="updateForm">
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input id="name" list="people-list" name="name" placeholder="Select or type a name"
-                   required
-                   type="text">
-        </div>
+<div class="management-container">
+    <div class="management-header">
+        <h2 class="management-title">
+            <i class="fas fa-cogs gear-icon"></i>
+            Point Management
+        </h2>
+        <p class="management-subtitle">Award, deduct, or transfer points between team members</p>
+    </div>
 
-        <div class="form-group">
-            <label for="change">Point Change:</label>
-            <input id="change" name="change" placeholder="e.g., +5 or -3" required type="number">
-        </div>
+    <div class="form-container">
+        <form id="updateForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="name">
+                        <i class="fas fa-user"></i>
+                        Target Person
+                    </label>
+                    <div class="input-wrapper">
+                        <input
+                                autocomplete="off"
+                                id="name"
+                                list="people-list"
+                                name="name"
+                                placeholder="Select or type a name"
+                                required
+                                type="text"
+                        >
+                        <i class="fas fa-chevron-down input-icon"></i>
+                    </div>
+                </div>
 
-        <div class="form-group">
-            <label for="pclass">Point Class:</label>
-            <input id="pclass" name="pclass" placeholder="Default: 'regular'" type="text">
-        </div>
+                <div class="form-group point-change-group">
+                    <label for="change">
+                        <i class="fas fa-plus-minus"></i>
+                        Point Change
+                    </label>
+                    <div class="input-wrapper">
+                        <input
+                                id="change"
+                                name="change"
+                                placeholder="e.g., +5 or -3"
+                                required
+                                type="number"
+                        >
+                        <i class="fas fa-calculator input-icon"></i>
+                    </div>
+                    <div class="point-buttons">
+                        <button class="point-btn positive" onclick="setPointValue(1)" type="button">
+                            +1
+                        </button>
+                        <button class="point-btn positive" onclick="setPointValue(5)" type="button">
+                            +5
+                        </button>
+                        <button class="point-btn positive" onclick="setPointValue(10)"
+                                type="button">+10
+                        </button>
+                        <button class="point-btn negative" onclick="setPointValue(-1)"
+                                type="button">-1
+                        </button>
+                        <button class="point-btn negative" onclick="setPointValue(-5)"
+                                type="button">-5
+                        </button>
+                        <button class="point-btn negative" onclick="setPointValue(-10)"
+                                type="button">-10
+                        </button>
+                    </div>
+                </div>
 
-        <div class="form-group">
-            <label for="recipient">Transfer Partner (Optional):</label>
-            <input id="recipient" list="people-list" name="recipient"
-                   placeholder="Select or type a name"
-                   type="text">
-            <small>If change is positive, takes points from this person. If negative, gives points
-                to this person.</small>
-        </div>
+                <div class="form-group">
+                    <label for="pclass">
+                        <i class="fas fa-tags"></i>
+                        Point Category
+                    </label>
+                    <div class="input-wrapper">
+                        <input
+                                id="pclass"
+                                name="pclass"
+                                placeholder="Default: 'regular'"
+                                type="text"
+                                value="regular"
+                        >
+                        <i class="fas fa-tag input-icon"></i>
+                    </div>
+                </div>
 
-        <button class="btn-success" type="submit">✅ Apply Change</button>
-    </form>
+                <div class="form-group">
+                    <label for="recipient">
+                        <i class="fas fa-exchange-alt"></i>
+                        Transfer Partner (Optional)
+                    </label>
+                    <div class="input-wrapper">
+                        <input
+                                autocomplete="off"
+                                id="recipient"
+                                list="people-list"
+                                name="recipient"
+                                placeholder="Select for point transfer"
+                                type="text"
+                        >
+                        <i class="fas fa-user-friends input-icon"></i>
+                    </div>
+                    <div class="help-text">
+                        <i class="fas fa-info-circle"></i>
+                        <span>When transferring: positive values take from this person, negative values give to this person</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button class="reset-btn" onclick="resetForm()" type="button">
+                    <i class="fas fa-undo"></i>
+                    Reset
+                </button>
+                <button class="submit-btn" id="submitBtn" type="submit">
+                    <i class="fas fa-check btn-icon"></i>
+                    Apply Changes
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <datalist id="people-list">
     {% for person in people %}
-    <option value="{{ person }}">
-        {% endfor %}
+    <option value="{{ person }}">{{ person }}</option>
+    {% endfor %}
 </datalist>
 
 <script>
-    // Pre-populate name field if passed in URL
     document.addEventListener('DOMContentLoaded', () => {
+        // Pre-populate name field if passed in URL
         const urlParams = new URLSearchParams(window.location.search);
         const name = urlParams.get('name');
         if (name) {
             document.getElementById('name').value = name;
         }
+
+        // Add input animations
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
     });
+
+    function setPointValue(value) {
+        const changeInput = document.getElementById('change');
+        changeInput.value = value;
+        changeInput.focus();
+        
+        // Add visual feedback
+        changeInput.style.borderColor = value > 0 ? 'rgba(79, 172, 254, 0.6)' : 'rgba(250, 112, 154, 0.6)';
+        setTimeout(() => {
+            changeInput.style.borderColor = 'var(--border-glass)';
+        }, 1000);
+    }
+
+    function resetForm() {
+        const form = document.getElementById('updateForm');
+        form.reset();
+        document.getElementById('pclass').value = 'regular';
+        
+        // Add reset animation
+        const formContainer = document.querySelector('.form-container');
+        formContainer.style.animation = 'none';
+        setTimeout(() => {
+            formContainer.style.animation = 'fadeInUp 0.6s ease-out';
+        }, 10);
+    }
+
+    function showSuccessAnimation(message) {
+        const successDiv = document.createElement('div');
+        successDiv.className = 'success-animation';
+        successDiv.innerHTML = `
+            <i class="fas fa-check-circle"></i>
+            <h3>Success!</h3>
+            <p>${message}</p>
+        `;
+        
+        document.body.appendChild(successDiv);
+        
+        setTimeout(() => {
+            successDiv.style.animation = 'successPop 0.3s ease-out reverse';
+            setTimeout(() => successDiv.remove(), 300);
+        }, 2000);
+    }
 
     document.getElementById('updateForm').addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        const submitBtn = document.getElementById('submitBtn');
+        const btnIcon = submitBtn.querySelector('.btn-icon');
+        const originalText = submitBtn.innerHTML;
+
+        // Show loading state
+        submitBtn.classList.add('loading');
+        submitBtn.disabled = true;
+        btnIcon.className = 'fas fa-spinner btn-icon';
+        submitBtn.innerHTML = '<i class="fas fa-spinner btn-icon"></i> Processing...';
 
         const formData = new FormData(e.target);
         const data = {
@@ -69,7 +574,8 @@
         };
 
         if (!data.name || isNaN(data.change)) {
-            alert('Name and a numeric point change are required.');
+            showMessage('❌ Name and a numeric point change are required.', 'error');
+            resetSubmitButton();
             return;
         }
 
@@ -81,12 +587,46 @@
             });
             const result = await response.json();
 
-            alert(result.message);
             if (result.success) {
+                showSuccessAnimation(result.message);
                 e.target.reset();
+                document.getElementById('pclass').value = 'regular';
+            } else {
+                showMessage('❌ ' + result.message, 'error');
             }
         } catch (err) {
-            alert('An unexpected error occurred: ' + err.message);
+            showMessage('❌ An unexpected error occurred: ' + err.message, 'error');
+        } finally {
+            resetSubmitButton();
+        }
+
+        function resetSubmitButton() {
+            setTimeout(() => {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }, 500);
+        }
+    });
+
+    // Enhanced form validation
+    const nameInput = document.getElementById('name');
+    const changeInput = document.getElementById('change');
+    
+    nameInput.addEventListener('input', function() {
+        if (this.value.trim()) {
+            this.style.borderColor = 'rgba(79, 172, 254, 0.6)';
+        } else {
+            this.style.borderColor = 'var(--border-glass)';
+        }
+    });
+
+    changeInput.addEventListener('input', function() {
+        const value = parseInt(this.value);
+        if (!isNaN(value)) {
+            this.style.borderColor = value > 0 ? 'rgba(79, 172, 254, 0.6)' : 'rgba(250, 112, 154, 0.6)';
+        } else {
+            this.style.borderColor = 'var(--border-glass)';
         }
     });
 </script>
