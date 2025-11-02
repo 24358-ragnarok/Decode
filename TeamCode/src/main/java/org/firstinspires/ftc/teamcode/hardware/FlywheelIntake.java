@@ -7,15 +7,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 
 public class FlywheelIntake extends Mechanism {
-	public final DcMotor intakeMotor;
-	public IntakeState state = IntakeState.STOPPED;
+	private final DcMotor intakeMotor;
+	public IntakeState state;
 	
 	
 	public MatchSettings.ArtifactColor expectation;
 	
 	public FlywheelIntake(DcMotor intakeMotor) {
 		this.intakeMotor = intakeMotor;
-		this.expectation = MatchSettings.ArtifactColor.UNKNOWN;
 		this.state = IntakeState.STOPPED;
 	}
 	

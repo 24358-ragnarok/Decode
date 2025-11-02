@@ -59,7 +59,6 @@ public class MainOp extends OpMode {
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
 		
 		// Enable retained mode for efficient telemetry updates
-		logging.enableRetainedMode();
 		
 		// Set up lazy evaluation for frequently-accessed but expensive operations
 		// These are only evaluated when telemetry is actually transmitted
@@ -70,6 +69,7 @@ public class MainOp extends OpMode {
 		for (Mechanism m : mechanisms.mechanismArray) {
 			logging.addData(m.getClass().toString(), "✅");
 		}
+		logging.update();
 		
 		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getTeleOpStartingPose());
 		mechanisms.drivetrain.switchToManual();
@@ -91,6 +91,7 @@ public class MainOp extends OpMode {
 		// Initialize mechanisms and start teleop drive
 		ifMechanismValid(mechanisms, MechanismManager::init);
 		mechanisms.drivetrain.follower.startTeleopDrive(); // or pass in true to enable braking
+		logging.enableRetainedMode();
 	}
 	
 	/**
@@ -180,26 +181,17 @@ public class MainOp extends OpMode {
 			if (subController.wasJustReleased(Controller.Action.AIM)) {
 				mechanisms.drivetrain.switchToManual();
 			}
-		}
-		
-		if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
-			if (mechanisms.alignmentEngine.isInLaunchZone(mechanisms.drivetrain.getPose())) {
-				// Fire the transfer when launcher is ready
-				HorizontalLauncher launcher = mechanisms.get(HorizontalLauncher.class);
-				boolean launcherReady = launcher == null || launcher.okayToLaunch();
-				
-				if (launcherReady) {
-					ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::fire);
-				}
+			if (subController.wasJustPressed(Controller.Action.AIM)) {
+				ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::prepareToLaunch);
 			}
 		}
 		
-		// TODO REMOVE debug experimental subsystem commands
+		if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
+			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::fire);
+		}
+		
 		if (subController.wasJustPressed(Controller.Action.OVERRIDE_ADVANCE)) {
 			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::advance);
-		}
-		if (subController.wasJustPressed(Controller.Action.OVERRIDE_LAUNCH)) {
-			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::fire);
 		}
 		if (subController.wasJustPressed(Controller.Action.OVERRIDE_BALL_DETECTION)) {
 			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), swt -> {

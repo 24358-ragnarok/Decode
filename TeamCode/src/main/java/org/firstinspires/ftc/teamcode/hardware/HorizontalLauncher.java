@@ -47,7 +47,7 @@ public class HorizontalLauncher extends Mechanism {
 		if (Settings.Launcher.CORRECT_PITCH) {
 			return Settings.Launcher.servoToPitch(servo.getPosition());
 		} else {
-			return Settings.Launcher.DEFAULT_PITCH; // Default launch angle
+			return Settings.Launcher.DEFAULT_PITCH_ANGLE; // Default launch angle
 		}
 	}
 	
@@ -177,7 +177,7 @@ public class HorizontalLauncher extends Mechanism {
 	
 	public void stop() {
 		belt.spinDown();
-		setPitch(Settings.Launcher.DEFAULT_PITCH);
+		setPitch(Settings.Launcher.DEFAULT_PITCH_ANGLE);
 	}
 	
 	/**
@@ -215,7 +215,7 @@ public class HorizontalLauncher extends Mechanism {
 		if (Settings.Launcher.CORRECT_PITCH) {
 			return Settings.Launcher.servoToPitch(verticalServo.getPosition());
 		} else {
-			return Settings.Launcher.DEFAULT_PITCH; // Default launch angle
+			return Settings.Launcher.DEFAULT_PITCH_ANGLE; // Default launch angle
 		}
 	}
 	
@@ -236,7 +236,7 @@ public class HorizontalLauncher extends Mechanism {
 	
 	public final void init() {
 		setYaw(0); // 0° yaw (center/forward)
-		setPitch(Settings.Launcher.DEFAULT_PITCH);
+		setPitch(Settings.Launcher.DEFAULT_PITCH_ANGLE);
 	}
 	
 	public final void update() {
@@ -302,21 +302,17 @@ public class HorizontalLauncher extends Mechanism {
 			return Math.max(0.0, Math.min(1.0, power));
 		}
 		
-		public final void spinUp(double motorSpeed) {
-			if (active)
-				return;
-			active = true;
-			spinupTimestamp = System.currentTimeMillis();
-			setBasePower(motorSpeed);
+		public final void spinUp() {
+			spinUpToRPM(targetSpeedRPM);
 		}
 		
-		public final void spinUp() {
+		public final void spinUpToRPM(double motorRPM) {
 			if (!active) {
 				active = true;
 				spinupTimestamp = System.currentTimeMillis();
 			}
 			// Use target speed instead of fixed speed
-			double targetPower = rpmToPower(targetSpeedRPM);
+			double targetPower = rpmToPower(motorRPM);
 			setBasePower(targetPower);
 		}
 		

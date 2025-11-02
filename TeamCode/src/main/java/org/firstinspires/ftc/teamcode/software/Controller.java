@@ -280,7 +280,6 @@ public class Controller extends Gamepad {
 		INTAKE_OUT,
 		OVERRIDE_BALL_DETECTION,
 		OVERRIDE_ADVANCE,
-		OVERRIDE_LAUNCH,
 		OVERRIDE_SPINUP,
 		AIM,
 		LAUNCH,

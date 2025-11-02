@@ -79,6 +79,9 @@ public final class SingleWheelTransfer extends Mechanism {
 	// Automatic advance timing
 	private long lastAutoAdvanceCheckMs = 0;
 	
+	// Pending ball to place after shift completes
+	private MatchSettings.ArtifactColor pendingBallAfterShift = MatchSettings.ArtifactColor.UNKNOWN;
+	
 	public SingleWheelTransfer(CRServo transferWheel, CRServo entranceWheel, Servo exitWheel,
 	                           RevColorSensorV3 colorSensor, FlywheelIntake intake) {
 		this.colorSensor = new ColorSensor(colorSensor);
@@ -130,6 +133,21 @@ public final class SingleWheelTransfer extends Mechanism {
 				performSingleReverseShift();
 			}
 			pendingShifts = 0;
+			
+			// If there's a pending ball to place after shift, place it now
+			// (entrance was already opened when the ball was detected)
+			if (pendingBallAfterShift != MatchSettings.ArtifactColor.UNKNOWN) {
+				// Safety check: ensure slot 0 is empty before placing the pending ball
+				// (should always be true after shift, but check for robustness)
+				if (slots[0] == MatchSettings.ArtifactColor.UNKNOWN) {
+					slots[0] = pendingBallAfterShift;
+					pendingBallAfterShift = MatchSettings.ArtifactColor.UNKNOWN;
+				} else {
+					// Slot 0 is unexpectedly occupied - clear pending ball to avoid issues
+					// This shouldn't happen in normal operation
+					pendingBallAfterShift = MatchSettings.ArtifactColor.UNKNOWN;
+				}
+			}
 		}
 		
 		// Detection with blind window
@@ -161,22 +179,46 @@ public final class SingleWheelTransfer extends Mechanism {
 	
 	/**
 	 * Called when the sensor reports a new ball (after blind window).
-	 * Attempts to place the ball into the first available entrance-side slot (index
-	 * 0..).
-	 * If the transfer is full, the detection is ignored.
+	 * Always attempts to place the ball into slot 0 (lowest position).
+	 * If slot 0 is empty, places the ball directly and opens the entrance.
+	 * If slot 0 is occupied, opens entrance immediately to let the physical ball
+	 * in,
+	 * shifts all balls forward first (if possible), then places the new ball in
+	 * slot 0
+	 * after the shift completes.
+	 * If slot 0 is occupied and we cannot shift forward (exit slot is full),
+	 * the detection is ignored (transfer is full).
 	 * Opens the entrance wheel briefly to let the ball in.
 	 */
 	public void onBallDetected(MatchSettings.ArtifactColor color) {
-		// Place into the earliest UNKNOWN slot starting from entrance (0).
-		for (int i = 0; i < slots.length; i++) {
-			if (slots[i] == MatchSettings.ArtifactColor.UNKNOWN) {
-				slots[i] = color;
-				// Open entrance wheel to let ball in
-				openEntrance();
-				return;
-			}
+		// If slot 0 is empty, place the ball directly without shifting
+		if (slots[0] == MatchSettings.ArtifactColor.UNKNOWN) {
+			slots[0] = color;
+			openEntrance();
+			return;
 		}
-		// If no slot free, ignore detection (full).
+		
+		// Slot 0 is occupied. Check if we can shift forward.
+		// We can shift forward only if the exit slot is not occupied.
+		if (isFull()) {
+			// Exit slot is full, cannot shift forward, cannot take in new ball
+			return; // Transfer is full
+		}
+		
+		// If there's already a pending ball waiting for a shift, we can't queue another
+		// one.
+		// This should be rare due to the blind window, but we need to handle it.
+		if (pendingBallAfterShift != MatchSettings.ArtifactColor.UNKNOWN) {
+			// Already have a pending ball, cannot queue another
+			return; // Will be handled after current shift completes
+		}
+		
+		// We can shift forward. Open entrance immediately to let the physical ball in.
+		// Store the new ball to be placed after the shift completes.
+		// The physical wheel will move first, then we'll place the ball in slot 0.
+		openEntrance();
+		pendingBallAfterShift = color;
+		advance(); // Schedule physical wheel movement
 	}
 	
 	/**
@@ -345,7 +387,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	 */
 	private void holdEntranceClosed() {
 		entranceWheel.setPower(ENTRANCE_WHEEL_HOLD_POWER);
-		intake.out();
+		intake.stop();
 		entranceWheelOpen = false;
 	}
 	
@@ -373,9 +415,6 @@ public final class SingleWheelTransfer extends Mechanism {
 		exitWheel.setPosition(EXIT_KICK_POSITION);
 		exitWheelFiring = true;
 		exitFireStartTimeMs = System.currentTimeMillis();
-		
-		// Spin main wheel as well
-		advance();
 	}
 	
 	/**
@@ -427,6 +466,21 @@ public final class SingleWheelTransfer extends Mechanism {
 	}
 	
 	/**
+	 * Rotate the transfer wheel to bring the closest ball (closest to launch)
+	 * to the launch position (exit). If no ball is present, no action is taken.
+	 */
+	public void prepareToLaunch() {
+		// Find the closest ball from exit (largest index with a ball)
+		for (int i = slots.length - 1; i > 0; i--) {
+			if (slots[i] != MatchSettings.ArtifactColor.UNKNOWN) {
+				moveSlotToKicker(i);
+				return;
+			}
+		}
+		// No ball found, nothing to do
+	}
+	
+	/**
 	 * Returns a copy of current slots (positional snapshot).
 	 */
 	public MatchSettings.ArtifactColor[] getSlotsSnapshot() {
@@ -434,11 +488,13 @@ public final class SingleWheelTransfer extends Mechanism {
 	}
 	
 	public boolean isFull() {
-		for (MatchSettings.ArtifactColor c : slots) {
-			if (c == MatchSettings.ArtifactColor.UNKNOWN)
-				return false;
-		}
-		return true;
+		// We're full if we cannot take in a new ball.
+		// Since shifting always moves all balls forward, we can only shift forward
+		// (and thus make room for a new ball in slot 0) when the exit slot is empty.
+		// If the exit slot is occupied, we cannot shift forward (would push a ball
+		// beyond the exit), so we're full.
+		int exitIndex = MAX_CAPACITY - 1;
+		return slots[exitIndex] != MatchSettings.ArtifactColor.UNKNOWN;
 	}
 	
 	public boolean isEmpty() {
@@ -474,6 +530,7 @@ public final class SingleWheelTransfer extends Mechanism {
 		Arrays.fill(slots, MatchSettings.ArtifactColor.UNKNOWN);
 		lastDetectTimeMs = 0;
 		pendingShifts = 0;
+		pendingBallAfterShift = MatchSettings.ArtifactColor.UNKNOWN;
 	}
 	
 	/**
