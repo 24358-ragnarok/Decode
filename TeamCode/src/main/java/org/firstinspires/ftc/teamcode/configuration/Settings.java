@@ -375,54 +375,77 @@ public class Settings {
 		// RED alliance paths are automatically mirrored by the PathRegistry.
 		// Headings are in radians. 90 degrees = Math.toRadians(90)
 		
-		// Poses for the FAR side of the field, BLUE alliance TODO (REFERENCE - tune
-		// these!)
+		public static double BALL_INTAKE_WAIT_S = 1.2; // TODO tune
+		
 		public static class BlueFar {
 			public static Pose START = new Pose(60.0, 7.65, Math.toRadians(90));
-			public static Pose INITIAL_LAUNCH = Field.BLUE_FAR_SHOOT; // Move to far shoot position
+			public static Pose SHOOT_0 = Field.BLUE_FAR_SHOOT; // Move to far shoot position
+			public static Pose SHOOT_1_2_3 = Field.BLUE_CLOSE_SHOOT; // Move to close shoot position
 			public static Pose PRESET_1_PREP = new Pose(42.5, 35, Math.toRadians(180));
 			public static Pose PRESET_1_GRAB_1 = new Pose(35.0, 35, Math.toRadians(180));
 			public static Pose PRESET_1_GRAB_2 = new Pose(27.0, 35, Math.toRadians(180));
 			public static Pose PRESET_1_END = new Pose(22, 35, Math.toRadians(180));
 			public static BezierCurve BEZIER_LAUNCH_1 = new BezierCurve(
-					new Pose(18.453, 28.628),
-					new Pose(64.671, 44.493),
-					new Pose(63.808, 69.499));
-			
-			public static Pose ENDING_LAUNCH_1 = new Pose(63.808, 69.499, Math.toRadians(130));
+					PRESET_1_END,
+					new Pose(67, 45),
+					SHOOT_1_2_3
+			);
 			
 			public static Pose PRESET_2_PREP = new Pose(38.802, 54.668, Math.toRadians(180));
 			public static Pose PRESET_2_GRAB_1 = new Pose(32.802, 54.668, Math.toRadians(180));
 			public static Pose PRESET_2_GRAB_2 = new Pose(26.802, 54.668, Math.toRadians(180));
 			public static Pose PRESET_2_END = new Pose(18.970, 54.496, Math.toRadians(180));
-			public static Pose LAUNCH_2 = Field.BLUE_CLOSE_SHOOT;
-			public static Pose PRESET_3_END = new Pose(19.143, 80.019, Math.toRadians(180));
-			public static Pose SCORE_3 = Field.BLUE_CLOSE_SHOOT;
+			public static BezierCurve BEZIER_LAUNCH_2 = new BezierCurve(
+					PRESET_2_END,
+					new Pose(64, 56),
+					SHOOT_1_2_3
+			);
+			
+			public static Pose PRESET_3_PREP = new Pose(38.802, 54.668, Math.toRadians(180));
+			public static Pose PRESET_3_GRAB_1 = new Pose(32.802, 54.668, Math.toRadians(180));
+			public static Pose PRESET_3_GRAB_2 = new Pose(26.802, 54.668, Math.toRadians(180));
+			public static Pose PRESET_3_END = new Pose(18.970, 54.496, Math.toRadians(180));
+			public static BezierCurve BEZIER_LAUNCH_3 = new BezierCurve(
+					PRESET_3_END,
+					new Pose(41, 81),
+					SHOOT_1_2_3
+			);
 			public static Pose PARK = new Pose(40.354, 92.091, Math.toRadians(125));
 		}
 		
-		// Poses for the CLOSE side of the field, BLUE alliance TODO (REFERENCE - tune
-		// these!)
 		public static class BlueClose {
-			// Start near the backdrop, facing forward.
-			public static Pose START = new Pose(60, 85, Math.toRadians(135));
-			// Position for the center spike mark.
-			public static Pose PRESET_1_PREP = new Pose(37, 82.5, Math.toRadians(180));
-			// Scoring position on the backdrop. Robot is flush, facing left.
-			public static Pose PRESET_1_END = new Pose(15., 82.5, Math.toRadians(180));
-			// A middle waypoint to help navigate under the stage truss.
-			public static Pose LAUNCH_1 = new Pose(53, 85, Math.toRadians(120));
-			// Position to pick up pixels from the stack across the field.
-			public static Pose PRESET_2_PREP = new Pose(42, 57, Math.toRadians(180));
-			// Scoring position on the backdrop. Robot is flush, facing left.
-			public static Pose PRESET_2_END = new Pose(14, 57, Math.toRadians(180));
-			// A middle waypoint to help navigate under the stage truss.
-			public static Pose LAUNCH_2 = new Pose(66, 66, Math.toRadians(125));
-			public static Pose PRESET_3_PREP = new Pose(41.5, 33, Math.toRadians(180));
-			// Scoring position on the backdrop. Robot is flush, facing left.
-			public static Pose PRESET_3_END = new Pose(13, 33, Math.toRadians(180));
-			// A middle waypoint to help navigate under the stage truss.
-			public static Pose LAUNCH_3 = new Pose(63, 20, Math.toRadians(120));
+			public static Pose START = new Pose(60.0, 84, Math.toRadians(90));
+			public static Pose SHOOT_0_1_2 = Field.BLUE_CLOSE_SHOOT;
+			public static Pose SHOOT_3 = Field.BLUE_FAR_SHOOT;
+			public static Pose PRESET_1_PREP = BlueFar.PRESET_3_PREP;
+			public static Pose PRESET_1_GRAB_1 = BlueFar.PRESET_3_GRAB_2;
+			public static Pose PRESET_1_GRAB_2 = BlueFar.PRESET_3_GRAB_2;
+			public static Pose PRESET_1_END = BlueFar.PRESET_3_END;
+			public static BezierCurve BEZIER_LAUNCH_1 = new BezierCurve(
+					PRESET_1_END,
+					new Pose(41, 81),
+					SHOOT_0_1_2
+			);
+			
+			public static Pose PRESET_2_PREP = BlueFar.PRESET_2_PREP;
+			public static Pose PRESET_2_GRAB_1 = BlueFar.PRESET_2_GRAB_1;
+			public static Pose PRESET_2_GRAB_2 = BlueFar.PRESET_2_GRAB_2;
+			public static Pose PRESET_2_END = BlueFar.PRESET_2_END;
+			public static BezierCurve BEZIER_LAUNCH_2 = new BezierCurve(
+					PRESET_2_END,
+					new Pose(64, 56),
+					SHOOT_0_1_2
+			);
+			
+			public static Pose PRESET_3_PREP = BlueFar.PRESET_1_PREP;
+			public static Pose PRESET_3_GRAB_1 = BlueFar.PRESET_1_GRAB_1;
+			public static Pose PRESET_3_GRAB_2 = BlueFar.PRESET_1_GRAB_2;
+			public static Pose PRESET_3_END = BlueFar.PRESET_1_END;
+			public static BezierCurve BEZIER_LAUNCH_3 = new BezierCurve(
+					PRESET_3_END,
+					new Pose(52, 37),
+					SHOOT_3
+			);
 			public static Pose PARK = new Pose(63, 20, Math.toRadians(120));
 		}
 	}

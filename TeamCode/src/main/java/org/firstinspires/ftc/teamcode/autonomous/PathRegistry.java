@@ -55,15 +55,15 @@ public class PathRegistry {
 		boolean isBlue = alliance == MatchSettings.AllianceColor.BLUE;
 		
 		switch (segment) {
-			case FAR_INITIAL_LAUNCH:
+			case FAR_LAUNCH_0:
 				return buildLinearPath(
 						isBlue ? Settings.Autonomous.BlueFar.START : mirror(Settings.Autonomous.BlueFar.START),
-						isBlue ? Settings.Autonomous.BlueFar.INITIAL_LAUNCH
-								: mirror(Settings.Autonomous.BlueFar.INITIAL_LAUNCH));
+						isBlue ? Settings.Autonomous.BlueFar.SHOOT_0
+								: mirror(Settings.Autonomous.BlueFar.SHOOT_0));
 			
 			case FAR_PRESET_1_PREP:
 				return buildLinearPath(
-						isBlue ? Settings.Autonomous.BlueFar.INITIAL_LAUNCH : mirror(Settings.Autonomous.BlueFar.INITIAL_LAUNCH),
+						isBlue ? Settings.Autonomous.BlueFar.SHOOT_0 : mirror(Settings.Autonomous.BlueFar.SHOOT_0),
 						isBlue ? Settings.Autonomous.BlueFar.PRESET_1_PREP
 								: mirror(Settings.Autonomous.BlueFar.PRESET_1_PREP));
 			
@@ -87,13 +87,14 @@ public class PathRegistry {
 								: mirror(Settings.Autonomous.BlueFar.PRESET_1_GRAB_2),
 						isBlue ? Settings.Autonomous.BlueFar.PRESET_1_END
 								: mirror(Settings.Autonomous.BlueFar.PRESET_1_END));
-			case FAR_LAUNCH:
+			
+			case FAR_LAUNCH_1:
 				if (isBlue) {
 					return follower.pathBuilder()
 							.addPath(Settings.Autonomous.BlueFar.BEZIER_LAUNCH_1)
 							.setLinearHeadingInterpolation(
 									Settings.Autonomous.BlueFar.PRESET_1_END.getHeading(),
-									Settings.Autonomous.BlueFar.ENDING_LAUNCH_1.getHeading())
+									Settings.Autonomous.BlueFar.SHOOT_1_2_3.getHeading())
 							.build();
 				} else {
 					BezierCurve mirrored = mirrorBezierCurve(Settings.Autonomous.BlueFar.BEZIER_LAUNCH_1);
@@ -101,14 +102,14 @@ public class PathRegistry {
 							.addPath(mirrored)
 							.setLinearHeadingInterpolation(
 									mirror(Settings.Autonomous.BlueFar.PRESET_1_END).getHeading(),
-									mirror(Settings.Autonomous.BlueFar.ENDING_LAUNCH_1).getHeading())
+									mirror(Settings.Autonomous.BlueFar.SHOOT_1_2_3).getHeading())
 							.build();
 				}
 			
 			case FAR_PRESET_2_PREP:
 				return buildLinearPath(
-						isBlue ? Settings.Autonomous.BlueFar.ENDING_LAUNCH_1
-								: mirror(Settings.Autonomous.BlueFar.ENDING_LAUNCH_1),
+						isBlue ? Settings.Autonomous.BlueFar.SHOOT_1_2_3
+								: mirror(Settings.Autonomous.BlueFar.SHOOT_1_2_3),
 						isBlue ? Settings.Autonomous.BlueFar.PRESET_2_PREP
 								: mirror(Settings.Autonomous.BlueFar.PRESET_2_PREP));
 			
@@ -135,22 +136,64 @@ public class PathRegistry {
 								: mirror(Settings.Autonomous.BlueFar.PRESET_2_END));
 			
 			case FAR_LAUNCH_2:
-				return buildCurvedPath(
-						isBlue ? Settings.Autonomous.BlueFar.PRESET_2_END
-								: mirror(Settings.Autonomous.BlueFar.PRESET_2_END),
-						isBlue ? Settings.Autonomous.BlueFar.LAUNCH_2 : mirror(Settings.Autonomous.BlueFar.LAUNCH_2));
+				if (isBlue) {
+					return follower.pathBuilder()
+							.addPath(Settings.Autonomous.BlueFar.BEZIER_LAUNCH_2)
+							.setLinearHeadingInterpolation(
+									Settings.Autonomous.BlueFar.PRESET_2_END.getHeading(),
+									Settings.Autonomous.BlueFar.SHOOT_1_2_3.getHeading())
+							.build();
+				} else {
+					BezierCurve mirrored = mirrorBezierCurve(Settings.Autonomous.BlueFar.BEZIER_LAUNCH_2);
+					return follower.pathBuilder()
+							.addPath(mirrored)
+							.setLinearHeadingInterpolation(
+									mirror(Settings.Autonomous.BlueFar.PRESET_2_END).getHeading(),
+									mirror(Settings.Autonomous.BlueFar.SHOOT_1_2_3).getHeading())
+							.build();
+				}
 			
-			case FAR_PRESET_3:
+			case FAR_PRESET_3_PREP:
 				return buildLinearPath(
-						isBlue ? Settings.Autonomous.BlueFar.LAUNCH_2 : mirror(Settings.Autonomous.BlueFar.LAUNCH_2),
+						isBlue ? Settings.Autonomous.BlueFar.SHOOT_1_2_3 : mirror(Settings.Autonomous.BlueFar.SHOOT_1_2_3),
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_3_PREP
+								: mirror(Settings.Autonomous.BlueFar.PRESET_3_PREP));
+			
+			case FAR_PRESET_3_GRAB_1:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_3_PREP : mirror(Settings.Autonomous.BlueFar.PRESET_3_PREP),
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_3_GRAB_1
+								: mirror(Settings.Autonomous.BlueFar.PRESET_3_GRAB_1));
+			
+			case FAR_PRESET_3_GRAB_2:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_3_GRAB_1 : mirror(Settings.Autonomous.BlueFar.PRESET_3_GRAB_1),
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_3_GRAB_2
+								: mirror(Settings.Autonomous.BlueFar.PRESET_3_GRAB_2));
+			
+			case FAR_PRESET_3_END:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_3_GRAB_2 : mirror(Settings.Autonomous.BlueFar.PRESET_3_GRAB_2),
 						isBlue ? Settings.Autonomous.BlueFar.PRESET_3_END
 								: mirror(Settings.Autonomous.BlueFar.PRESET_3_END));
 			
 			case FAR_LAUNCH_3:
-				return buildCurvedPath(
-						isBlue ? Settings.Autonomous.BlueFar.PRESET_3_END
-								: mirror(Settings.Autonomous.BlueFar.PRESET_3_END),
-						isBlue ? Settings.Autonomous.BlueFar.PARK : mirror(Settings.Autonomous.BlueFar.PARK));
+				if (isBlue) {
+					return follower.pathBuilder()
+							.addPath(Settings.Autonomous.BlueFar.BEZIER_LAUNCH_3)
+							.setLinearHeadingInterpolation(
+									Settings.Autonomous.BlueFar.PRESET_3_END.getHeading(),
+									Settings.Autonomous.BlueFar.SHOOT_1_2_3.getHeading())
+							.build();
+				} else {
+					BezierCurve mirrored = mirrorBezierCurve(Settings.Autonomous.BlueFar.BEZIER_LAUNCH_3);
+					return follower.pathBuilder()
+							.addPath(mirrored)
+							.setLinearHeadingInterpolation(
+									mirror(Settings.Autonomous.BlueFar.PRESET_3_END).getHeading(),
+									mirror(Settings.Autonomous.BlueFar.SHOOT_1_2_3).getHeading())
+							.build();
+				}
 			
 			case FAR_PARK:
 				Pose park = isBlue ? Settings.Autonomous.BlueFar.PARK : mirror(Settings.Autonomous.BlueFar.PARK);
@@ -169,72 +212,152 @@ public class PathRegistry {
 		boolean isBlue = alliance == MatchSettings.AllianceColor.BLUE;
 		
 		switch (segment) {
-			case CLOSE_PRESET_1_PREP:
+			case CLOSE_LAUNCH_0:
 				return buildLinearPath(
 						isBlue ? Settings.Autonomous.BlueClose.START : mirror(Settings.Autonomous.BlueClose.START),
+						isBlue ? Settings.Autonomous.BlueClose.SHOOT_0_1_2
+								: mirror(Settings.Autonomous.BlueClose.SHOOT_0_1_2));
+			
+			case CLOSE_PRESET_1_PREP:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueClose.SHOOT_0_1_2 : mirror(Settings.Autonomous.BlueClose.SHOOT_0_1_2),
 						isBlue ? Settings.Autonomous.BlueClose.PRESET_1_PREP
 								: mirror(Settings.Autonomous.BlueClose.PRESET_1_PREP));
 			
-			case CLOSE_PRESET_1_END:
+			case CLOSE_PRESET_1_GRAB_1:
 				return buildLinearPath(
 						isBlue ? Settings.Autonomous.BlueClose.PRESET_1_PREP
 								: mirror(Settings.Autonomous.BlueClose.PRESET_1_PREP),
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_1_GRAB_1
+								: mirror(Settings.Autonomous.BlueClose.PRESET_1_GRAB_1));
+			
+			case CLOSE_PRESET_1_GRAB_2:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_1_GRAB_1
+								: mirror(Settings.Autonomous.BlueClose.PRESET_1_GRAB_1),
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_1_GRAB_2
+								: mirror(Settings.Autonomous.BlueClose.PRESET_1_GRAB_2));
+			
+			case CLOSE_PRESET_1_END:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_1_GRAB_2
+								: mirror(Settings.Autonomous.BlueClose.PRESET_1_GRAB_2),
 						isBlue ? Settings.Autonomous.BlueClose.PRESET_1_END
 								: mirror(Settings.Autonomous.BlueClose.PRESET_1_END));
 			
 			case CLOSE_LAUNCH_1:
-				return buildLinearPath(
-						isBlue ? Settings.Autonomous.BlueClose.PRESET_1_END
-								: mirror(Settings.Autonomous.BlueClose.PRESET_1_END),
-						isBlue ? Settings.Autonomous.BlueClose.LAUNCH_1
-								: mirror(Settings.Autonomous.BlueClose.LAUNCH_1));
+				if (isBlue) {
+					return follower.pathBuilder()
+							.addPath(Settings.Autonomous.BlueClose.BEZIER_LAUNCH_1)
+							.setLinearHeadingInterpolation(
+									Settings.Autonomous.BlueClose.PRESET_1_END.getHeading(),
+									Settings.Autonomous.BlueClose.SHOOT_0_1_2.getHeading())
+							.build();
+				} else {
+					BezierCurve mirrored = mirrorBezierCurve(Settings.Autonomous.BlueClose.BEZIER_LAUNCH_1);
+					return follower.pathBuilder()
+							.addPath(mirrored)
+							.setLinearHeadingInterpolation(
+									mirror(Settings.Autonomous.BlueClose.PRESET_1_END).getHeading(),
+									mirror(Settings.Autonomous.BlueClose.SHOOT_0_1_2).getHeading())
+							.build();
+				}
 			
 			case CLOSE_PRESET_2_PREP:
 				return buildLinearPath(
-						isBlue ? Settings.Autonomous.BlueClose.LAUNCH_1
-								: mirror(Settings.Autonomous.BlueClose.LAUNCH_1),
+						isBlue ? Settings.Autonomous.BlueClose.SHOOT_0_1_2 : mirror(Settings.Autonomous.BlueClose.SHOOT_0_1_2),
 						isBlue ? Settings.Autonomous.BlueClose.PRESET_2_PREP
 								: mirror(Settings.Autonomous.BlueClose.PRESET_2_PREP));
 			
-			case CLOSE_PRESET_2_END:
+			case CLOSE_PRESET_2_GRAB_1:
 				return buildLinearPath(
 						isBlue ? Settings.Autonomous.BlueClose.PRESET_2_PREP
 								: mirror(Settings.Autonomous.BlueClose.PRESET_2_PREP),
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_2_GRAB_1
+								: mirror(Settings.Autonomous.BlueClose.PRESET_2_GRAB_1));
+			
+			case CLOSE_PRESET_2_GRAB_2:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_2_GRAB_1
+								: mirror(Settings.Autonomous.BlueClose.PRESET_2_GRAB_1),
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_2_GRAB_2
+								: mirror(Settings.Autonomous.BlueClose.PRESET_2_GRAB_2));
+			
+			case CLOSE_PRESET_2_END:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_2_GRAB_2
+								: mirror(Settings.Autonomous.BlueClose.PRESET_2_GRAB_2),
 						isBlue ? Settings.Autonomous.BlueClose.PRESET_2_END
 								: mirror(Settings.Autonomous.BlueClose.PRESET_2_END));
 			
 			case CLOSE_LAUNCH_2:
-				return buildCurvedPath(
-						isBlue ? Settings.Autonomous.BlueClose.PRESET_2_END
-								: mirror(Settings.Autonomous.BlueClose.PRESET_2_END),
-						isBlue ? Settings.Autonomous.BlueClose.LAUNCH_2
-								: mirror(Settings.Autonomous.BlueClose.LAUNCH_2));
+				if (isBlue) {
+					return follower.pathBuilder()
+							.addPath(Settings.Autonomous.BlueClose.BEZIER_LAUNCH_2)
+							.setLinearHeadingInterpolation(
+									Settings.Autonomous.BlueClose.PRESET_2_END.getHeading(),
+									Settings.Autonomous.BlueClose.SHOOT_0_1_2.getHeading())
+							.build();
+				} else {
+					BezierCurve mirrored = mirrorBezierCurve(Settings.Autonomous.BlueClose.BEZIER_LAUNCH_2);
+					return follower.pathBuilder()
+							.addPath(mirrored)
+							.setLinearHeadingInterpolation(
+									mirror(Settings.Autonomous.BlueClose.PRESET_2_END).getHeading(),
+									mirror(Settings.Autonomous.BlueClose.SHOOT_0_1_2).getHeading())
+							.build();
+				}
+			
 			
 			case CLOSE_PRESET_3_PREP:
 				return buildLinearPath(
-						isBlue ? Settings.Autonomous.BlueClose.LAUNCH_2
-								: mirror(Settings.Autonomous.BlueClose.LAUNCH_2),
+						isBlue ? Settings.Autonomous.BlueClose.SHOOT_0_1_2 : mirror(Settings.Autonomous.BlueClose.SHOOT_0_1_2),
 						isBlue ? Settings.Autonomous.BlueClose.PRESET_3_PREP
 								: mirror(Settings.Autonomous.BlueClose.PRESET_3_PREP));
 			
-			case CLOSE_PRESET_3_END:
+			case CLOSE_PRESET_3_GRAB_1:
 				return buildLinearPath(
 						isBlue ? Settings.Autonomous.BlueClose.PRESET_3_PREP
 								: mirror(Settings.Autonomous.BlueClose.PRESET_3_PREP),
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_3_GRAB_1
+								: mirror(Settings.Autonomous.BlueClose.PRESET_3_GRAB_1));
+			
+			case CLOSE_PRESET_3_GRAB_2:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_3_GRAB_1
+								: mirror(Settings.Autonomous.BlueClose.PRESET_3_GRAB_1),
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_3_GRAB_2
+								: mirror(Settings.Autonomous.BlueClose.PRESET_3_GRAB_2));
+			
+			case CLOSE_PRESET_3_END:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueClose.PRESET_3_GRAB_2
+								: mirror(Settings.Autonomous.BlueClose.PRESET_3_GRAB_2),
 						isBlue ? Settings.Autonomous.BlueClose.PRESET_3_END
 								: mirror(Settings.Autonomous.BlueClose.PRESET_3_END));
 			
 			case CLOSE_LAUNCH_3:
-				return buildCurvedPath(
-						isBlue ? Settings.Autonomous.BlueClose.PRESET_3_END
-								: mirror(Settings.Autonomous.BlueClose.PRESET_3_END),
-						isBlue ? Settings.Autonomous.BlueClose.LAUNCH_3
-								: mirror(Settings.Autonomous.BlueClose.LAUNCH_3));
+				if (isBlue) {
+					return follower.pathBuilder()
+							.addPath(Settings.Autonomous.BlueClose.BEZIER_LAUNCH_3)
+							.setLinearHeadingInterpolation(
+									Settings.Autonomous.BlueClose.PRESET_3_END.getHeading(),
+									Settings.Autonomous.BlueClose.SHOOT_3.getHeading())
+							.build();
+				} else {
+					BezierCurve mirrored = mirrorBezierCurve(Settings.Autonomous.BlueClose.BEZIER_LAUNCH_3);
+					return follower.pathBuilder()
+							.addPath(mirrored)
+							.setLinearHeadingInterpolation(
+									mirror(Settings.Autonomous.BlueClose.PRESET_3_END).getHeading(),
+									mirror(Settings.Autonomous.BlueClose.SHOOT_3).getHeading())
+							.build();
+				}
 			
 			case CLOSE_PARK:
 				return buildLinearPath(
-						isBlue ? Settings.Autonomous.BlueClose.LAUNCH_3
-								: mirror(Settings.Autonomous.BlueClose.LAUNCH_3),
+						isBlue ? Settings.Autonomous.BlueClose.SHOOT_3
+								: mirror(Settings.Autonomous.BlueClose.SHOOT_3),
 						isBlue ? Settings.Autonomous.BlueClose.PARK : mirror(Settings.Autonomous.BlueClose.PARK));
 			
 			default:
@@ -296,31 +419,40 @@ public class PathRegistry {
 	 */
 	public enum PathSegment {
 		// Far position paths
-		FAR_INITIAL_LAUNCH,
+		FAR_LAUNCH_0,
 		FAR_PRESET_1_PREP,
 		FAR_PRESET_1_GRAB_1,
 		FAR_PRESET_1_GRAB_2,
 		
 		FAR_PRESET_1_END,
-		FAR_LAUNCH,
+		FAR_LAUNCH_1,
 		FAR_PRESET_2_PREP,
 		FAR_PRESET_2_GRAB_1,
 		FAR_PRESET_2_GRAB_2,
 		FAR_PRESET_2_END,
 		FAR_LAUNCH_2,
-		FAR_PRESET_3,
+		FAR_PRESET_3_PREP,
+		FAR_PRESET_3_GRAB_1,
+		FAR_PRESET_3_GRAB_2,
+		FAR_PRESET_3_END,
 		FAR_LAUNCH_3,
 		FAR_PARK,
 		
 		// Close position paths
-		CLOSE_INITIAL_LAUNCH,
+		CLOSE_LAUNCH_0,
 		CLOSE_PRESET_1_PREP,
+		CLOSE_PRESET_1_GRAB_1,
+		CLOSE_PRESET_1_GRAB_2,
 		CLOSE_PRESET_1_END,
 		CLOSE_LAUNCH_1,
 		CLOSE_PRESET_2_PREP,
+		CLOSE_PRESET_2_GRAB_1,
+		CLOSE_PRESET_2_GRAB_2,
 		CLOSE_PRESET_2_END,
 		CLOSE_LAUNCH_2,
 		CLOSE_PRESET_3_PREP,
+		CLOSE_PRESET_3_GRAB_1,
+		CLOSE_PRESET_3_GRAB_2,
 		CLOSE_PRESET_3_END,
 		CLOSE_LAUNCH_3,
 		CLOSE_PARK

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.BALL_INTAKE_WAIT_S;
+
 import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.autonomous.actions.FollowPathAction;
@@ -47,44 +49,60 @@ public class SequenceBuilder {
 	 */
 	public static AutonomousSequence buildFarSequence(PathRegistry pathRegistry) {
 		return new SequenceBuilder(pathRegistry)
-				// Cycle 1: Launch preload, go to sample, intake
-				.followPath(PathRegistry.PathSegment.FAR_INITIAL_LAUNCH)
+				// Launch preloads
+				.prepLaunch()
+				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_0)
 				.launch()
 				
+				// Get ball set I
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_PREP)
 				.startIntake()
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_GRAB_1)
-				.wait(1.0)
+				.wait(BALL_INTAKE_WAIT_S)
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_GRAB_2)
-				.wait(1.0)
+				.wait(BALL_INTAKE_WAIT_S)
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_END)
-				.wait(1.0)
+				.wait(BALL_INTAKE_WAIT_S)
 				.stopIntake()
-				.prepLaunch()
 				
-				.followPath(PathRegistry.PathSegment.FAR_LAUNCH)
+				// Launch ball set I
+				.prepLaunch()
+				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_1)
 				.launch()
+				
+				// Get ball set II
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_PREP)
 				.startIntake()
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_GRAB_1)
-				.wait(1.0)
+				.wait(BALL_INTAKE_WAIT_S)
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_GRAB_2)
-				.wait(1.0)
+				.wait(BALL_INTAKE_WAIT_S)
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_END)
-				.wait(1.0)
+				.wait(BALL_INTAKE_WAIT_S)
 				.stopIntake()
+				
+				// Launch ball set II
 				.prepLaunch()
-				
-				
-				.followPath(PathRegistry.PathSegment.FAR_LAUNCH)
+				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_2)
 				.launch()
+				
+				// Get ball set III
+				.followPath(PathRegistry.PathSegment.FAR_PRESET_3_PREP)
 				.startIntake()
-				.followPath(PathRegistry.PathSegment.FAR_PRESET_3)
+				.followPath(PathRegistry.PathSegment.FAR_PRESET_3_GRAB_1)
+				.wait(BALL_INTAKE_WAIT_S)
+				.followPath(PathRegistry.PathSegment.FAR_PRESET_3_GRAB_2)
+				.wait(BALL_INTAKE_WAIT_S)
+				.followPath(PathRegistry.PathSegment.FAR_PRESET_3_END)
+				.wait(BALL_INTAKE_WAIT_S)
 				.stopIntake()
-				.followPath(PathRegistry.PathSegment.FAR_LAUNCH)
 				
-				// Final launch and park
+				// Launch ball set III
+				.prepLaunch()
+				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_3)
 				.launch()
+				
+				// Park
 				.followPath(PathRegistry.PathSegment.FAR_PARK)
 				.build();
 	}
@@ -94,31 +112,58 @@ public class SequenceBuilder {
 	 */
 	public static AutonomousSequence buildCloseSequence(PathRegistry pathRegistry) {
 		return new SequenceBuilder(pathRegistry)
-				// Cycle 1: Launch preload, go to sample, intake
+				// Launch preload
 				.prepLaunch()
-				.followPath(PathRegistry.PathSegment.CLOSE_INITIAL_LAUNCH)
+				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_0)
 				.launch()
+				
+				// Get ball set I
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_1_PREP)
 				.startIntake()
+				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_1_GRAB_1)
+				.wait(BALL_INTAKE_WAIT_S)
+				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_1_GRAB_2)
+				.wait(BALL_INTAKE_WAIT_S)
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_1_END)
+				.wait(BALL_INTAKE_WAIT_S)
 				.stopIntake()
-				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_1)
 				
-				// Cycle 2: Launch, go to sample, intake
+				// Launch ball set I
+				.prepLaunch()
+				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_1)
 				.launch()
+				
+				// Get ball set II
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_2_PREP)
 				.startIntake()
+				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_2_GRAB_1)
+				.wait(BALL_INTAKE_WAIT_S)
+				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_2_GRAB_2)
+				.wait(BALL_INTAKE_WAIT_S)
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_2_END)
+				.wait(BALL_INTAKE_WAIT_S)
 				.stopIntake()
-				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_2)
 				
-				// Cycle 3: Launch, go to sample, intake
+				// Launch ball set II
+				.prepLaunch()
+				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_2)
 				.launch()
+				
+				// Get ball set I
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_PREP)
 				.startIntake()
+				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_1)
+				.wait(1.0)
+				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_2)
+				.wait(1.0)
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_END)
+				.wait(1.0)
 				.stopIntake()
+				
+				// Launch ball set I
+				.prepLaunch()
 				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_3)
+				.launch()
 				
 				// Final launch and park
 				.launch()
