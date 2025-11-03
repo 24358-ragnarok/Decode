@@ -17,6 +17,19 @@ import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
 import java.lang.reflect.Proxy;
 
+/**
+ * Central manager for all robot mechanisms and subsystems.
+ * <p>
+ * Handles safe initialization, lifecycle management, and dependency injection for all mechanisms.
+ * Uses a fail-safe approach where missing hardware components are gracefully handled without
+ * crashing the robot program.
+ * <p>
+ * Key features:
+ * - Safe mechanism creation with exception handling
+ * - Type-safe mechanism retrieval
+ * - Centralized lifecycle management (init, update, stop)
+ * - Automatic dependency resolution between mechanisms
+ */
 public class MechanismManager {
 	public final Drivetrain drivetrain;
 	public final Mechanism[] mechanismArray;
@@ -109,6 +122,12 @@ public class MechanismManager {
 		}
 	}
 	
+	/**
+	 * Creates a dummy servo that swallows all method calls.
+	 * Used when hardware is not available but code expects a servo instance.
+	 *
+	 * @return A proxy servo that does nothing
+	 */
 	public Servo dummyServo() {
 		return (Servo) Proxy.newProxyInstance(
 				Servo.class.getClassLoader(),
@@ -118,6 +137,11 @@ public class MechanismManager {
 				});
 	}
 	
+	/**
+	 * Retrieves a mechanism of the specified type.
+	 * @param type The class type of the mechanism to retrieve
+	 * @return The mechanism instance, or null if not available
+	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Mechanism> @Nullable T get(Class<T> type) {
 		for (Mechanism m : mechanismArray) {
@@ -128,22 +152,37 @@ public class MechanismManager {
 		return null;
 	}
 	
-	public void init() {
-		for (Mechanism m : mechanismArray)
-			if (m != null)
-				m.init();
+	/**
+	 * Initializes all available mechanisms.
+	 */
+	public void start() {
+		for (Mechanism m : mechanismArray) {
+			if (m != null) {
+				m.start();
+			}
+		}
 	}
 	
+	/**
+	 * Updates all available mechanisms and the drivetrain.
+	 */
 	public void update() {
-		for (Mechanism m : mechanismArray)
-			if (m != null)
+		for (Mechanism m : mechanismArray) {
+			if (m != null) {
 				m.update();
+			}
+		}
 		drivetrain.update();
 	}
 	
+	/**
+	 * Stops all available mechanisms safely.
+	 */
 	public void stop() {
-		for (Mechanism m : mechanismArray)
-			if (m != null)
+		for (Mechanism m : mechanismArray) {
+			if (m != null) {
 				m.stop();
+			}
+		}
 	}
 }

@@ -36,7 +36,7 @@ public class TubeIntake extends Mechanism {
 		intakeMotor.setPower(0);
 	}
 	
-	public void init() {
+	public void start() {
 		colorSensor.init();
 	}
 	

@@ -15,6 +15,18 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 
+/**
+ * Constants and configuration for the Pedro Pathing system.
+ * <p>
+ * Contains all the tuned parameters for:
+ * - Follower control (PIDF coefficients, mass, acceleration)
+ * - Mecanum drivetrain configuration (motor names, directions, velocities)
+ * - Pinpoint localizer setup (pod positions, encoder configuration)
+ * - Path constraints (velocity, acceleration, timing limits)
+ * <p>
+ * These values should be tuned using the Pedro Pathing tuning OpModes
+ * before use in competition.
+ */
 public class Constants {
 	public static final FollowerConstants followerConstants = new FollowerConstants()
 			.mass(10.5)
@@ -56,10 +68,17 @@ public class Constants {
 			.strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
 	
 	/**
-	 * These are the PathConstraints in order:
-	 * tValueConstraint, velocityConstraint, translationalConstraint, headingConstraint, timeoutConstraint,
-	 * brakingStrength, BEZIER_CURVE_SEARCH_LIMIT, brakingStart
-	 * The BEZIER_CURVE_SEARCH_LIMIT should typically be left at 10 and shouldn't be changed.
+	 * Path constraints that control how the robot follows paths.
+	 * <p>
+	 * Parameters in order:
+	 * - tValueConstraint: How close to path end before considering complete (0.998)
+	 * - velocityConstraint: Minimum velocity threshold (0.01)
+	 * - translationalConstraint: Translational tolerance (0.01)
+	 * - headingConstraint: Heading tolerance in radians (0.001)
+	 * - timeoutConstraint: Maximum time for path completion in seconds (50)
+	 * - brakingStrength: How aggressively to brake at path end (2)
+	 * - BEZIER_CURVE_SEARCH_LIMIT: Search resolution for curves (10 - don't change)
+	 * - brakingStart: When to start braking relative to path end (1)
 	 */
 	public static PathConstraints pathConstraints = new PathConstraints(
 			0.998,
@@ -72,6 +91,12 @@ public class Constants {
 			1
 	);
 	
+	/**
+	 * Factory method to create a configured Follower instance.
+	 *
+	 * @param hardwareMap The robot's hardware map
+	 * @return A fully configured Follower ready for use
+	 */
 	public static Follower createFollower(HardwareMap hardwareMap) {
 		return new FollowerBuilder(followerConstants, hardwareMap)
 				.mecanumDrivetrain(driveConstants)

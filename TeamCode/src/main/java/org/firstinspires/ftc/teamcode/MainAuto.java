@@ -91,7 +91,7 @@ public class MainAuto extends OpMode {
 	@Override
 	public void start() {
 		// Initialize all mechanisms
-		mechanisms.init();
+		mechanisms.start();
 		
 		ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), swt -> {
 			swt.slots[0] = MatchSettings.ArtifactColor.PURPLE;

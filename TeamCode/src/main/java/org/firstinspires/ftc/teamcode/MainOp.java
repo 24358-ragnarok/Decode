@@ -33,7 +33,7 @@ public class MainOp extends OpMode {
 	private MechanismManager mechanisms;
 	private Controller mainController;
 	private Controller subController;
-	
+
 	/**
 	 * This allows us to run commands only if the related mechanism works.
 	 * For example I could run "if launcher exists, shoot it" using this.
@@ -43,22 +43,22 @@ public class MainOp extends OpMode {
 			action.accept(obj);
 		}
 	}
-	
+
 	/**
 	 * Runs when "init" is pressed on the Driver Station.
+	 * Initializes all robot systems, controllers, and telemetry for TeleOp
+	 * operation.
 	 */
 	@Override
 	public final void init() {
 		// Pull the stored match state and settings from when they were set during auto
 		matchSettings = new MatchSettings(blackboard);
-		
+
 		// Initialize robot systems
 		mechanisms = new MechanismManager(hardwareMap, matchSettings);
 		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower, matchSettings);
 		subController = new Controller(gamepad2, mechanisms.drivetrain.follower, matchSettings);
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
-		
-		// Enable retained mode for efficient telemetry updates
 		
 		// Set up lazy evaluation for frequently-accessed but expensive operations
 		// These are only evaluated when telemetry is actually transmitted
@@ -91,7 +91,7 @@ public class MainOp extends OpMode {
 	@Override
 	public final void start() {
 		// Initialize mechanisms and start teleop drive
-		ifMechanismValid(mechanisms, MechanismManager::init);
+		ifMechanismValid(mechanisms, MechanismManager::start);
 		mechanisms.drivetrain.follower.startTeleopDrive(); // or pass in true to enable braking
 		logging.enableRetainedMode();
 	}
@@ -127,7 +127,9 @@ public class MainOp extends OpMode {
 	}
 	
 	/**
-	 * Process controller inputs
+	 * Process controller inputs for both main and sub controllers.
+	 * Handles drivetrain movement, launcher controls, intake operations, and
+	 * telemetry updates.
 	 */
 	private void processControllerInputs() {
 		// Drivetrain
@@ -143,8 +145,8 @@ public class MainOp extends OpMode {
 			ifMechanismValid(mechanisms.drivetrain, dt -> dt.follower.setPose(RESET_POSE));
 		}
 		
-		// automatically switch the perspective for field-centric
-		// driving based on the side we start on
+		// Automatically switch the perspective for field-centric
+		// driving based on the alliance color we start on
 		double perspectiveRotation = matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE
 				? Math.toRadians(0)
 				: Math.toRadians(180);
@@ -269,6 +271,8 @@ public class MainOp extends OpMode {
 	
 	/**
 	 * Set the LEDs on the controller based on the match state.
+	 * Green LED indicates green artifact needed, purple LED indicates purple
+	 * artifact needed.
 	 */
 	private void setControllerLEDs() {
 		if (matchSettings.nextArtifactNeeded() == MatchSettings.ArtifactColor.GREEN) {

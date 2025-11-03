@@ -8,32 +8,45 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.Mechanism;
 
 /**
- * Interface between the Limelight camera and the robot, allowing us to get
- * specific data smoothly.
+ * Interface between the Limelight camera and the robot, providing vision processing
+ * capabilities for artifact detection, AprilTag recognition, and goal targeting.
+ * <p>
+ * Manages pipeline switching between different vision modes:
+ * - AprilTag detection for motif recognition and goal targeting
+ * - Green artifact detection
+ * - Purple artifact detection
+ * <p>
+ * Optimized to minimize overhead by avoiding unnecessary pipeline switches and
+ * providing efficient result caching.
  */
 public class LimelightManager extends Mechanism {
 	public final Limelight3A limelight;
 	public final MatchSettings matchSettings;
 	LLResult currentResult;
-	Pipeline currentPipeline = Pipeline.APRILTAG; // to detect the obelisk april tag during start of auto
+	/**
+	 * Current active pipeline - starts with AprilTag to detect obelisk during auto start
+	 */
+	Pipeline currentPipeline = Pipeline.APRILTAG;
 	
 	public LimelightManager(Limelight3A limelight, MatchSettings matchSettings) {
 		this.limelight = limelight;
 		this.matchSettings = matchSettings;
-		init(); // limelight is a non-physical system and thus can be initialized at any time
+		start(); // limelight is a non-physical system and thus can be initialized at any time
 	}
 	
 	/**
-	 * Initializes limelight with polling rate of 100 Hz
+	 * Initializes limelight with polling rate of 100 Hz.
+	 * Sets the current pipeline and starts the camera streaming.
 	 */
-	public void init() {
+	public void start() {
 		setCurrentPipeline(currentPipeline);
 		limelight.start();
 		limelight.setPollRateHz(100);
 	}
 	
 	/**
-	 * This causes significant overhead and should be avoided.
+	 * Updates the limelight result cache. 
+	 * Note: This causes significant overhead and should be avoided in tight loops.
 	 */
 	public void update() {
 		limelight.getLatestResult();

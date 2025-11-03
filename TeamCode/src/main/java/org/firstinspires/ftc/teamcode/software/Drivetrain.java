@@ -70,7 +70,7 @@ public class Drivetrain extends Mechanism {
 	}
 	
 	@Override
-	public void init() {
+	public void start() {
 		// No initialization required - drivetrain is initialized in constructor
 	}
 	

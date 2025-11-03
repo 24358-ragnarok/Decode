@@ -148,7 +148,7 @@ public class SequenceBuilder {
 				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_2)
 				.launch()
 				
-				// Get ball set I
+				// Get ball set III
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_PREP)
 				.startIntake()
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_1)

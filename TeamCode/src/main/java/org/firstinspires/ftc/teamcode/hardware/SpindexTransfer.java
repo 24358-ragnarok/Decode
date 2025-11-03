@@ -79,7 +79,7 @@ public class SpindexTransfer extends Mechanism {
 		return Math.min(d, 1.0 - d);
 	}
 	
-	public void init() {
+	public void start() {
 		closeBothSeals();
 		rotateSlotToExit(0);
 	}

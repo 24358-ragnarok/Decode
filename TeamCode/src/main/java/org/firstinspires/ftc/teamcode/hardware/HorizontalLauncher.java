@@ -234,7 +234,7 @@ public class HorizontalLauncher extends Mechanism {
 	
 	// ========== Testing/Utility Methods ==========
 	
-	public final void init() {
+	public final void start() {
 		setYaw(0); // 0° yaw (center/forward)
 		setPitch(Settings.Launcher.DEFAULT_PITCH_ANGLE);
 	}

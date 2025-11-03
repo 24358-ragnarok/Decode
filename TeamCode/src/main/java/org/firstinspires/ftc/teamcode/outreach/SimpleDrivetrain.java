@@ -7,8 +7,14 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 /**
- * Main TeleOp class for driver-controlled period.
- * Handles controller profile selection and robot operation during matches.
+ * Simplified drivetrain OpMode for outreach and demonstration purposes.
+ * Provides basic mecanum drive functionality with gamepad controls and d-pad precision movement.
+ * <p>
+ * Controls:
+ * - Left stick: Drive and strafe
+ * - Right stick X: Rotation
+ * - Bumpers: Precision rotation (left/right)
+ * - D-pad: Precision movement in cardinal directions
  *
  * @noinspection ClassWithoutConstructor
  */
@@ -20,6 +26,9 @@ public class SimpleDrivetrain extends OpMode {
 	public DcMotor backRightMotor;
 	
 	
+	/**
+	 * Initializes the drivetrain motors and sets their directions.
+	 */
 	@Override
 	public final void init() {
 		frontLeftMotor = hardwareMap.get(DcMotor.class, "frontLeft");
@@ -34,6 +43,10 @@ public class SimpleDrivetrain extends OpMode {
 	}
 	
 	
+	/**
+	 * Main loop that processes gamepad input and controls the drivetrain.
+	 */
+	@Override
 	public final void loop() {
 		double drivePower = -gamepad1.left_stick_y;
 		double strafePower = gamepad1.left_stick_x;
@@ -61,6 +74,12 @@ public class SimpleDrivetrain extends OpMode {
 		mecanumDrive(strafePower, drivePower, rotatePower);
 	}
 	
+	/**
+	 * Calculates and applies mecanum drive motor powers.
+	 * @param strafePower Left/right movement power (-1.0 to 1.0)
+	 * @param drivePower Forward/backward movement power (-1.0 to 1.0)
+	 * @param rotatePower Rotational power (-1.0 to 1.0)
+	 */
 	public void mecanumDrive(double strafePower, double drivePower, double rotatePower) {
 		double frontLeftPower = drivePower + strafePower + rotatePower;
 		double frontRightPower = drivePower - strafePower - rotatePower;

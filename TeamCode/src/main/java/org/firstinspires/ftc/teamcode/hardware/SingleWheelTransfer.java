@@ -93,7 +93,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	}
 	
 	@Override
-	public void init() {
+	public void start() {
 		holdEntranceClosed();
 		holdExitClosed();
 		stopTransferWheelImmediate();

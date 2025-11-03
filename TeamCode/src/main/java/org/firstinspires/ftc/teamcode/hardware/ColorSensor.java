@@ -10,9 +10,13 @@ import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 
 /**
  * A Decode-specific Color Sensor wrapper to accurately determine what artifact
- * type is in front
- * of the sensor.
- * TODO: Tune color thresholds and confidence values in Settings.ColorSensor
+ * type is in front of the sensor.
+ * <p>
+ * Uses RGB color distance calculations to classify artifacts as GREEN, PURPLE, or UNKNOWN.
+ * Color thresholds and confidence values can be tuned in Settings.ColorSensor.
+ * <p>
+ * The sensor uses Euclidean distance in RGB space to determine the closest match
+ * to predefined color targets, with a confidence threshold to reject uncertain readings.
  */
 public class ColorSensor {
 	private static final int RGB_COMPONENTS = 3;
@@ -54,7 +58,12 @@ public class ColorSensor {
 	}
 	
 	/**
-	 * Euclidean distance between measured RGB and target RGB
+	 * Calculates the Euclidean distance between measured RGB values and target RGB values.
+	 * Lower distances indicate better color matches.
+	 *
+	 * @param measured The measured RGB values from the sensor
+	 * @param target The target RGB values to compare against
+	 * @return The Euclidean distance between the two color points
 	 */
 	public double computeDistance(double[] measured, double[] target) {
 		double dr = measured[0] - target[0];
