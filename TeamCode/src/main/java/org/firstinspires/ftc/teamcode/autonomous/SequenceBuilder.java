@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.autonomous.actions.IntakeAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ParallelAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PrepareLaunchAction;
-import org.firstinspires.ftc.teamcode.autonomous.actions.SpinUpAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.StopIntakeAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.WaitAction;
 
@@ -153,20 +152,19 @@ public class SequenceBuilder {
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_PREP)
 				.startIntake()
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_1)
-				.wait(1.0)
+				.wait(BALL_INTAKE_WAIT_S)
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_2)
-				.wait(1.0)
+				.wait(BALL_INTAKE_WAIT_S)
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_END)
-				.wait(1.0)
+				.wait(BALL_INTAKE_WAIT_S)
 				.stopIntake()
 				
-				// Launch ball set I
+				// Launch ball set III
 				.prepLaunch()
 				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_3)
 				.launch()
 				
-				// Final launch and park
-				.launch()
+				// Park
 				.followPath(PathRegistry.PathSegment.CLOSE_PARK)
 				.build();
 	}
@@ -178,12 +176,6 @@ public class SequenceBuilder {
 	 * @return this (for method chaining)
 	 */
 	public SequenceBuilder followPath(PathRegistry.PathSegment segment) {
-		PathChain path = pathRegistry.getPath(segment);
-		sequence.addAction(new FollowPathAction(path, segment.name()));
-		return this;
-	}
-	
-	public SequenceBuilder followPathSlowly(PathRegistry.PathSegment segment) {
 		PathChain path = pathRegistry.getPath(segment);
 		sequence.addAction(new FollowPathAction(path, segment.name()));
 		return this;
@@ -221,11 +213,6 @@ public class SequenceBuilder {
 	 */
 	public SequenceBuilder launch() {
 		sequence.addAction(new LaunchAction());
-		return this;
-	}
-	
-	public SequenceBuilder spinUp() {
-		sequence.addAction(new SpinUpAction());
 		return this;
 	}
 	

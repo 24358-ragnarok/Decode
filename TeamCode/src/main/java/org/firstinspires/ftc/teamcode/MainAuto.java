@@ -32,13 +32,13 @@ import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
  */
 @Autonomous(name = "Main Auto", group = ".Competition Modes")
 public class MainAuto extends OpMode {
-	
+
 	private Timer opmodeTimer;
 	private MatchConfigurationWizard wizard;
 	private MechanismManager mechanisms;
 	private MatchSettings matchSettings;
 	private UnifiedLogging logging;
-	
+
 	// The new optimal structure
 	private PathRegistry pathRegistry;
 	private AutonomousSequence autonomousSequence;
@@ -105,41 +105,20 @@ public class MainAuto extends OpMode {
 		// handles alliance mirroring, and the sequence builder creates the
 		// entire autonomous routine declaratively
 		
-		try {
-			pathRegistry = new PathRegistry(mechanisms.drivetrain.follower,
-					matchSettings);
-			
-			if (matchSettings.getAutoStartingPosition() == MatchSettings.AutoStartingPosition.FAR) {
-				autonomousSequence = SequenceBuilder.buildFarSequence(pathRegistry);
-			} else {
-				autonomousSequence = SequenceBuilder.buildCloseSequence(pathRegistry);
-			}
-			
-			// Start the sequence
-			autonomousSequence.start(mechanisms);
-			
-			// Start the opmode timer
-			opmodeTimer.resetTimer();
-		} catch (Exception e) {
-			// Log the exception with full details
-			logging.addLine("=== FATAL ERROR ===");
-			logging.addData("Error", e.getClass().getSimpleName());
-			logging.addData("Message", e.getMessage());
-			logging.addData("Position", matchSettings.getAutoStartingPosition());
-			logging.addData("Alliance", matchSettings.getAllianceColor());
-			
-			// Log stack trace for debugging
-			StringBuilder stackTrace = new StringBuilder();
-			for (StackTraceElement element : e.getStackTrace()) {
-				stackTrace.append(element.toString()).append("\n");
-			}
-			telemetry.addData("Stack Trace", stackTrace.toString());
-			logging.update();
-			telemetry.update();
-			
-			// Re-throw to prevent further execution
-			throw new RuntimeException("Failed to build autonomous sequence", e);
+		pathRegistry = new PathRegistry(mechanisms.drivetrain.follower,
+				matchSettings);
+		
+		if (matchSettings.getAutoStartingPosition() == MatchSettings.AutoStartingPosition.FAR) {
+			autonomousSequence = SequenceBuilder.buildFarSequence(pathRegistry);
+		} else {
+			autonomousSequence = SequenceBuilder.buildCloseSequence(pathRegistry);
 		}
+		
+		// Start the sequence
+		autonomousSequence.start(mechanisms);
+		
+		// Start the opmode timer
+		opmodeTimer.resetTimer();
 	}
 	
 	/**
@@ -147,37 +126,18 @@ public class MainAuto extends OpMode {
 	 */
 	@Override
 	public void loop() {
-		try {
-			mechanisms.drivetrain.follower.update();
-			
-			// Update all mechanisms (sensors, motors, etc.)
-			mechanisms.update();
-			
-			// Update the autonomous sequence
-			// This single line replaces the entire state machine logic!
-			if (autonomousSequence != null) {
-				autonomousSequence.update(mechanisms);
-			}
-			
-			// Clear dynamic telemetry and log updated data
-			logging.clearDynamic();
-			logTelemetry();
-		} catch (Exception e) {
-			// Log the exception with full details
-			logging.clearDynamic();
-			logging.addLine("=== RUNTIME ERROR ===");
-			logging.addData("Error", e.getClass().getSimpleName());
-			logging.addData("Message", e.getMessage());
-			if (autonomousSequence != null) {
-				logging.addData("Current Action", autonomousSequence.getCurrentActionName());
-				logging.addData("Action Index", autonomousSequence.getCurrentActionIndex());
-			}
-			logging.update();
-			telemetry.update();
-			
-			// Stop the opmode
-			requestOpModeStop();
-		}
+		mechanisms.drivetrain.follower.update();
+		
+		// Update all mechanisms (sensors, motors, etc.)
+		mechanisms.update();
+		
+		// Update the autonomous sequence
+		// This single line replaces the entire state machine logic!
+		autonomousSequence.update(mechanisms);
+		
+		// Clear dynamic telemetry and log updated data
+		logging.clearDynamic();
+		logTelemetry();
 	}
 	
 	/**

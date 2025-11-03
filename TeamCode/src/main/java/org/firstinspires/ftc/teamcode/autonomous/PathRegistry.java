@@ -130,8 +130,8 @@ public class PathRegistry {
 			
 			case FAR_PRESET_2_END:
 				return buildLinearPath(
-						isBlue ? Settings.Autonomous.BlueFar.PRESET_2_PREP
-								: mirror(Settings.Autonomous.BlueFar.PRESET_2_PREP),
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_2_GRAB_2
+								: mirror(Settings.Autonomous.BlueFar.PRESET_2_GRAB_2),
 						isBlue ? Settings.Autonomous.BlueFar.PRESET_2_END
 								: mirror(Settings.Autonomous.BlueFar.PRESET_2_END));
 			
