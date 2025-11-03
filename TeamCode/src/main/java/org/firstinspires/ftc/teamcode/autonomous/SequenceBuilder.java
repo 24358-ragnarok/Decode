@@ -6,6 +6,8 @@ import org.firstinspires.ftc.teamcode.autonomous.actions.FollowPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.IntakeAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ParallelAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.PrepareLaunchAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.SpinUpAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.StopIntakeAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.WaitAction;
 
@@ -46,27 +48,40 @@ public class SequenceBuilder {
 	public static AutonomousSequence buildFarSequence(PathRegistry pathRegistry) {
 		return new SequenceBuilder(pathRegistry)
 				// Cycle 1: Launch preload, go to sample, intake
+				.followPath(PathRegistry.PathSegment.FAR_INITIAL_LAUNCH)
 				.launch()
+				
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_PREP)
 				.startIntake()
+				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_GRAB_1)
+				.wait(1.0)
+				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_GRAB_2)
+				.wait(1.0)
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_END)
+				.wait(1.0)
 				.stopIntake()
-				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_1)
+				.prepLaunch()
 				
-				// Cycle 2: Launch, go to sample, intake
+				.followPath(PathRegistry.PathSegment.FAR_LAUNCH)
 				.launch()
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_PREP)
 				.startIntake()
+				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_GRAB_1)
+				.wait(1.0)
+				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_GRAB_2)
+				.wait(1.0)
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_END)
+				.wait(1.0)
 				.stopIntake()
-				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_2)
+				.prepLaunch()
 				
-				// Cycle 3: Launch, go to sample, intake
+				
+				.followPath(PathRegistry.PathSegment.FAR_LAUNCH)
 				.launch()
 				.startIntake()
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_3)
 				.stopIntake()
-				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_3)
+				.followPath(PathRegistry.PathSegment.FAR_LAUNCH)
 				
 				// Final launch and park
 				.launch()
@@ -80,6 +95,8 @@ public class SequenceBuilder {
 	public static AutonomousSequence buildCloseSequence(PathRegistry pathRegistry) {
 		return new SequenceBuilder(pathRegistry)
 				// Cycle 1: Launch preload, go to sample, intake
+				.prepLaunch()
+				.followPath(PathRegistry.PathSegment.CLOSE_INITIAL_LAUNCH)
 				.launch()
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_1_PREP)
 				.startIntake()
@@ -121,6 +138,12 @@ public class SequenceBuilder {
 		return this;
 	}
 	
+	public SequenceBuilder followPathSlowly(PathRegistry.PathSegment segment) {
+		PathChain path = pathRegistry.getPath(segment);
+		sequence.addAction(new FollowPathAction(path, segment.name()));
+		return this;
+	}
+	
 	/**
 	 * Adds an action to start the intake.
 	 *
@@ -128,6 +151,11 @@ public class SequenceBuilder {
 	 */
 	public SequenceBuilder startIntake() {
 		sequence.addAction(new IntakeAction());
+		return this;
+	}
+	
+	public SequenceBuilder prepLaunch() {
+		sequence.addAction(new PrepareLaunchAction());
 		return this;
 	}
 	
@@ -148,6 +176,11 @@ public class SequenceBuilder {
 	 */
 	public SequenceBuilder launch() {
 		sequence.addAction(new LaunchAction());
+		return this;
+	}
+	
+	public SequenceBuilder spinUp() {
+		sequence.addAction(new SpinUpAction());
 		return this;
 	}
 	
@@ -184,19 +217,6 @@ public class SequenceBuilder {
 		return this;
 	}
 	
-	/**
-	 * Convenience method: follow path and start intake simultaneously.
-	 *
-	 * @param segment The path segment to follow
-	 * @return this (for method chaining)
-	 */
-	public SequenceBuilder followPathWithIntake(PathRegistry.PathSegment segment) {
-		PathChain path = pathRegistry.getPath(segment);
-		parallel(
-				new FollowPathAction(path, segment.name()),
-				new IntakeAction());
-		return this;
-	}
 	
 	/**
 	 * Convenience method: Complete intake cycle (prep -> intake -> stop).

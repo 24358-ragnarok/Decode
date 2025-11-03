@@ -55,20 +55,39 @@ public class PathRegistry {
 		boolean isBlue = alliance == MatchSettings.AllianceColor.BLUE;
 		
 		switch (segment) {
-			case FAR_PRESET_1_PREP:
+			case FAR_INITIAL_LAUNCH:
 				return buildLinearPath(
 						isBlue ? Settings.Autonomous.BlueFar.START : mirror(Settings.Autonomous.BlueFar.START),
+						isBlue ? Settings.Autonomous.BlueFar.INITIAL_LAUNCH
+								: mirror(Settings.Autonomous.BlueFar.INITIAL_LAUNCH));
+			
+			case FAR_PRESET_1_PREP:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueFar.INITIAL_LAUNCH : mirror(Settings.Autonomous.BlueFar.INITIAL_LAUNCH),
 						isBlue ? Settings.Autonomous.BlueFar.PRESET_1_PREP
 								: mirror(Settings.Autonomous.BlueFar.PRESET_1_PREP));
 			
-			case FAR_PRESET_1_END:
+			case FAR_PRESET_1_GRAB_1:
 				return buildLinearPath(
 						isBlue ? Settings.Autonomous.BlueFar.PRESET_1_PREP
 								: mirror(Settings.Autonomous.BlueFar.PRESET_1_PREP),
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_1_GRAB_1
+								: mirror(Settings.Autonomous.BlueFar.PRESET_1_GRAB_1));
+			
+			case FAR_PRESET_1_GRAB_2:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_1_GRAB_1
+								: mirror(Settings.Autonomous.BlueFar.PRESET_1_GRAB_1),
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_1_GRAB_2
+								: mirror(Settings.Autonomous.BlueFar.PRESET_1_GRAB_2));
+			
+			case FAR_PRESET_1_END:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_1_GRAB_2
+								: mirror(Settings.Autonomous.BlueFar.PRESET_1_GRAB_2),
 						isBlue ? Settings.Autonomous.BlueFar.PRESET_1_END
 								: mirror(Settings.Autonomous.BlueFar.PRESET_1_END));
-			
-			case FAR_LAUNCH_1:
+			case FAR_LAUNCH:
 				if (isBlue) {
 					return follower.pathBuilder()
 							.addPath(Settings.Autonomous.BlueFar.BEZIER_LAUNCH_1)
@@ -92,6 +111,21 @@ public class PathRegistry {
 								: mirror(Settings.Autonomous.BlueFar.ENDING_LAUNCH_1),
 						isBlue ? Settings.Autonomous.BlueFar.PRESET_2_PREP
 								: mirror(Settings.Autonomous.BlueFar.PRESET_2_PREP));
+			
+			
+			case FAR_PRESET_2_GRAB_1:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_2_PREP
+								: mirror(Settings.Autonomous.BlueFar.PRESET_2_PREP),
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_2_GRAB_1
+								: mirror(Settings.Autonomous.BlueFar.PRESET_2_GRAB_1));
+			
+			case FAR_PRESET_2_GRAB_2:
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_2_GRAB_1
+								: mirror(Settings.Autonomous.BlueFar.PRESET_2_GRAB_1),
+						isBlue ? Settings.Autonomous.BlueFar.PRESET_2_GRAB_2
+								: mirror(Settings.Autonomous.BlueFar.PRESET_2_GRAB_2));
 			
 			case FAR_PRESET_2_END:
 				return buildLinearPath(
@@ -262,10 +296,16 @@ public class PathRegistry {
 	 */
 	public enum PathSegment {
 		// Far position paths
+		FAR_INITIAL_LAUNCH,
 		FAR_PRESET_1_PREP,
+		FAR_PRESET_1_GRAB_1,
+		FAR_PRESET_1_GRAB_2,
+		
 		FAR_PRESET_1_END,
-		FAR_LAUNCH_1,
+		FAR_LAUNCH,
 		FAR_PRESET_2_PREP,
+		FAR_PRESET_2_GRAB_1,
+		FAR_PRESET_2_GRAB_2,
 		FAR_PRESET_2_END,
 		FAR_LAUNCH_2,
 		FAR_PRESET_3,
@@ -273,6 +313,7 @@ public class PathRegistry {
 		FAR_PARK,
 		
 		// Close position paths
+		CLOSE_INITIAL_LAUNCH,
 		CLOSE_PRESET_1_PREP,
 		CLOSE_PRESET_1_END,
 		CLOSE_LAUNCH_1,

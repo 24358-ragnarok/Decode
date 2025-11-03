@@ -62,12 +62,12 @@ public class Constants {
 	 * The BEZIER_CURVE_SEARCH_LIMIT should typically be left at 10 and shouldn't be changed.
 	 */
 	public static PathConstraints pathConstraints = new PathConstraints(
-			0.995,
-			0.1,
-			0.1,
-			0.009,
+			0.998,
+			0.01,
+			0.01,
+			0.001,
 			50,
-			1,
+			2,
 			10,
 			1
 	);

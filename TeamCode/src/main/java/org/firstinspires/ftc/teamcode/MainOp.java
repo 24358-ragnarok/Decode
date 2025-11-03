@@ -38,7 +38,7 @@ public class MainOp extends OpMode {
 	 * This allows us to run commands only if the related mechanism works.
 	 * For example I could run "if launcher exists, shoot it" using this.
 	 */
-	private static <T> void ifMechanismValid(T obj, Consumer<T> action) {
+	public static <T> void ifMechanismValid(T obj, Consumer<T> action) {
 		if (obj != null) {
 			action.accept(obj);
 		}

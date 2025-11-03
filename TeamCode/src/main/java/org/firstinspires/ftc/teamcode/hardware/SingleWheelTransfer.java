@@ -51,7 +51,7 @@ import java.util.Arrays;
  */
 public final class SingleWheelTransfer extends Mechanism {
 	// Positional model: slots[0] is entrance, slots[n-1] is at exit
-	private final MatchSettings.ArtifactColor[] slots = new MatchSettings.ArtifactColor[MAX_CAPACITY];
+	public final MatchSettings.ArtifactColor[] slots = new MatchSettings.ArtifactColor[MAX_CAPACITY];
 	
 	// Hardware
 	private final ColorSensor colorSensor;
@@ -111,6 +111,7 @@ public final class SingleWheelTransfer extends Mechanism {
 		// Do not allow intake when we have 3 balls (violation)
 		if (isFull()) {
 			holdEntranceClosed();
+			intake.out();
 		}
 		
 		// Auto-close exit wheel after fire duration
@@ -232,6 +233,11 @@ public final class SingleWheelTransfer extends Mechanism {
 			slots[i] = slots[i - 1];
 		}
 		slots[0] = MatchSettings.ArtifactColor.UNKNOWN;
+	}
+	
+	public boolean canFire() {
+		// simply say if a ball is in firing position and nothing is pending
+		return slots[2] != MatchSettings.ArtifactColor.UNKNOWN && !transferWheelRunning && (pendingShifts == 0);
 	}
 	
 	/**
@@ -387,7 +393,6 @@ public final class SingleWheelTransfer extends Mechanism {
 	 */
 	private void holdEntranceClosed() {
 		entranceWheel.setPower(ENTRANCE_WHEEL_HOLD_POWER);
-		intake.stop();
 		entranceWheelOpen = false;
 	}
 	
@@ -471,7 +476,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	 */
 	public void prepareToLaunch() {
 		// Find the closest ball from exit (largest index with a ball)
-		for (int i = slots.length - 1; i > 0; i--) {
+		for (int i = slots.length - 1; i >= 0; i--) {
 			if (slots[i] != MatchSettings.ArtifactColor.UNKNOWN) {
 				moveSlotToKicker(i);
 				return;

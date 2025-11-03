@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.autonomous.actions;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_FIRE_DURATION_MS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_FIRE_RESET_MS;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
@@ -39,13 +39,14 @@ public class LaunchAction implements AutonomousAction {
 		if (hasLauncher) {
 			HorizontalLauncher launcher = mechanisms.get(HorizontalLauncher.class);
 			launcher.ready();
+			lastFireTimeMs = System.currentTimeMillis();
 		}
 	}
 	
 	@Override
 	public boolean execute(MechanismManager mechanisms) {
-		// If no transfer, we can't launch anything
-		if (!hasTransfer) {
+		// If no parts, we can't launch anything
+		if (!hasTransfer || !hasLauncher) {
 			return true;
 		}
 		
@@ -60,11 +61,7 @@ public class LaunchAction implements AutonomousAction {
 		// State machine for sequential ball firing
 		switch (state) {
 			case READY_TO_LAUNCH:
-				// Check if launcher is ready to fire
-				boolean launcherReady = !hasLauncher || (launcher != null && launcher.okayToLaunch());
-				if (launcherReady) {
-					state = State.ADVANCING_BALL;
-				}
+				state = State.ADVANCING_BALL;
 				break;
 			
 			case ADVANCING_BALL:
@@ -74,48 +71,18 @@ public class LaunchAction implements AutonomousAction {
 					break;
 				}
 				
-				// Find the next ball needed and advance it to the kicker
-				MatchSettings.ArtifactColor nextNeeded = mechanisms.matchSettings.nextArtifactNeeded();
-				
-				// If we don't know what we need, just advance whatever is there
-				if (nextNeeded == MatchSettings.ArtifactColor.UNKNOWN) {
-					// Just fire whatever is at the kicker or advance the first ball
-					if (transfer.getNextBallToKicker() == MatchSettings.ArtifactColor.UNKNOWN) {
-						// Nothing at kicker, advance first ball
-						transfer.advance();
-					}
+				if (System.currentTimeMillis() - lastFireTimeMs > EXIT_FIRE_DURATION_MS + EXIT_FIRE_RESET_MS) {
+					transfer.prepareToLaunch();
 					state = State.WAITING_TO_FIRE;
-					break;
 				}
-				
-				// Look for the needed ball in the transfer
-				int ballIndex = transfer.indexOf(nextNeeded);
-				if (ballIndex >= 0) {
-					// Found the ball, move it to kicker
-					transfer.moveSlotToKicker(ballIndex);
-				} else {
-					// Don't have the needed ball, fire whatever we have
-					if (transfer.getNextBallToKicker() == MatchSettings.ArtifactColor.UNKNOWN) {
-						transfer.advance();
-					}
-				}
-				state = State.WAITING_TO_FIRE;
 				break;
 			
 			case WAITING_TO_FIRE:
-				// Wait for wheel to stop running and cooldown period
-				long now = System.currentTimeMillis();
-				boolean wheelStopped = !transfer.isTransferWheelRunning();
-				boolean cooldownPassed = (now - lastFireTimeMs) > EXIT_FIRE_DURATION_MS;
-				
-				if (wheelStopped && cooldownPassed) {
-					// Ball should be at kicker now, check if there's something to fire
-					if (transfer.getNextBallToKicker() != MatchSettings.ArtifactColor.UNKNOWN) {
-						state = State.FIRING;
-					} else {
-						// Nothing to fire, we must be empty
-						state = State.COMPLETE;
-					}
+				if (transfer.canFire()) {
+					state = State.FIRING;
+				}
+				if (transfer.isEmpty()) {
+					state = State.COMPLETE;
 				}
 				break;
 			

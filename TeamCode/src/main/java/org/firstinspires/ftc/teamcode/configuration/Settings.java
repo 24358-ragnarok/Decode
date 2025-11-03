@@ -22,7 +22,7 @@ public class Settings {
 	public static class Controls {
 		public static final EnumMap<Controller.Action, Controller.Control> actionControlMap = new EnumMap<>(
 				Controller.Action.class);
-		
+
 		static {
 			// Main Controller (Driver)
 			actionControlMap.put(Controller.Action.MOVE_Y, Controller.Control.LEFT_STICK_Y);
@@ -41,7 +41,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.CANCEL_ASSISTED_DRIVING, Controller.Control.RIGHT_STICK_BUTTON);
 			actionControlMap.put(Controller.Action.RESET_FOLLOWER, Controller.Control.BACK);
 			actionControlMap.put(Controller.Action.TOGGLE_CENTRICITY, Controller.Control.LEFT_STICK_BUTTON);
-			
+
 			// Secondary Controller (Operator)
 			actionControlMap.put(Controller.Action.AIM, Controller.Control.LEFT_TRIGGER);
 			actionControlMap.put(Controller.Action.LAUNCH, Controller.Control.RIGHT_TRIGGER);
@@ -168,7 +168,8 @@ public class Settings {
 		// Exit wheel settings (at kicker position)
 		public static final double EXIT_KICK_POSITION = 0.0; // Launch
 		public static final double EXIT_LOCK_POSITION = 1.0; // Closed
-		public static final long EXIT_FIRE_DURATION_MS = 500; // How long it needs to fire
+		public static final long EXIT_FIRE_DURATION_MS = 250; // How long it needs to fire
+		public static final long EXIT_FIRE_RESET_MS = 250; // How long it needs to reset kicker to locker
 		
 		// Automatic advance settings
 		public static final boolean AUTO_ADVANCE_ENABLED = false; // Enable automatic ball advancement
@@ -342,6 +343,12 @@ public class Settings {
 		public static Pose CLOSE_LAUNCH_ZONE_LEFT_CORNER = new Pose(15, 128);
 		public static Pose CLOSE_LAUNCH_ZONE_RIGHT_CORNER = new Pose(129, 128);
 		
+		// TeleOp position poses (BLUE alliance reference - will be mirrored for RED)
+		// These are used for goto commands during driver control
+		public static Pose BLUE_CLOSE_SHOOT = new Pose(60, 89, Math.toRadians(115));
+		public static Pose BLUE_FAR_SHOOT = new Pose(60, 15, Math.toRadians(115));
+		public static Pose BLUE_HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
+		public static Pose BLUE_GATE = new Pose(25, 68, Math.toRadians(0));
 	}
 	
 	/**
@@ -371,9 +378,12 @@ public class Settings {
 		// Poses for the FAR side of the field, BLUE alliance TODO (REFERENCE - tune
 		// these!)
 		public static class BlueFar {
-			public static Pose START = new Pose(65.533, 12.244, Math.toRadians(135));
-			public static Pose PRESET_1_PREP = new Pose(35.526, 28.455, Math.toRadians(180));
-			public static Pose PRESET_1_END = new Pose(18.453, 28.628, Math.toRadians(180));
+			public static Pose START = new Pose(60.0, 7.65, Math.toRadians(90));
+			public static Pose INITIAL_LAUNCH = Field.BLUE_FAR_SHOOT; // Move to far shoot position
+			public static Pose PRESET_1_PREP = new Pose(42.5, 35, Math.toRadians(180));
+			public static Pose PRESET_1_GRAB_1 = new Pose(35.0, 35, Math.toRadians(180));
+			public static Pose PRESET_1_GRAB_2 = new Pose(27.0, 35, Math.toRadians(180));
+			public static Pose PRESET_1_END = new Pose(22, 35, Math.toRadians(180));
 			public static BezierCurve BEZIER_LAUNCH_1 = new BezierCurve(
 					new Pose(18.453, 28.628),
 					new Pose(64.671, 44.493),
@@ -382,10 +392,12 @@ public class Settings {
 			public static Pose ENDING_LAUNCH_1 = new Pose(63.808, 69.499, Math.toRadians(130));
 			
 			public static Pose PRESET_2_PREP = new Pose(38.802, 54.668, Math.toRadians(180));
+			public static Pose PRESET_2_GRAB_1 = new Pose(32.802, 54.668, Math.toRadians(180));
+			public static Pose PRESET_2_GRAB_2 = new Pose(26.802, 54.668, Math.toRadians(180));
 			public static Pose PRESET_2_END = new Pose(18.970, 54.496, Math.toRadians(180));
-			public static Pose LAUNCH_2 = new Pose(52, 80, Math.toRadians(135));
+			public static Pose LAUNCH_2 = Field.BLUE_CLOSE_SHOOT;
 			public static Pose PRESET_3_END = new Pose(19.143, 80.019, Math.toRadians(180));
-			public static Pose SCORE_3 = new Pose(40.354, 92.091, Math.toRadians(125));
+			public static Pose SCORE_3 = Field.BLUE_CLOSE_SHOOT;
 			public static Pose PARK = new Pose(40.354, 92.091, Math.toRadians(125));
 		}
 		

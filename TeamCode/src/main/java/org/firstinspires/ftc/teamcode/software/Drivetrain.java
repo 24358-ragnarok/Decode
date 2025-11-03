@@ -8,6 +8,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.Mechanism;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -22,18 +23,19 @@ import java.util.Map;
 public class Drivetrain extends Mechanism {
 	public final Follower follower;
 	// Define field-centric poses for autonomous targets.
-	// TODO: Tune these coordinates for your actual field and alliance.
+	// Automatically mirrored for RED alliance.
 	private final Map<Position, Pose> positionPoses = new HashMap<>();
 	public boolean robotCentric = true;
 	private State state;
-	
+
 	/**
 	 * Initializes the Drivetrain and the PedroPathing Follower.
 	 * <p>
 	 * Note: Starting pose should be set by the OpMode (MainAuto or MainOp),
 	 * not in this constructor.
 	 *
-	 * @param hardwareMap The robot's hardware map.
+	 * @param hardwareMap   The robot's hardware map.
+	 * @param matchSettings The match settings (contains alliance color)
 	 */
 	public Drivetrain(HardwareMap hardwareMap, MatchSettings matchSettings) {
 		// The Constants class now holds all hardware and tuning configurations.
@@ -41,10 +43,30 @@ public class Drivetrain extends Mechanism {
 		// Don't set starting pose here - let each OpMode handle it
 		
 		// Initialize the poses for each predefined position
-		positionPoses.put(Position.CLOSE_SHOOT, new Pose(60, 89, Math.toRadians(115)));
-		positionPoses.put(Position.FAR_SHOOT, new Pose(60, 15, Math.toRadians(115)));
-		positionPoses.put(Position.HUMAN_PLAYER, new Pose(30, 30, Math.toRadians(225)));
-		positionPoses.put(Position.GATE, new Pose(25, 68, Math.toRadians(0)));
+		// Use BLUE as reference, mirror for RED alliance
+		boolean isBlue = matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE;
+		
+		positionPoses.put(Position.CLOSE_SHOOT,
+				isBlue ? Settings.Field.BLUE_CLOSE_SHOOT : mirror(Settings.Field.BLUE_CLOSE_SHOOT));
+		positionPoses.put(Position.FAR_SHOOT,
+				isBlue ? Settings.Field.BLUE_FAR_SHOOT : mirror(Settings.Field.BLUE_FAR_SHOOT));
+		positionPoses.put(Position.HUMAN_PLAYER,
+				isBlue ? Settings.Field.BLUE_HUMAN_PLAYER : mirror(Settings.Field.BLUE_HUMAN_PLAYER));
+		positionPoses.put(Position.GATE,
+				isBlue ? Settings.Field.BLUE_GATE : mirror(Settings.Field.BLUE_GATE));
+	}
+	
+	/**
+	 * Mirrors a pose across the field centerline for red alliance.
+	 * Field width is 144 inches (standard FTC field).
+	 * Takes a BLUE pose and returns the mirrored RED pose.
+	 */
+	private Pose mirror(Pose bluePose) {
+		return new Pose(
+				Settings.Field.WIDTH - bluePose.getX(), // Mirror X coordinate
+				bluePose.getY(), // Y stays the same
+				Math.PI - bluePose.getHeading() // Mirror heading
+		);
 	}
 	
 	@Override
