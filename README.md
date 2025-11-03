@@ -1,4 +1,4 @@
-Code for Decode, the 2025-2026 FTC Season
+# Code for Decode, the 2025-2026 FTC Season
 
 Quick links:
 
