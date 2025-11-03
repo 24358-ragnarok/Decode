@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
-import org.firstinspires.ftc.teamcode.software.AlignmentEngine;
 import org.firstinspires.ftc.teamcode.software.Drivetrain;
 import org.firstinspires.ftc.teamcode.software.LimelightManager;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
@@ -25,7 +24,6 @@ public class MechanismManager {
 	// Optional non-mechanism helpers
 	public final LimelightManager limelightManager;
 	public final TrajectoryEngine trajectoryEngine;
-	public final AlignmentEngine alignmentEngine;
 	public final MatchSettings matchSettings;
 	
 	public MechanismManager(HardwareMap hw, MatchSettings match) {
@@ -37,7 +35,6 @@ public class MechanismManager {
 		SingleWheelTransfer transfer = createTransfer(hw, intake);
 		LimelightManager ll = createLimelight(hw, match);
 		TrajectoryEngine traj = createTrajectory(ll, match);
-		AlignmentEngine align = createAlignment(match, drivetrain);
 		HorizontalLauncher launcher = createLauncher(hw, traj, match);
 		
 		mechanismArray = new Mechanism[]{intake, transfer, launcher};
@@ -45,7 +42,6 @@ public class MechanismManager {
 		// Save helpers
 		limelightManager = ll;
 		trajectoryEngine = traj;
-		alignmentEngine = align;
 	}
 	
 	private FlywheelIntake createIntake(HardwareMap hw) {
@@ -88,16 +84,6 @@ public class MechanismManager {
 			return null;
 		try {
 			return new TrajectoryEngine(ll, match, drivetrain);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-	
-	private AlignmentEngine createAlignment(MatchSettings match, Drivetrain dt) {
-		if (!Settings.Deploy.ALIGNMENT_ENGINE)
-			return null;
-		try {
-			return new AlignmentEngine(match, dt);
 		} catch (Exception e) {
 			return null;
 		}

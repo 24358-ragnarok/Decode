@@ -22,7 +22,13 @@ public class Settings {
 	public static class Controls {
 		public static final EnumMap<Controller.Action, Controller.Control> actionControlMap = new EnumMap<>(
 				Controller.Action.class);
-
+		public static final Controller.Action[] gotoActions = {
+				Controller.Action.GOTO_CLOSE_SHOOT,
+				Controller.Action.GOTO_FAR_SHOOT,
+				Controller.Action.GOTO_HUMAN_PLAYER,
+				Controller.Action.GOTO_GATE
+		};
+		
 		static {
 			// Main Controller (Driver)
 			actionControlMap.put(Controller.Action.MOVE_Y, Controller.Control.LEFT_STICK_Y);

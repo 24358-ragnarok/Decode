@@ -66,6 +66,8 @@ public class MainOp extends OpMode {
 		logging.addDataLazy("X", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getX());
 		logging.addDataLazy("Y", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getY());
 		
+		logging.addData("Alliance", matchSettings.getAllianceColor());
+		
 		for (Mechanism m : mechanisms.mechanismArray) {
 			logging.addData(m.getClass().toString(), "✅");
 		}
@@ -149,14 +151,7 @@ public class MainOp extends OpMode {
 		
 		ifMechanismValid(mechanisms.drivetrain, dt -> dt.manual(drive, strafe, rotate, perspectiveRotation));
 		
-		// Go-to actions
-		Controller.Action[] gotoActions = {
-				Controller.Action.GOTO_CLOSE_SHOOT,
-				Controller.Action.GOTO_FAR_SHOOT,
-				Controller.Action.GOTO_HUMAN_PLAYER,
-				Controller.Action.GOTO_GATE
-		};
-		for (Controller.Action action : gotoActions) {
+		for (Controller.Action action : Settings.Controls.gotoActions) {
 			if (mainController.wasJustPressed(action)
 					&& mainController.getProcessedValue(Controller.Control.START) <= 0.0) {
 				ifMechanismValid(mechanisms.drivetrain,
@@ -174,16 +169,13 @@ public class MainOp extends OpMode {
 		
 		// Alignment & Launcher
 		if (subController.getProcessedValue(Controller.Action.AIM) > 0.1) {
-			mechanisms.alignmentEngine.run();
 			ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::ready);
 		} else {
 			ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::stop);
-			if (subController.wasJustReleased(Controller.Action.AIM)) {
-				mechanisms.drivetrain.switchToManual();
-			}
-			if (subController.wasJustPressed(Controller.Action.AIM)) {
-				ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::prepareToLaunch);
-			}
+		}
+		
+		if (subController.wasJustPressed(Controller.Action.AIM)) {
+			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::prepareToLaunch);
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
@@ -201,19 +193,6 @@ public class MainOp extends OpMode {
 		if (subController.getProcessedValue(Controller.Action.OVERRIDE_SPINUP) > 0.0) {
 			ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::spinUp);
 		}
-		
-		ifMechanismValid(mechanisms.get(FlywheelIntake.class),
-				fwi -> {
-					logging.addLine("Intake valid");
-				});
-		
-		// Debug telemetry for aiming system
-		logging.addLine("=== AIM DEBUG ===");
-		logging.addData("Aim Button", subController.getProcessedValue(Controller.Action.AIM) > 0.1);
-		logging.addData("In Launch Zone", mechanisms.alignmentEngine.isInLaunchZone(mechanisms.drivetrain.getPose()));
-		logging.addData("Alliance", matchSettings.getAllianceColor());
-		logging.addData("Target Tag ID",
-				matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE ? 20 : 24);
 		
 		// Get aiming solution for debugging
 		ifMechanismValid(mechanisms.get(HorizontalLauncher.class),
@@ -276,9 +255,6 @@ public class MainOp extends OpMode {
 		Pose targetPose = (matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE)
 				? Settings.Field.BLUE_GOAL_POSE
 				: Settings.Field.RED_GOAL_POSE;
-		logging.addDataLazy("angle to goal", "%.2f",
-				() -> Math.toDegrees(mechanisms.alignmentEngine.angleToTarget(
-						mechanisms.drivetrain.getPose(), targetPose)));
 		
 		// Classifier controls
 		if (subController.getProcessedValue(Controller.Action.EMPTY_CLASSIFIER_STATE) > 0)
