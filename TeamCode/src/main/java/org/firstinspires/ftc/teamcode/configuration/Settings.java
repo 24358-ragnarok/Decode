@@ -333,7 +333,7 @@ public class Settings {
 	public static class Field {
 		public static double WIDTH = 144.0; // inches
 		public static double BALL_MASS_KG = .076; // kg
-		public static Pose RESET_POSE = new Pose(72, 72, Math.toRadians(90));
+		public static Pose RESET_POSE = new Pose(22, 126, Math.toRadians(145));
 		public static Pose RED_GOAL_POSE = new Pose(130.0, 130.0, Math.toRadians(225));
 		public static double[] RED_GOAL_AIM_3D = new double[]{RED_GOAL_POSE.getX(), RED_GOAL_POSE.getY(),
 				7 + Aiming.GOAL_HEIGHT_INCHES};
