@@ -476,7 +476,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	 */
 	public void prepareToLaunch() {
 		// Find the closest ball from exit (largest index with a ball)
-		for (int i = slots.length - 1; i > 0; i--) {
+		for (int i = slots.length - 1; i >= 0; i--) {
 			if (slots[i] != MatchSettings.ArtifactColor.UNKNOWN) {
 				moveSlotToKicker(i);
 				return;

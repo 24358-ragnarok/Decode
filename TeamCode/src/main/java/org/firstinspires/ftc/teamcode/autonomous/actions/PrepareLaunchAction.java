@@ -32,7 +32,7 @@ public class PrepareLaunchAction implements AutonomousAction {
 		// Start spinning up launcher if available
 		if (hasLauncher) {
 			HorizontalLauncher launcher = mechanisms.get(HorizontalLauncher.class);
-			launcher.spinUp();
+			launcher.ready();
 		}
 
 		return true;

@@ -11,19 +11,34 @@ import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 public class FollowPathAction implements AutonomousAction {
 	private final PathChain path;
 	private final String name;
+	private final boolean slowly;
 	
-	public FollowPathAction(PathChain path, String name) {
+	public FollowPathAction(PathChain path, String name, boolean slowly) {
 		this.path = path;
 		this.name = name;
+		this.slowly = slowly;
 	}
 	
 	public FollowPathAction(PathChain path) {
-		this(path, "FollowPath");
+		this(path, "FollowPath", false);
 	}
+	
+	public FollowPathAction(PathChain path, boolean slowly) {
+		this(path, "FollowPath", slowly);
+	}
+	
+	public FollowPathAction(PathChain path, String name) {
+		this(path, name, false);
+	}
+	
 	
 	@Override
 	public void initialize(MechanismManager mechanisms) {
-		mechanisms.drivetrain.follower.followPath(path);
+		if (slowly) {
+			mechanisms.drivetrain.follower.followPath(path, 0.20, true);
+		} else {
+			mechanisms.drivetrain.follower.followPath(path);
+		}
 	}
 	
 	@Override

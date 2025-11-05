@@ -40,10 +40,10 @@ public class Settings {
 			actionControlMap.put(Controller.Action.ABS_EAST, Controller.Control.DPAD_RIGHT);
 			actionControlMap.put(Controller.Action.ABS_WEST, Controller.Control.DPAD_LEFT);
 			actionControlMap.put(Controller.Action.ABS_SOUTH, Controller.Control.DPAD_DOWN);
-			actionControlMap.put(Controller.Action.GOTO_CLOSE_SHOOT, Controller.Control.CIRCLE);
-			actionControlMap.put(Controller.Action.GOTO_FAR_SHOOT, Controller.Control.CROSS);
+			actionControlMap.put(Controller.Action.GOTO_CLOSE_SHOOT, Controller.Control.CROSS);
+			actionControlMap.put(Controller.Action.GOTO_FAR_SHOOT, Controller.Control.TRIANGLE);
 			actionControlMap.put(Controller.Action.GOTO_HUMAN_PLAYER, Controller.Control.SQUARE);
-			actionControlMap.put(Controller.Action.GOTO_GATE, Controller.Control.TRIANGLE);
+			actionControlMap.put(Controller.Action.GOTO_GATE, Controller.Control.CIRCLE);
 			actionControlMap.put(Controller.Action.CANCEL_ASSISTED_DRIVING, Controller.Control.RIGHT_STICK_BUTTON);
 			actionControlMap.put(Controller.Action.RESET_FOLLOWER, Controller.Control.BACK);
 			actionControlMap.put(Controller.Action.TOGGLE_CENTRICITY, Controller.Control.LEFT_STICK_BUTTON);
@@ -141,7 +141,7 @@ public class Settings {
 		public static double EXIT_OFFSET = 0.25; // Offset from intake to exit alignment
 		public static double RAPID_FIRE_COOLDOWN_MS = 200;
 		public static long EJECT_EXIT_TIME_MS = 200; // ms for ball to fully leave the spindex after servo opens
-		public static double EXIT_SERVO_CLOSED_POSITION = 1.0;
+		public static double EXIT_SERVO_CLOSED_POSITION = 0.5;
 		public static double EXIT_SERVO_OPEN_POSITION = 0.0;
 		public static double INTAKE_SERVO_CLOSED_POSITION = 1.0;
 		public static double INTAKE_SERVO_OPEN_POSITION = 0.0;
@@ -164,7 +164,7 @@ public class Settings {
 		// Main transfer wheel settings
 		public static final double TRANSFER_WHEEL_FORWARD_POWER = 0.5; // Power when advancing balls
 		public static final double TRANSFER_WHEEL_REVERSE_POWER = -0.5; // Power when reversing
-		public static final long TRANSFER_TIME_MS = 850; // Time to run wheel to move one ball slot
+		public static final long TRANSFER_TIME_MS = 675; // Time to run wheel to move one ball slot
 		
 		// Entrance wheel settings (at color sensor position)
 		public static final double ENTRANCE_WHEEL_INTAKE_POWER = 1.0; // Power when letting balls in
@@ -174,8 +174,8 @@ public class Settings {
 		// Exit wheel settings (at kicker position)
 		public static final double EXIT_KICK_POSITION = 0.0; // Launch
 		public static final double EXIT_LOCK_POSITION = 1.0; // Closed
-		public static final long EXIT_FIRE_DURATION_MS = 250; // How long it needs to fire
-		public static final long EXIT_FIRE_RESET_MS = 250; // How long it needs to reset kicker to locker
+		public static final long EXIT_FIRE_DURATION_MS = 600; // How long it needs to fire
+		public static final long EXIT_FIRE_RESET_MS = 400; // How long it needs to reset kicker to back position
 		
 		// Automatic advance settings
 		public static final boolean AUTO_ADVANCE_ENABLED = false; // Enable automatic ball advancement
@@ -301,8 +301,8 @@ public class Settings {
 		 * Preset launch angles and RPM for each shooting position.
 		 * These values are used when AIM is called based on which position is closer.
 		 */
-		public static double CLOSE_SHOOT_PITCH_DEGREES = 60.0; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 3000.0; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_PITCH_DEGREES = 54.5; // Launch angle from horizontal for close position
+		public static double CLOSE_SHOOT_RPM = 2875.0; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 46.0; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 4000.0; // Wheel RPM for far position
@@ -333,7 +333,7 @@ public class Settings {
 	public static class Field {
 		public static double WIDTH = 144.0; // inches
 		public static double BALL_MASS_KG = .076; // kg
-		public static Pose RESET_POSE = new Pose(72, 72, Math.toRadians(270));
+		public static Pose RESET_POSE = new Pose(72, 72, Math.toRadians(90));
 		public static Pose RED_GOAL_POSE = new Pose(130.0, 130.0, Math.toRadians(225));
 		public static double[] RED_GOAL_AIM_3D = new double[]{RED_GOAL_POSE.getX(), RED_GOAL_POSE.getY(),
 				7 + Aiming.GOAL_HEIGHT_INCHES};
@@ -351,8 +351,8 @@ public class Settings {
 		
 		// TeleOp position poses (BLUE alliance reference - will be mirrored for RED)
 		// These are used for goto commands during driver control
-		public static Pose BLUE_CLOSE_SHOOT = new Pose(60, 89, Math.toRadians(115));
-		public static Pose BLUE_FAR_SHOOT = new Pose(60, 15, Math.toRadians(115));
+		public static Pose BLUE_CLOSE_SHOOT = new Pose(60, 89, Math.toRadians(138));
+		public static Pose BLUE_FAR_SHOOT = new Pose(60, 15, Math.toRadians(112));
 		public static Pose BLUE_HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 		public static Pose BLUE_GATE = new Pose(25, 68, Math.toRadians(0));
 	}
@@ -381,50 +381,50 @@ public class Settings {
 		// RED alliance paths are automatically mirrored by the PathRegistry.
 		// Headings are in radians. 90 degrees = Math.toRadians(90)
 		
-		public static double BALL_INTAKE_WAIT_S = 1.2; // TODO tune
+		public static double BALL_INTAKE_WAIT_S = 0.6;
 		
 		public static class BlueFar {
-			public static Pose START = new Pose(60.0, 7.65, Math.toRadians(90));
+			public static Pose START = new Pose(56.125, 7.65, Math.toRadians(90));
 			public static Pose SHOOT_0 = Field.BLUE_FAR_SHOOT; // Move to far shoot position
 			public static Pose SHOOT_1_2_3 = Field.BLUE_CLOSE_SHOOT; // Move to close shoot position
-			public static Pose PRESET_1_PREP = new Pose(42.5, 35, Math.toRadians(180));
-			public static Pose PRESET_1_GRAB_1 = new Pose(35.0, 35, Math.toRadians(180));
-			public static Pose PRESET_1_GRAB_2 = new Pose(27.0, 35, Math.toRadians(180));
-			public static Pose PRESET_1_END = new Pose(22, 35, Math.toRadians(180));
+			public static Pose PRESET_1_PREP = new Pose(43, 36, Math.toRadians(180));
+			public static Pose PRESET_1_GRAB_1 = new Pose(35.0, 36, Math.toRadians(180));
+			public static Pose PRESET_1_GRAB_2 = new Pose(30.0, 36, Math.toRadians(180));
+			public static Pose PRESET_1_END = new Pose(25, 36, Math.toRadians(180));
 			public static BezierCurve BEZIER_LAUNCH_1 = new BezierCurve(
 					PRESET_1_END,
 					new Pose(67, 45),
 					SHOOT_1_2_3
 			);
 			
-			public static Pose PRESET_2_PREP = new Pose(38.802, 54.668, Math.toRadians(180));
-			public static Pose PRESET_2_GRAB_1 = new Pose(32.802, 54.668, Math.toRadians(180));
-			public static Pose PRESET_2_GRAB_2 = new Pose(26.802, 54.668, Math.toRadians(180));
-			public static Pose PRESET_2_END = new Pose(18.970, 54.496, Math.toRadians(180));
+			public static Pose PRESET_2_PREP = new Pose(42, 60, Math.toRadians(180));
+			public static Pose PRESET_2_GRAB_1 = new Pose(35.0, 60, Math.toRadians(180));
+			public static Pose PRESET_2_GRAB_2 = new Pose(30.0, 60, Math.toRadians(180));
+			public static Pose PRESET_2_END = new Pose(25, 60, Math.toRadians(180));
 			public static BezierCurve BEZIER_LAUNCH_2 = new BezierCurve(
 					PRESET_2_END,
 					new Pose(64, 56),
 					SHOOT_1_2_3
 			);
 			
-			public static Pose PRESET_3_PREP = new Pose(38.802, 54.668, Math.toRadians(180));
-			public static Pose PRESET_3_GRAB_1 = new Pose(32.802, 54.668, Math.toRadians(180));
-			public static Pose PRESET_3_GRAB_2 = new Pose(26.802, 54.668, Math.toRadians(180));
-			public static Pose PRESET_3_END = new Pose(18.970, 54.496, Math.toRadians(180));
+			public static Pose PRESET_3_PREP = new Pose(42, 85, Math.toRadians(180));
+			public static Pose PRESET_3_GRAB_1 = new Pose(35.0, 85, Math.toRadians(180));
+			public static Pose PRESET_3_GRAB_2 = new Pose(30.0, 85, Math.toRadians(180));
+			public static Pose PRESET_3_END = new Pose(25, 85, Math.toRadians(180));
 			public static BezierCurve BEZIER_LAUNCH_3 = new BezierCurve(
 					PRESET_3_END,
 					new Pose(41, 81),
 					SHOOT_1_2_3
 			);
-			public static Pose PARK = new Pose(40.354, 92.091, Math.toRadians(125));
+			public static Pose PARK = PRESET_1_END;
 		}
 		
 		public static class BlueClose {
-			public static Pose START = new Pose(60.0, 84, Math.toRadians(90));
+			public static Pose START = new Pose(22, 126, Math.toRadians(145));
 			public static Pose SHOOT_0_1_2 = Field.BLUE_CLOSE_SHOOT;
 			public static Pose SHOOT_3 = Field.BLUE_FAR_SHOOT;
 			public static Pose PRESET_1_PREP = BlueFar.PRESET_3_PREP;
-			public static Pose PRESET_1_GRAB_1 = BlueFar.PRESET_3_GRAB_2;
+			public static Pose PRESET_1_GRAB_1 = BlueFar.PRESET_3_GRAB_1;
 			public static Pose PRESET_1_GRAB_2 = BlueFar.PRESET_3_GRAB_2;
 			public static Pose PRESET_1_END = BlueFar.PRESET_3_END;
 			public static BezierCurve BEZIER_LAUNCH_1 = new BezierCurve(
@@ -452,7 +452,7 @@ public class Settings {
 					new Pose(52, 37),
 					SHOOT_3
 			);
-			public static Pose PARK = new Pose(63, 20, Math.toRadians(120));
+			public static Pose PARK = PRESET_1_END;
 		}
 	}
 }

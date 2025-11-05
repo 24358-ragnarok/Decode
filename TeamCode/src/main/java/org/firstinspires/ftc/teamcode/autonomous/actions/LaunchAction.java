@@ -39,7 +39,6 @@ public class LaunchAction implements AutonomousAction {
 		if (hasLauncher) {
 			HorizontalLauncher launcher = mechanisms.get(HorizontalLauncher.class);
 			launcher.ready();
-			lastFireTimeMs = System.currentTimeMillis();
 		}
 	}
 	
@@ -65,8 +64,8 @@ public class LaunchAction implements AutonomousAction {
 				break;
 			
 			case ADVANCING_BALL:
-				// Check if transfer is empty
-				if (transfer.isEmpty()) {
+				// Check if transfer is empty and done with previous launch
+				if (transfer.isEmpty() && System.currentTimeMillis() - lastFireTimeMs > EXIT_FIRE_DURATION_MS) {
 					state = State.COMPLETE;
 					break;
 				}

@@ -56,13 +56,12 @@ public class SequenceBuilder {
 				// Get ball set I
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_PREP)
 				.startIntake()
-				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_GRAB_1)
+				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_1_GRAB_1)
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_GRAB_2)
+				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_1_GRAB_2)
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_END)
+				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_1_END)
 				.wait(BALL_INTAKE_WAIT_S)
-				.stopIntake()
 				
 				// Launch ball set I
 				.prepLaunch()
@@ -71,14 +70,12 @@ public class SequenceBuilder {
 				
 				// Get ball set II
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_PREP)
-				.startIntake()
-				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_GRAB_1)
+				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_2_GRAB_1)
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_GRAB_2)
+				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_2_GRAB_2)
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_END)
+				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_2_END)
 				.wait(BALL_INTAKE_WAIT_S)
-				.stopIntake()
 				
 				// Launch ball set II
 				.prepLaunch()
@@ -86,23 +83,24 @@ public class SequenceBuilder {
 				.launch()
 				
 				// Get ball set III
+				/**
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_3_PREP)
-				.startIntake()
-				.followPath(PathRegistry.PathSegment.FAR_PRESET_3_GRAB_1)
+				 .followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_3_GRAB_1)
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPath(PathRegistry.PathSegment.FAR_PRESET_3_GRAB_2)
+				 .followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_3_GRAB_2)
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPath(PathRegistry.PathSegment.FAR_PRESET_3_END)
+				 .followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_3_END)
 				.wait(BALL_INTAKE_WAIT_S)
-				.stopIntake()
 				
 				// Launch ball set III
 				.prepLaunch()
 				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_3)
 				.launch()
+				 */
 				
 				// Park
 				.followPath(PathRegistry.PathSegment.FAR_PARK)
+				.stopIntake()
 				.build();
 	}
 	
@@ -114,18 +112,18 @@ public class SequenceBuilder {
 				// Launch preload
 				.prepLaunch()
 				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_0)
+				.wait(0.5)
 				.launch()
 				
 				// Get ball set I
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_1_PREP)
 				.startIntake()
-				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_1_GRAB_1)
+				.followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_1_GRAB_1)
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_1_GRAB_2)
+				.followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_1_GRAB_2)
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_1_END)
+				.followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_1_END)
 				.wait(BALL_INTAKE_WAIT_S)
-				.stopIntake()
 				
 				// Launch ball set I
 				.prepLaunch()
@@ -134,14 +132,12 @@ public class SequenceBuilder {
 				
 				// Get ball set II
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_2_PREP)
-				.startIntake()
-				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_2_GRAB_1)
+				.followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_2_GRAB_1)
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_2_GRAB_2)
+				.followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_2_GRAB_2)
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_2_END)
+				.followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_2_END)
 				.wait(BALL_INTAKE_WAIT_S)
-				.stopIntake()
 				
 				// Launch ball set II
 				.prepLaunch()
@@ -149,23 +145,24 @@ public class SequenceBuilder {
 				.launch()
 				
 				// Get ball set III
+				/**
 				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_PREP)
-				.startIntake()
-				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_1)
+				 .followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_1)
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_2)
+				 .followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_2)
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_END)
+				 .followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_3_END)
 				.wait(BALL_INTAKE_WAIT_S)
-				.stopIntake()
 				
 				// Launch ball set III
 				.prepLaunch()
 				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_3)
 				.launch()
+				 */
 				
 				// Park
 				.followPath(PathRegistry.PathSegment.CLOSE_PARK)
+				.stopIntake()
 				.build();
 	}
 	
@@ -178,6 +175,12 @@ public class SequenceBuilder {
 	public SequenceBuilder followPath(PathRegistry.PathSegment segment) {
 		PathChain path = pathRegistry.getPath(segment);
 		sequence.addAction(new FollowPathAction(path, segment.name()));
+		return this;
+	}
+	
+	public SequenceBuilder followPathSlowly(PathRegistry.PathSegment segment) {
+		PathChain path = pathRegistry.getPath(segment);
+		sequence.addAction(new FollowPathAction(path, segment.name(), true));
 		return this;
 	}
 	

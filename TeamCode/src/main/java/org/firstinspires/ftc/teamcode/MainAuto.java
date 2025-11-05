@@ -96,7 +96,7 @@ public class MainAuto extends OpMode {
 		ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), swt -> {
 			swt.slots[0] = MatchSettings.ArtifactColor.PURPLE;
 			swt.slots[1] = MatchSettings.ArtifactColor.PURPLE;
-			swt.slots[2] = MatchSettings.ArtifactColor.PURPLE;
+			swt.slots[2] = MatchSettings.ArtifactColor.GREEN;
 		});
 		
 		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getAutonomousStartingPose());

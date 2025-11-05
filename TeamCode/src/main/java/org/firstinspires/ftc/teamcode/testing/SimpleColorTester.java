@@ -4,6 +4,7 @@ import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.ColorSensor;
 
@@ -30,5 +31,6 @@ public class SimpleColorTester extends OpMode {
 		telemetry.addData("detected", wrapper.getArtifactColor());
 		telemetry.addData("distance to green", wrapper.computeDistance(sensed, Settings.ColorSensor.GREEN_TARGET));
 		telemetry.addData("distance to purple", wrapper.computeDistance(sensed, Settings.ColorSensor.PURPLE_TARGET));
+		telemetry.addData("physical distance inches", colorSensorV3.getDistance(DistanceUnit.INCH));
 	}
 }

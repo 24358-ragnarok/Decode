@@ -155,8 +155,8 @@ public class HorizontalLauncher extends Mechanism {
 	 * controlled separately to actually fire balls.
 	 */
 	public void ready() {
-		spinUp();
 		aim();
+		spinUp();
 	}
 	
 	public void spinUp() {
@@ -171,8 +171,8 @@ public class HorizontalLauncher extends Mechanism {
 	 * Use this in loops when the transfer is being controlled separately.
 	 */
 	public void maintainReady() {
-		spinUp(); // spinUp() is safe to call repeatedly - it checks internally
 		aim();
+		spinUp(); // spinUp() is safe to call repeatedly - it checks internally
 	}
 	
 	public void stop() {
