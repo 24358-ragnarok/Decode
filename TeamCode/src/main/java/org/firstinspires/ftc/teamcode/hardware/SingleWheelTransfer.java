@@ -111,7 +111,7 @@ public final class SingleWheelTransfer extends Mechanism {
 		// Do not allow intake when we have 3 balls (violation)
 		if (isFull()) {
 			holdEntranceClosed();
-			intake.out();
+			intake.stop();
 		}
 		
 		// Auto-close exit wheel after fire duration
