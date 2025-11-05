@@ -16,6 +16,8 @@ import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 
+import java.util.Arrays;
+
 /**
  * The main Autonomous script that makes the robot move by itself during the
  * Auto period of a match.
@@ -93,10 +95,8 @@ public class MainAuto extends OpMode {
 		// Initialize all mechanisms
 		mechanisms.start();
 		
-		ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), swt -> {
-			swt.slots[0] = MatchSettings.ArtifactColor.PURPLE;
-			swt.slots[1] = MatchSettings.ArtifactColor.PURPLE;
-			swt.slots[2] = MatchSettings.ArtifactColor.GREEN;
+		ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
+			Arrays.fill(transfer.slots, MatchSettings.ArtifactColor.PURPLE);
 		});
 		
 		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getAutonomousStartingPose());

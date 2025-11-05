@@ -59,10 +59,10 @@ public final class SingleWheelTransfer extends Mechanism {
 	private final CRServo entranceWheel; // CR wheel at color sensor that lets balls in
 	private final Servo exitWheel; // CR wheel at kicker that fires balls out
 	private final FlywheelIntake intake;
-	
+
 	// Detection gating
 	private long lastDetectTimeMs = 0;
-	
+
 	// Transfer wheel timing and scheduled shifts
 	private boolean transferWheelRunning = false;
 	private long transferWheelEndTimeMs = 0;
@@ -386,6 +386,15 @@ public final class SingleWheelTransfer extends Mechanism {
 		intake.in();
 		entranceWheelOpen = true;
 		entranceOpenStartTimeMs = System.currentTimeMillis();
+	}
+	
+	/**
+	 * Force open the entrance wheel for intake operations.
+	 * This is a public method for override actions and testing.
+	 * The wheel will automatically close after ENTRANCE_OPEN_DURATION_MS.
+	 */
+	public void forceOpenEntrance() {
+		openEntrance();
 	}
 	
 	/**

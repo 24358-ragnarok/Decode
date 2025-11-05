@@ -7,10 +7,13 @@ import com.pedropathing.paths.PathChain;
 import org.firstinspires.ftc.teamcode.autonomous.actions.FollowPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.IntakeAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LaunchAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.OverrideIntakeIn;
+import org.firstinspires.ftc.teamcode.autonomous.actions.OverrideTransferState;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ParallelAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PrepareLaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.StopIntakeAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.WaitAction;
+import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 
 /**
  * Fluent builder for creating autonomous sequences.
@@ -29,10 +32,10 @@ import org.firstinspires.ftc.teamcode.autonomous.actions.WaitAction;
  * </pre>
  */
 public class SequenceBuilder {
-	
+
 	private final AutonomousSequence sequence;
 	private final PathRegistry pathRegistry;
-	
+
 	/**
 	 * Creates a new sequence builder.
 	 *
@@ -42,7 +45,7 @@ public class SequenceBuilder {
 		this.sequence = new AutonomousSequence();
 		this.pathRegistry = pathRegistry;
 	}
-	
+
 	/**
 	 * Static factory method to create Far position sequences.
 	 */
@@ -52,20 +55,24 @@ public class SequenceBuilder {
 				.prepLaunch()
 				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_0)
 				.launch()
-				
+
 				// Get ball set I
 				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_PREP)
 				.startIntake()
 				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_1_GRAB_1)
 				.wait(BALL_INTAKE_WAIT_S)
+				.overrideIntakeIn()
 				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_1_GRAB_2)
 				.wait(BALL_INTAKE_WAIT_S)
+				.overrideIntakeIn()
 				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_1_END)
 				.wait(BALL_INTAKE_WAIT_S)
-				
+				.overrideIntakeIn()
+
 				// Launch ball set I
 				.prepLaunch()
 				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_1)
+				.overrideTransferStateFull()
 				.launch()
 				
 				// Get ball set II
@@ -80,22 +87,23 @@ public class SequenceBuilder {
 				// Launch ball set II
 				.prepLaunch()
 				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_2)
+				.overrideTransferStateFull()
 				.launch()
 				
 				// Get ball set III
 				/**
-				.followPath(PathRegistry.PathSegment.FAR_PRESET_3_PREP)
-				 .followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_3_GRAB_1)
-				.wait(BALL_INTAKE_WAIT_S)
-				 .followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_3_GRAB_2)
-				.wait(BALL_INTAKE_WAIT_S)
-				 .followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_3_END)
-				.wait(BALL_INTAKE_WAIT_S)
-				
-				// Launch ball set III
-				.prepLaunch()
-				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_3)
-				.launch()
+				 * .followPath(PathRegistry.PathSegment.FAR_PRESET_3_PREP)
+				 * .followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_3_GRAB_1)
+				 * .wait(BALL_INTAKE_WAIT_S)
+				 * .followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_3_GRAB_2)
+				 * .wait(BALL_INTAKE_WAIT_S)
+				 * .followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_3_END)
+				 * .wait(BALL_INTAKE_WAIT_S)
+				 *
+				 * // Launch ball set III
+				 * .prepLaunch()
+				 * .followPath(PathRegistry.PathSegment.FAR_LAUNCH_3)
+				 * .launch()
 				 */
 				
 				// Park
@@ -146,18 +154,18 @@ public class SequenceBuilder {
 				
 				// Get ball set III
 				/**
-				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_PREP)
-				 .followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_1)
-				.wait(BALL_INTAKE_WAIT_S)
-				 .followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_2)
-				.wait(BALL_INTAKE_WAIT_S)
-				 .followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_3_END)
-				.wait(BALL_INTAKE_WAIT_S)
-				
-				// Launch ball set III
-				.prepLaunch()
-				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_3)
-				.launch()
+				 * .followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_PREP)
+				 * .followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_1)
+				 * .wait(BALL_INTAKE_WAIT_S)
+				 * .followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_2)
+				 * .wait(BALL_INTAKE_WAIT_S)
+				 * .followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_3_END)
+				 * .wait(BALL_INTAKE_WAIT_S)
+				 *
+				 * // Launch ball set III
+				 * .prepLaunch()
+				 * .followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_3)
+				 * .launch()
 				 */
 				
 				// Park
@@ -252,7 +260,6 @@ public class SequenceBuilder {
 		return this;
 	}
 	
-	
 	/**
 	 * Convenience method: Complete intake cycle (prep -> intake -> stop).
 	 * Represents going to a sample, picking it up, and returning.
@@ -280,6 +287,44 @@ public class SequenceBuilder {
 		return this
 				.launch()
 				.followPath(nextSegment);
+	}
+	
+	/**
+	 * Adds an override action to force all transfer slots to be full with the
+	 * specified color.
+	 * Useful for testing and debugging autonomous sequences.
+	 *
+	 * @param artifactColor The color to fill all slots with
+	 * @return this (for method chaining)
+	 */
+	public SequenceBuilder overrideTransferState(MatchSettings.ArtifactColor artifactColor) {
+		sequence.addAction(new OverrideTransferState(artifactColor));
+		return this;
+	}
+	
+	/**
+	 * Adds an override action to force all transfer slots to be full with PURPLE
+	 * artifacts.
+	 * This is a convenience method for the most common test case.
+	 *
+	 * @return this (for method chaining)
+	 */
+	public SequenceBuilder overrideTransferStateFull() {
+		sequence.addAction(new OverrideTransferState());
+		return this;
+	}
+	
+	
+	/**
+	 * Adds an override action to force both intake motor and transfer entrance
+	 * wheel to start.
+	 * Leaves intake running when complete
+	 *
+	 * @return this (for method chaining)
+	 */
+	public SequenceBuilder overrideIntakeIn() {
+		sequence.addAction(new OverrideIntakeIn());
+		return this;
 	}
 	
 	/**
