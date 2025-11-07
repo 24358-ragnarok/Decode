@@ -139,7 +139,6 @@ public class MainOp extends OpMode {
 		}
 		
 		mechanisms.stop();
-		blackboard.clear(); // do not save match settings in between matches
 	}
 	
 	/**
@@ -193,7 +192,7 @@ public class MainOp extends OpMode {
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.AIM)) {
-			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::prepareToLaunch);
+			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::moveNextBallToKicker);
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.LAUNCH)) {

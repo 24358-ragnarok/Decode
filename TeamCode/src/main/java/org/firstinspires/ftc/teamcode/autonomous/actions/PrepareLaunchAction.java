@@ -26,7 +26,7 @@ public class PrepareLaunchAction implements AutonomousAction {
 		// Prepare transfer if available
 		if (hasTransfer) {
 			SingleWheelTransfer transfer = mechanisms.get(SingleWheelTransfer.class);
-			transfer.prepareToLaunch();
+			transfer.moveNextBallToKicker();
 		}
 		
 		// Start spinning up launcher if available

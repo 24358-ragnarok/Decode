@@ -111,6 +111,7 @@ public final class SingleWheelTransfer extends Mechanism {
 		// Auto-close exit wheel after fire duration
 		if (exitWheelFiring && now - exitFireStartTimeMs > EXIT_FIRE_DURATION_MS) {
 			holdExitClosed();
+			moveNextBallToKicker();
 		}
 		
 		// Handle transfer wheel run completion and perform scheduled shifts
@@ -477,7 +478,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	 * Rotate the transfer wheel to bring the closest ball (closest to launch)
 	 * to the launch position (exit). If no ball is present, no action is taken.
 	 */
-	public void prepareToLaunch() {
+	public void moveNextBallToKicker() {
 		// Find the closest ball from exit (largest index with a ball)
 		for (int i = slots.length - 1; i >= 0; i--) {
 			if (slots[i] != MatchSettings.ArtifactColor.UNKNOWN) {
