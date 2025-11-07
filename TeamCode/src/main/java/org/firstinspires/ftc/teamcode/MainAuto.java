@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import static org.firstinspires.ftc.teamcode.MainOp.ifMechanismValid;
 
 import com.bylazar.telemetry.PanelsTelemetry;
+import com.pedropathing.geometry.Pose;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -44,7 +45,7 @@ public class MainAuto extends OpMode {
 	// The new optimal structure
 	private PathRegistry pathRegistry;
 	private AutonomousSequence autonomousSequence;
-	
+
 	/**
 	 * Runs when INIT is pressed on the driver station.
 	 */
@@ -146,6 +147,16 @@ public class MainAuto extends OpMode {
 	 */
 	@Override
 	public void stop() {
+		// Store the actual robot pose for TeleOp to use as starting position
+		if (mechanisms != null && mechanisms.drivetrain.follower != null) {
+			Pose finalPose = mechanisms.drivetrain.follower.getPose();
+			matchSettings.setStoredPose(finalPose);
+			
+			// Log the stored pose for debugging
+			logging.addData("STORED POSE", finalPose);
+			logging.update();
+		}
+		
 		if (autonomousSequence != null) {
 			autonomousSequence.stop(mechanisms);
 		}

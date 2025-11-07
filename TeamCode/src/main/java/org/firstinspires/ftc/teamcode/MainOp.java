@@ -59,20 +59,29 @@ public class MainOp extends OpMode {
 		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower, matchSettings);
 		subController = new Controller(gamepad2, mechanisms.drivetrain.follower, matchSettings);
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
-		
+
 		// Set up lazy evaluation for frequently-accessed but expensive operations
 		// These are only evaluated when telemetry is actually transmitted
 		logging.addDataLazy("Heading°", () -> Math.toDegrees(mechanisms.drivetrain.follower.getHeading()));
 		logging.addDataLazy("X", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getX());
 		logging.addDataLazy("Y", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getY());
-		
+
 		logging.addData("Alliance", matchSettings.getAllianceColor());
+		
+		// Show whether we're using stored pose or fallback
+		Pose storedPose = matchSettings.getStoredPose();
+		if (storedPose != null) {
+			logging.addData("Starting Pose Source", "STORED FROM PREVIOUS");
+			logging.addData("Stored Pose", storedPose);
+		} else {
+			logging.addData("Starting Pose Source", "FALLBACK/PREDEFINED");
+		}
 		
 		for (Mechanism m : mechanisms.mechanismArray) {
 			logging.addData(m.getClass().toString(), "✅");
 		}
 		logging.update();
-		
+
 		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getTeleOpStartingPose());
 		mechanisms.drivetrain.switchToManual();
 	}
@@ -94,6 +103,7 @@ public class MainOp extends OpMode {
 		// Initialize mechanisms and start teleop drive
 		ifMechanismValid(mechanisms, MechanismManager::start);
 		mechanisms.drivetrain.follower.startTeleopDrive(); // or pass in true to enable braking
+		matchSettings.clearStoredPose();
 		logging.enableRetainedMode();
 	}
 	
@@ -123,6 +133,11 @@ public class MainOp extends OpMode {
 	 */
 	@Override
 	public final void stop() {
+		// Store the actual robot pose for future reference or debugging
+		if (mechanisms != null && mechanisms.drivetrain != null && mechanisms.drivetrain.follower != null) {
+			matchSettings.setStoredPose(mechanisms.drivetrain.follower.getPose());
+		}
+		
 		mechanisms.stop();
 		blackboard.clear(); // do not save match settings in between matches
 	}
@@ -155,8 +170,10 @@ public class MainOp extends OpMode {
 		ifMechanismValid(mechanisms.drivetrain, dt -> dt.manual(drive, strafe, rotate, perspectiveRotation));
 		
 		for (Controller.Action action : Settings.Controls.gotoActions) {
-			Pose gotopose = mechanisms.drivetrain.getPositionPose(Drivetrain.Position.valueOf(action.name().substring("GOTO_".length())));
-			if (mainController.wasJustPressed(action) && mainController.getProcessedValue(Controller.Control.START) <= 0.0) {
+			Pose gotopose = mechanisms.drivetrain
+					.getPositionPose(Drivetrain.Position.valueOf(action.name().substring("GOTO_".length())));
+			if (mainController.wasJustPressed(action)
+					&& mainController.getProcessedValue(Controller.Control.START) <= 0.0) {
 				ifMechanismValid(mechanisms.drivetrain,
 						dt -> dt.goTo(gotopose));
 			} else if (mainController.wasJustReleased(action)) {
@@ -189,7 +206,7 @@ public class MainOp extends OpMode {
 		if (subController.wasJustPressed(Controller.Action.OVERRIDE_BALL_DETECTION)) {
 			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), swt -> {
 				swt.clearAllSlots();
-				swt.onBallDetected(MatchSettings.ArtifactColor.PURPLE);
+				swt.openEntrance();
 			});
 		}
 		

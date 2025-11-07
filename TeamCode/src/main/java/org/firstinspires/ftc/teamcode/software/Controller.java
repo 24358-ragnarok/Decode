@@ -124,8 +124,18 @@ public class Controller extends Gamepad {
 		return val;
 	}
 	
+	/**
+	 * See above for function. getProcessedValue of an ACTION applies action-based processing to the processed input value.
+	 *
+	 * @param action The action to process
+	 * @return processed action value
+	 */
 	public final double getProcessedValue(Action action) {
-		return getProcessedValue(getControlForAction(action));
+		double val = getProcessedValue(getControlForAction(action));
+		if (action == Action.ROTATE_LEFT || action == Action.ROTATE_RIGHT) {
+			val /= 3;
+		}
+		return val;
 	}
 	
 	/**

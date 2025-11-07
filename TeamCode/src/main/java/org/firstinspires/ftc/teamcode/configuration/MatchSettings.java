@@ -19,12 +19,13 @@ public class MatchSettings {
 	private static final String MOTIF_KEY = "motif";
 	private static final String AUTO_KEY = "autoStartingPosition";
 	private static final String ALLIANCE_COLOR_KEY = "allianceColor";
+	private static final String STORED_POSE_KEY = "storedPose";
 	private final HashMap<String, Object> blackboard;
-	
+
 	public MatchSettings(HashMap<String, Object> blackboard) {
 		this.blackboard = blackboard;
 	}
-	
+
 	/**
 	 * Returns an array of ArtifactColor representing the sequence for the given
 	 * Motif.
@@ -58,18 +59,18 @@ public class MatchSettings {
 		}
 		return colors;
 	}
-	
+
 	public AllianceColor getAllianceColor() {
 		String color = (String) blackboard.get(ALLIANCE_COLOR_KEY);
 		return Objects.equals(color, "red") ? AllianceColor.RED : AllianceColor.BLUE;
 	}
-	
+
 	public void setAllianceColor(AllianceColor color) {
 		if (color != null) {
 			blackboard.put(ALLIANCE_COLOR_KEY, color.name().toLowerCase());
 		}
 	}
-	
+
 	/**
 	 * Gets the Autonomous starting position for the robot based on the match
 	 * settings.
@@ -96,22 +97,28 @@ public class MatchSettings {
 	}
 	
 	/**
-	 * Gets the TeleOp starting position for the robot based on the end of the
-	 * Autonomous period.
+	 * Gets the TeleOp starting position for the robot based on the actual stored
+	 * pose
+	 * from the previous OpMode (typically Autonomous).
 	 * <p>
-	 * Uses BLUE poses as reference and mirrors for RED alliance.
+	 * If no actual pose was stored, falls back to predefined poses or reset
+	 * position.
 	 *
 	 * @return A Pose of the starting position
 	 */
 	public Pose getTeleOpStartingPose() {
-		// If either of these values are unset, Auto has not yet been run,
-		// so we have nothing to base starting position on. Instead, assume the robot is
-		// on the center of the field,
-		// our designated resetting position during testing.
+		// First, try to get the actual stored pose
+		Pose actualPose = getStoredPose();
+		if (actualPose != null) {
+			return actualPose;
+		}
+		
+		// If no actual pose was stored, check if Auto has been configured at all
 		if (blackboard.get(ALLIANCE_COLOR_KEY) == null || blackboard.get(AUTO_KEY) == null) {
 			return Settings.Field.RESET_POSE;
 		}
 		
+		// Fall back to predefined poses if actual pose is unavailable
 		AllianceColor allianceColor = getAllianceColor();
 		AutoStartingPosition startingPosition = getAutoStartingPosition();
 		
@@ -226,6 +233,37 @@ public class MatchSettings {
 		}
 		
 		return nextThree;
+	}
+	
+	/**
+	 * Retrieves the stored robot pose from the previous OpMode.
+	 *
+	 * @return The stored pose, or null if no pose was stored
+	 */
+	public Pose getStoredPose() {
+		double[] poseArray = (double[]) blackboard.get(STORED_POSE_KEY);
+		if (poseArray != null && poseArray.length == 3) {
+			return new Pose(poseArray[0], poseArray[1], poseArray[2]);
+		}
+		return null;
+	}
+	
+	/**
+	 * Stores the actual robot pose for use by subsequent OpModes.
+	 * This pose will be used as the starting position for the next OpMode.
+	 *
+	 * @param pose The actual robot pose to store
+	 */
+	public void setStoredPose(Pose pose) {
+		if (pose != null) {
+			// Store pose as array: [x, y, heading]
+			double[] poseArray = {pose.getX(), pose.getY(), pose.getHeading()};
+			blackboard.put(STORED_POSE_KEY, poseArray);
+		}
+	}
+	
+	public void clearStoredPose() {
+		blackboard.remove(STORED_POSE_KEY);
 	}
 	
 	/**

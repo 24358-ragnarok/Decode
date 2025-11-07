@@ -375,7 +375,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	 * Open the entrance wheel to let balls in.
 	 * The wheel will automatically close after ENTRANCE_OPEN_DURATION_MS.
 	 */
-	private void openEntrance() {
+	public void openEntrance() {
 		entranceWheel.setPower(ENTRANCE_WHEEL_INTAKE_POWER);
 		intake.in();
 		entranceWheelOpen = true;
