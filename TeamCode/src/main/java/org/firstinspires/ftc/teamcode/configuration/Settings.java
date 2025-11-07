@@ -302,7 +302,7 @@ public class Settings {
 		 * These values are used when AIM is called based on which position is closer.
 		 */
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 54.5; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2875.0; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_RPM = 2850.0; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 46.0; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 4000.0; // Wheel RPM for far position
@@ -333,7 +333,7 @@ public class Settings {
 	public static class Field {
 		public static double WIDTH = 144.0; // inches
 		public static double BALL_MASS_KG = .076; // kg
-		public static Pose RESET_POSE = new Pose(22, 126, Math.toRadians(145));
+		public static Pose RESET_POSE = new Pose(72, 72, Math.toRadians(90));
 		public static Pose RED_GOAL_POSE = new Pose(130.0, 130.0, Math.toRadians(225));
 		public static double[] RED_GOAL_AIM_3D = new double[]{RED_GOAL_POSE.getX(), RED_GOAL_POSE.getY(),
 				7 + Aiming.GOAL_HEIGHT_INCHES};
@@ -381,24 +381,24 @@ public class Settings {
 		// RED alliance paths are automatically mirrored by the PathRegistry.
 		// Headings are in radians. 90 degrees = Math.toRadians(90)
 		
-		public static double BALL_INTAKE_WAIT_S = 0.6;
+		public static double BALL_INTAKE_WAIT_S = 0.4;
 		
 		public static class BlueFar {
-			public static Pose START = new Pose(56.125, 7.65, Math.toRadians(90));
+			public static Pose START = new Pose(55.75, 7.65, Math.toRadians(90));
 			public static Pose SHOOT_0 = Field.BLUE_FAR_SHOOT; // Move to far shoot position
 			public static Pose SHOOT_1_2_3 = Field.BLUE_CLOSE_SHOOT; // Move to close shoot position
-			public static Pose PRESET_1_PREP = new Pose(43, 36, Math.toRadians(180));
-			public static Pose PRESET_1_GRAB_1 = new Pose(35.0, 36, Math.toRadians(180));
-			public static Pose PRESET_1_GRAB_2 = new Pose(30.0, 36, Math.toRadians(180));
-			public static Pose PRESET_1_END = new Pose(25, 36, Math.toRadians(180));
+			public static Pose PRESET_1_PREP = new Pose(40, 35, Math.toRadians(180));
+			public static Pose PRESET_1_GRAB_1 = new Pose(36.0, 35, Math.toRadians(180));
+			public static Pose PRESET_1_GRAB_2 = new Pose(30.0, 35, Math.toRadians(180));
+			public static Pose PRESET_1_END = new Pose(25, 35, Math.toRadians(180));
 			public static BezierCurve BEZIER_LAUNCH_1 = new BezierCurve(
 					PRESET_1_END,
 					new Pose(67, 45),
 					SHOOT_1_2_3
 			);
 			
-			public static Pose PRESET_2_PREP = new Pose(42, 60, Math.toRadians(180));
-			public static Pose PRESET_2_GRAB_1 = new Pose(35.0, 60, Math.toRadians(180));
+			public static Pose PRESET_2_PREP = new Pose(40, 60, Math.toRadians(180));
+			public static Pose PRESET_2_GRAB_1 = new Pose(36.0, 60, Math.toRadians(180));
 			public static Pose PRESET_2_GRAB_2 = new Pose(30.0, 60, Math.toRadians(180));
 			public static Pose PRESET_2_END = new Pose(25, 60, Math.toRadians(180));
 			public static BezierCurve BEZIER_LAUNCH_2 = new BezierCurve(
@@ -407,10 +407,10 @@ public class Settings {
 					SHOOT_1_2_3
 			);
 			
-			public static Pose PRESET_3_PREP = new Pose(42, 85, Math.toRadians(180));
-			public static Pose PRESET_3_GRAB_1 = new Pose(35.0, 85, Math.toRadians(180));
-			public static Pose PRESET_3_GRAB_2 = new Pose(30.0, 85, Math.toRadians(180));
-			public static Pose PRESET_3_END = new Pose(25, 85, Math.toRadians(180));
+			public static Pose PRESET_3_PREP = new Pose(42, 86, Math.toRadians(180));
+			public static Pose PRESET_3_GRAB_1 = new Pose(35.0, 86, Math.toRadians(180));
+			public static Pose PRESET_3_GRAB_2 = new Pose(30.0, 86, Math.toRadians(180));
+			public static Pose PRESET_3_END = new Pose(25, 86, Math.toRadians(180));
 			public static BezierCurve BEZIER_LAUNCH_3 = new BezierCurve(
 					PRESET_3_END,
 					new Pose(41, 81),

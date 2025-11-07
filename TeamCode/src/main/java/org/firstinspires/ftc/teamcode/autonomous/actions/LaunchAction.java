@@ -52,6 +52,10 @@ public class LaunchAction implements AutonomousAction {
 		HorizontalLauncher launcher = mechanisms.get(HorizontalLauncher.class);
 		SingleWheelTransfer transfer = mechanisms.get(SingleWheelTransfer.class);
 		
+		if (transfer.isEmpty() && state == State.READY_TO_LAUNCH) {
+			state = State.COMPLETE; // nothing to fire initially, just quit
+		}
+		
 		// Maintain launcher ready state (spin-up and aim)
 		if (hasLauncher && launcher != null) {
 			launcher.maintainReady();
@@ -98,8 +102,12 @@ public class LaunchAction implements AutonomousAction {
 				break;
 		}
 		
-		// Complete when transfer is empty or we're in COMPLETE state
-		return transfer.isEmpty() || state == State.COMPLETE;
+		if (state == State.COMPLETE) {
+			launcher.stop();
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	@Override
@@ -116,7 +124,7 @@ public class LaunchAction implements AutonomousAction {
 	
 	@Override
 	public String getName() {
-		return "Launch";
+		return "Launch, " + state.toString();
 	}
 	
 	private enum State {

@@ -83,6 +83,7 @@ public class MainOp extends OpMode {
 	@Override
 	public final void init_loop() {
 		logging.drawDebug(mechanisms.drivetrain.follower);
+		logging.update();
 	}
 	
 	/**
@@ -154,14 +155,12 @@ public class MainOp extends OpMode {
 		ifMechanismValid(mechanisms.drivetrain, dt -> dt.manual(drive, strafe, rotate, perspectiveRotation));
 		
 		for (Controller.Action action : Settings.Controls.gotoActions) {
-			if (mainController.wasJustPressed(action)
-					&& mainController.getProcessedValue(Controller.Control.START) <= 0.0) {
+			Pose gotopose = mechanisms.drivetrain.getPositionPose(Drivetrain.Position.valueOf(action.name().substring("GOTO_".length())));
+			if (mainController.wasJustPressed(action) && mainController.getProcessedValue(Controller.Control.START) <= 0.0) {
 				ifMechanismValid(mechanisms.drivetrain,
-						dt -> dt.goTo(Drivetrain.Position.valueOf(action.name().substring("GOTO_".length()))));
-				break;
-			}
-			if (mainController.getProcessedValue(action) > 0) {
-				logging.addData("goto", action);
+						dt -> dt.goTo(gotopose));
+			} else if (mainController.wasJustReleased(action)) {
+				mechanisms.drivetrain.switchToManual();
 			}
 		}
 		
@@ -189,6 +188,7 @@ public class MainOp extends OpMode {
 		}
 		if (subController.wasJustPressed(Controller.Action.OVERRIDE_BALL_DETECTION)) {
 			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), swt -> {
+				swt.clearAllSlots();
 				swt.onBallDetected(MatchSettings.ArtifactColor.PURPLE);
 			});
 		}

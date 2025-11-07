@@ -87,6 +87,7 @@ public class Tuning extends SelectableOpMode {
 	
 	public static void draw() {
 		Drawing.drawDebug(follower);
+		Drawing.update();
 	}
 	
 	/**
@@ -185,7 +186,7 @@ class LocalizationTest extends OpMode {
  * @version 1.0, 5/6/2024
  */
 class ForwardTuner extends OpMode {
-	public static double DISTANCE = 48;
+	public static double DISTANCE = 100;
 	
 	@Override
 	public void init() {
@@ -234,7 +235,7 @@ class ForwardTuner extends OpMode {
  * @version 2.0, 6/26/2025
  */
 class LateralTuner extends OpMode {
-	public static double DISTANCE = 48;
+	public static double DISTANCE = 100;
 	
 	@Override
 	public void init() {
@@ -335,7 +336,7 @@ class TurnTuner extends OpMode {
  * @version 1.0, 3/13/2024
  */
 class ForwardVelocityTuner extends OpMode {
-	public static double DISTANCE = 48;
+	public static double DISTANCE = 100;
 	public static double RECORD_NUMBER = 10;
 	private final ArrayList<Double> velocities = new ArrayList<>();
 	private boolean end;
@@ -444,7 +445,7 @@ class ForwardVelocityTuner extends OpMode {
  * @version 1.0, 3/13/2024
  */
 class LateralVelocityTuner extends OpMode {
-	public static double DISTANCE = 48;
+	public static double DISTANCE = 100;
 	public static double RECORD_NUMBER = 10;
 	private final ArrayList<Double> velocities = new ArrayList<>();
 	private boolean end;
@@ -545,7 +546,7 @@ class LateralVelocityTuner extends OpMode {
  * @version 1.0, 3/13/2024
  */
 class ForwardZeroPowerAccelerationTuner extends OpMode {
-	private static final double VELOCITY = 50;
+	private static final double VELOCITY = 60;
 	
 	private final ArrayList<Double> accelerations = new ArrayList<>();
 	public double previousVelocity;
@@ -654,7 +655,7 @@ class ForwardZeroPowerAccelerationTuner extends OpMode {
  * @version 1.0, 3/13/2024
  */
 class LateralZeroPowerAccelerationTuner extends OpMode {
-	private static final double VELOCITY = 40;
+	private static final double VELOCITY = 48;
 	private final ArrayList<Double> accelerations = new ArrayList<>();
 	public double previousVelocity;
 	private long previousTimeNano;

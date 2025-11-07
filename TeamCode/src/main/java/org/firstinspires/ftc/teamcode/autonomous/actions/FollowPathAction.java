@@ -35,7 +35,7 @@ public class FollowPathAction implements AutonomousAction {
 	@Override
 	public void initialize(MechanismManager mechanisms) {
 		if (slowly) {
-			mechanisms.drivetrain.follower.followPath(path, 0.20, true);
+			mechanisms.drivetrain.follower.followPath(path, 0.23, true);
 		} else {
 			mechanisms.drivetrain.follower.followPath(path);
 		}

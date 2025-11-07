@@ -29,18 +29,18 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
  */
 public class Constants {
 	public static final FollowerConstants followerConstants = new FollowerConstants()
-			.mass(10.5)
+			.mass(11.0)
 			.forwardZeroPowerAcceleration(-36.0)
 			.lateralZeroPowerAcceleration(-57.0)
 			
-			.translationalPIDFCoefficients(new PIDFCoefficients(0.06, 0, 0.007, 0.075))
-			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.01, 0.03))
+			.translationalPIDFCoefficients(new PIDFCoefficients(0.15, 0, 0.01, 0.075))
+			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.15, 0, 0.015, 0.03))
 			
-			.headingPIDFCoefficients(new PIDFCoefficients(1.1, 0, 0.05, 0.06))
-			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.8, 0, 0.07, 0.03))
+			.headingPIDFCoefficients(new PIDFCoefficients(1.3, 0, 0.02, 0.055))
+			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.6, 0, 0.05, 0.03))
 			
-			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.01, 0, 0.00035, 0.6, 0.015))
-			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.02, 0, 0.000005, 0.6, 0.01))
+			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.5, 0, 0.001, 0.6, 0.15))
+			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.2, 0, 0.0003, 0.6, 0.05))
 			
 			.useSecondaryDrivePIDF(true)
 			.useSecondaryHeadingPIDF(true)
@@ -56,11 +56,11 @@ public class Constants {
 			.leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
 			.rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
 			.rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-			.xVelocity(53.2).yVelocity(43.3);
+			.xVelocity(64.0).yVelocity(52);
 	
 	public static PinpointConstants localizerConstants = new PinpointConstants()
 			.forwardPodY(6)
-			.strafePodX(-5.5)
+			.strafePodX(-6)
 			.distanceUnit(DistanceUnit.INCH)
 			.hardwareMapName(Settings.HardwareIDs.PINPOINT)
 			.encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
@@ -86,7 +86,7 @@ public class Constants {
 			0.01,
 			0.001,
 			50,
-			2,
+			1,
 			10,
 			1
 	);

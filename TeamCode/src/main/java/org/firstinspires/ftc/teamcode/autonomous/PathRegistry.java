@@ -196,8 +196,10 @@ public class PathRegistry {
 				}
 			
 			case FAR_PARK:
-				Pose park = isBlue ? Settings.Autonomous.BlueFar.PARK : mirror(Settings.Autonomous.BlueFar.PARK);
-				return buildLinearPath(park, park);
+				return buildLinearPath(
+						isBlue ? Settings.Autonomous.BlueFar.SHOOT_1_2_3 : mirror(Settings.Autonomous.BlueFar.SHOOT_1_2_3),
+						isBlue ? Settings.Autonomous.BlueFar.PARK
+								: mirror(Settings.Autonomous.BlueFar.PARK));
 			
 			default:
 				throw new IllegalArgumentException("Invalid far path segment: " + segment);

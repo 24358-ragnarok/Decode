@@ -203,7 +203,7 @@ public final class SingleWheelTransfer extends Mechanism {
 		// We can shift forward only if the exit slot is not occupied.
 		if (isFull()) {
 			// Exit slot is full, cannot shift forward, cannot take in new ball
-			return; // Transfer is full
+			holdEntranceClosed(); // Transfer is full
 		}
 		
 		// If there's already a pending ball waiting for a shift, we can't queue another

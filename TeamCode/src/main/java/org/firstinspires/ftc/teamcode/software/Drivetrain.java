@@ -84,12 +84,6 @@ public class Drivetrain extends Mechanism {
 	 */
 	public void update() {
 		follower.update();
-		
-		// When an automated movement (GOTO) is finished,
-		// automatically switch back to manual control.
-		if ((state == State.PATHING) && !follower.isBusy()) {
-			switchToManual();
-		}
 	}
 	
 	@Override
@@ -158,12 +152,16 @@ public class Drivetrain extends Mechanism {
 	 * @param targetPose The absolute target pose.
 	 */
 	public void goTo(Pose targetPose) {
+		if (follower.isBusy() && follower.getCurrentPath().endPose() == targetPose) {
+			return;
+		}
+		
 		this.state = State.PATHING;
 		PathChain path = follower.pathBuilder()
 				.addPath(new Path(new BezierLine(follower::getPose, targetPose)))
 				.setLinearHeadingInterpolation(follower.getHeading(), targetPose.getHeading())
 				.build();
-		follower.followPath(path);
+		follower.holdPoint(targetPose);
 	}
 	
 	public void rotateTo(double angle) {
