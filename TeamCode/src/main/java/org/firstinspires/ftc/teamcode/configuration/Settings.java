@@ -25,7 +25,7 @@ public class Settings {
 		public static final Controller.Action[] gotoActions = {
 				Controller.Action.GOTO_CLOSE_SHOOT,
 				Controller.Action.GOTO_FAR_SHOOT,
-				Controller.Action.GOTO_HUMAN_PLAYER,
+				Controller.Action.GOTO_PARK,
 				Controller.Action.GOTO_GATE
 		};
 		
@@ -42,7 +42,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.ABS_SOUTH, Controller.Control.DPAD_DOWN);
 			actionControlMap.put(Controller.Action.GOTO_CLOSE_SHOOT, Controller.Control.CROSS);
 			actionControlMap.put(Controller.Action.GOTO_FAR_SHOOT, Controller.Control.TRIANGLE);
-			actionControlMap.put(Controller.Action.GOTO_HUMAN_PLAYER, Controller.Control.SQUARE);
+			actionControlMap.put(Controller.Action.GOTO_PARK, Controller.Control.SQUARE);
 			actionControlMap.put(Controller.Action.GOTO_GATE, Controller.Control.CIRCLE);
 			actionControlMap.put(Controller.Action.CANCEL_ASSISTED_DRIVING, Controller.Control.RIGHT_STICK_BUTTON);
 			actionControlMap.put(Controller.Action.RESET_FOLLOWER, Controller.Control.BACK);
@@ -54,6 +54,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.LAUNCHER_STEEPNESS_AXIS, Controller.Control.RIGHT_STICK_Y);
 			actionControlMap.put(Controller.Action.LAUNCHER_ROTATION_AXIS, Controller.Control.RIGHT_STICK_X);
 			actionControlMap.put(Controller.Action.INTAKE_IN, Controller.Control.SQUARE);
+			actionControlMap.put(Controller.Action.INTAKE_STOP, Controller.Control.CIRCLE);
 			actionControlMap.put(Controller.Action.INTAKE_OUT, Controller.Control.CROSS);
 			actionControlMap.put(Controller.Action.OVERRIDE_ADVANCE, Controller.Control.DPAD_UP);
 			actionControlMap.put(Controller.Action.OVERRIDE_BALL_DETECTION, Controller.Control.DPAD_DOWN);
@@ -355,6 +356,7 @@ public class Settings {
 		public static Pose BLUE_FAR_SHOOT = new Pose(60, 15, Math.toRadians(112));
 		public static Pose BLUE_HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 		public static Pose BLUE_GATE = new Pose(25, 68, Math.toRadians(0));
+		public static Pose BLUE_TELEOP_PARK = new Pose(105, 33, Math.toRadians(0));
 	}
 	
 	/**
@@ -384,7 +386,7 @@ public class Settings {
 		public static double BALL_INTAKE_WAIT_S = 0.4;
 		
 		public static class BlueFar {
-			public static Pose START = new Pose(55.75, 7.65, Math.toRadians(90));
+			public static Pose START = new Pose(56.25, 7.65, Math.toRadians(90));
 			public static Pose SHOOT_0 = Field.BLUE_FAR_SHOOT; // Move to far shoot position
 			public static Pose SHOOT_1_2_3 = Field.BLUE_CLOSE_SHOOT; // Move to close shoot position
 			public static Pose PRESET_1_PREP = new Pose(40, 35, Math.toRadians(180));

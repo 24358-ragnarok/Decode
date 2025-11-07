@@ -37,7 +37,7 @@ public class FollowPathAction implements AutonomousAction {
 		if (slowly) {
 			mechanisms.drivetrain.follower.followPath(path, 0.23, true);
 		} else {
-			mechanisms.drivetrain.follower.followPath(path);
+			mechanisms.drivetrain.follower.followPath(path, true);
 		}
 	}
 	

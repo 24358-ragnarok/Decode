@@ -192,9 +192,6 @@ public class MainOp extends OpMode {
 				swt.onBallDetected(MatchSettings.ArtifactColor.PURPLE);
 			});
 		}
-		if (subController.getProcessedValue(Controller.Action.OVERRIDE_SPINUP) > 0.0) {
-			ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::spinUp);
-		}
 		
 		// Get aiming solution for debugging
 		ifMechanismValid(mechanisms.get(HorizontalLauncher.class),
@@ -217,11 +214,15 @@ public class MainOp extends OpMode {
 		
 		// Intake & Transfer
 		if (subController.wasJustPressed(Controller.Action.INTAKE_IN)) {
-			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::toggleIn);
+			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::in);
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.INTAKE_OUT)) {
-			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::toggleOut);
+			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::out);
+		}
+		
+		if (subController.wasJustPressed(Controller.Action.INTAKE_STOP)) {
+			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::stop);
 		}
 		
 		// Transfer telemetry

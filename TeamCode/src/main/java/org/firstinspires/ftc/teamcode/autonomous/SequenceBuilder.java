@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.B
 
 import com.pedropathing.paths.PathChain;
 
+import org.firstinspires.ftc.teamcode.autonomous.actions.EndAtAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.FollowPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.IntakeAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LaunchAction;
@@ -71,6 +72,7 @@ public class SequenceBuilder {
 				// Launch ball set I
 				.prepLaunch()
 				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_1)
+				.wait(0.25)
 				.launch()
 				
 				// Get ball set II
@@ -87,6 +89,7 @@ public class SequenceBuilder {
 				// Launch ball set II
 				.prepLaunch()
 				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_2)
+				.wait(0.25)
 				.launch()
 				
 				// Get ball set III
@@ -106,8 +109,9 @@ public class SequenceBuilder {
 				 */
 				
 				// Park
-				.followPath(PathRegistry.PathSegment.FAR_PARK)
 				.stopIntake()
+				.followPath(PathRegistry.PathSegment.FAR_PARK)
+				.endAt(PathRegistry.PathSegment.FAR_PARK)
 				.build();
 	}
 	
@@ -136,6 +140,7 @@ public class SequenceBuilder {
 				// Launch ball set I
 				.prepLaunch()
 				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_1)
+				.wait(0.25)
 				.launch()
 				
 				// Get ball set II
@@ -152,6 +157,7 @@ public class SequenceBuilder {
 				// Launch ball set II
 				.prepLaunch()
 				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_2)
+				.wait(0.25)
 				.launch()
 				
 				// Get ball set III
@@ -171,8 +177,9 @@ public class SequenceBuilder {
 				 */
 				
 				// Park
-				.followPath(PathRegistry.PathSegment.CLOSE_PARK)
 				.stopIntake()
+				.followPath(PathRegistry.PathSegment.CLOSE_PARK)
+				.endAt(PathRegistry.PathSegment.CLOSE_PARK)
 				.build();
 	}
 	
@@ -185,6 +192,12 @@ public class SequenceBuilder {
 	public SequenceBuilder followPath(PathRegistry.PathSegment segment) {
 		PathChain path = pathRegistry.getPath(segment);
 		sequence.addAction(new FollowPathAction(path, segment.name()));
+		return this;
+	}
+	
+	public SequenceBuilder endAt(PathRegistry.PathSegment segment) {
+		PathChain path = pathRegistry.getPath(segment);
+		sequence.addAction(new EndAtAction(path.endPose()));
 		return this;
 	}
 	

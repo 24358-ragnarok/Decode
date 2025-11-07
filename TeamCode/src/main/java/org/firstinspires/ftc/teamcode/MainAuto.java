@@ -32,7 +32,7 @@ import java.util.Arrays;
  * The old state machine approach (600+ lines, lots of duplication) has been
  * replaced with a clean, maintainable structure (~150 lines).
  */
-@Autonomous(name = "Main Auto", group = ".Competition Modes")
+@Autonomous(name = "Main Auto", group = ".Competition Modes", preselectTeleOp = "MainOp")
 public class MainAuto extends OpMode {
 
 	private Timer opmodeTimer;

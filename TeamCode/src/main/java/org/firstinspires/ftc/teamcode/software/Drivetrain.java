@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.software;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -50,8 +48,8 @@ public class Drivetrain extends Mechanism {
 				isBlue ? Settings.Field.BLUE_CLOSE_SHOOT : mirror(Settings.Field.BLUE_CLOSE_SHOOT));
 		positionPoses.put(Position.FAR_SHOOT,
 				isBlue ? Settings.Field.BLUE_FAR_SHOOT : mirror(Settings.Field.BLUE_FAR_SHOOT));
-		positionPoses.put(Position.HUMAN_PLAYER,
-				isBlue ? Settings.Field.BLUE_HUMAN_PLAYER : mirror(Settings.Field.BLUE_HUMAN_PLAYER));
+		positionPoses.put(Position.PARK,
+				isBlue ? Settings.Field.BLUE_TELEOP_PARK : mirror(Settings.Field.BLUE_TELEOP_PARK));
 		positionPoses.put(Position.GATE,
 				isBlue ? Settings.Field.BLUE_GATE : mirror(Settings.Field.BLUE_GATE));
 	}
@@ -157,10 +155,6 @@ public class Drivetrain extends Mechanism {
 		}
 		
 		this.state = State.PATHING;
-		PathChain path = follower.pathBuilder()
-				.addPath(new Path(new BezierLine(follower::getPose, targetPose)))
-				.setLinearHeadingInterpolation(follower.getHeading(), targetPose.getHeading())
-				.build();
 		follower.holdPoint(targetPose);
 	}
 	
@@ -218,7 +212,7 @@ public class Drivetrain extends Mechanism {
 	public enum Position {
 		CLOSE_SHOOT,
 		FAR_SHOOT,
-		HUMAN_PLAYER,
+		PARK,
 		GATE,
 	}
 	
