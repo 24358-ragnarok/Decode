@@ -36,10 +36,10 @@ public class Settings {
 			actionControlMap.put(Controller.Action.ROTATE_AXIS, Controller.Control.RIGHT_STICK_X);
 			actionControlMap.put(Controller.Action.ROTATE_LEFT, Controller.Control.LEFT_BUMPER);
 			actionControlMap.put(Controller.Action.ROTATE_RIGHT, Controller.Control.RIGHT_BUMPER);
-			actionControlMap.put(Controller.Action.ABS_NORTH, Controller.Control.DPAD_UP);
-			actionControlMap.put(Controller.Action.ABS_EAST, Controller.Control.DPAD_RIGHT);
-			actionControlMap.put(Controller.Action.ABS_WEST, Controller.Control.DPAD_LEFT);
-			actionControlMap.put(Controller.Action.ABS_SOUTH, Controller.Control.DPAD_DOWN);
+			actionControlMap.put(Controller.Action.SLOW_FORWARD, Controller.Control.DPAD_UP);
+			actionControlMap.put(Controller.Action.SLOW_LEFT, Controller.Control.DPAD_RIGHT);
+			actionControlMap.put(Controller.Action.SLOW_RIGHT, Controller.Control.DPAD_LEFT);
+			actionControlMap.put(Controller.Action.SLOW_BACKWARD, Controller.Control.DPAD_DOWN);
 			actionControlMap.put(Controller.Action.GOTO_CLOSE_SHOOT, Controller.Control.CROSS);
 			actionControlMap.put(Controller.Action.GOTO_FAR_SHOOT, Controller.Control.TRIANGLE);
 			actionControlMap.put(Controller.Action.GOTO_PARK, Controller.Control.SQUARE);
@@ -66,36 +66,6 @@ public class Settings {
 	}
 	
 	/**
-	 * Settings related to the robot's drivetrain and movement.
-	 */
-	@Configurable
-	public static class Drive {
-		// Multiplier applied to strafe movements to compensate for mechanical
-		// differences
-		public static final double STRAFE_POWER_COEFFICIENT = 1.2;
-	}
-	
-	/**
-	 * Parameters for assisted driving and alignment behaviors.
-	 */
-	@Configurable
-	public static class Alignment {
-		// Translational control
-		public static double MAX_TRANSLATIONAL_SPEED = 0.5; // Max drive/strafe speed when far from target (0..1)
-		public static double FULL_SPEED_DISTANCE = 30.0; // Distance (inches) outside of which translational speed hits
-		// max
-		public static double STOP_DISTANCE = 1.0; // Distance (inches) inside which translational speed tapers to near
-		// zero
-		
-		// Rotational control
-		public static double MAX_ROTATION_SPEED = 0.5; // Max rotation speed (0..1)
-		public static double FULL_SPEED_HEADING_ERROR = Math.toRadians(90); // Heading error (radians) at which rotation
-		// is full speed
-		public static double HEADING_DEADBAND = Math.toRadians(2.5); // Deadband: don't rotate if error below this
-		// (radians)
-	}
-	
-	/**
 	 * Hardware device name mapping.
 	 */
 	@Configurable
@@ -105,7 +75,7 @@ public class Settings {
 		public static final String FRONT_RIGHT_MOTOR = "frontRight";
 		public static final String REAR_LEFT_MOTOR = "rearLeft";
 		public static final String REAR_RIGHT_MOTOR = "rearRight";
-		public static final String PINPOINT = "pinpoint"; // Assuming this is a drive motor or odometry pod
+		public static final String PINPOINT = "pinpoint";
 		
 		// Subsystem motors and servos
 		public static final String INTAKE_MOTOR = "intakeMotor";
@@ -129,7 +99,7 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Intake {
-		public static double SPEED = -0.8;
+		public static double SPEED = -1.0;
 	}
 	
 	/**
@@ -159,28 +129,28 @@ public class Settings {
 	 */
 	public static class Transfer {
 		// Detection settings
-		public static final double BLIND_WINDOW_MS = 2000.0; // Time after detection to ignore new detections
+		public static final double BLIND_WINDOW_MS = 750; // Time after detection to ignore new detections
 		public static final int MAX_CAPACITY = 3; // Number of ball slots
 		
 		// Main transfer wheel settings
-		public static final double TRANSFER_WHEEL_FORWARD_POWER = 0.5; // Power when advancing balls
-		public static final double TRANSFER_WHEEL_REVERSE_POWER = -0.5; // Power when reversing
-		public static final long TRANSFER_TIME_MS = 675; // Time to run wheel to move one ball slot
+		public static final double TRANSFER_WHEEL_FORWARD_POWER = 1.0; // Power when advancing balls
+		public static final double TRANSFER_WHEEL_REVERSE_POWER = -1.0; // Power when reversing
+		public static final long TRANSFER_TIME_MS = 550; // Time to run wheel to move one ball slot
 		
 		// Entrance wheel settings (at color sensor position)
 		public static final double ENTRANCE_WHEEL_INTAKE_POWER = 1.0; // Power when letting balls in
 		public static final double ENTRANCE_WHEEL_HOLD_POWER = 0.0; // No reverse to hold closed
-		public static final long ENTRANCE_OPEN_DURATION_MS = 1250; // How long to open entrance when intaking
+		public static final long ENTRANCE_OPEN_DURATION_MS = 750; // How long to open entrance when intaking
 		
 		// Exit wheel settings (at kicker position)
-		public static final double EXIT_KICK_POSITION = 0.0; // Launch
+		public static final double EXIT_KICK_POSITION = 0.4; // Launch
 		public static final double EXIT_LOCK_POSITION = 1.0; // Closed
-		public static final long EXIT_FIRE_DURATION_MS = 600; // How long it needs to fire
-		public static final long EXIT_FIRE_RESET_MS = 400; // How long it needs to reset kicker to back position
+		public static final long EXIT_FIRE_DURATION_MS = 300; // How long it needs to fire
+		public static final long EXIT_FIRE_RESET_MS = 300; // How long it needs to reset kicker to back position
 		
 		// Automatic advance settings
-		public static final boolean AUTO_ADVANCE_ENABLED = false; // Enable automatic ball advancement
-		public static final long AUTO_ADVANCE_GRACE_PERIOD_MS = 300; // Wait time after detection before auto-advancing
+		public static final boolean AUTO_ADVANCE_ENABLED = true; // Enable automatic ball advancement
+		public static final long AUTO_ADVANCE_GRACE_PERIOD_MS = 100; // Wait time after detection before auto-advancing
 	}
 	
 	/**
@@ -206,7 +176,7 @@ public class Settings {
 	@Configurable
 	public static class Launcher {
 		public static long BELT_SPINUP_TIME_MS = 650;
-		public static double BELT_SYNC_KP = 0.05; // Proportional gain for synchronizing belt speeds
+		public static double BELT_SYNC_KP = 0.1; // Proportional gain for synchronizing belt speeds
 		// Pitch servo calibration (physical limits)
 		public static double PITCH_SERVO_AT_MIN = 0.692; // Servo position at minimum pitch angle
 		public static double PITCH_SERVO_AT_MAX = 0.415; // Servo position at maximum pitch angle
@@ -302,11 +272,11 @@ public class Settings {
 		 * Preset launch angles and RPM for each shooting position.
 		 * These values are used when AIM is called based on which position is closer.
 		 */
-		public static double CLOSE_SHOOT_PITCH_DEGREES = 54.5; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2850.0; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_PITCH_DEGREES = 54.0; // Launch angle from horizontal for close position
+		public static double CLOSE_SHOOT_RPM = 2600.0; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 46.0; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 4000.0; // Wheel RPM for far position
+		public static double FAR_SHOOT_PITCH_DEGREES = 45.5; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 3500.0; // Wheel RPM for far position
 		
 		/**
 		 * Alignment tolerances.
@@ -352,11 +322,11 @@ public class Settings {
 		
 		// TeleOp position poses (BLUE alliance reference - will be mirrored for RED)
 		// These are used for goto commands during driver control
-		public static Pose BLUE_CLOSE_SHOOT = new Pose(60, 89, Math.toRadians(138));
-		public static Pose BLUE_FAR_SHOOT = new Pose(60, 15, Math.toRadians(112));
+		public static Pose BLUE_CLOSE_SHOOT = new Pose(58, 86, Math.toRadians(135));
+		public static Pose BLUE_FAR_SHOOT = new Pose(60, 15, Math.toRadians(115));
 		public static Pose BLUE_HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 		public static Pose BLUE_GATE = new Pose(25, 68, Math.toRadians(0));
-		public static Pose BLUE_TELEOP_PARK = new Pose(105, 33, Math.toRadians(0));
+		public static Pose BLUE_TELEOP_PARK = new Pose(104, 32, Math.toRadians(0));
 	}
 	
 	/**
@@ -386,13 +356,13 @@ public class Settings {
 		public static double BALL_INTAKE_WAIT_S = 0.4;
 		
 		public static class BlueFar {
-			public static Pose START = new Pose(56.25, 7.65, Math.toRadians(90));
+			public static Pose START = new Pose(56.25, 7.0, Math.toRadians(90));
 			public static Pose SHOOT_0 = Field.BLUE_FAR_SHOOT; // Move to far shoot position
 			public static Pose SHOOT_1_2_3 = Field.BLUE_CLOSE_SHOOT; // Move to close shoot position
-			public static Pose PRESET_1_PREP = new Pose(40, 35, Math.toRadians(180));
-			public static Pose PRESET_1_GRAB_1 = new Pose(36.0, 35, Math.toRadians(180));
-			public static Pose PRESET_1_GRAB_2 = new Pose(30.0, 35, Math.toRadians(180));
-			public static Pose PRESET_1_END = new Pose(25, 35, Math.toRadians(180));
+			public static Pose PRESET_1_PREP = new Pose(40, 34, Math.toRadians(180));
+			public static Pose PRESET_1_GRAB_1 = new Pose(36.0, 34, Math.toRadians(180));
+			public static Pose PRESET_1_GRAB_2 = new Pose(30.0, 34, Math.toRadians(180));
+			public static Pose PRESET_1_END = new Pose(20, 34, Math.toRadians(180));
 			public static BezierCurve BEZIER_LAUNCH_1 = new BezierCurve(
 					PRESET_1_END,
 					new Pose(67, 45),
@@ -402,7 +372,7 @@ public class Settings {
 			public static Pose PRESET_2_PREP = new Pose(40, 60, Math.toRadians(180));
 			public static Pose PRESET_2_GRAB_1 = new Pose(36.0, 60, Math.toRadians(180));
 			public static Pose PRESET_2_GRAB_2 = new Pose(30.0, 60, Math.toRadians(180));
-			public static Pose PRESET_2_END = new Pose(25, 60, Math.toRadians(180));
+			public static Pose PRESET_2_END = new Pose(20, 60, Math.toRadians(180));
 			public static BezierCurve BEZIER_LAUNCH_2 = new BezierCurve(
 					PRESET_2_END,
 					new Pose(64, 56),
@@ -412,7 +382,7 @@ public class Settings {
 			public static Pose PRESET_3_PREP = new Pose(42, 86, Math.toRadians(180));
 			public static Pose PRESET_3_GRAB_1 = new Pose(35.0, 86, Math.toRadians(180));
 			public static Pose PRESET_3_GRAB_2 = new Pose(30.0, 86, Math.toRadians(180));
-			public static Pose PRESET_3_END = new Pose(25, 86, Math.toRadians(180));
+			public static Pose PRESET_3_END = new Pose(20, 86, Math.toRadians(180));
 			public static BezierCurve BEZIER_LAUNCH_3 = new BezierCurve(
 					PRESET_3_END,
 					new Pose(41, 81),

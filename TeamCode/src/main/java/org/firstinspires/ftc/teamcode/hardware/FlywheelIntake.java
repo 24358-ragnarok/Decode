@@ -51,7 +51,7 @@ public class FlywheelIntake extends Mechanism {
 	 */
 	@Override
 	public void start() {
-		in();
+		stop();
 	}
 	
 	/**

@@ -6,6 +6,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -48,7 +49,7 @@ public class MechanismManager {
 		SingleWheelTransfer transfer = createTransfer(hw, intake);
 		LimelightManager ll = createLimelight(hw, match);
 		TrajectoryEngine traj = createTrajectory(ll, match);
-		HorizontalLauncher launcher = createLauncher(hw, traj, match);
+		BoonstraBlaster launcher = createLauncher(hw, traj, match);
 		
 		mechanismArray = new Mechanism[]{intake, transfer, launcher};
 		
@@ -102,12 +103,12 @@ public class MechanismManager {
 		}
 	}
 	
-	private HorizontalLauncher createLauncher(HardwareMap hw, TrajectoryEngine traj, MatchSettings matchSettings) {
+	private BoonstraBlaster createLauncher(HardwareMap hw, TrajectoryEngine traj, MatchSettings matchSettings) {
 		if (!Settings.Deploy.LAUNCHER)
 			return null;
 		try {
-			DcMotor right = hw.get(DcMotor.class, Settings.HardwareIDs.LAUNCHER_RIGHT);
-			DcMotor left = hw.get(DcMotor.class, Settings.HardwareIDs.LAUNCHER_LEFT);
+			DcMotorEx right = hw.get(DcMotorEx.class, Settings.HardwareIDs.LAUNCHER_RIGHT);
+			DcMotorEx left = hw.get(DcMotorEx.class, Settings.HardwareIDs.LAUNCHER_LEFT);
 			Servo horizontal;
 			if (Settings.Launcher.CORRECT_YAW) {
 				horizontal = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_YAW_SERVO);
@@ -116,7 +117,7 @@ public class MechanismManager {
 				horizontal = dummyServo();
 			}
 			Servo vertical = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
-			return new HorizontalLauncher(right, left, horizontal, vertical, traj, matchSettings);
+			return new BoonstraBlaster(right, left, horizontal, vertical, traj, matchSettings);
 		} catch (Exception e) {
 			return null;
 		}

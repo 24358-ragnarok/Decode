@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.software;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.math.Vector;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
@@ -135,29 +134,10 @@ public class Controller extends Gamepad {
 		if (action == Action.ROTATE_LEFT || action == Action.ROTATE_RIGHT) {
 			val /= 3;
 		}
+		if (action == Action.SLOW_FORWARD || action == Action.SLOW_BACKWARD || action == Action.SLOW_LEFT || action == Action.SLOW_RIGHT) {
+			val /= 7;
+		}
 		return val;
-	}
-	
-	/**
-	 * Makes the Dpad of the controller move the robot absolutely on the field by
-	 * translating the
-	 * inputs to the robot's coordinate system.
-	 *
-	 * @return The processed robot-centric movement vector
-	 */
-	public Vector getRobotCentricDpad() {
-		// Calculate the field-centric vector components from d-pad inputs.
-		// North/East are positive.
-		double fieldY = getProcessedValue(Action.ABS_NORTH) - getProcessedValue(Action.ABS_SOUTH);
-		double fieldX = getProcessedValue(Action.ABS_EAST) - getProcessedValue(Action.ABS_WEST);
-		
-		Vector dpadVector = new Vector(fieldX, fieldY);
-		
-		// To convert a field-centric vector to a robot-centric one, rotate it opposite
-		// the robot's current heading.
-		dpadVector.rotateVector(-follower.getHeading());
-		
-		return dpadVector;
 	}
 	
 	/**
@@ -167,8 +147,7 @@ public class Controller extends Gamepad {
 	 * backward)
 	 */
 	public final double getProcessedDrive() {
-		Vector robotVec = getRobotCentricDpad();
-		double drive = getProcessedValue(Action.MOVE_Y) + robotVec.getYComponent();
+		double drive = getProcessedValue(Action.MOVE_Y) + getProcessedValue(Action.SLOW_FORWARD) - getProcessedValue(Action.SLOW_BACKWARD);
 		return Math.max(-1, Math.min(1, drive));
 	}
 	
@@ -179,8 +158,7 @@ public class Controller extends Gamepad {
 	 * right)
 	 */
 	public final double getProcessedStrafe() {
-		Vector robotVec = getRobotCentricDpad();
-		double strafe = getProcessedValue(Action.MOVE_X) + robotVec.getXComponent();
+		double strafe = getProcessedValue(Action.MOVE_X) - getProcessedValue(Action.SLOW_LEFT) + getProcessedValue(Action.SLOW_RIGHT);
 		return Math.max(-1, Math.min(1, strafe));
 	}
 	
@@ -275,10 +253,10 @@ public class Controller extends Gamepad {
 		ROTATE_LEFT,
 		ROTATE_RIGHT,
 		ROTATE_AXIS,
-		ABS_NORTH,
-		ABS_EAST,
-		ABS_WEST,
-		ABS_SOUTH,
+		SLOW_FORWARD,
+		SLOW_LEFT,
+		SLOW_RIGHT,
+		SLOW_BACKWARD,
 		TOGGLE_CENTRICITY,
 		RESET_FOLLOWER,
 		GOTO_CLOSE_SHOOT,

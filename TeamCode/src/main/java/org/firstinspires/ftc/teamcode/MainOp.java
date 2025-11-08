@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
+import org.firstinspires.ftc.teamcode.hardware.BoonstraBlaster;
 import org.firstinspires.ftc.teamcode.hardware.FlywheelIntake;
-import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
 import org.firstinspires.ftc.teamcode.hardware.Mechanism;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
@@ -120,6 +120,7 @@ public class MainOp extends OpMode {
 		
 		processControllerInputs();
 		setControllerLEDs();
+		setControllerRumble();
 		
 		// Draw debug visualization (retained items like Heading, X, Y are auto-updated
 		// via Func)
@@ -163,8 +164,8 @@ public class MainOp extends OpMode {
 		// Automatically switch the perspective for field-centric
 		// driving based on the alliance color we start on
 		double perspectiveRotation = matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE
-				? Math.toRadians(0)
-				: Math.toRadians(180);
+				? Math.toRadians(180)
+				: Math.toRadians(0);
 		
 		ifMechanismValid(mechanisms.drivetrain, dt -> dt.manual(drive, strafe, rotate, perspectiveRotation));
 		
@@ -186,9 +187,9 @@ public class MainOp extends OpMode {
 		
 		// Alignment & Launcher
 		if (subController.getProcessedValue(Controller.Action.AIM) > 0.1) {
-			ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::ready);
+			ifMechanismValid(mechanisms.get(BoonstraBlaster.class), BoonstraBlaster::ready);
 		} else {
-			ifMechanismValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::stop);
+			ifMechanismValid(mechanisms.get(BoonstraBlaster.class), BoonstraBlaster::stop);
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.AIM)) {
@@ -210,7 +211,7 @@ public class MainOp extends OpMode {
 		}
 		
 		// Get aiming solution for debugging
-		ifMechanismValid(mechanisms.get(HorizontalLauncher.class),
+		ifMechanismValid(mechanisms.get(BoonstraBlaster.class),
 				launcher -> {
 					TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine
 							.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
@@ -222,7 +223,7 @@ public class MainOp extends OpMode {
 				});
 		
 		// Launcher mechanism status
-		ifMechanismValid(mechanisms.get(HorizontalLauncher.class), hl -> {
+		ifMechanismValid(mechanisms.get(BoonstraBlaster.class), hl -> {
 			logging.addData("Launcher Ready", hl.okayToLaunch());
 			logging.addData("Current Pitch°", "%.2f", hl.getPitch());
 			logging.addData("Current Yaw°", "%.2f", hl.getYaw());
@@ -298,6 +299,14 @@ public class MainOp extends OpMode {
 			subController.setLedColor(255, 0, 255, 100);
 		} else {
 			subController.setLedColor(0, 0, 0, 0);
+		}
+	}
+	
+	private void setControllerRumble() {
+		if (mechanisms.drivetrain.follower.getPose().distanceFrom(mechanisms.drivetrain.getPositionPose(Drivetrain.Position.CLOSE_SHOOT)) < 0.1 ||
+				mechanisms.drivetrain.follower.getPose().distanceFrom(mechanisms.drivetrain.getPositionPose(Drivetrain.Position.FAR_SHOOT)) < 0.1
+		) {
+			subController.rumble(100);
 		}
 	}
 }

@@ -1,22 +1,23 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
-public class HorizontalLauncher extends Mechanism {
+public class BoonstraBlaster extends Mechanism {
 	private final TrajectoryEngine trajectoryEngine;
 	private final Servo horizontalServo;
 	private final Servo verticalServo;
 	private final SyncBelt belt;
 	private final MatchSettings matchSettings;
 	
-	public HorizontalLauncher(
-			DcMotor beltRight,
-			DcMotor beltLeft,
+	public BoonstraBlaster(
+			DcMotorEx beltRight,
+			DcMotorEx beltLeft,
 			Servo horizontalServo,
 			Servo verticalServo,
 			TrajectoryEngine trajectoryEngine, MatchSettings matchSettings) {
@@ -53,7 +54,7 @@ public class HorizontalLauncher extends Mechanism {
 	
 	/**
 	 * Aims the launcher at the target using feedback from the TrajectoryEngine.
-	 * This is invoked by the {@link HorizontalLauncher#ready()} method which should
+	 * This is invoked by the {@link BoonstraBlaster#ready()} method which should
 	 * be called repeatedly in the main robot loop when aiming.
 	 * <p>
 	 * The TrajectoryEngine provides a standardized AimingSolution with:
@@ -123,10 +124,8 @@ public class HorizontalLauncher extends Mechanism {
 		double pitchError = Math.abs(currentPitch - solution.verticalOffsetDegrees);
 		boolean pitchAligned = pitchError < Settings.Aiming.MAX_PITCH_ERROR;
 		
-		// Check belt speed
-		boolean beltReady = belt.atSpeed();
 		
-		return yawAligned && pitchAligned && beltReady;
+		return yawAligned && pitchAligned;
 	}
 	
 	/**
@@ -240,7 +239,6 @@ public class HorizontalLauncher extends Mechanism {
 	}
 	
 	public final void update() {
-		belt.update();
 	}
 	
 	/**
@@ -252,119 +250,54 @@ public class HorizontalLauncher extends Mechanism {
 	 * artifacts
 	 */
 	public static class SyncBelt {
-		private final DcMotor beltRight;
-		private final DcMotor beltLeft;
-		
-		private long spinupTimestamp = 0;
+		private static final double MAX_MOTOR_RPM = 6000.0;
+		private static final double RAMP_RATE = 0.001; // adjust for how fast power moves toward needed level
+		private final DcMotorEx beltRight;
+		private final DcMotorEx beltLeft;
 		private boolean active = false;
-		private double targetSpeedRPM = Settings.Aiming.DEFAULT_WHEEL_SPEED_RPM;
+		private double targetSpeedAngular = Settings.Aiming.DEFAULT_WHEEL_SPEED_RPM;
+		private double rightPower = 0;
+		private double leftPower = 0;
 		
-		// For smoothing
-		private int lastRightPos = 0;
-		private int lastLeftPos = 0;
-		
-		public SyncBelt(DcMotor right, DcMotor left) {
+		public SyncBelt(DcMotorEx right, DcMotorEx left) {
 			this.beltRight = right;
 			this.beltLeft = left;
+			
 			left.setDirection(DcMotor.Direction.REVERSE);
-			right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-			left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 			right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 			left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 		}
 		
-		/**
-		 * Sets the target wheel speed in RPM.
-		 * This is used by complex aiming to achieve the calculated launch velocity.
-		 */
+		private static double clamp(double v, double min, double max) {
+			return Math.max(min, Math.min(max, v));
+		}
+		
 		public void setTargetSpeed(double rpm) {
-			// Clamp to safe range
-			this.targetSpeedRPM = Math.max(Settings.Aiming.MIN_WHEEL_SPEED_RPM,
-					Math.min(Settings.Aiming.MAX_WHEEL_SPEED_RPM, rpm));
-			// If we're already spinning, adjust immediately
-			if (active) {
-				// Restart spinup timer if speed changed significantly
-				spinupTimestamp = System.currentTimeMillis();
-			}
+			targetSpeedAngular = rpm * 28 / 60;
 		}
 		
-		/**
-		 * Calculates motor power from target RPM.
-		 * This is a simple linear mapping that should be calibrated for your motors.
-		 */
-		private double rpmToPower(double rpm) {
-			// Simple linear mapping - adjust based on motor characteristics
-			// Assumes max motor RPM at full power is around 6000 RPM
-			double maxMotorRPM = 6000.0;
-			double power = rpm / maxMotorRPM;
-			
-			// Clamp to valid motor power range
-			return Math.max(0.0, Math.min(1.0, power));
+		public void spinUp() {
+			active = true;
+			beltLeft.setVelocity(targetSpeedAngular);
+			beltRight.setVelocity(targetSpeedAngular);
 		}
 		
-		public final void spinUp() {
-			spinUpToRPM(targetSpeedRPM);
-		}
-		
-		public final void spinUpToRPM(double motorRPM) {
-			if (!active) {
-				active = true;
-				spinupTimestamp = System.currentTimeMillis();
-			}
-			// Use target speed instead of fixed speed
-			double targetPower = rpmToPower(motorRPM);
-			setBasePower(targetPower);
-		}
-		
-		public final void spinDown() {
+		public void spinDown() {
 			active = false;
-			spinupTimestamp = 0;
-			beltRight.setPower(0);
-			beltLeft.setPower(0);
+			rightPower = leftPower = 0;
+			beltLeft.setVelocity(0);
+			beltRight.setVelocity(0);
+		}
+		
+		public double getAverageRPM() {
+			double ticksPerRev = 28;
+			double rightRPM = (beltRight.getVelocity() / ticksPerRev) / 60.0;
+			double leftRPM = (beltLeft.getVelocity() / ticksPerRev) / 60.0;
+			return (rightRPM + leftRPM) / 2.0;
 		}
 		
 		public boolean atSpeed() {
-			return active &&
-					System.currentTimeMillis() - spinupTimestamp > Settings.Launcher.BELT_SPINUP_TIME_MS;
-		}
-		
-		/**
-		 * Continuously try to match the actual speeds of the motors so they have the
-		 * same tangential speed.
-		 */
-		public void update() {
-			if (!active)
-				return;
-			
-			int rightPos = beltRight.getCurrentPosition();
-			int leftPos = beltLeft.getCurrentPosition();
-			
-			int deltaRight = rightPos - lastRightPos;
-			int deltaLeft = leftPos - lastLeftPos;
-			
-			lastRightPos = rightPos;
-			lastLeftPos = leftPos;
-			
-			// Prevent div-by-zero
-			if (deltaRight == 0 && deltaLeft == 0)
-				return;
-			
-			// Compute imbalance ratio
-			double avg = (Math.abs(deltaRight) + Math.abs(deltaLeft)) / 2.0;
-			double error = (deltaRight - deltaLeft) / avg;
-			
-			// Proportional correction
-			double correction = Settings.Launcher.BELT_SYNC_KP * error;
-			
-			// Use target speed instead of fixed speed
-			double base = rpmToPower(targetSpeedRPM);
-			beltRight.setPower(base * (1 - correction));
-			beltLeft.setPower(base * (1 + correction));
-		}
-		
-		private void setBasePower(double power) {
-			beltRight.setPower(power);
-			beltLeft.setPower(power);
+			return active && Math.abs(targetSpeedAngular - getAverageRPM()) < 100;
 		}
 	}
 }

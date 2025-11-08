@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.configuration.Settings;
-import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
+import org.firstinspires.ftc.teamcode.hardware.BoonstraBlaster;
 
 /**
  * An enhanced TeleOp for testing launcher motor performance and angle.
@@ -26,7 +26,7 @@ public class ProjectileMotionTest extends LinearOpMode {
 	// State & Control
 	private double commandedRPM = 3000;
 	// Hardware
-	private HorizontalLauncher.SyncBelt syncBelt;
+	private BoonstraBlaster.SyncBelt syncBelt;
 	private DcMotorEx rightLauncherMotor;
 	private DcMotorEx leftLauncherMotor;
 	private Servo kickerServo;
@@ -44,7 +44,7 @@ public class ProjectileMotionTest extends LinearOpMode {
 		leftLauncherMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 		
 		
-		syncBelt = new HorizontalLauncher.SyncBelt(rightLauncherMotor, leftLauncherMotor);
+		syncBelt = new BoonstraBlaster.SyncBelt(rightLauncherMotor, leftLauncherMotor);
 		pitchServo = hardwareMap.get(Servo.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
 		pitchServo.setPosition(commandedAngle);
 		kickerServo = hardwareMap.get(Servo.class, Settings.HardwareIDs.TRANSFER_EXIT_KICKER);
@@ -85,7 +85,8 @@ public class ProjectileMotionTest extends LinearOpMode {
 			commandedAngle = Math.max(Settings.Launcher.PITCH_SERVO_AT_MAX, Math.min(Settings.Launcher.PITCH_SERVO_AT_MIN, commandedAngle));
 			
 			if (gamepad1.left_trigger > 0.1) {
-				syncBelt.spinUpToRPM(commandedRPM);
+				syncBelt.setTargetSpeed(commandedRPM);
+				syncBelt.spinUp();
 			} else {
 				syncBelt.spinDown();
 			}
@@ -98,11 +99,11 @@ public class ProjectileMotionTest extends LinearOpMode {
 			// --- Telemetry ---
 			telemetry.addData("Commanded RPM", commandedRPM);
 			telemetry.addData("Real Average RPM", "%.2f", (rightRPM + leftRPM) / 2.0);
-			
+			telemetry.addData("2 Average RPM", "%.2f", syncBelt.getAverageRPM());
 			telemetry.addLine();
 			
 			telemetry.addData("Commanded Pitch Position", commandedAngle);
-			telemetry.addData("Real Angle", HorizontalLauncher.getPitchDirect(pitchServo));
+			telemetry.addData("Real Angle", BoonstraBlaster.getPitchDirect(pitchServo));
 			
 			telemetry.update();
 		}

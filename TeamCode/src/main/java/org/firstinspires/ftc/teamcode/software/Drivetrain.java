@@ -59,7 +59,7 @@ public class Drivetrain extends Mechanism {
 	 * Field width is 144 inches (standard FTC field).
 	 * Takes a BLUE pose and returns the mirrored RED pose.
 	 */
-	private Pose mirror(Pose bluePose) {
+	public Pose mirror(Pose bluePose) {
 		return new Pose(
 				Settings.Field.WIDTH - bluePose.getX(), // Mirror X coordinate
 				bluePose.getY(), // Y stays the same

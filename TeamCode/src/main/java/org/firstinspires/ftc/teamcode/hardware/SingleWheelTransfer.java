@@ -59,26 +59,20 @@ public final class SingleWheelTransfer extends Mechanism {
 	private final CRServo entranceWheel; // CR wheel at color sensor that lets balls in
 	private final Servo exitWheel; // CR wheel at kicker that fires balls out
 	private final FlywheelIntake intake;
-
+	// Automatic advance timing
+	private final long lastAutoAdvanceCheckMs = 0;
 	// Detection gating
 	private long lastDetectTimeMs = 0;
-
 	// Transfer wheel timing and scheduled shifts
 	private boolean transferWheelRunning = false;
 	private long transferWheelEndTimeMs = 0;
 	private int pendingShifts = 0; // number of single-slot shifts to perform when wheel run ends
-	
 	// Entrance wheel timing
 	private boolean entranceWheelOpen = false;
 	private long entranceOpenStartTimeMs = 0;
-	
 	// Exit wheel timing
 	private boolean exitWheelFiring = false;
 	private long exitFireStartTimeMs = 0;
-	
-	// Automatic advance timing
-	private long lastAutoAdvanceCheckMs = 0;
-	
 	// Pending ball to place after shift completes
 	private MatchSettings.ArtifactColor pendingBallAfterShift = MatchSettings.ArtifactColor.UNKNOWN;
 	
@@ -111,7 +105,6 @@ public final class SingleWheelTransfer extends Mechanism {
 		// Auto-close exit wheel after fire duration
 		if (exitWheelFiring && now - exitFireStartTimeMs > EXIT_FIRE_DURATION_MS) {
 			holdExitClosed();
-			moveNextBallToKicker();
 		}
 		
 		// Handle transfer wheel run completion and perform scheduled shifts
@@ -214,7 +207,6 @@ public final class SingleWheelTransfer extends Mechanism {
 		// The physical wheel will move first, then we'll place the ball in slot 0.
 		openEntrance();
 		pendingBallAfterShift = color;
-		advance(); // Schedule physical wheel movement
 	}
 	
 	/**
@@ -324,38 +316,21 @@ public final class SingleWheelTransfer extends Mechanism {
 		// - Entrance wheel is open (intaking)
 		// - Exit wheel is firing
 		// - Not enough time since last detection (grace period)
-		if (transferWheelRunning || entranceWheelOpen || exitWheelFiring) {
+		if (transferWheelRunning || entranceWheelOpen || exitWheelFiring || isEmpty()) {
 			return;
 		}
 		
 		// Check if we need a grace period after detection
-		if (now - lastDetectTimeMs < AUTO_ADVANCE_GRACE_PERIOD_MS) {
+		if (now - lastDetectTimeMs < AUTO_ADVANCE_GRACE_PERIOD_MS + ENTRANCE_OPEN_DURATION_MS) {
 			return;
 		}
 		
-		// Check if exit slot is empty
-		if (slots[MAX_CAPACITY - 1] != MatchSettings.ArtifactColor.UNKNOWN) {
+		// Check if exit slot is empty and intake slot is full
+		if (slots[MAX_CAPACITY - 1] != MatchSettings.ArtifactColor.UNKNOWN || slots[0] == MatchSettings.ArtifactColor.UNKNOWN) {
 			return; // Exit already has a ball
 		}
 		
-		// Find the closest ball to the exit that can be moved
-		int closestBallIndex = -1;
-		for (int i = MAX_CAPACITY - 2; i >= 0; i--) {
-			if (slots[i] != MatchSettings.ArtifactColor.UNKNOWN) {
-				closestBallIndex = i;
-				break;
-			}
-		}
-		
-		// If we found a ball, calculate steps needed and advance
-		if (closestBallIndex >= 0) {
-			int stepsNeeded = (MAX_CAPACITY - 1) - closestBallIndex;
-			if (stepsNeeded > 0) {
-				// Record this auto-advance check time
-				lastAutoAdvanceCheckMs = now;
-				advanceSteps(stepsNeeded);
-			}
-		}
+		advance();
 	}
 	
 	/**
@@ -469,8 +444,8 @@ public final class SingleWheelTransfer extends Mechanism {
 		if (slots[slotIndex] == MatchSettings.ArtifactColor.UNKNOWN)
 			return;
 		int shiftsNeeded = (MAX_CAPACITY - 1) - slotIndex;
-		if (shiftsNeeded > 0) {
-			advanceSteps(shiftsNeeded);
+		if (shiftsNeeded - pendingShifts > 0) {
+			advanceSteps(shiftsNeeded - pendingShifts);
 		}
 	}
 	
