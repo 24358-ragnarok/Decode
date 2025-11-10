@@ -15,15 +15,14 @@ import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
  * Useful for testing, debugging, or emergency intake operations where normal
  * transfer state management needs to be overridden.
  */
-public class OverrideIntakeIn implements AutonomousAction {
+public class OverrideIntakeInAction implements AutonomousAction {
 	
 	/**
 	 * Creates an override intake action.
 	 */
-	public OverrideIntakeIn() {
+	public OverrideIntakeInAction() {
 	
 	}
-	
 	
 	@Override
 	public void initialize(MechanismManager mechanisms) {
@@ -49,6 +48,6 @@ public class OverrideIntakeIn implements AutonomousAction {
 	
 	@Override
 	public String getName() {
-		return "OverrideIntakeIn";
+		return "OverrideIntakeInAction";
 	}
 }

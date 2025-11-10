@@ -82,11 +82,11 @@ public class MatchSettings {
 	public Pose getAutonomousStartingPose() {
 		AllianceColor allianceColor = getAllianceColor();
 		AutoStartingPosition startingPosition = getAutoStartingPosition();
-		
+
 		// Get BLUE pose (our reference)
 		Pose bluePose = startingPosition == AutoStartingPosition.CLOSE
-				? Settings.Autonomous.BlueClose.START
-				: Settings.Autonomous.BlueFar.START;
+				? Settings.Positions.AutoStart.CLOSE
+				: Settings.Positions.AutoStart.FAR;
 		
 		// Mirror for RED alliance
 		if (allianceColor == AllianceColor.RED) {
@@ -95,7 +95,7 @@ public class MatchSettings {
 			return bluePose;
 		}
 	}
-	
+
 	/**
 	 * Gets the TeleOp starting position for the robot based on the actual stored
 	 * pose
@@ -112,10 +112,10 @@ public class MatchSettings {
 		if (actualPose != null) {
 			return actualPose;
 		}
-		
+
 		// If no actual pose was stored, check if Auto has been configured at all
 		if (blackboard.get(ALLIANCE_COLOR_KEY) == null || blackboard.get(AUTO_KEY) == null) {
-			return Settings.Field.RESET_POSE;
+			return Settings.Positions.Default.RESET;
 		}
 		
 		// Fall back to predefined poses if actual pose is unavailable
@@ -123,9 +123,7 @@ public class MatchSettings {
 		AutoStartingPosition startingPosition = getAutoStartingPosition();
 		
 		// Get BLUE pose (our reference)
-		Pose bluePose = startingPosition == AutoStartingPosition.CLOSE
-				? Settings.Autonomous.BlueClose.PARK
-				: Settings.Autonomous.BlueFar.PARK;
+		Pose bluePose = Settings.Positions.Park.DEFAULT;
 		
 		// Mirror for RED alliance
 		if (allianceColor == AllianceColor.RED) {
@@ -271,8 +269,7 @@ public class MatchSettings {
 	 * Field width is 144 inches (standard FTC field).
 	 * Takes a BLUE pose and returns the mirrored RED pose.
 	 * <p>
-	 * This is a duplicate of the method in PathRegistry to keep MatchSettings
-	 * independent.
+	 * This is used for autonomous starting pose calculation.
 	 */
 	private Pose mirrorPose(Pose bluePose) {
 		return new Pose(

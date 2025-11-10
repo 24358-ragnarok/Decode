@@ -14,25 +14,25 @@ import java.util.Arrays;
  * requiring
  * physical ball collection.
  */
-public class OverrideTransferState implements AutonomousAction {
+public class OverrideTransferStateAction implements AutonomousAction {
 	private final MatchSettings.ArtifactColor artifactColor;
-	
+
 	/**
 	 * Creates an override action that fills all transfer slots with the specified
 	 * color.
 	 *
 	 * @param artifactColor The color to fill all slots with
 	 */
-	public OverrideTransferState(MatchSettings.ArtifactColor artifactColor) {
+	public OverrideTransferStateAction(MatchSettings.ArtifactColor artifactColor) {
 		this.artifactColor = artifactColor;
 	}
-	
+
 	/**
 	 * Creates an override action that fills all transfer slots with PURPLE
 	 * artifacts.
 	 * This is a convenience constructor for the most common test case.
 	 */
-	public OverrideTransferState() {
+	public OverrideTransferStateAction() {
 		this(MatchSettings.ArtifactColor.PURPLE);
 	}
 	
@@ -57,6 +57,6 @@ public class OverrideTransferState implements AutonomousAction {
 	
 	@Override
 	public String getName() {
-		return "OverrideTransferState(" + artifactColor + ")";
+		return "OverrideTransferStateAction(" + artifactColor + ")";
 	}
 }

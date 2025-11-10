@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.BLI
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.ENTRANCE_OPEN_DURATION_MS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.ENTRANCE_WHEEL_HOLD_POWER;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.ENTRANCE_WHEEL_INTAKE_POWER;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.ENTRANCE_WHEEL_OUT_POWER;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_FIRE_DURATION_MS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_KICK_POSITION;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_LOCK_POSITION;
@@ -370,8 +371,14 @@ public final class SingleWheelTransfer extends Mechanism {
 	/**
 	 * Hold entrance closed with slight reverse power.
 	 */
-	private void holdEntranceClosed() {
+	public void holdEntranceClosed() {
 		entranceWheel.setPower(ENTRANCE_WHEEL_HOLD_POWER);
+		entranceWheelOpen = false;
+	}
+	
+	public void clearEntrance() {
+		entranceWheel.setPower(ENTRANCE_WHEEL_OUT_POWER);
+		intake.out();
 		entranceWheelOpen = false;
 	}
 	

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.configuration;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.software.Controller;
@@ -28,7 +27,7 @@ public class Settings {
 				Controller.Action.GOTO_PARK,
 				Controller.Action.GOTO_GATE
 		};
-		
+
 		static {
 			// Main Controller (Driver)
 			actionControlMap.put(Controller.Action.MOVE_Y, Controller.Control.LEFT_STICK_Y);
@@ -64,7 +63,7 @@ public class Settings {
 			}
 		}
 	}
-	
+
 	/**
 	 * Hardware device name mapping.
 	 */
@@ -76,24 +75,24 @@ public class Settings {
 		public static final String REAR_LEFT_MOTOR = "rearLeft";
 		public static final String REAR_RIGHT_MOTOR = "rearRight";
 		public static final String PINPOINT = "pinpoint";
-		
+
 		// Subsystem motors and servos
 		public static final String INTAKE_MOTOR = "intakeMotor";
 		public static final String LAUNCHER_RIGHT = "launcherRight";
 		public static final String LAUNCHER_LEFT = "launcherLeft";
 		public static final String LAUNCHER_YAW_SERVO = "launcherYawServo";
 		public static final String LAUNCHER_PITCH_SERVO = "launcherPitchServo";
-		
+
 		// Transfer mechanism
 		public static final String TRANSFER_WHEEL_SERVO = "transferMainServo";
 		public static final String TRANSFER_ENTRANCE_WHEEL = "transferEntranceServo"; // CR wheel at color sensor
 		public static final String TRANSFER_EXIT_KICKER = "transferExitServo"; // CR wheel at kicker position
-		
+
 		// Sensors
 		public static final String TRANSFER_COLOR_SENSOR = "transferColorSensor";
 		public static final String LIMELIGHT = "limelight";
 	}
-	
+
 	/**
 	 * Settings for the Intake mechanism.
 	 */
@@ -101,7 +100,7 @@ public class Settings {
 	public static class Intake {
 		public static double SPEED = -1.0;
 	}
-	
+
 	/**
 	 * Settings for the Spindex (indexer/sorter) mechanism.
 	 */
@@ -140,6 +139,7 @@ public class Settings {
 		// Entrance wheel settings (at color sensor position)
 		public static final double ENTRANCE_WHEEL_INTAKE_POWER = 1.0; // Power when letting balls in
 		public static final double ENTRANCE_WHEEL_HOLD_POWER = 0.0; // No reverse to hold closed
+		public static final double ENTRANCE_WHEEL_OUT_POWER = -1.0;
 		public static final long ENTRANCE_OPEN_DURATION_MS = 750; // How long to open entrance when intaking
 		
 		// Exit wheel settings (at kicker position)
@@ -194,7 +194,7 @@ public class Settings {
 		public static boolean CORRECT_PITCH = true;
 		public static double[] OUTTAKE_DATA_X = {0.0, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0};
 		public static double[] OUTTAKE_DATA_Y = {0.0, 90, 180, 257, 340, 423, 660};
-		
+
 		/**
 		 * Converts pitch angle (degrees) to servo position using calibration points.
 		 * Maps angle range [PITCH_MIN_ANGLE, PITCH_MAX_ANGLE] to servo range
@@ -275,7 +275,7 @@ public class Settings {
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 54.0; // Launch angle from horizontal for close position
 		public static double CLOSE_SHOOT_RPM = 2600.0; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 45.5; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_PITCH_DEGREES = 46; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 3500.0; // Wheel RPM for far position
 		
 		/**
@@ -298,35 +298,132 @@ public class Settings {
 	}
 	
 	/**
-	 * Key locations on the game field.
+	 * Field dimensions and physical constants.
 	 */
 	@Configurable
 	public static class Field {
 		public static double WIDTH = 144.0; // inches
 		public static double BALL_MASS_KG = .076; // kg
-		public static Pose RESET_POSE = new Pose(72, 72, Math.toRadians(90));
-		public static Pose RED_GOAL_POSE = new Pose(130.0, 130.0, Math.toRadians(225));
-		public static double[] RED_GOAL_AIM_3D = new double[]{RED_GOAL_POSE.getX(), RED_GOAL_POSE.getY(),
-				7 + Aiming.GOAL_HEIGHT_INCHES};
+	}
+	
+	/**
+	 * Centralized collection of all robot positions on the field.
+	 * All poses are defined in BLUE alliance coordinates and will be automatically
+	 * mirrored by various systems when needed for RED alliance.
+	 */
+	@Configurable
+	public static class Positions {
 		
-		public static Pose BLUE_GOAL_POSE = new Pose(14.0, 130.0, Math.toRadians(315));
-		public static double[] BLUE_GOAL_AIM_3D = new double[]{BLUE_GOAL_POSE.getX(), BLUE_GOAL_POSE.getY(),
-				7 + Aiming.GOAL_HEIGHT_INCHES};
-		public static Pose FAR_LAUNCH_ZONE_FRONT_CORNER = new Pose(72, 24);
-		public static Pose FAR_LAUNCH_ZONE_LEFT_CORNER = new Pose(50, 0);
-		public static Pose FAR_LAUNCH_ZONE_RIGHT_CORNER = new Pose(95, 0);
+		/**
+		 * Default/reset positions.
+		 */
+		public static class Default {
+			public static final Pose RESET = new Pose(72, 72, Math.toRadians(90));
+		}
 		
-		public static Pose CLOSE_LAUNCH_ZONE_FRONT_CORNER = new Pose(72, 72);
-		public static Pose CLOSE_LAUNCH_ZONE_LEFT_CORNER = new Pose(15, 128);
-		public static Pose CLOSE_LAUNCH_ZONE_RIGHT_CORNER = new Pose(129, 128);
+		/**
+		 * Goal positions for scoring.
+		 */
+		public static class Goals {
+			public static final Pose RED_GOAL = new Pose(130.0, 130.0, Math.toRadians(225));
+			public static final Pose BLUE_GOAL = new Pose(14.0, 130.0, Math.toRadians(315));
+			
+			// 3D aiming coordinates (x, y, z) for trajectory calculations
+			public static final double[] RED_GOAL_AIM_3D = new double[]{
+					RED_GOAL.getX(), RED_GOAL.getY(), 7 + Aiming.GOAL_HEIGHT_INCHES};
+			public static final double[] BLUE_GOAL_AIM_3D = new double[]{
+					BLUE_GOAL.getX(), BLUE_GOAL.getY(), 7 + Aiming.GOAL_HEIGHT_INCHES};
+		}
 		
-		// TeleOp position poses (BLUE alliance reference - will be mirrored for RED)
-		// These are used for goto commands during driver control
-		public static Pose BLUE_CLOSE_SHOOT = new Pose(58, 86, Math.toRadians(135));
-		public static Pose BLUE_FAR_SHOOT = new Pose(60, 15, Math.toRadians(115));
-		public static Pose BLUE_HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
-		public static Pose BLUE_GATE = new Pose(25, 68, Math.toRadians(0));
-		public static Pose BLUE_TELEOP_PARK = new Pose(104, 32, Math.toRadians(0));
+		/**
+		 * Launch zone boundaries for field awareness.
+		 */
+		public static class LaunchZones {
+			// Far launch zone (closer to wall)
+			public static final Pose FAR_FRONT_CORNER = new Pose(72, 24);
+			public static final Pose FAR_LEFT_CORNER = new Pose(50, 0);
+			public static final Pose FAR_RIGHT_CORNER = new Pose(95, 0);
+			
+			// Close launch zone (closer to goals)
+			public static final Pose CLOSE_FRONT_CORNER = new Pose(72, 72);
+			public static final Pose CLOSE_LEFT_CORNER = new Pose(15, 128);
+			public static final Pose CLOSE_RIGHT_CORNER = new Pose(129, 128);
+		}
+		
+		/**
+		 * TeleOp operational positions (BLUE alliance reference).
+		 * These are used for goto commands during driver control.
+		 */
+		public static class TeleOp {
+			public static final Pose CLOSE_SHOOT = new Pose(58, 86, Math.toRadians(135));
+			public static final Pose FAR_SHOOT = new Pose(60, 15, Math.toRadians(115));
+			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
+			public static final Pose GATE = new Pose(25, 68, Math.toRadians(0));
+			public static final Pose PARK = new Pose(104, 32, Math.toRadians(0));
+		}
+		
+		/**
+		 * Autonomous starting positions.
+		 */
+		public static class AutoStart {
+			public static final Pose FAR = new Pose(56.25, 7.0, Math.toRadians(90));
+			public static final Pose CLOSE = new Pose(22, 126, Math.toRadians(145));
+		}
+		
+		/**
+		 * Sample pickup locations organized by preset groups.
+		 */
+		public static class Samples {
+			
+			/**
+			 * First preset group (closest to wall).
+			 */
+			public static class Preset1 {
+				public static final Pose PREP = new Pose(43, 34, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(36.0, 34, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 34, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 34, Math.toRadians(180));
+			}
+			
+			/**
+			 * Second preset group (middle).
+			 */
+			public static class Preset2 {
+				public static final Pose PREP = new Pose(43, 60, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(36.0, 60, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 60, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 60, Math.toRadians(180));
+			}
+			
+			/**
+			 * Third preset group (farthest from wall).
+			 */
+			public static class Preset3 {
+				public static final Pose PREP = new Pose(43, 86, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(35.0, 86, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 86, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 86, Math.toRadians(180));
+			}
+		}
+		
+		/**
+		 * Control points for curved autonomous paths.
+		 */
+		public static class ControlPoints {
+			// From sample areas to shooting positions
+			public static final Pose FROM_PRESET1_TO_CLOSE = new Pose(67, 45);
+			public static final Pose FROM_PRESET2_TO_CLOSE = new Pose(64, 56);
+			public static final Pose FROM_PRESET3_TO_CLOSE = new Pose(41, 81);
+			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
+		}
+		
+		/**
+		 * Parking positions for end of autonomous.
+		 */
+		public static class Park {
+			public static final Pose DEFAULT = Samples.Preset1.GRAB_1; // Reuse a safe position
+		}
+		
 	}
 	
 	/**
@@ -346,85 +443,8 @@ public class Settings {
 		public static boolean ALIGNMENT_ENGINE = true;
 	}
 	
-	// A static class to hold all pose constants for organization.
+	// Autonomous settings - pose constants moved to AutonomousPoses class
 	public static class Autonomous {
-		// NOTE: BLUE alliance paths are the reference (we have a blue field for
-		// tuning).
-		// RED alliance paths are automatically mirrored by the PathRegistry.
-		// Headings are in radians. 90 degrees = Math.toRadians(90)
-		
 		public static double BALL_INTAKE_WAIT_S = 0.4;
-		
-		public static class BlueFar {
-			public static Pose START = new Pose(56.25, 7.0, Math.toRadians(90));
-			public static Pose SHOOT_0 = Field.BLUE_FAR_SHOOT; // Move to far shoot position
-			public static Pose SHOOT_1_2_3 = Field.BLUE_CLOSE_SHOOT; // Move to close shoot position
-			public static Pose PRESET_1_PREP = new Pose(40, 34, Math.toRadians(180));
-			public static Pose PRESET_1_GRAB_1 = new Pose(36.0, 34, Math.toRadians(180));
-			public static Pose PRESET_1_GRAB_2 = new Pose(30.0, 34, Math.toRadians(180));
-			public static Pose PRESET_1_END = new Pose(20, 34, Math.toRadians(180));
-			public static BezierCurve BEZIER_LAUNCH_1 = new BezierCurve(
-					PRESET_1_END,
-					new Pose(67, 45),
-					SHOOT_1_2_3
-			);
-			
-			public static Pose PRESET_2_PREP = new Pose(40, 60, Math.toRadians(180));
-			public static Pose PRESET_2_GRAB_1 = new Pose(36.0, 60, Math.toRadians(180));
-			public static Pose PRESET_2_GRAB_2 = new Pose(30.0, 60, Math.toRadians(180));
-			public static Pose PRESET_2_END = new Pose(20, 60, Math.toRadians(180));
-			public static BezierCurve BEZIER_LAUNCH_2 = new BezierCurve(
-					PRESET_2_END,
-					new Pose(64, 56),
-					SHOOT_1_2_3
-			);
-			
-			public static Pose PRESET_3_PREP = new Pose(42, 86, Math.toRadians(180));
-			public static Pose PRESET_3_GRAB_1 = new Pose(35.0, 86, Math.toRadians(180));
-			public static Pose PRESET_3_GRAB_2 = new Pose(30.0, 86, Math.toRadians(180));
-			public static Pose PRESET_3_END = new Pose(20, 86, Math.toRadians(180));
-			public static BezierCurve BEZIER_LAUNCH_3 = new BezierCurve(
-					PRESET_3_END,
-					new Pose(41, 81),
-					SHOOT_1_2_3
-			);
-			public static Pose PARK = PRESET_1_END;
-		}
-		
-		public static class BlueClose {
-			public static Pose START = new Pose(22, 126, Math.toRadians(145));
-			public static Pose SHOOT_0_1_2 = Field.BLUE_CLOSE_SHOOT;
-			public static Pose SHOOT_3 = Field.BLUE_FAR_SHOOT;
-			public static Pose PRESET_1_PREP = BlueFar.PRESET_3_PREP;
-			public static Pose PRESET_1_GRAB_1 = BlueFar.PRESET_3_GRAB_1;
-			public static Pose PRESET_1_GRAB_2 = BlueFar.PRESET_3_GRAB_2;
-			public static Pose PRESET_1_END = BlueFar.PRESET_3_END;
-			public static BezierCurve BEZIER_LAUNCH_1 = new BezierCurve(
-					PRESET_1_END,
-					new Pose(41, 81),
-					SHOOT_0_1_2
-			);
-			
-			public static Pose PRESET_2_PREP = BlueFar.PRESET_2_PREP;
-			public static Pose PRESET_2_GRAB_1 = BlueFar.PRESET_2_GRAB_1;
-			public static Pose PRESET_2_GRAB_2 = BlueFar.PRESET_2_GRAB_2;
-			public static Pose PRESET_2_END = BlueFar.PRESET_2_END;
-			public static BezierCurve BEZIER_LAUNCH_2 = new BezierCurve(
-					PRESET_2_END,
-					new Pose(64, 56),
-					SHOOT_0_1_2
-			);
-			
-			public static Pose PRESET_3_PREP = BlueFar.PRESET_1_PREP;
-			public static Pose PRESET_3_GRAB_1 = BlueFar.PRESET_1_GRAB_1;
-			public static Pose PRESET_3_GRAB_2 = BlueFar.PRESET_1_GRAB_2;
-			public static Pose PRESET_3_END = BlueFar.PRESET_1_END;
-			public static BezierCurve BEZIER_LAUNCH_3 = new BezierCurve(
-					PRESET_3_END,
-					new Pose(52, 37),
-					SHOOT_3
-			);
-			public static Pose PARK = PRESET_1_END;
-		}
 	}
 }

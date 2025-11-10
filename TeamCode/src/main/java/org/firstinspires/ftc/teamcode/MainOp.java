@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Field.RESET_POSE;
-
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -158,7 +156,7 @@ public class MainOp extends OpMode {
 		}
 		
 		if (mainController.wasJustPressed(Controller.Action.RESET_FOLLOWER)) {
-			ifMechanismValid(mechanisms.drivetrain, dt -> dt.follower.setPose(RESET_POSE));
+			ifMechanismValid(mechanisms.drivetrain, dt -> dt.follower.setPose(Settings.Positions.Default.RESET));
 		}
 		
 		// Automatically switch the perspective for field-centric
@@ -176,6 +174,11 @@ public class MainOp extends OpMode {
 					&& mainController.getProcessedValue(Controller.Control.START) <= 0.0) {
 				ifMechanismValid(mechanisms.drivetrain,
 						dt -> dt.goTo(gotopose));
+				if (gotopose == mechanisms.drivetrain
+						.getPositionPose(Drivetrain.Position.valueOf("PARK"))) {
+					ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::stop);
+					
+				}
 			} else if (mainController.wasJustReleased(action)) {
 				mechanisms.drivetrain.switchToManual();
 			}
@@ -273,8 +276,8 @@ public class MainOp extends OpMode {
 		// Use lazy evaluation for expensive angle calculation - only computed when
 		// transmitted
 		Pose targetPose = (matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE)
-				? Settings.Field.BLUE_GOAL_POSE
-				: Settings.Field.RED_GOAL_POSE;
+				? Settings.Positions.Goals.BLUE_GOAL
+				: Settings.Positions.Goals.RED_GOAL;
 		
 		// Classifier controls
 		if (subController.getProcessedValue(Controller.Action.EMPTY_CLASSIFIER_STATE) > 0)

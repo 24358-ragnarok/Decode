@@ -45,13 +45,13 @@ public class Drivetrain extends Mechanism {
 		boolean isBlue = matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE;
 		
 		positionPoses.put(Position.CLOSE_SHOOT,
-				isBlue ? Settings.Field.BLUE_CLOSE_SHOOT : mirror(Settings.Field.BLUE_CLOSE_SHOOT));
+				isBlue ? Settings.Positions.TeleOp.CLOSE_SHOOT : mirror(Settings.Positions.TeleOp.CLOSE_SHOOT));
 		positionPoses.put(Position.FAR_SHOOT,
-				isBlue ? Settings.Field.BLUE_FAR_SHOOT : mirror(Settings.Field.BLUE_FAR_SHOOT));
+				isBlue ? Settings.Positions.TeleOp.FAR_SHOOT : mirror(Settings.Positions.TeleOp.FAR_SHOOT));
 		positionPoses.put(Position.PARK,
-				isBlue ? Settings.Field.BLUE_TELEOP_PARK : mirror(Settings.Field.BLUE_TELEOP_PARK));
+				isBlue ? Settings.Positions.TeleOp.PARK : mirror(Settings.Positions.TeleOp.PARK));
 		positionPoses.put(Position.GATE,
-				isBlue ? Settings.Field.BLUE_GATE : mirror(Settings.Field.BLUE_GATE));
+				isBlue ? Settings.Positions.TeleOp.GATE : mirror(Settings.Positions.TeleOp.GATE));
 	}
 	
 	/**

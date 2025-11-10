@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousSequence;
-import org.firstinspires.ftc.teamcode.autonomous.PathRegistry;
 import org.firstinspires.ftc.teamcode.autonomous.SequenceBuilder;
 import org.firstinspires.ftc.teamcode.configuration.MatchConfigurationWizard;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
@@ -43,7 +42,6 @@ public class MainAuto extends OpMode {
 	private UnifiedLogging logging;
 
 	// The new optimal structure
-	private PathRegistry pathRegistry;
 	private AutonomousSequence autonomousSequence;
 
 	/**
@@ -54,16 +52,16 @@ public class MainAuto extends OpMode {
 		// Create fresh timer and logging
 		opmodeTimer = new Timer();
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
-		
+
 		// Match settings will be configured by the driver during init_loop
 		matchSettings = new MatchSettings(blackboard);
 		blackboard.clear(); // do not save match settings in between matches
-		
+
 		// Initialize blackboard with default values to ensure clean state
 		// This prevents stale data from previous runs from affecting the current run
 		matchSettings.setAllianceColor(MatchSettings.AllianceColor.BLUE);
 		matchSettings.setAutoStartingPosition(MatchSettings.AutoStartingPosition.CLOSE);
-		
+
 		wizard = new MatchConfigurationWizard(matchSettings, gamepad1, logging);
 		
 		// Initialize robot mechanisms
@@ -103,17 +101,13 @@ public class MainAuto extends OpMode {
 		
 		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getAutonomousStartingPose());
 		// Build the autonomous sequence based on configuration
-		// This is where the magic happens - the path registry automatically
-		// handles alliance mirroring, and the sequence builder creates the
-		// entire autonomous routine declaratively
-		
-		pathRegistry = new PathRegistry(mechanisms.drivetrain.follower,
-				matchSettings);
+		// This is where the magic happens - the new PathAction system automatically
+		// handles alliance mirroring and dynamic path building from current position
 		
 		if (matchSettings.getAutoStartingPosition() == MatchSettings.AutoStartingPosition.FAR) {
-			autonomousSequence = SequenceBuilder.buildFarSequence(pathRegistry);
+			autonomousSequence = SequenceBuilder.buildFarSequence(matchSettings);
 		} else {
-			autonomousSequence = SequenceBuilder.buildCloseSequence(pathRegistry);
+			autonomousSequence = SequenceBuilder.buildCloseSequence(matchSettings);
 		}
 		
 		// Start the sequence

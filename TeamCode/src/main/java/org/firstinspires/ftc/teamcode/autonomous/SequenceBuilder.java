@@ -2,19 +2,24 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.BALL_INTAKE_WAIT_S;
 
-import com.pedropathing.paths.PathChain;
+import com.pedropathing.geometry.Pose;
 
+import org.firstinspires.ftc.teamcode.autonomous.actions.ClearIntakeAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.CurvePathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.EndAtAction;
-import org.firstinspires.ftc.teamcode.autonomous.actions.FollowPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.IntakeAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LaunchAction;
-import org.firstinspires.ftc.teamcode.autonomous.actions.OverrideIntakeIn;
-import org.firstinspires.ftc.teamcode.autonomous.actions.OverrideTransferState;
+import org.firstinspires.ftc.teamcode.autonomous.actions.LinearPathAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.OverrideIntakeInAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.OverrideTransferStateAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ParallelAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PrepareLaunchAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.SlowLinearPathAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.SplinedPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.StopIntakeAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.WaitAction;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.configuration.Settings;
 
 /**
  * Fluent builder for creating autonomous sequences.
@@ -23,11 +28,13 @@ import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
  * Example usage:
  *
  * <pre>
- * AutonomousSequence sequence = new SequenceBuilder(pathRegistry)
- * 		.followPath(PathSegment.FAR_PRESET_1_PREP)
+ * AutonomousSequence sequence = new SequenceBuilder(matchSettings)
+ * 		.moveTo(Settings.Positions.Samples.Preset1.PREP)
  * 		.startIntake()
- * 		.followPath(PathSegment.FAR_PRESET_1_END)
+ * 		.moveSlowlyTo(Settings.Positions.Samples.Preset1.END)
  * 		.stopIntake()
+ * 		.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+ * 				Settings.Positions.ControlPoints.FROM_PRESET1_TO_CLOSE, "Launch")
  * 		.launch()
  * 		.build();
  * </pre>
@@ -35,178 +42,259 @@ import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 public class SequenceBuilder {
 
 	private final AutonomousSequence sequence;
-	private final PathRegistry pathRegistry;
+	private final MatchSettings matchSettings;
 
 	/**
 	 * Creates a new sequence builder.
 	 *
-	 * @param pathRegistry The path registry for retrieving paths
+	 * @param matchSettings The match settings for alliance color and position
 	 */
-	public SequenceBuilder(PathRegistry pathRegistry) {
+	public SequenceBuilder(MatchSettings matchSettings) {
 		this.sequence = new AutonomousSequence();
-		this.pathRegistry = pathRegistry;
+		this.matchSettings = matchSettings;
 	}
 
 	/**
 	 * Static factory method to create Far position sequences.
 	 */
-	public static AutonomousSequence buildFarSequence(PathRegistry pathRegistry) {
-		return new SequenceBuilder(pathRegistry)
+	public static AutonomousSequence buildFarSequence(MatchSettings matchSettings) {
+		return new SequenceBuilder(matchSettings)
 				// Launch preloads
 				.prepLaunch()
-				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_0)
+				.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
 				.wait(0.25)
 				.launch()
 
 				// Get ball set I
-				.followPath(PathRegistry.PathSegment.FAR_PRESET_1_PREP)
+				.clearIntake()
+				.moveTo(Settings.Positions.Samples.Preset1.PREP, "Prep Preset1")
 				.startIntake()
-				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_1_GRAB_1)
+				.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_1, "Grab1 Preset1")
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_1_GRAB_2)
+				.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab2 Preset1")
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_1_END)
+				.moveSlowlyTo(Settings.Positions.Samples.Preset1.END, "End Preset1")
 				.wait(BALL_INTAKE_WAIT_S)
 				.stopIntake()
 
 				// Launch ball set I
 				.prepLaunch()
-				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_1)
+				.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+						Settings.Positions.ControlPoints.FROM_PRESET1_TO_CLOSE, "Launch Preset1")
 				.wait(0.25)
 				.launch()
-				
+
 				// Get ball set II
+				.clearIntake()
+				.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
 				.startIntake()
-				.followPath(PathRegistry.PathSegment.FAR_PRESET_2_PREP)
-				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_2_GRAB_1)
+				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_2_GRAB_2)
+				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_2_END)
+				.moveSlowlyTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
 				.wait(BALL_INTAKE_WAIT_S)
 				.stopIntake()
-				
+
 				// Launch ball set II
 				.prepLaunch()
-				.followPath(PathRegistry.PathSegment.FAR_LAUNCH_2)
+				.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+						Settings.Positions.ControlPoints.FROM_PRESET2_TO_CLOSE, "Launch Preset2")
 				.wait(0.25)
 				.launch()
 				
-				// Get ball set III
-				/**
-				 * .followPath(PathRegistry.PathSegment.FAR_PRESET_3_PREP)
-				 * .followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_3_GRAB_1)
+				// Get ball set III (commented out for now)
+				/*
+				 * .clearIntake()
+				 * .moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
+				 * .startIntake()
+				 * .moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_1, "Grab1 Preset3")
 				 * .wait(BALL_INTAKE_WAIT_S)
-				 * .followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_3_GRAB_2)
+				 * .moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_2, "Grab2 Preset3")
 				 * .wait(BALL_INTAKE_WAIT_S)
-				 * .followPathSlowly(PathRegistry.PathSegment.FAR_PRESET_3_END)
+				 * .moveSlowlyTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
 				 * .wait(BALL_INTAKE_WAIT_S)
+				 * .stopIntake()
 				 *
 				 * // Launch ball set III
 				 * .prepLaunch()
-				 * .followPath(PathRegistry.PathSegment.FAR_LAUNCH_3)
+				 * .moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+				 * Settings.Positions.ControlPoints.FROM_PRESET3_TO_CLOSE, "Launch Preset3")
+				 * .wait(0.25)
 				 * .launch()
 				 */
-				
+
 				// Park
 				.stopIntake()
-				.followPath(PathRegistry.PathSegment.FAR_PARK)
-				.endAt(PathRegistry.PathSegment.FAR_PARK)
+				.moveTo(Settings.Positions.Park.DEFAULT, "Park")
+				.endAt(Settings.Positions.Park.DEFAULT)
 				.build();
 	}
-	
+
 	/**
 	 * Static factory method to create Close position sequences.
 	 */
-	public static AutonomousSequence buildCloseSequence(PathRegistry pathRegistry) {
-		return new SequenceBuilder(pathRegistry)
+	public static AutonomousSequence buildCloseSequence(MatchSettings matchSettings) {
+		return new SequenceBuilder(matchSettings)
 				// Launch preload
 				.prepLaunch()
-				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_0)
+				.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
 				.wait(0.25)
 				.launch()
 				
-				// Get ball set I
+				// Get ball set I (Preset3 for close sequence)
+				.clearIntake()
+				.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
 				.startIntake()
-				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_1_PREP)
-				.followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_1_GRAB_1)
+				.moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_1, "Grab1 Preset3")
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_1_GRAB_2)
+				.moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_2, "Grab2 Preset3")
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_1_END)
+				.moveSlowlyTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
 				.wait(BALL_INTAKE_WAIT_S)
 				.stopIntake()
-				
+
 				// Launch ball set I
 				.prepLaunch()
-				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_1)
+				.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+						Settings.Positions.ControlPoints.FROM_PRESET3_TO_CLOSE, "Launch Preset3")
 				.wait(0.25)
 				.launch()
 				
-				// Get ball set II
+				// Get ball set II (Preset2 for close sequence)
+				.clearIntake()
+				.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
 				.startIntake()
-				.followPath(PathRegistry.PathSegment.CLOSE_PRESET_2_PREP)
-				.followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_2_GRAB_1)
+				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_2_GRAB_2)
+				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
 				.wait(BALL_INTAKE_WAIT_S)
-				.followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_2_END)
+				.moveSlowlyTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
 				.wait(BALL_INTAKE_WAIT_S)
 				.stopIntake()
-				
+
 				// Launch ball set II
 				.prepLaunch()
-				.followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_2)
+				.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+						Settings.Positions.ControlPoints.FROM_PRESET2_TO_CLOSE, "Launch Preset2")
 				.wait(0.25)
 				.launch()
 				
-				// Get ball set III
-				/**
-				 * .followPath(PathRegistry.PathSegment.CLOSE_PRESET_3_PREP)
-				 * .followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_1)
+				// Get ball set III (commented out for now)
+				/*
+				 * .clearIntake()
+				 * .moveTo(Settings.Positions.Samples.Preset1.PREP, "Prep Preset1")
+				 * .startIntake()
+				 * .moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_1, "Grab1 Preset1")
 				 * .wait(BALL_INTAKE_WAIT_S)
-				 * .followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_3_GRAB_2)
+				 * .moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab2 Preset1")
 				 * .wait(BALL_INTAKE_WAIT_S)
-				 * .followPathSlowly(PathRegistry.PathSegment.CLOSE_PRESET_3_END)
+				 * .moveSlowlyTo(Settings.Positions.Samples.Preset1.END, "End Preset1")
 				 * .wait(BALL_INTAKE_WAIT_S)
+				 * .stopIntake()
 				 *
 				 * // Launch ball set III
 				 * .prepLaunch()
-				 * .followPath(PathRegistry.PathSegment.CLOSE_LAUNCH_3)
+				 * .moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
+				 * Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
+				 * .wait(0.25)
 				 * .launch()
 				 */
-				
+
 				// Park
 				.stopIntake()
-				.followPath(PathRegistry.PathSegment.CLOSE_PARK)
-				.endAt(PathRegistry.PathSegment.CLOSE_PARK)
+				.moveTo(Settings.Positions.Park.DEFAULT, "Park")
+				.endAt(Settings.Positions.Park.DEFAULT)
 				.build();
+	}
+
+	/**
+	 * Adds a linear path action to a target pose.
+	 *
+	 * @param targetPose The target pose (in BLUE alliance coordinates)
+	 * @param name       Human-readable name for telemetry
+	 * @return this (for method chaining)
+	 */
+	public SequenceBuilder moveTo(Pose targetPose, String name) {
+		sequence.addAction(new LinearPathAction(targetPose, name, matchSettings));
+		return this;
 	}
 	
 	/**
-	 * Adds a path following action.
-	 *
-	 * @param segment The path segment to follow
-	 * @return this (for method chaining)
+	 * Adds a linear path action to a target pose with auto-generated name.
 	 */
-	public SequenceBuilder followPath(PathRegistry.PathSegment segment) {
-		PathChain path = pathRegistry.getPath(segment);
-		sequence.addAction(new FollowPathAction(path, segment.name()));
+	public SequenceBuilder moveTo(Pose targetPose) {
+		sequence.addAction(new LinearPathAction(targetPose, matchSettings));
 		return this;
 	}
 	
-	public SequenceBuilder endAt(PathRegistry.PathSegment segment) {
-		PathChain path = pathRegistry.getPath(segment);
-		sequence.addAction(new EndAtAction(path.endPose()));
+	/**
+	 * Adds a slow linear path action to a target pose.
+	 */
+	public SequenceBuilder moveSlowlyTo(Pose targetPose, String name) {
+		sequence.addAction(new SlowLinearPathAction(targetPose, name, matchSettings));
 		return this;
 	}
 	
-	public SequenceBuilder followPathSlowly(PathRegistry.PathSegment segment) {
-		PathChain path = pathRegistry.getPath(segment);
-		sequence.addAction(new FollowPathAction(path, segment.name(), true));
+	/**
+	 * Adds a slow linear path action to a target pose with auto-generated name.
+	 */
+	public SequenceBuilder moveSlowlyTo(Pose targetPose) {
+		sequence.addAction(new SlowLinearPathAction(targetPose, matchSettings));
 		return this;
 	}
 	
+	/**
+	 * Adds a splined path action to a target pose.
+	 */
+	public SequenceBuilder moveSplineTo(Pose targetPose, String name, Pose... controlPoints) {
+		sequence.addAction(new SplinedPathAction(targetPose, name, matchSettings, controlPoints));
+		return this;
+	}
+	
+	/**
+	 * Adds a splined path action with auto-generated control points.
+	 */
+	public SequenceBuilder moveSplineTo(Pose targetPose, String name) {
+		sequence.addAction(new SplinedPathAction(targetPose, name, matchSettings));
+		return this;
+	}
+	
+	/**
+	 * Adds a curve path action with control points.
+	 */
+	public SequenceBuilder moveCurveTo(Pose targetPose, String name, Pose... controlPoints) {
+		sequence.addAction(new CurvePathAction(targetPose, name, matchSettings, controlPoints));
+		return this;
+	}
+	
+	/**
+	 * Adds a curve path action with control points and auto-generated name.
+	 */
+	public SequenceBuilder moveCurveTo(Pose targetPose, Pose... controlPoints) {
+		sequence.addAction(new CurvePathAction(targetPose, matchSettings, controlPoints));
+		return this;
+	}
+	
+	/**
+	 * Convenience method for single control point curves.
+	 */
+	public SequenceBuilder moveCurveToVia(Pose targetPose, Pose controlPoint, String name) {
+		sequence.addAction(CurvePathAction.withSingleControlPoint(targetPose, controlPoint, name, matchSettings));
+		return this;
+	}
+	
+	/**
+	 * Adds an end-at action to hold position at a target pose.
+	 */
+	public SequenceBuilder endAt(Pose targetPose) {
+		Pose finalPose = (matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE)
+				? targetPose
+				: mirror(targetPose);
+		sequence.addAction(new EndAtAction(finalPose));
+		return this;
+	}
+
 	/**
 	 * Adds an action to start the intake.
 	 *
@@ -217,11 +305,16 @@ public class SequenceBuilder {
 		return this;
 	}
 	
+	public SequenceBuilder clearIntake() {
+		sequence.addAction(new ClearIntakeAction());
+		return this;
+	}
+
 	public SequenceBuilder prepLaunch() {
 		sequence.addAction(new PrepareLaunchAction());
 		return this;
 	}
-	
+
 	/**
 	 * Adds an action to stop the intake.
 	 *
@@ -231,7 +324,7 @@ public class SequenceBuilder {
 		sequence.addAction(new StopIntakeAction());
 		return this;
 	}
-	
+
 	/**
 	 * Adds a launch action (waits for spindex to empty).
 	 *
@@ -279,15 +372,15 @@ public class SequenceBuilder {
 	 * Convenience method: Complete intake cycle (prep -> intake -> stop).
 	 * Represents going to a sample, picking it up, and returning.
 	 *
-	 * @param prepSegment Path to approach the sample
-	 * @param endSegment  Path to pick up the sample
+	 * @param prepPose Path to approach the sample
+	 * @param endPose  Path to pick up the sample
 	 * @return this (for method chaining)
 	 */
-	public SequenceBuilder intakeCycle(PathRegistry.PathSegment prepSegment, PathRegistry.PathSegment endSegment) {
+	public SequenceBuilder intakeCycle(Pose prepPose, Pose endPose) {
 		return this
-				.followPath(prepSegment)
+				.moveTo(prepPose)
 				.startIntake()
-				.followPath(endSegment)
+				.moveSlowlyTo(endPose)
 				.stopIntake();
 	}
 	
@@ -295,13 +388,13 @@ public class SequenceBuilder {
 	 * Convenience method: Complete launch cycle (launch -> wait for empty -> move).
 	 * Represents launching samples and then moving to next position.
 	 *
-	 * @param nextSegment Path to follow after launching
+	 * @param nextPose Path to follow after launching
 	 * @return this (for method chaining)
 	 */
-	public SequenceBuilder launchAndMove(PathRegistry.PathSegment nextSegment) {
+	public SequenceBuilder launchAndMove(Pose nextPose) {
 		return this
 				.launch()
-				.followPath(nextSegment);
+				.moveTo(nextPose);
 	}
 	
 	/**
@@ -313,7 +406,7 @@ public class SequenceBuilder {
 	 * @return this (for method chaining)
 	 */
 	public SequenceBuilder overrideTransferState(MatchSettings.ArtifactColor artifactColor) {
-		sequence.addAction(new OverrideTransferState(artifactColor));
+		sequence.addAction(new OverrideTransferStateAction(artifactColor));
 		return this;
 	}
 	
@@ -325,10 +418,9 @@ public class SequenceBuilder {
 	 * @return this (for method chaining)
 	 */
 	public SequenceBuilder overrideTransferStateFull() {
-		sequence.addAction(new OverrideTransferState());
+		sequence.addAction(new OverrideTransferStateAction());
 		return this;
 	}
-	
 	
 	/**
 	 * Adds an override action to force both intake motor and transfer entrance
@@ -338,7 +430,7 @@ public class SequenceBuilder {
 	 * @return this (for method chaining)
 	 */
 	public SequenceBuilder overrideIntakeIn() {
-		sequence.addAction(new OverrideIntakeIn());
+		sequence.addAction(new OverrideIntakeInAction());
 		return this;
 	}
 	
@@ -349,5 +441,18 @@ public class SequenceBuilder {
 	 */
 	public AutonomousSequence build() {
 		return sequence;
+	}
+	
+	/**
+	 * Mirrors a pose across the field centerline for red alliance.
+	 * Field width is 144 inches (standard FTC field).
+	 * Takes a BLUE pose and returns the mirrored RED pose.
+	 */
+	private Pose mirror(Pose bluePose) {
+		return new Pose(
+				Settings.Field.WIDTH - bluePose.getX(), // Mirror X coordinate
+				bluePose.getY(), // Y stays the same
+				Math.PI - bluePose.getHeading() // Mirror heading
+		);
 	}
 }
