@@ -149,12 +149,6 @@ public class MainOp extends OpMode {
 							? Settings.Positions.Default.RESET
 							: Settings.Field.mirrorPose(Settings.Positions.Default.RESET)));
 		}
-
-		// Automatically switch the perspective for field-centric
-		// driving based on the alliance color we start on
-		double perspectiveRotation = matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE
-				? Math.toRadians(180)
-				: Math.toRadians(0);
 		
 		mechanisms.ifValid(mechanisms.drivetrain, dt -> dt.manual(drive, strafe, rotate));
 		
@@ -200,25 +194,6 @@ public class MainOp extends OpMode {
 			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::openEntrance);
 		}
 		
-		// Get aiming solution for debugging
-		mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class),
-				launcher -> {
-					TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine
-							.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
-					if (solution.hasTarget) {
-						logging.addData("Yaw Offset°", "%.2f", solution.horizontalOffsetDegrees);
-						logging.addData("Target Pitch°", "%.2f", solution.verticalOffsetDegrees);
-						logging.addData("Required RPM", "%.0f", solution.rpm);
-					}
-				});
-		
-		// Launcher mechanism status
-		mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class), launcher -> {
-			logging.addData("Launcher Ready", launcher.okayToLaunch());
-			logging.addData("Current Pitch°", "%.2f", launcher.getPitch());
-			logging.addData("Current Yaw°", "%.2f", launcher.getYaw());
-		});
-		
 		// Intake & Transfer
 		if (subController.wasJustPressed(Controller.Action.INTAKE_IN)) {
 			mechanisms.ifValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::in);
@@ -251,6 +226,25 @@ public class MainOp extends OpMode {
 			logging.addData("Slots", slotsDisplay.toString());
 		});
 		
+		// Get aiming solution for debugging
+		mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class),
+				launcher -> {
+					TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine
+							.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
+					if (solution.hasTarget) {
+						logging.addData("Yaw Offset°", "%.2f", solution.horizontalOffsetDegrees);
+						logging.addData("Target Pitch°", "%.2f", solution.verticalOffsetDegrees);
+						logging.addData("Required RPM", "%.0f", solution.rpm);
+					}
+				});
+		
+		// Launcher mechanism status
+		mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class), launcher -> {
+			logging.addData("Launcher Ready", launcher.okayToLaunch());
+			logging.addData("Current Pitch°", "%.2f", launcher.getPitch());
+			logging.addData("Current Yaw°", "%.2f", launcher.getYaw());
+		});
+		
 		// Dynamic telemetry - only shown when conditions are met
 		if (mechanisms.drivetrain.getState() == Drivetrain.State.PATHING) {
 			logging.addData("headed to", mechanisms.drivetrain.follower.getCurrentPath().endPose());
@@ -259,12 +253,6 @@ public class MainOp extends OpMode {
 		if (mechanisms.drivetrain.follower.isBusy()) {
 			logging.addLine("FOLLOWER IS BUSY");
 		}
-		
-		// Use lazy evaluation for expensive angle calculation - only computed when
-		// transmitted
-		Pose targetPose = (matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE)
-				? Settings.Positions.Goals.BLUE_GOAL
-				: Settings.Positions.Goals.RED_GOAL;
 		
 		// Classifier controls
 		if (subController.getProcessedValue(Controller.Action.EMPTY_CLASSIFIER_STATE) > 0)
