@@ -23,6 +23,7 @@ public class Drivetrain extends Mechanism {
 	// Define field-centric poses for autonomous targets.
 	// Automatically mirrored for RED alliance.
 	private final Map<Position, Pose> positionPoses = new HashMap<>();
+	private final MatchSettings matchSettings;
 	public boolean robotCentric = true;
 	private State state;
 
@@ -38,35 +39,25 @@ public class Drivetrain extends Mechanism {
 	public Drivetrain(HardwareMap hardwareMap, MatchSettings matchSettings) {
 		// The Constants class now holds all hardware and tuning configurations.
 		this.follower = Constants.createFollower(hardwareMap);
+		this.matchSettings = matchSettings;
 		// Don't set starting pose here - let each OpMode handle it
-		
+
 		// Initialize the poses for each predefined position
 		// Use BLUE as reference, mirror for RED alliance
 		boolean isBlue = matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE;
-		
+
 		positionPoses.put(Position.CLOSE_SHOOT,
-				isBlue ? Settings.Positions.TeleOp.CLOSE_SHOOT : mirror(Settings.Positions.TeleOp.CLOSE_SHOOT));
+				isBlue ? Settings.Positions.TeleOp.CLOSE_SHOOT
+						: Settings.Field.mirrorPose(Settings.Positions.TeleOp.CLOSE_SHOOT));
 		positionPoses.put(Position.FAR_SHOOT,
-				isBlue ? Settings.Positions.TeleOp.FAR_SHOOT : mirror(Settings.Positions.TeleOp.FAR_SHOOT));
+				isBlue ? Settings.Positions.TeleOp.FAR_SHOOT
+						: Settings.Field.mirrorPose(Settings.Positions.TeleOp.FAR_SHOOT));
 		positionPoses.put(Position.PARK,
-				isBlue ? Settings.Positions.TeleOp.PARK : mirror(Settings.Positions.TeleOp.PARK));
+				isBlue ? Settings.Positions.TeleOp.PARK : Settings.Field.mirrorPose(Settings.Positions.TeleOp.PARK));
 		positionPoses.put(Position.GATE,
-				isBlue ? Settings.Positions.TeleOp.GATE : mirror(Settings.Positions.TeleOp.GATE));
+				isBlue ? Settings.Positions.TeleOp.GATE : Settings.Field.mirrorPose(Settings.Positions.TeleOp.GATE));
 	}
-	
-	/**
-	 * Mirrors a pose across the field centerline for red alliance.
-	 * Field width is 144 inches (standard FTC field).
-	 * Takes a BLUE pose and returns the mirrored RED pose.
-	 */
-	public Pose mirror(Pose bluePose) {
-		return new Pose(
-				Settings.Field.WIDTH - bluePose.getX(), // Mirror X coordinate
-				bluePose.getY(), // Y stays the same
-				Math.PI - bluePose.getHeading() // Mirror heading
-		);
-	}
-	
+
 	@Override
 	public void start() {
 		// No initialization required - drivetrain is initialized in constructor
@@ -96,13 +87,16 @@ public class Drivetrain extends Mechanism {
 	 * @param strafePower Left/right strafe power (-1.0 to 1.0).
 	 * @param rotation    Rotational power (-1.0 to 1.0).
 	 */
-	public void manual(double drivePower, double strafePower, double rotation, double offsetHeading) {
+	public void manual(double drivePower, double strafePower, double rotation) {
 		if (state != State.MANUAL) {
 			return; // Automation is handling driving, so ignore manual input.
 		}
-		if (robotCentric) {
-			offsetHeading = Math.toRadians(0); // do not rotate movement if now
-		}
+		
+		double offsetHeading = robotCentric ? Math.toRadians(0) :
+				matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE
+						? Math.toRadians(180)
+						: Math.toRadians(0);
+		
 		// The Follower expects a standard coordinate system (forward is positive).
 		follower.setTeleOpDrive(drivePower, strafePower, -rotation, robotCentric, offsetHeading);
 	}
@@ -207,6 +201,54 @@ public class Drivetrain extends Mechanism {
 	 */
 	public Pose getPositionPose(Position position) {
 		return positionPoses.get(position);
+	}
+	
+	/**
+	 * Converts a Controller.Action to a Drivetrain.Position.
+	 * Returns null if the action is not a GOTO action.
+	 *
+	 * @param action The controller action to convert
+	 * @return The corresponding Position, or null if not a GOTO action
+	 */
+	public Position actionToPosition(Controller.Action action) {
+		switch (action) {
+			case GOTO_CLOSE_SHOOT:
+				return Position.CLOSE_SHOOT;
+			case GOTO_FAR_SHOOT:
+				return Position.FAR_SHOOT;
+			case GOTO_PARK:
+				return Position.PARK;
+			case GOTO_GATE:
+				return Position.GATE;
+			default:
+				return null;
+		}
+	}
+	
+	/**
+	 * Checks if a Controller.Action is a GOTO action.
+	 *
+	 * @param action The action to check
+	 * @return true if the action is a GOTO action
+	 */
+	public boolean isGotoAction(Controller.Action action) {
+		return actionToPosition(action) != null;
+	}
+	
+	/**
+	 * Commands the robot to follow a path to a position specified by a
+	 * Controller.Action.
+	 * Only works for GOTO actions (GOTO_CLOSE_SHOOT, GOTO_FAR_SHOOT, GOTO_PARK,
+	 * GOTO_GATE).
+	 * Does nothing if the action is not a GOTO action.
+	 *
+	 * @param action The GOTO action specifying the target position
+	 */
+	public void goTo(Controller.Action action) {
+		Position position = actionToPosition(action);
+		if (position != null) {
+			goTo(position);
+		}
 	}
 	
 	public enum Position {

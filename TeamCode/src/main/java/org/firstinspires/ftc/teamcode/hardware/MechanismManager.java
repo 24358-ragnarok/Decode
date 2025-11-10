@@ -17,12 +17,15 @@ import org.firstinspires.ftc.teamcode.software.LimelightManager;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
 import java.lang.reflect.Proxy;
+import java.util.function.Consumer;
 
 /**
  * Central manager for all robot mechanisms and subsystems.
  * <p>
- * Handles safe initialization, lifecycle management, and dependency injection for all mechanisms.
- * Uses a fail-safe approach where missing hardware components are gracefully handled without
+ * Handles safe initialization, lifecycle management, and dependency injection
+ * for all mechanisms.
+ * Uses a fail-safe approach where missing hardware components are gracefully
+ * handled without
  * crashing the robot program.
  * <p>
  * Key features:
@@ -34,30 +37,30 @@ import java.lang.reflect.Proxy;
 public class MechanismManager {
 	public final Drivetrain drivetrain;
 	public final Mechanism[] mechanismArray;
-	
+
 	// Optional non-mechanism helpers
 	public final LimelightManager limelightManager;
 	public final TrajectoryEngine trajectoryEngine;
 	public final MatchSettings matchSettings;
-	
+
 	public MechanismManager(HardwareMap hw, MatchSettings match) {
 		drivetrain = new Drivetrain(hw, match);
 		matchSettings = match;
-		
+
 		// Build mechanisms safely
 		FlywheelIntake intake = createIntake(hw);
 		SingleWheelTransfer transfer = createTransfer(hw, intake);
 		LimelightManager ll = createLimelight(hw, match);
 		TrajectoryEngine traj = createTrajectory(ll, match);
-		BoonstraBlaster launcher = createLauncher(hw, traj, match);
+		HorizontalLauncher launcher = createLauncher(hw, traj, match);
 		
 		mechanismArray = new Mechanism[]{intake, transfer, launcher};
-		
+
 		// Save helpers
 		limelightManager = ll;
 		trajectoryEngine = traj;
 	}
-	
+
 	private FlywheelIntake createIntake(HardwareMap hw) {
 		if (!Settings.Deploy.INTAKE)
 			return null;
@@ -68,7 +71,7 @@ public class MechanismManager {
 			return null;
 		}
 	}
-	
+
 	private SingleWheelTransfer createTransfer(HardwareMap hw, FlywheelIntake intake) {
 		if (!Settings.Deploy.TRANSFER)
 			return null;
@@ -103,7 +106,7 @@ public class MechanismManager {
 		}
 	}
 	
-	private BoonstraBlaster createLauncher(HardwareMap hw, TrajectoryEngine traj, MatchSettings matchSettings) {
+	private HorizontalLauncher createLauncher(HardwareMap hw, TrajectoryEngine traj, MatchSettings matchSettings) {
 		if (!Settings.Deploy.LAUNCHER)
 			return null;
 		try {
@@ -117,7 +120,7 @@ public class MechanismManager {
 				horizontal = dummyServo();
 			}
 			Servo vertical = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
-			return new BoonstraBlaster(right, left, horizontal, vertical, traj, matchSettings);
+			return new HorizontalLauncher(right, left, horizontal, vertical, traj, matchSettings);
 		} catch (Exception e) {
 			return null;
 		}
@@ -140,6 +143,7 @@ public class MechanismManager {
 	
 	/**
 	 * Retrieves a mechanism of the specified type.
+	 * 
 	 * @param type The class type of the mechanism to retrieve
 	 * @return The mechanism instance, or null if not available
 	 */
@@ -184,6 +188,21 @@ public class MechanismManager {
 			if (m != null) {
 				m.stop();
 			}
+		}
+	}
+	
+	/**
+	 * Executes an action only if the specified object is not null.
+	 * This allows safe execution of operations on mechanisms that may not be
+	 * available.
+	 *
+	 * @param obj    The object to check (may be null)
+	 * @param action The action to execute if the object is valid
+	 * @param <T>    The type of the object
+	 */
+	public <T> void ifValid(T obj, Consumer<T> action) {
+		if (obj != null) {
+			action.accept(obj);
 		}
 	}
 }

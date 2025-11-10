@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.configuration.Settings;
-import org.firstinspires.ftc.teamcode.hardware.BoonstraBlaster;
+import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
 
 @TeleOp(name = "Test: Pitch", group = "Tests")
 public class ServoTest extends OpMode {
@@ -16,7 +16,7 @@ public class ServoTest extends OpMode {
 	public void init() {
 		pitchServo = hardwareMap.get(Servo.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
 		// Set initial pitch to 0°
-		BoonstraBlaster.setPitchDirect(pitchServo, pitch);
+		HorizontalLauncher.setPitchDirect(pitchServo, pitch);
 	}
 	
 	@Override
@@ -25,15 +25,15 @@ public class ServoTest extends OpMode {
 		if (gamepad1.dpadUpWasPressed()) {
 			// Increase pitch by 5° on each press
 			pitch += 5.0;
-			BoonstraBlaster.setPitchDirect(pitchServo, pitch);
+			HorizontalLauncher.setPitchDirect(pitchServo, pitch);
 		}
 		if (gamepad1.dpadDownWasPressed()) {
 			pitch -= 5.0;
-			BoonstraBlaster.setPitchDirect(pitchServo, pitch);
+			HorizontalLauncher.setPitchDirect(pitchServo, pitch);
 		}
 		
 		// Get and display current pitch from servo
-		double currentPitch = BoonstraBlaster.getPitchDirect(pitchServo);
+		double currentPitch = HorizontalLauncher.getPitchDirect(pitchServo);
 		telemetry.addData("Target Pitch", "%.1f°", pitch);
 		telemetry.addData("Current Pitch", "%.1f°", currentPitch);
 		telemetry.addData("Servo Position", "%.3f", pitchServo.getPosition());

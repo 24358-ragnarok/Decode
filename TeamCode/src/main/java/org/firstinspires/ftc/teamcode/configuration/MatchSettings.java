@@ -87,10 +87,10 @@ public class MatchSettings {
 		Pose bluePose = startingPosition == AutoStartingPosition.CLOSE
 				? Settings.Positions.AutoStart.CLOSE
 				: Settings.Positions.AutoStart.FAR;
-		
+
 		// Mirror for RED alliance
 		if (allianceColor == AllianceColor.RED) {
-			return mirrorPose(bluePose);
+			return Settings.Field.mirrorPose(bluePose);
 		} else {
 			return bluePose;
 		}
@@ -117,7 +117,7 @@ public class MatchSettings {
 		if (blackboard.get(ALLIANCE_COLOR_KEY) == null || blackboard.get(AUTO_KEY) == null) {
 			return Settings.Positions.Default.RESET;
 		}
-		
+
 		// Fall back to predefined poses if actual pose is unavailable
 		AllianceColor allianceColor = getAllianceColor();
 		AutoStartingPosition startingPosition = getAutoStartingPosition();
@@ -127,7 +127,7 @@ public class MatchSettings {
 		
 		// Mirror for RED alliance
 		if (allianceColor == AllianceColor.RED) {
-			return mirrorPose(bluePose);
+			return Settings.Field.mirrorPose(bluePose);
 		} else {
 			return bluePose;
 		}
@@ -262,21 +262,6 @@ public class MatchSettings {
 	
 	public void clearStoredPose() {
 		blackboard.remove(STORED_POSE_KEY);
-	}
-	
-	/**
-	 * Mirrors a pose across the field centerline for red alliance.
-	 * Field width is 144 inches (standard FTC field).
-	 * Takes a BLUE pose and returns the mirrored RED pose.
-	 * <p>
-	 * This is used for autonomous starting pose calculation.
-	 */
-	private Pose mirrorPose(Pose bluePose) {
-		return new Pose(
-				Settings.Field.WIDTH - bluePose.getX(), // Mirror X coordinate
-				bluePose.getY(), // Y stays the same
-				Math.PI - bluePose.getHeading() // Mirror heading
-		);
 	}
 	
 	public enum AllianceColor {

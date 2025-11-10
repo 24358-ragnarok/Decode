@@ -51,7 +51,7 @@ public abstract class PathAction implements AutonomousAction {
 		// Mirror target pose if we're on RED alliance
 		Pose actualTarget = (alliance == MatchSettings.AllianceColor.BLUE)
 				? targetPose
-				: mirror(targetPose);
+				: Settings.Field.mirrorPose(targetPose);
 		
 		// Build the path dynamically from current position to target
 		generatedPath = buildPath(mechanisms, currentPose, actualTarget);
@@ -100,18 +100,6 @@ public abstract class PathAction implements AutonomousAction {
 		mechanisms.drivetrain.follower.followPath(path, true);
 	}
 	
-	/**
-	 * Mirrors a pose across the field centerline for red alliance.
-	 * Field width is 144 inches (standard FTC field).
-	 * Takes a BLUE pose and returns the mirrored RED pose.
-	 */
-	protected Pose mirror(Pose bluePose) {
-		return new Pose(
-				Settings.Field.WIDTH - bluePose.getX(), // Mirror X coordinate
-				bluePose.getY(), // Y stays the same
-				Math.PI - bluePose.getHeading() // Mirror heading
-		);
-	}
 	
 	/**
 	 * Gets the final target pose (after alliance mirroring).
@@ -120,6 +108,6 @@ public abstract class PathAction implements AutonomousAction {
 	public Pose getFinalTargetPose() {
 		return (alliance == MatchSettings.AllianceColor.BLUE)
 				? targetPose
-				: mirror(targetPose);
+				: Settings.Field.mirrorPose(targetPose);
 	}
 }

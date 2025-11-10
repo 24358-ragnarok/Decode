@@ -117,7 +117,7 @@ public class Settings {
 		public static double INTAKE_SERVO_OPEN_POSITION = 0.0;
 		public static double TOLERANCE = 5.0 / 360.0; // how close a slot must be to the exit to launch
 	}
-	
+
 	/**
 	 * Settings for the transfer mechanism with CR management wheels.
 	 * <p>
@@ -130,7 +130,7 @@ public class Settings {
 		// Detection settings
 		public static final double BLIND_WINDOW_MS = 750; // Time after detection to ignore new detections
 		public static final int MAX_CAPACITY = 3; // Number of ball slots
-		
+
 		// Main transfer wheel settings
 		public static final double TRANSFER_WHEEL_FORWARD_POWER = 1.0; // Power when advancing balls
 		public static final double TRANSFER_WHEEL_REVERSE_POWER = -1.0; // Power when reversing
@@ -304,6 +304,22 @@ public class Settings {
 	public static class Field {
 		public static double WIDTH = 144.0; // inches
 		public static double BALL_MASS_KG = .076; // kg
+		
+		/**
+		 * Mirrors a pose across the field centerline for red alliance.
+		 * Field width is 144 inches (standard FTC field).
+		 * Takes a BLUE pose and returns the mirrored RED pose.
+		 *
+		 * @param bluePose The pose in BLUE alliance coordinates
+		 * @return The mirrored pose in RED alliance coordinates
+		 */
+		public static Pose mirrorPose(Pose bluePose) {
+			return new Pose(
+					WIDTH - bluePose.getX(), // Mirror X coordinate
+					bluePose.getY(), // Y stays the same
+					Math.PI - bluePose.getHeading() // Mirror heading across x axis
+			);
+		}
 	}
 	
 	/**
@@ -318,7 +334,7 @@ public class Settings {
 		 * Default/reset positions.
 		 */
 		public static class Default {
-			public static final Pose RESET = new Pose(72, 72, Math.toRadians(90));
+			public static final Pose RESET = new Pose(72, 72, Math.toRadians(90)); // TODO set this to corner instead
 		}
 		
 		/**

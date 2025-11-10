@@ -8,16 +8,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
-import org.firstinspires.ftc.teamcode.hardware.BoonstraBlaster;
 import org.firstinspires.ftc.teamcode.hardware.FlywheelIntake;
+import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
 import org.firstinspires.ftc.teamcode.hardware.Mechanism;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 import org.firstinspires.ftc.teamcode.software.Controller;
 import org.firstinspires.ftc.teamcode.software.Drivetrain;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
-
-import java.util.function.Consumer;
 
 /**
  * This is our main TeleOp class for the driver-controlled period, which occurs
@@ -31,16 +29,6 @@ public class MainOp extends OpMode {
 	private MechanismManager mechanisms;
 	private Controller mainController;
 	private Controller subController;
-
-	/**
-	 * This allows us to run commands only if the related mechanism works.
-	 * For example I could run "if launcher exists, shoot it" using this.
-	 */
-	public static <T> void ifMechanismValid(T obj, Consumer<T> action) {
-		if (obj != null) {
-			action.accept(obj);
-		}
-	}
 
 	/**
 	 * Runs when "init" is pressed on the Driver Station.
@@ -65,7 +53,7 @@ public class MainOp extends OpMode {
 		logging.addDataLazy("Y", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getY());
 
 		logging.addData("Alliance", matchSettings.getAllianceColor());
-		
+
 		// Show whether we're using stored pose or fallback
 		Pose storedPose = matchSettings.getStoredPose();
 		if (storedPose != null) {
@@ -74,7 +62,7 @@ public class MainOp extends OpMode {
 		} else {
 			logging.addData("Starting Pose Source", "FALLBACK/PREDEFINED");
 		}
-		
+
 		for (Mechanism m : mechanisms.mechanismArray) {
 			logging.addData(m.getClass().toString(), "✅");
 		}
@@ -83,7 +71,7 @@ public class MainOp extends OpMode {
 		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getTeleOpStartingPose());
 		mechanisms.drivetrain.switchToManual();
 	}
-	
+
 	/**
 	 * Runs after "init" and before "start" repeatedly.
 	 */
@@ -92,19 +80,19 @@ public class MainOp extends OpMode {
 		logging.drawDebug(mechanisms.drivetrain.follower);
 		logging.update();
 	}
-	
+
 	/**
 	 * Runs when "start" is pressed on the Driver Station.
 	 */
 	@Override
 	public final void start() {
 		// Initialize mechanisms and start teleop drive
-		ifMechanismValid(mechanisms, MechanismManager::start);
+		mechanisms.ifValid(mechanisms, MechanismManager::start);
 		mechanisms.drivetrain.follower.startTeleopDrive(); // or pass in true to enable braking
 		matchSettings.clearStoredPose();
 		logging.enableRetainedMode();
 	}
-	
+
 	/**
 	 * Runs repeatedly after "start" is pressed on the Driver Station, during the
 	 * actual game.
@@ -112,20 +100,20 @@ public class MainOp extends OpMode {
 	@Override
 	public final void loop() {
 		mechanisms.update();
-		
+
 		// Clear dynamic (non-retained) telemetry from previous loop
 		logging.clearDynamic();
-		
+
 		processControllerInputs();
 		setControllerLEDs();
 		setControllerRumble();
-		
+
 		// Draw debug visualization (retained items like Heading, X, Y are auto-updated
 		// via Func)
 		logging.drawDebug(mechanisms.drivetrain.follower);
 		logging.update();
 	}
-	
+
 	/**
 	 * Runs when "stop" is pressed on the Driver Station.
 	 * Cleanup and shutdown should occur instantaneously and be non-blocking.
@@ -136,10 +124,10 @@ public class MainOp extends OpMode {
 		if (mechanisms != null && mechanisms.drivetrain != null && mechanisms.drivetrain.follower != null) {
 			matchSettings.setStoredPose(mechanisms.drivetrain.follower.getPose());
 		}
-		
+
 		mechanisms.stop();
 	}
-	
+
 	/**
 	 * Process controller inputs for both main and sub controllers.
 	 * Handles drivetrain movement, launcher controls, intake operations, and
@@ -150,71 +138,70 @@ public class MainOp extends OpMode {
 		double drive = mainController.getProcessedDrive();
 		double strafe = mainController.getProcessedStrafe();
 		double rotate = mainController.getProcessedRotation();
-		
+
 		if (mainController.wasJustPressed(Controller.Action.TOGGLE_CENTRICITY)) {
-			ifMechanismValid(mechanisms.drivetrain, Drivetrain::toggleCentricity);
+			mechanisms.ifValid(mechanisms.drivetrain, Drivetrain::toggleCentricity);
 		}
-		
+
 		if (mainController.wasJustPressed(Controller.Action.RESET_FOLLOWER)) {
-			ifMechanismValid(mechanisms.drivetrain, dt -> dt.follower.setPose(Settings.Positions.Default.RESET));
+			mechanisms.ifValid(mechanisms.drivetrain, dt -> dt.follower.setPose(
+					(matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE)
+							? Settings.Positions.Default.RESET
+							: Settings.Field.mirrorPose(Settings.Positions.Default.RESET)));
 		}
-		
+
 		// Automatically switch the perspective for field-centric
 		// driving based on the alliance color we start on
 		double perspectiveRotation = matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE
 				? Math.toRadians(180)
 				: Math.toRadians(0);
 		
-		ifMechanismValid(mechanisms.drivetrain, dt -> dt.manual(drive, strafe, rotate, perspectiveRotation));
+		mechanisms.ifValid(mechanisms.drivetrain, dt -> dt.manual(drive, strafe, rotate));
 		
+		// Handle GOTO actions
 		for (Controller.Action action : Settings.Controls.gotoActions) {
-			Pose gotopose = mechanisms.drivetrain
-					.getPositionPose(Drivetrain.Position.valueOf(action.name().substring("GOTO_".length())));
 			if (mainController.wasJustPressed(action)
 					&& mainController.getProcessedValue(Controller.Control.START) <= 0.0) {
-				ifMechanismValid(mechanisms.drivetrain,
-						dt -> dt.goTo(gotopose));
-				if (gotopose == mechanisms.drivetrain
-						.getPositionPose(Drivetrain.Position.valueOf("PARK"))) {
-					ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::stop);
-					
-				}
+				mechanisms.ifValid(mechanisms.drivetrain, dt -> {
+					dt.goTo(action);
+					// Stop intake when going to park
+					if (dt.actionToPosition(action) == Drivetrain.Position.PARK) {
+						mechanisms.ifValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::stop);
+					}
+				});
 			} else if (mainController.wasJustReleased(action)) {
 				mechanisms.drivetrain.switchToManual();
 			}
 		}
 		
 		if (mainController.wasJustPressed(Controller.Action.CANCEL_ASSISTED_DRIVING)) {
-			ifMechanismValid(mechanisms.drivetrain, Drivetrain::switchToManual);
+			mechanisms.ifValid(mechanisms.drivetrain, Drivetrain::switchToManual);
 		}
 		
 		// Alignment & Launcher
 		if (subController.getProcessedValue(Controller.Action.AIM) > 0.1) {
-			ifMechanismValid(mechanisms.get(BoonstraBlaster.class), BoonstraBlaster::ready);
+			mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::ready);
 		} else {
-			ifMechanismValid(mechanisms.get(BoonstraBlaster.class), BoonstraBlaster::stop);
+			mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::stop);
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.AIM)) {
-			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::moveNextBallToKicker);
+			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::moveNextBallToKicker);
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
-			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::fire);
+			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::fire);
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.OVERRIDE_ADVANCE)) {
-			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::advance);
+			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::advance);
 		}
 		if (subController.wasJustPressed(Controller.Action.OVERRIDE_BALL_DETECTION)) {
-			ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), swt -> {
-				swt.clearAllSlots();
-				swt.openEntrance();
-			});
+			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::openEntrance);
 		}
 		
 		// Get aiming solution for debugging
-		ifMechanismValid(mechanisms.get(BoonstraBlaster.class),
+		mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class),
 				launcher -> {
 					TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine
 							.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
@@ -226,27 +213,27 @@ public class MainOp extends OpMode {
 				});
 		
 		// Launcher mechanism status
-		ifMechanismValid(mechanisms.get(BoonstraBlaster.class), hl -> {
-			logging.addData("Launcher Ready", hl.okayToLaunch());
-			logging.addData("Current Pitch°", "%.2f", hl.getPitch());
-			logging.addData("Current Yaw°", "%.2f", hl.getYaw());
+		mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class), launcher -> {
+			logging.addData("Launcher Ready", launcher.okayToLaunch());
+			logging.addData("Current Pitch°", "%.2f", launcher.getPitch());
+			logging.addData("Current Yaw°", "%.2f", launcher.getYaw());
 		});
 		
 		// Intake & Transfer
 		if (subController.wasJustPressed(Controller.Action.INTAKE_IN)) {
-			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::in);
+			mechanisms.ifValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::in);
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.INTAKE_OUT)) {
-			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::out);
+			mechanisms.ifValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::out);
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.INTAKE_STOP)) {
-			ifMechanismValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::stop);
+			mechanisms.ifValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::stop);
 		}
 		
 		// Transfer telemetry
-		ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
+		mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
 			logging.addLine("=== TRANSFER STATUS ===");
 			logging.addData("Next at Exit", transfer.getNextBallToKicker());
 			logging.addData("Full", transfer.isFull());
@@ -306,9 +293,10 @@ public class MainOp extends OpMode {
 	}
 	
 	private void setControllerRumble() {
-		if (mechanisms.drivetrain.follower.getPose().distanceFrom(mechanisms.drivetrain.getPositionPose(Drivetrain.Position.CLOSE_SHOOT)) < 0.1 ||
-				mechanisms.drivetrain.follower.getPose().distanceFrom(mechanisms.drivetrain.getPositionPose(Drivetrain.Position.FAR_SHOOT)) < 0.1
-		) {
+		if (mechanisms.drivetrain.follower.getPose()
+				.distanceFrom(mechanisms.drivetrain.getPositionPose(Drivetrain.Position.CLOSE_SHOOT)) < 0.1 ||
+				mechanisms.drivetrain.follower.getPose()
+						.distanceFrom(mechanisms.drivetrain.getPositionPose(Drivetrain.Position.FAR_SHOOT)) < 0.1) {
 			subController.rumble(100);
 		}
 	}

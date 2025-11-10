@@ -5,6 +5,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 
 /**
@@ -64,7 +65,7 @@ public class SplinedPathAction extends PathAction {
 			for (int i = 0; i < controlPoints.length; i++) {
 				allPoints[i + 1] = (alliance == MatchSettings.AllianceColor.BLUE)
 						? controlPoints[i]
-						: mirror(controlPoints[i]);
+						: Settings.Field.mirrorPose(controlPoints[i]);
 			}
 			
 			allPoints[allPoints.length - 1] = endPose;

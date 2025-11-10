@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.MainOp.ifMechanismValid;
-
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.util.Timer;
@@ -63,7 +61,7 @@ public class MainAuto extends OpMode {
 		matchSettings.setAutoStartingPosition(MatchSettings.AutoStartingPosition.CLOSE);
 
 		wizard = new MatchConfigurationWizard(matchSettings, gamepad1, logging);
-		
+
 		// Initialize robot mechanisms
 		mechanisms = new MechanismManager(hardwareMap, matchSettings);
 		
@@ -95,7 +93,7 @@ public class MainAuto extends OpMode {
 		// Initialize all mechanisms
 		mechanisms.start();
 		
-		ifMechanismValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
+		mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
 			Arrays.fill(transfer.slots, MatchSettings.ArtifactColor.PURPLE);
 		});
 		

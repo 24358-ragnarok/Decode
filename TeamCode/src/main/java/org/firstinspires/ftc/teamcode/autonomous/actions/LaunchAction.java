@@ -4,7 +4,7 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXI
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_FIRE_RESET_MS;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
-import org.firstinspires.ftc.teamcode.hardware.BoonstraBlaster;
+import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 
@@ -30,14 +30,14 @@ public class LaunchAction implements AutonomousAction {
 	
 	@Override
 	public void initialize(MechanismManager mechanisms) {
-		hasLauncher = mechanisms.get(BoonstraBlaster.class) != null;
+		hasLauncher = mechanisms.get(HorizontalLauncher.class) != null;
 		hasTransfer = mechanisms.get(SingleWheelTransfer.class) != null;
 		state = State.READY_TO_LAUNCH;
 		lastFireTimeMs = 0;
 		
 		// Start the launcher ready sequence (spin up, aim)
 		if (hasLauncher) {
-			BoonstraBlaster launcher = mechanisms.get(BoonstraBlaster.class);
+			HorizontalLauncher launcher = mechanisms.get(HorizontalLauncher.class);
 			launcher.ready();
 		}
 	}
@@ -49,7 +49,7 @@ public class LaunchAction implements AutonomousAction {
 			return true;
 		}
 		
-		BoonstraBlaster launcher = mechanisms.get(BoonstraBlaster.class);
+		HorizontalLauncher launcher = mechanisms.get(HorizontalLauncher.class);
 		SingleWheelTransfer transfer = mechanisms.get(SingleWheelTransfer.class);
 		
 		if (transfer.isEmpty() && state == State.READY_TO_LAUNCH) {
@@ -114,7 +114,7 @@ public class LaunchAction implements AutonomousAction {
 	public void end(MechanismManager mechanisms, boolean interrupted) {
 		// If interrupted, stop the launcher
 		if (interrupted && hasLauncher) {
-			BoonstraBlaster launcher = mechanisms.get(BoonstraBlaster.class);
+			HorizontalLauncher launcher = mechanisms.get(HorizontalLauncher.class);
 			if (launcher != null) {
 				launcher.stop();
 			}

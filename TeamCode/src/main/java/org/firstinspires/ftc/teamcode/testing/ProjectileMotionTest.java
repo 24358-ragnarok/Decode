@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.configuration.Settings;
-import org.firstinspires.ftc.teamcode.hardware.BoonstraBlaster;
+import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
 
 /**
  * An enhanced TeleOp for testing launcher motor performance and angle.
@@ -26,7 +26,7 @@ public class ProjectileMotionTest extends LinearOpMode {
 	// State & Control
 	private double commandedRPM = 3000;
 	// Hardware
-	private BoonstraBlaster.SyncBelt syncBelt;
+	private HorizontalLauncher.SyncBelt syncBelt;
 	private DcMotorEx rightLauncherMotor;
 	private DcMotorEx leftLauncherMotor;
 	private Servo kickerServo;
@@ -44,7 +44,7 @@ public class ProjectileMotionTest extends LinearOpMode {
 		leftLauncherMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 		
 		
-		syncBelt = new BoonstraBlaster.SyncBelt(rightLauncherMotor, leftLauncherMotor);
+		syncBelt = new HorizontalLauncher.SyncBelt(rightLauncherMotor, leftLauncherMotor);
 		pitchServo = hardwareMap.get(Servo.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
 		pitchServo.setPosition(commandedAngle);
 		kickerServo = hardwareMap.get(Servo.class, Settings.HardwareIDs.TRANSFER_EXIT_KICKER);
@@ -103,7 +103,7 @@ public class ProjectileMotionTest extends LinearOpMode {
 			telemetry.addLine();
 			
 			telemetry.addData("Commanded Pitch Position", commandedAngle);
-			telemetry.addData("Real Angle", BoonstraBlaster.getPitchDirect(pitchServo));
+			telemetry.addData("Real Angle", HorizontalLauncher.getPitchDirect(pitchServo));
 			
 			telemetry.update();
 		}

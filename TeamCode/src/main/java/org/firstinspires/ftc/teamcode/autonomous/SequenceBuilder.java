@@ -290,7 +290,7 @@ public class SequenceBuilder {
 	public SequenceBuilder endAt(Pose targetPose) {
 		Pose finalPose = (matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE)
 				? targetPose
-				: mirror(targetPose);
+				: Settings.Field.mirrorPose(targetPose);
 		sequence.addAction(new EndAtAction(finalPose));
 		return this;
 	}
@@ -441,18 +441,5 @@ public class SequenceBuilder {
 	 */
 	public AutonomousSequence build() {
 		return sequence;
-	}
-	
-	/**
-	 * Mirrors a pose across the field centerline for red alliance.
-	 * Field width is 144 inches (standard FTC field).
-	 * Takes a BLUE pose and returns the mirrored RED pose.
-	 */
-	private Pose mirror(Pose bluePose) {
-		return new Pose(
-				Settings.Field.WIDTH - bluePose.getX(), // Mirror X coordinate
-				bluePose.getY(), // Y stays the same
-				Math.PI - bluePose.getHeading() // Mirror heading
-		);
 	}
 }

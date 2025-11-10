@@ -8,14 +8,14 @@ import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
-public class BoonstraBlaster extends Mechanism {
+public class HorizontalLauncher extends Mechanism {
 	private final TrajectoryEngine trajectoryEngine;
 	private final Servo horizontalServo;
 	private final Servo verticalServo;
 	private final SyncBelt belt;
 	private final MatchSettings matchSettings;
 	
-	public BoonstraBlaster(
+	public HorizontalLauncher(
 			DcMotorEx beltRight,
 			DcMotorEx beltLeft,
 			Servo horizontalServo,
@@ -54,7 +54,7 @@ public class BoonstraBlaster extends Mechanism {
 	
 	/**
 	 * Aims the launcher at the target using feedback from the TrajectoryEngine.
-	 * This is invoked by the {@link BoonstraBlaster#ready()} method which should
+	 * This is invoked by the {@link HorizontalLauncher#ready()} method which should
 	 * be called repeatedly in the main robot loop when aiming.
 	 * <p>
 	 * The TrajectoryEngine provides a standardized AimingSolution with:
