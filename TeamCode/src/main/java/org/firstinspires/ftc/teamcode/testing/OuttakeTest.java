@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
  * @noinspection ClassWithoutConstructor, OverlyLongMethod
  */
 @TeleOp(name = "Test: Outtake", group = "Tests")
-public class ProjectileMotionTest extends LinearOpMode {
+public class OuttakeTest extends LinearOpMode {
 	
 	// Motor Configuration
 	final double TICKS_PER_REVOLUTION = 28;

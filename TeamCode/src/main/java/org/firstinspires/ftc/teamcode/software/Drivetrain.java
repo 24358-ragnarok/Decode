@@ -5,10 +5,10 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.configuration.Constants;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.Mechanism;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
