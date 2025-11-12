@@ -39,7 +39,7 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
  * <p>
  * Configuration persists across power cycles.
  */
-@TeleOp(name = "Config: Color Rangefinder", group = "Configuration")
+@TeleOp(name = "Configure: I2C Color Rangefinder", group = "Configuration")
 public class ConfigureColorRangefinder extends OpMode {
 	private RevColorSensorV3 sensor;
 	private ColorRangefinderConfigurator configurator;
@@ -50,16 +50,6 @@ public class ConfigureColorRangefinder extends OpMode {
 	private double greenLow;
 	private double greenHigh;
 	private double maxDistance;
-	
-	// Button press detection
-	private boolean lastCross = false;
-	private boolean lastTriangle = false;
-	private boolean lastDpadUp = false;
-	private boolean lastDpadDown = false;
-	private boolean lastDpadLeft = false;
-	private boolean lastDpadRight = false;
-	private boolean lastLeftBumper = false;
-	private boolean lastRightBumper = false;
 	
 	// Deployment status
 	private boolean configDeployed = false;
@@ -101,16 +91,14 @@ public class ConfigureColorRangefinder extends OpMode {
 		handleThresholdAdjustment();
 		
 		// Handle deployment
-		if (gamepad1.cross && !lastCross) {
+		if (gamepad1.crossWasPressed()) {
 			deployConfiguration();
 		}
-		lastCross = gamepad1.cross;
 		
 		// Handle reset
-		if (gamepad1.triangle && !lastTriangle) {
+		if (gamepad1.triangleWasPressed()) {
 			resetToDefaults();
 		}
-		lastTriangle = gamepad1.triangle;
 		
 		// Display telemetry
 		displayTelemetry(colors, distance, hue);
@@ -118,34 +106,28 @@ public class ConfigureColorRangefinder extends OpMode {
 	
 	private void handleThresholdAdjustment() {
 		// Purple range adjustment (DPAD UP/DOWN)
-		if (gamepad1.dpad_up && !lastDpadUp) {
+		if (gamepad1.dpadUpWasPressed()) {
 			purpleHigh = Math.min(255, purpleHigh + 5);
 		}
-		if (gamepad1.dpad_down && !lastDpadDown) {
+		if (gamepad1.dpadDownWasPressed()) {
 			purpleLow = Math.max(0, purpleLow - 5);
 		}
-		lastDpadUp = gamepad1.dpad_up;
-		lastDpadDown = gamepad1.dpad_down;
 		
 		// Green range adjustment (DPAD LEFT/RIGHT)
-		if (gamepad1.dpad_right && !lastDpadRight) {
+		if (gamepad1.dpadRightWasPressed()) {
 			greenHigh = Math.min(255, greenHigh + 5);
 		}
-		if (gamepad1.dpad_left && !lastDpadLeft) {
+		if (gamepad1.dpadLeftWasPressed()) {
 			greenLow = Math.max(0, greenLow - 5);
 		}
-		lastDpadLeft = gamepad1.dpad_left;
-		lastDpadRight = gamepad1.dpad_right;
 		
 		// Distance threshold adjustment (BUMPERS)
-		if (gamepad1.right_bumper && !lastRightBumper) {
+		if (gamepad1.rightBumperWasPressed()) {
 			maxDistance = Math.min(100, maxDistance + 5);
 		}
-		if (gamepad1.left_bumper && !lastLeftBumper) {
+		if (gamepad1.leftBumperWasPressed()) {
 			maxDistance = Math.max(5, maxDistance - 5);
 		}
-		lastLeftBumper = gamepad1.left_bumper;
-		lastRightBumper = gamepad1.right_bumper;
 	}
 	
 	private void deployConfiguration() {

@@ -16,8 +16,8 @@ import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
  * <p>
  * The sensor's onboard processor handles all HSV color detection and distance
  * filtering in hardware. This class simply reads the digital pin states:
- * - Pin 0 → LOW when PURPLE detected (HSV hue ~160-190°, within distance)
- * - Pin 1 → LOW when GREEN detected (HSV hue ~110-140°, within distance)
+ * - Pin 0 → HIGH when PURPLE detected (HSV hue ~160-190°, within distance)
+ * - Pin 1 → HIGH when GREEN detected (HSV hue ~110-140°, within distance)
  * <p>
  * Benefits:
  * - Ultra-fast detection (&lt;1ms, no I2C communication)
@@ -88,28 +88,28 @@ public class ColorRangefinder {
 	/**
 	 * Checks if PURPLE artifact is detected.
 	 * <p>
-	 * Reads Pin 0 digital state. The sensor pulls the pin LOW when purple is
+	 * Reads Pin 0 digital state. The sensor pulls the pin HIGH when purple is
 	 * detected within the configured HSV hue range and distance threshold.
 	 *
 	 * @return true if purple is detected within configured thresholds
 	 */
 	public boolean isPurpleDetected() {
-		// Digital pins are active LOW: getState() returns false when sensor detects
+		// Digital pins are active HIGH: getState() returns true when sensor detects
 		// color
-		return !pin0.getState();
+		return pin0.getState();
 	}
 	
 	/**
 	 * Checks if GREEN artifact is detected.
 	 * <p>
-	 * Reads Pin 1 digital state. The sensor pulls the pin LOW when green is
+	 * Reads Pin 1 digital state. The sensor pulls the pin HIGH when green is
 	 * detected within the configured HSV hue range and distance threshold.
 	 *
 	 * @return true if green is detected within configured thresholds
 	 */
 	public boolean isGreenDetected() {
-		// Digital pins are active LOW: getState() returns false when sensor detects
+		// Digital pins are active HIGH: getState() returns true when sensor detects
 		// color
-		return !pin1.getState();
+		return pin1.getState();
 	}
 }
