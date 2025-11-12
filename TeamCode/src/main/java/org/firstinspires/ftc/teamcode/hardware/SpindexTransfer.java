@@ -10,9 +10,10 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Spindex.RAPI
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Spindex.SLOT_INTAKE_POSITIONS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Spindex.TOLERANCE;
 
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.software.ColorRangefinder;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -32,10 +33,10 @@ import java.util.List;
 @Deprecated
 public class SpindexTransfer extends Mechanism {
 	// Hardware & Config (public for Command access)
-	public final Servo spindexServo;
-	public final Servo exitSealServo;
-	public final Servo intakeSealServo;
-	public final ColorSensor colorSensor;
+	public final ServoImplEx spindexServo;
+	public final ServoImplEx exitSealServo;
+	public final ServoImplEx intakeSealServo;
+	public final ColorRangefinder colorSensor;
 	public final MatchSettings matchSettings;
 	public final double[] slotIntakePositions = new double[3];
 	public final double exitOffset;
@@ -49,7 +50,7 @@ public class SpindexTransfer extends Mechanism {
 	// --- Command Pattern Implementation ---
 	private Command currentCommand = new Command.IdleCommand();
 	
-	public SpindexTransfer(Servo spindexServo, Servo exitSealServo, Servo intakeSealServo, ColorSensor spindexColorSensor,
+	public SpindexTransfer(ServoImplEx spindexServo, ServoImplEx exitSealServo, ServoImplEx intakeSealServo, ColorRangefinder spindexColorSensor,
 	                       MatchSettings matchSettings) {
 		this.spindexServo = spindexServo;
 		this.exitSealServo = exitSealServo;

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
@@ -10,16 +11,16 @@ import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
 public class HorizontalLauncher extends Mechanism {
 	private final TrajectoryEngine trajectoryEngine;
-	private final Servo horizontalServo;
-	private final Servo verticalServo;
+	private final ServoImplEx horizontalServo;
+	private final ServoImplEx verticalServo;
 	private final SyncBelt belt;
 	private final MatchSettings matchSettings;
 	
 	public HorizontalLauncher(
 			DcMotorEx beltRight,
 			DcMotorEx beltLeft,
-			Servo horizontalServo,
-			Servo verticalServo,
+			ServoImplEx horizontalServo,
+			ServoImplEx verticalServo,
 			TrajectoryEngine trajectoryEngine, MatchSettings matchSettings) {
 		this.trajectoryEngine = trajectoryEngine;
 		this.horizontalServo = horizontalServo;
@@ -33,7 +34,7 @@ public class HorizontalLauncher extends Mechanism {
 	 * Sets the pitch angle directly on a servo using the launcher's conversion
 	 * logic.
 	 */
-	public static void setPitchDirect(Servo servo, double pitchDegrees) {
+	public static void setPitchDirect(ServoImplEx servo, double pitchDegrees) {
 		if (Settings.Launcher.CORRECT_PITCH) {
 			servo.setPosition(Settings.Launcher.pitchToServo(pitchDegrees));
 		}

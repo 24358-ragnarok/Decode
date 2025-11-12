@@ -1,22 +1,24 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
 import androidx.annotation.Nullable;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
-import com.qualcomm.hardware.rev.RevColorSensorV3;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
-import org.firstinspires.ftc.teamcode.software.Drivetrain;
+import org.firstinspires.ftc.teamcode.software.ColorRangefinder;
 import org.firstinspires.ftc.teamcode.software.LimelightManager;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
 import java.lang.reflect.Proxy;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -42,8 +44,11 @@ public class MechanismManager {
 	public final LimelightManager limelightManager;
 	public final TrajectoryEngine trajectoryEngine;
 	public final MatchSettings matchSettings;
+	List<LynxModule> allHubs;
+	
 
 	public MechanismManager(HardwareMap hw, MatchSettings match) {
+		allHubs = hardwareMap.getAll(LynxModule.class);
 		drivetrain = new Drivetrain(hw, match);
 		matchSettings = match;
 
@@ -59,14 +64,20 @@ public class MechanismManager {
 		// Save helpers
 		limelightManager = ll;
 		trajectoryEngine = traj;
+		
+		// Now that we've built all of the systems, begin caching system reads for efficiency
+		for (LynxModule hub : allHubs) {
+			hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+			hub.setConstant(Settings.Color.RAGNAROK_RED);
+		}
 	}
 
 	private FlywheelIntake createIntake(HardwareMap hw) {
 		if (!Settings.Deploy.INTAKE)
 			return null;
 		try {
-			DcMotor intakeServo = hw.get(DcMotor.class, Settings.HardwareIDs.INTAKE_MOTOR);
-			return new FlywheelIntake(intakeServo);
+			DcMotorEx intakeMotor = hw.get(DcMotorEx.class, Settings.HardwareIDs.INTAKE_MOTOR);
+			return new FlywheelIntake(intakeMotor);
 		} catch (Exception e) {
 			return null;
 		}
@@ -78,9 +89,9 @@ public class MechanismManager {
 		try {
 			CRServo transferWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_WHEEL_SERVO);
 			CRServo entranceWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_ENTRANCE_WHEEL);
-			Servo exitWheel = hw.get(Servo.class, Settings.HardwareIDs.TRANSFER_EXIT_KICKER);
-			RevColorSensorV3 colorSensor = hw.get(RevColorSensorV3.class, Settings.HardwareIDs.TRANSFER_COLOR_SENSOR);
-			return new SingleWheelTransfer(transferWheel, entranceWheel, exitWheel, colorSensor, intake);
+			ServoImplEx exitWheel = hw.get(ServoImplEx.class, Settings.HardwareIDs.TRANSFER_EXIT_KICKER);
+			ColorRangefinder color = new ColorRangefinder(hw);
+			return new SingleWheelTransfer(transferWheel, entranceWheel, exitWheel, color, intake);
 		} catch (Exception e) {
 			return null;
 		}
@@ -112,14 +123,14 @@ public class MechanismManager {
 		try {
 			DcMotorEx right = hw.get(DcMotorEx.class, Settings.HardwareIDs.LAUNCHER_RIGHT);
 			DcMotorEx left = hw.get(DcMotorEx.class, Settings.HardwareIDs.LAUNCHER_LEFT);
-			Servo horizontal;
+			ServoImplEx horizontal;
 			if (Settings.Launcher.CORRECT_YAW) {
-				horizontal = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_YAW_SERVO);
+				horizontal = hw.get(ServoImplEx.class, Settings.HardwareIDs.LAUNCHER_YAW_SERVO);
 			} else {
 				// make a dummy servo instead
 				horizontal = dummyServo();
 			}
-			Servo vertical = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
+			ServoImplEx vertical = hw.get(ServoImplEx.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
 			return new HorizontalLauncher(right, left, horizontal, vertical, traj, matchSettings);
 		} catch (Exception e) {
 			return null;
@@ -132,10 +143,10 @@ public class MechanismManager {
 	 *
 	 * @return A proxy servo that does nothing
 	 */
-	public Servo dummyServo() {
-		return (Servo) Proxy.newProxyInstance(
-				Servo.class.getClassLoader(),
-				new Class[]{Servo.class},
+	public ServoImplEx dummyServo() {
+		return (ServoImplEx) Proxy.newProxyInstance(
+				ServoImplEx.class.getClassLoader(),
+				new Class[]{ServoImplEx.class},
 				(proxy, method, args) -> {
 					return null; // swallow exceptions
 				});
@@ -172,6 +183,11 @@ public class MechanismManager {
 	 * Updates all available mechanisms and the drivetrain.
 	 */
 	public void update() {
+		// prepare for new hardware reads
+		for (LynxModule hub : allHubs) {
+			hub.clearBulkCache();
+		}
+		
 		for (Mechanism m : mechanismArray) {
 			if (m != null) {
 				m.update();

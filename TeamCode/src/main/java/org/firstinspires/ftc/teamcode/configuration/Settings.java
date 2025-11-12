@@ -14,6 +14,11 @@ import java.util.EnumMap;
  */
 @Configurable
 public class Settings {
+	public static class Color {
+		public final static int RAGNAROK_RED = 0xFF0000;
+		public final static int ELITE_GOLD = 0xFFEB29;
+	}
+
 	/**
 	 * Maps controller inputs to robot actions for TeleOp.
 	 */
@@ -135,13 +140,13 @@ public class Settings {
 		public static final double TRANSFER_WHEEL_FORWARD_POWER = 1.0; // Power when advancing balls
 		public static final double TRANSFER_WHEEL_REVERSE_POWER = -1.0; // Power when reversing
 		public static final long TRANSFER_TIME_MS = 550; // Time to run wheel to move one ball slot
-		
+
 		// Entrance wheel settings (at color sensor position)
 		public static final double ENTRANCE_WHEEL_INTAKE_POWER = 1.0; // Power when letting balls in
 		public static final double ENTRANCE_WHEEL_HOLD_POWER = 0.0; // No reverse to hold closed
 		public static final double ENTRANCE_WHEEL_OUT_POWER = -1.0;
 		public static final long ENTRANCE_OPEN_DURATION_MS = 750; // How long to open entrance when intaking
-		
+
 		// Exit wheel settings (at kicker position)
 		public static final double EXIT_KICK_POSITION = 0.4; // Launch
 		public static final double EXIT_LOCK_POSITION = 1.0; // Closed
@@ -259,8 +264,31 @@ public class Settings {
 		public static double LL_WINDOW_SIZE_DEGREES = 40; // Horizontal window size
 	}
 	
+	/**
+	 * Settings for the Brushland Labs Color Rangefinder sensor.
+	 * Uses HSV-based hardware detection for lighting-independent color
+	 * classification.
+	 * <p>
+	 * HSV hue values are scaled from 0-360° to 0-255 for sensor configuration.
+	 * Purple: ~160-190° on color wheel
+	 * Green: ~110-140° on color wheel
+	 * <p>
+	 * Documentation: https://docs.brushlandlabs.com/sensors/color-rangefinder/
+	 */
 	@Configurable
 	public static class ColorSensor {
+		// Purple HSV hue range (160-190 degrees scaled to 0-255)
+		public static double PURPLE_HUE_LOW = 160.0 / 360.0 * 255.0; // ~113
+		public static double PURPLE_HUE_HIGH = 190.0 / 360.0 * 255.0; // ~134
+		
+		// Green HSV hue range (110-140 degrees scaled to 0-255)
+		public static double GREEN_HUE_LOW = 110.0 / 360.0 * 255.0; // ~78
+		public static double GREEN_HUE_HIGH = 140.0 / 360.0 * 255.0; // ~99
+		
+		// Maximum detection distance (objects must be within this range)
+		public static double MAX_DETECTION_DISTANCE_MM = 20.0; // millimeters
+		
+		// LEGACY
 		public static double[] GREEN_TARGET = {70, 200, 150};
 		public static double[] PURPLE_TARGET = {120, 150, 220};
 		public static double CONFIDENCE_THRESHOLD = 60.0; // Acceptable distance threshold

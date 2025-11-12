@@ -15,11 +15,11 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.TRA
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.TRANSFER_WHEEL_FORWARD_POWER;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.TRANSFER_WHEEL_REVERSE_POWER;
 
-import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.software.ColorRangefinder;
 
 import java.util.Arrays;
 
@@ -55,10 +55,10 @@ public final class SingleWheelTransfer extends Mechanism {
 	public final MatchSettings.ArtifactColor[] slots = new MatchSettings.ArtifactColor[MAX_CAPACITY];
 
 	// Hardware
-	private final ColorSensor colorSensor;
+	private final ColorRangefinder color;
 	private final CRServo transferWheel; // Main wheel that moves balls through transfer
 	private final CRServo entranceWheel; // CR wheel at color sensor that lets balls in
-	private final Servo exitWheel; // CR wheel at kicker that fires balls out
+	private final ServoImplEx exitWheel; // CR wheel at kicker that fires balls out
 	private final FlywheelIntake intake;
 	// Automatic advance timing
 	private final long lastAutoAdvanceCheckMs = 0;
@@ -77,9 +77,9 @@ public final class SingleWheelTransfer extends Mechanism {
 	// Pending ball to place after shift completes
 	private MatchSettings.ArtifactColor pendingBallAfterShift = MatchSettings.ArtifactColor.UNKNOWN;
 	
-	public SingleWheelTransfer(CRServo transferWheel, CRServo entranceWheel, Servo exitWheel,
-	                           RevColorSensorV3 colorSensor, FlywheelIntake intake) {
-		this.colorSensor = new ColorSensor(colorSensor);
+	public SingleWheelTransfer(CRServo transferWheel, CRServo entranceWheel, ServoImplEx exitWheel,
+	                           ColorRangefinder color, FlywheelIntake intake) {
+		this.color = color;
 		this.transferWheel = transferWheel;
 		this.entranceWheel = entranceWheel;
 		this.exitWheel = exitWheel;
@@ -141,7 +141,7 @@ public final class SingleWheelTransfer extends Mechanism {
 		}
 		
 		// Detection with blind window
-		MatchSettings.ArtifactColor detected = colorSensor.getArtifactColor();
+		MatchSettings.ArtifactColor detected = color.getArtifactColor();
 		if (detected != MatchSettings.ArtifactColor.UNKNOWN && now - lastDetectTimeMs > BLIND_WINDOW_MS) {
 			lastDetectTimeMs = now;
 			onBallDetected(detected);

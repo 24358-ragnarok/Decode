@@ -62,7 +62,7 @@ public class ColorSensor {
 	 * Lower distances indicate better color matches.
 	 *
 	 * @param measured The measured RGB values from the sensor
-	 * @param target The target RGB values to compare against
+	 * @param target   The target RGB values to compare against
 	 * @return The Euclidean distance between the two color points
 	 */
 	public double computeDistance(double[] measured, double[] target) {

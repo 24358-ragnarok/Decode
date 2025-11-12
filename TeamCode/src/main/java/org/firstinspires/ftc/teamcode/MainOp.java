@@ -8,13 +8,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
+import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
 import org.firstinspires.ftc.teamcode.hardware.Mechanism;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 import org.firstinspires.ftc.teamcode.software.Controller;
-import org.firstinspires.ftc.teamcode.software.Drivetrain;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
 /**
@@ -111,6 +111,7 @@ public class MainOp extends OpMode {
 		// Draw debug visualization (retained items like Heading, X, Y are auto-updated
 		// via Func)
 		logging.drawDebug(mechanisms.drivetrain.follower);
+		logData();
 		logging.update();
 	}
 
@@ -207,6 +208,33 @@ public class MainOp extends OpMode {
 			mechanisms.ifValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::stop);
 		}
 		
+		// Classifier controls
+		if (subController.getProcessedValue(Controller.Action.EMPTY_CLASSIFIER_STATE) > 0)
+			matchSettings.emptyClassifier();
+		
+		if (subController.getProcessedValue(Controller.Action.INCREMENT_CLASSIFIER_STATE) > 0)
+			matchSettings.incrementClassifier();
+		
+		mainController.saveLastState();
+		subController.saveLastState();
+	}
+	
+	/**
+	 * Set the LEDs on the controller based on the match state.
+	 * Green LED indicates green artifact needed, purple LED indicates purple
+	 * artifact needed.
+	 */
+	private void setControllerLEDs() {
+		if (matchSettings.nextArtifactNeeded() == MatchSettings.ArtifactColor.GREEN) {
+			subController.setLedColor(0, 255, 0, 100);
+		} else if (matchSettings.nextArtifactNeeded() == MatchSettings.ArtifactColor.PURPLE) {
+			subController.setLedColor(255, 0, 255, 100);
+		} else {
+			subController.setLedColor(0, 0, 0, 0);
+		}
+	}
+	
+	private void logData() {
 		// Transfer telemetry
 		mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
 			logging.addLine("=== TRANSFER STATUS ===");
@@ -252,31 +280,6 @@ public class MainOp extends OpMode {
 		}
 		if (mechanisms.drivetrain.follower.isBusy()) {
 			logging.addLine("FOLLOWER IS BUSY");
-		}
-		
-		// Classifier controls
-		if (subController.getProcessedValue(Controller.Action.EMPTY_CLASSIFIER_STATE) > 0)
-			matchSettings.emptyClassifier();
-		
-		if (subController.getProcessedValue(Controller.Action.INCREMENT_CLASSIFIER_STATE) > 0)
-			matchSettings.incrementClassifier();
-		
-		mainController.saveLastState();
-		subController.saveLastState();
-	}
-	
-	/**
-	 * Set the LEDs on the controller based on the match state.
-	 * Green LED indicates green artifact needed, purple LED indicates purple
-	 * artifact needed.
-	 */
-	private void setControllerLEDs() {
-		if (matchSettings.nextArtifactNeeded() == MatchSettings.ArtifactColor.GREEN) {
-			subController.setLedColor(0, 255, 0, 100);
-		} else if (matchSettings.nextArtifactNeeded() == MatchSettings.ArtifactColor.PURPLE) {
-			subController.setLedColor(255, 0, 255, 100);
-		} else {
-			subController.setLedColor(0, 0, 0, 0);
 		}
 	}
 	

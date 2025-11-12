@@ -38,10 +38,9 @@ public class MainAuto extends OpMode {
 	private MechanismManager mechanisms;
 	private MatchSettings matchSettings;
 	private UnifiedLogging logging;
-
 	// The new optimal structure
 	private AutonomousSequence autonomousSequence;
-
+	
 	/**
 	 * Runs when INIT is pressed on the driver station.
 	 */
@@ -120,8 +119,6 @@ public class MainAuto extends OpMode {
 	 */
 	@Override
 	public void loop() {
-		mechanisms.drivetrain.follower.update();
-		
 		// Update all mechanisms (sensors, motors, etc.)
 		mechanisms.update();
 		

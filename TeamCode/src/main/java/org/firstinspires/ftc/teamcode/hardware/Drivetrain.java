@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.software;
+package org.firstinspires.ftc.teamcode.hardware;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.configuration.Constants;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
-import org.firstinspires.ftc.teamcode.hardware.Mechanism;
+import org.firstinspires.ftc.teamcode.software.Controller;
 
 import java.util.HashMap;
 import java.util.Map;

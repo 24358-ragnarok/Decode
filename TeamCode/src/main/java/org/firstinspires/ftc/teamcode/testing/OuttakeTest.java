@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
@@ -29,8 +29,8 @@ public class OuttakeTest extends LinearOpMode {
 	private HorizontalLauncher.SyncBelt syncBelt;
 	private DcMotorEx rightLauncherMotor;
 	private DcMotorEx leftLauncherMotor;
-	private Servo kickerServo;
-	private Servo pitchServo;
+	private ServoImplEx kickerServo;
+	private ServoImplEx pitchServo;
 	private IMU imu; // The Inertial Measurement Unit
 	private double commandedAngle = Settings.Launcher.DEFAULT_PITCH_ANGLE;
 	
@@ -45,9 +45,9 @@ public class OuttakeTest extends LinearOpMode {
 		
 		
 		syncBelt = new HorizontalLauncher.SyncBelt(rightLauncherMotor, leftLauncherMotor);
-		pitchServo = hardwareMap.get(Servo.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
+		pitchServo = hardwareMap.get(ServoImplEx.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
 		pitchServo.setPosition(commandedAngle);
-		kickerServo = hardwareMap.get(Servo.class, Settings.HardwareIDs.TRANSFER_EXIT_KICKER);
+		kickerServo = hardwareMap.get(ServoImplEx.class, Settings.HardwareIDs.TRANSFER_EXIT_KICKER);
 		kickerServo.setPosition(Settings.Transfer.EXIT_LOCK_POSITION);
 		
 		telemetry.addLine("✅ Initialization Complete");

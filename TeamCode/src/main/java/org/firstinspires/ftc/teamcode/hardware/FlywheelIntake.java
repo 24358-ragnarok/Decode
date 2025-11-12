@@ -2,14 +2,14 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.SPEED;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 /**
  * FlywheelIntake controls the robot's intake mechanism using a flywheel motor.
  * Supports intake, outtake, and stop operations with state tracking.
  */
 public class FlywheelIntake extends Mechanism {
-	private final DcMotor intakeMotor;
+	private final DcMotorEx intakeMotor;
 	public IntakeState state;
 	
 	/**
@@ -17,7 +17,7 @@ public class FlywheelIntake extends Mechanism {
 	 *
 	 * @param intakeMotor The DC motor that controls the intake flywheel
 	 */
-	public FlywheelIntake(DcMotor intakeMotor) {
+	public FlywheelIntake(DcMotorEx intakeMotor) {
 		this.intakeMotor = intakeMotor;
 		this.state = IntakeState.STOPPED;
 	}
