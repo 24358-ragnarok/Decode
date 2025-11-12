@@ -46,12 +46,8 @@ public class MainOp extends OpMode {
 		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower, matchSettings);
 		subController = new Controller(gamepad2, mechanisms.drivetrain.follower, matchSettings);
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
-
-		// Set up lazy evaluation for frequently-accessed but expensive operations
-		// These are only evaluated when telemetry is actually transmitted
-		logging.addDataLazy("Heading°", () -> Math.toDegrees(mechanisms.drivetrain.follower.getHeading()));
-		logging.addDataLazy("X", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getX());
-		logging.addDataLazy("Y", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getY());
+		
+		setupLogging();
 
 		logging.addData("Alliance", matchSettings.getAllianceColor());
 
@@ -100,10 +96,9 @@ public class MainOp extends OpMode {
 	 */
 	@Override
 	public final void loop() {
-		mechanisms.update();
-
-		// Clear dynamic (non-retained) telemetry from previous loop
 		logging.clearDynamic();
+		
+		mechanisms.update();
 
 		processControllerInputs();
 		setControllerLEDs();
@@ -111,8 +106,9 @@ public class MainOp extends OpMode {
 
 		// Draw debug visualization (retained items like Heading, X, Y are auto-updated
 		// via Func)
+		logging.addData("CYCLE MS", (lastTime - getRuntime()) * 1_000);
+		lastTime = getRuntime();
 		logging.drawDebug(mechanisms.drivetrain.follower);
-		logData();
 		logging.update();
 	}
 
@@ -123,11 +119,10 @@ public class MainOp extends OpMode {
 	@Override
 	public final void stop() {
 		// Store the actual robot pose for future reference or debugging
-		if (mechanisms != null && mechanisms.drivetrain != null && mechanisms.drivetrain.follower != null) {
+		if (mechanisms != null && mechanisms.drivetrain.follower != null) {
 			matchSettings.setStoredPose(mechanisms.drivetrain.follower.getPose());
+			mechanisms.stop();
 		}
-
-		mechanisms.stop();
 	}
 
 	/**
@@ -235,56 +230,74 @@ public class MainOp extends OpMode {
 		}
 	}
 	
-	private void logData() {
-		logging.addData("CYCLE MS", (lastTime - getRuntime()) * 1_000);
-		lastTime = getRuntime();
+	private void setupLogging() {
+		// Set up lazy evaluation for frequently-accessed but expensive operations
+		// These are only evaluated when telemetry is actually transmitted
+		logging.addDataLazy("Heading°", () -> Math.toDegrees(mechanisms.drivetrain.follower.getHeading()));
+		logging.addDataLazy("X", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getX());
+		logging.addDataLazy("Y", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getY());
 
 		// Transfer telemetry
 		mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
-			logging.addLine("=== TRANSFER STATUS ===");
-			logging.addData("Next at Exit", transfer.getNextBallToKicker());
-			logging.addData("Full", transfer.isFull());
-			logging.addData("Empty", transfer.isEmpty());
-			logging.addData("Transfer Wheel", transfer.isTransferWheelRunning() ? "RUNNING" : "STOPPED");
-			logging.addData("Entrance Wheel", transfer.isEntranceWheelOpen() ? "OPEN" : "CLOSED");
-			logging.addData("Exit Wheel", transfer.isExitWheelFiring() ? "FIRING" : "CLOSED");
-			
-			// Show slot contents
-			MatchSettings.ArtifactColor[] slots = transfer.getSlotsSnapshot();
-			StringBuilder slotsDisplay = new StringBuilder();
-			for (int i = 0; i < slots.length; i++) {
-				slotsDisplay.append(i).append(":").append(slots[i]).append(" ");
-			}
-			logging.addData("Slots", slotsDisplay.toString());
+			logging.addDataLazy("Transfer Slots", () -> {
+				MatchSettings.ArtifactColor[] slots = transfer.getSlotsSnapshot();
+				StringBuilder slotsDisplay = new StringBuilder();
+				for (int i = 0; i < slots.length; i++) {
+					slotsDisplay.append(i)
+							.append(" ")
+							.append(slots[i])
+							.append(",");
+				}
+				return slotsDisplay.toString();
+			});
 		});
 		
-		// Get aiming solution for debugging
-		mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class),
-				launcher -> {
-					TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine
-							.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
-					if (solution.hasTarget) {
-						logging.addData("Yaw Offset°", "%.2f", solution.horizontalOffsetDegrees);
-						logging.addData("Target Pitch°", "%.2f", solution.verticalOffsetDegrees);
-						logging.addData("Required RPM", "%.0f", solution.rpm);
-					}
-				});
+		mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class), launcher -> {
+			logging.addDataLazy("Launch Solution Yaw Offset°", () -> {
+				TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine
+						.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
+				return solution.hasTarget ? String.format("%.2f", solution.horizontalOffsetDegrees) : "N/A";
+			});
+			
+			logging.addDataLazy("Launch Solution Absolute Pitch°", () -> {
+				TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine
+						.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
+				return solution.hasTarget ? String.format("%.2f", solution.verticalOffsetDegrees) : "N/A";
+			});
+			
+			logging.addDataLazy("Launch Solution Required RPM", () -> {
+				TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine
+						.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
+				return solution.hasTarget ? String.format("%.0f", solution.rpm) : "N/A";
+			});
+		});
+		
 		
 		// Launcher mechanism status
 		mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class), launcher -> {
-			logging.addData("Launcher Ready", launcher.okayToLaunch());
-			logging.addData("Current Pitch°", "%.2f", launcher.getPitch());
-			logging.addData("Current Yaw°", "%.2f", launcher.getYaw());
+			logging.addDataLazy("Launch Ready", launcher::okayToLaunch);
+			logging.addDataLazy("Current Pitch°", () -> String.format("%.2f", launcher.getPitch()));
+			logging.addDataLazy("Current Yaw°", () -> String.format("%.2f", launcher.getYaw()));
 		});
 		
-		// Dynamic telemetry - only shown when conditions are met
-		if (mechanisms.drivetrain.getState() == Drivetrain.State.PATHING) {
-			logging.addData("headed to", mechanisms.drivetrain.follower.getCurrentPath().endPose());
-			logging.addData("from", mechanisms.drivetrain.follower.getPose());
-		}
-		if (mechanisms.drivetrain.follower.isBusy()) {
-			logging.addLine("FOLLOWER IS BUSY");
-		}
+		logging.addDataLazy("pathing", () -> {
+			if (mechanisms.drivetrain.getState() == Drivetrain.State.PATHING) {
+				return mechanisms.drivetrain.follower.getCurrentPath().endPose().toString();
+			} else {
+				return "direct drive";
+			}
+		});
+		
+		logging.addDataLazy("pathing from", () -> {
+			if (mechanisms.drivetrain.getState() == Drivetrain.State.PATHING) {
+				return mechanisms.drivetrain.follower.getPose().toString();
+			} else {
+				return "direct drive";
+			}
+		});
+		
+		logging.addDataLazy("Following", () -> mechanisms.drivetrain.follower.isBusy());
+		
 	}
 	
 	private void setControllerRumble() {

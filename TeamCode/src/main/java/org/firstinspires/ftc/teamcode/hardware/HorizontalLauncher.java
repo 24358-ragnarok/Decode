@@ -126,7 +126,7 @@ public class HorizontalLauncher extends Mechanism {
 		boolean pitchAligned = pitchError < Settings.Aiming.MAX_PITCH_ERROR;
 		
 		
-		return yawAligned && pitchAligned;
+		return yawAligned && pitchAligned && belt.atSpeed();
 	}
 	
 	/**

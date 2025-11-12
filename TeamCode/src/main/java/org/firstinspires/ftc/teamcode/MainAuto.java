@@ -112,6 +112,7 @@ public class MainAuto extends OpMode {
 		
 		// Start the opmode timer
 		opmodeTimer.resetTimer();
+		setupLogging();
 	}
 	
 	/**
@@ -119,16 +120,17 @@ public class MainAuto extends OpMode {
 	 */
 	@Override
 	public void loop() {
+		logging.clearDynamic();
+		
 		// Update all mechanisms (sensors, motors, etc.)
 		mechanisms.update();
-		
 		// Update the autonomous sequence
 		// This single line replaces the entire state machine logic!
 		autonomousSequence.update(mechanisms);
 		
 		// Clear dynamic telemetry and log updated data
-		logging.clearDynamic();
-		logTelemetry();
+		logging.drawDebug(mechanisms.drivetrain.follower);
+		logging.update();
 	}
 	
 	/**
@@ -156,47 +158,33 @@ public class MainAuto extends OpMode {
 	/**
 	 * Comprehensive telemetry logging - optimized with lazy evaluation.
 	 */
-	private void logTelemetry() {
-		// Debug visualization
-		logging.drawDebug(mechanisms.drivetrain.follower);
-		
-		// Configuration info (static, retained)
-		logging.addData("Alliance", matchSettings.getAllianceColor());
-		logging.addData("Starting Position", matchSettings.getAutoStartingPosition());
-		logging.addData("Initial Position", matchSettings.getAutonomousStartingPose());
-		
-		// Sequence progress - use lazy evaluation to avoid unnecessary string
-		// operations
-		logging.addLine("");
-		logging.addLine("=== SEQUENCE PROGRESS ===");
-		logging.addDataLazy("Current Action", () -> autonomousSequence.getCurrentActionName());
-		logging.addDataLazy("Action",
-				() -> (autonomousSequence.getCurrentActionIndex() + 1) + " / " +
-						autonomousSequence.getTotalActions());
-		logging.addDataLazy("Progress", "%.1f%%",
-				() -> autonomousSequence.getProgressPercent());
-		
-		// Robot state - use lazy evaluation for pose calculations
-		logging.addLine("");
-		logging.addLine("=== ROBOT STATE ===");
+	private void setupLogging() {
 		logging.addDataLazy("Current Position", () -> mechanisms.drivetrain.follower.getPose());
-		logging.addDataLazy("Heading (deg)", "%.2f",
-				() -> Math.toDegrees(mechanisms.drivetrain.follower.getPose().getHeading()));
+		logging.addDataLazy("Current Action", () -> autonomousSequence.getCurrentActionName());
+		logging.addDataLazy("Action", () -> {
+			int current = autonomousSequence.getCurrentActionIndex() + 1;
+			int total = autonomousSequence.getTotalActions();
+			double percent = autonomousSequence.getProgressPercent();
+			return String.format("%d / %d (%.1f%%)", current, total, percent);
+		});
 		
-		// Conditional telemetry for path info (dynamic)
-		if (mechanisms.drivetrain.follower.isBusy()) {
-			logging.addDataLazy("Path End Position",
-					() -> mechanisms.drivetrain.follower.getCurrentPath().endPose());
-			logging.addDataLazy("Path Beginning Position",
-					() -> mechanisms.drivetrain.follower.getCurrentPath().getPoseInformation(0).getPose());
-		}
+		logging.addDataLazy("Path Beginning Position", () -> {
+			if (mechanisms.drivetrain.follower.isBusy()) {
+				return mechanisms.drivetrain.follower.getCurrentPath().getPoseInformation(0).getPose().toString();
+			} else {
+				return "N/A";
+			}
+		});
+		logging.addDataLazy("Path End Position", () -> {
+			if (mechanisms.drivetrain.follower.isBusy()) {
+				return mechanisms.drivetrain.follower.getCurrentPath().endPose().toString();
+			} else {
+				return "N/A";
+			}
+		});
 		
-		// Timing - use lazy evaluation
-		logging.addLine("");
-		logging.addDataLazy("Elapsed Time (s)", "%.2f",
+		logging.addDataLazy("Elapsed Time", "%.2f",
 				() -> opmodeTimer.getElapsedTimeSeconds());
 		
-		// Update the display
-		logging.update();
 	}
 }

@@ -39,7 +39,7 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
  * <p>
  * Configuration persists across power cycles.
  */
-@TeleOp(name = "Configure: I2C Color Rangefinder", group = "Configuration")
+@TeleOp(name = "Configure: I2C Color Rangefinder", group = "Tests")
 public class ConfigureColorRangefinder extends OpMode {
 	private RevColorSensorV3 sensor;
 	private ColorRangefinderConfigurator configurator;
