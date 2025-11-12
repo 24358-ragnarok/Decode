@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
-import org.firstinspires.ftc.teamcode.software.ColorRangefinder;
+import org.firstinspires.ftc.teamcode.software.ColorSensor;
 
 import java.util.Arrays;
 
@@ -55,7 +55,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	public final MatchSettings.ArtifactColor[] slots = new MatchSettings.ArtifactColor[MAX_CAPACITY];
 
 	// Hardware
-	private final ColorRangefinder color;
+	private final ColorSensor color;
 	private final CRServo transferWheel; // Main wheel that moves balls through transfer
 	private final CRServo entranceWheel; // CR wheel at color sensor that lets balls in
 	private final ServoImplEx exitWheel; // CR wheel at kicker that fires balls out
@@ -78,7 +78,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	private MatchSettings.ArtifactColor pendingBallAfterShift = MatchSettings.ArtifactColor.UNKNOWN;
 	
 	public SingleWheelTransfer(CRServo transferWheel, CRServo entranceWheel, ServoImplEx exitWheel,
-	                           ColorRangefinder color, FlywheelIntake intake) {
+	                           ColorSensor color, FlywheelIntake intake) {
 		this.color = color;
 		this.transferWheel = transferWheel;
 		this.entranceWheel = entranceWheel;

@@ -25,6 +25,7 @@ import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 @TeleOp(name = "MainOp", group = ".Competition Modes")
 public class MainOp extends OpMode {
 	public MatchSettings matchSettings;
+	private double lastTime = 0;
 	private UnifiedLogging logging;
 	private MechanismManager mechanisms;
 	private Controller mainController;
@@ -235,6 +236,9 @@ public class MainOp extends OpMode {
 	}
 	
 	private void logData() {
+		logging.addData("CYCLE MS", (lastTime - getRuntime()) * 1_000);
+		lastTime = getRuntime();
+
 		// Transfer telemetry
 		mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
 			logging.addLine("=== TRANSFER STATUS ===");
@@ -285,9 +289,9 @@ public class MainOp extends OpMode {
 	
 	private void setControllerRumble() {
 		if (mechanisms.drivetrain.follower.getPose()
-				.distanceFrom(mechanisms.drivetrain.getPositionPose(Drivetrain.Position.CLOSE_SHOOT)) < 0.1 ||
+				.distanceFrom(mechanisms.drivetrain.getPositionPose(Drivetrain.Position.CLOSE_SHOOT)) < 1 ||
 				mechanisms.drivetrain.follower.getPose()
-						.distanceFrom(mechanisms.drivetrain.getPositionPose(Drivetrain.Position.FAR_SHOOT)) < 0.1) {
+						.distanceFrom(mechanisms.drivetrain.getPositionPose(Drivetrain.Position.FAR_SHOOT)) < 1) {
 			subController.rumble(100);
 		}
 	}

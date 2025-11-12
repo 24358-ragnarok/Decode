@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -13,7 +14,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
-import org.firstinspires.ftc.teamcode.software.ColorRangefinder;
+import org.firstinspires.ftc.teamcode.software.ColorSensor;
 import org.firstinspires.ftc.teamcode.software.LimelightManager;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
@@ -90,7 +91,9 @@ public class MechanismManager {
 			CRServo transferWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_WHEEL_SERVO);
 			CRServo entranceWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_ENTRANCE_WHEEL);
 			ServoImplEx exitWheel = hw.get(ServoImplEx.class, Settings.HardwareIDs.TRANSFER_EXIT_KICKER);
-			ColorRangefinder color = new ColorRangefinder(hw);
+			RevColorSensorV3 sensor = hw.get(RevColorSensorV3.class, Settings.HardwareIDs.TRANSFER_COLOR_SENSOR);
+			ColorSensor color = new ColorSensor(sensor);
+			// ColorRangefinder color = new ColorRangefinder(hw);
 			return new SingleWheelTransfer(transferWheel, entranceWheel, exitWheel, color, intake);
 		} catch (Exception e) {
 			return null;

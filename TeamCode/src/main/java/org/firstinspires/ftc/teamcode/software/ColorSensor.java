@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.hardware;
+package org.firstinspires.ftc.teamcode.software;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.ColorSensor.CONFIDENCE_THRESHOLD;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.ColorSensor.GREEN_TARGET;
