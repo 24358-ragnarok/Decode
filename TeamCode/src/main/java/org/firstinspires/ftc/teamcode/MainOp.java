@@ -11,10 +11,10 @@ import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
-import org.firstinspires.ftc.teamcode.hardware.Mechanism;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 import org.firstinspires.ftc.teamcode.software.Controller;
+import org.firstinspires.ftc.teamcode.software.SlewThrottle;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
 /**
@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 @TeleOp(name = "MainOp", group = ".Competition Modes")
 public class MainOp extends OpMode {
 	public MatchSettings matchSettings;
-	private double lastTime = 0;
+	public SlewThrottle slewThrottle;
 	private UnifiedLogging logging;
 	private MechanismManager mechanisms;
 	private Controller mainController;
@@ -46,7 +46,7 @@ public class MainOp extends OpMode {
 		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower, matchSettings);
 		subController = new Controller(gamepad2, mechanisms.drivetrain.follower, matchSettings);
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
-		
+		slewThrottle = new SlewThrottle();
 		setupLogging();
 
 		logging.addData("Alliance", matchSettings.getAllianceColor());
@@ -60,9 +60,6 @@ public class MainOp extends OpMode {
 			logging.addData("Starting Pose Source", "FALLBACK/PREDEFINED");
 		}
 
-		for (Mechanism m : mechanisms.mechanismArray) {
-			logging.addData(m.getClass().toString(), "✅");
-		}
 		logging.update();
 
 		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getTeleOpStartingPose());
@@ -106,8 +103,6 @@ public class MainOp extends OpMode {
 
 		// Draw debug visualization (retained items like Heading, X, Y are auto-updated
 		// via Func)
-		logging.addData("CYCLE MS", (lastTime - getRuntime()) * 1_000);
-		lastTime = getRuntime();
 		logging.drawDebug(mechanisms.drivetrain.follower);
 		logging.update();
 	}
@@ -132,9 +127,15 @@ public class MainOp extends OpMode {
 	 */
 	private void processControllerInputs() {
 		// Drivetrain
-		double drive = mainController.getProcessedDrive();
-		double strafe = mainController.getProcessedStrafe();
-		double rotate = mainController.getProcessedRotation();
+		double d = mainController.getProcessedDrive();
+		double s = mainController.getProcessedStrafe();
+		double r = mainController.getProcessedRotation();
+//		double[] throttledValues = slewThrottle.throttled(drive, strafe, rotate);
+//		double throttledDrive = throttledValues[0];
+//		double throttledStrafe = throttledValues[1];
+//		double throttledRotate = throttledValues[2];
+//		logging.addData("REAL DRIVE", d);
+//		logging.addData("SMOOTH DRIVE", throttledDrive);
 
 		if (mainController.wasJustPressed(Controller.Action.TOGGLE_CENTRICITY)) {
 			mechanisms.ifValid(mechanisms.drivetrain, Drivetrain::toggleCentricity);
@@ -147,7 +148,7 @@ public class MainOp extends OpMode {
 							: Settings.Field.mirrorPose(Settings.Positions.Default.RESET)));
 		}
 		
-		mechanisms.ifValid(mechanisms.drivetrain, dt -> dt.manual(drive, strafe, rotate));
+		mechanisms.ifValid(mechanisms.drivetrain, dt -> dt.manual(d, s, r));
 		
 		// Handle GOTO actions
 		for (Controller.Action action : Settings.Controls.gotoActions) {

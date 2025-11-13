@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 /**
  * @noinspection CyclicClassDependency, DataFlowIssue
+ * <br/>
  * The Controller class wraps around the FTC-provided
  * {@link Gamepad}.
  * It provides versatility and does complex calculations to allow

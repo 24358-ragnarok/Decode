@@ -37,9 +37,17 @@ public class SimpleDrivetrain extends OpMode {
 		backRightMotor = hardwareMap.get(DcMotor.class, "rearRight");
 		
 		frontRightMotor.setDirection(Constants.driveConstants.rightFrontMotorDirection);
+		frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+		
 		backRightMotor.setDirection(Constants.driveConstants.rightRearMotorDirection);
+		backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+		
 		frontLeftMotor.setDirection(Constants.driveConstants.leftFrontMotorDirection);
+		frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+		
 		backLeftMotor.setDirection(Constants.driveConstants.leftRearMotorDirection);
+		backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+		
 	}
 	
 	

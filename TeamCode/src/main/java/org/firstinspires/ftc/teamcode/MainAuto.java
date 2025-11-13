@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.bylazar.telemetry.PanelsTelemetry;
-import com.pedropathing.geometry.Pose;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -141,18 +140,13 @@ public class MainAuto extends OpMode {
 	public void stop() {
 		// Store the actual robot pose for TeleOp to use as starting position
 		if (mechanisms != null && mechanisms.drivetrain.follower != null) {
-			Pose finalPose = mechanisms.drivetrain.follower.getPose();
-			matchSettings.setStoredPose(finalPose);
-			
-			// Log the stored pose for debugging
-			logging.addData("STORED POSE", finalPose);
-			logging.update();
+			matchSettings.setStoredPose(mechanisms.drivetrain.follower.getPose());
+			mechanisms.stop();
 		}
 		
 		if (autonomousSequence != null) {
 			autonomousSequence.stop(mechanisms);
 		}
-		mechanisms.stop();
 	}
 	
 	/**

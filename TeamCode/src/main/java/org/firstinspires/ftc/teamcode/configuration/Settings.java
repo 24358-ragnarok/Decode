@@ -300,11 +300,11 @@ public class Settings {
 		 * Preset launch angles and RPM for each shooting position.
 		 * These values are used when AIM is called based on which position is closer.
 		 */
-		public static double CLOSE_SHOOT_PITCH_DEGREES = 54.0; // Launch angle from horizontal for close position
+		public static double CLOSE_SHOOT_PITCH_DEGREES = 55.0; // Launch angle from horizontal for close position
 		public static double CLOSE_SHOOT_RPM = 2600.0; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 46; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3500.0; // Wheel RPM for far position
+		public static double FAR_SHOOT_PITCH_DEGREES = 54; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 3000.0; // Wheel RPM for far position
 		
 		/**
 		 * Alignment tolerances.
@@ -403,7 +403,7 @@ public class Settings {
 			public static final Pose FAR_SHOOT = new Pose(60, 15, Math.toRadians(115));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(25, 68, Math.toRadians(0));
-			public static final Pose PARK = new Pose(104, 32, Math.toRadians(0));
+			public static final Pose PARK = new Pose(109.5, 31, Math.toRadians(0));
 		}
 		
 		/**
@@ -479,7 +479,7 @@ public class Settings {
 	@Configurable
 	public static class Deploy {
 		public static boolean INTAKE = true;
-		public static boolean LIMELIGHT = true;
+		public static boolean LIMELIGHT = false;
 		public static boolean TRANSFER = true;
 		public static boolean TRAJECTORY_ENGINE = true;
 		public static boolean LAUNCHER = TRAJECTORY_ENGINE && true;

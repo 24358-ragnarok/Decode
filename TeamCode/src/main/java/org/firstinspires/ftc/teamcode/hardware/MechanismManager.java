@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import androidx.annotation.Nullable;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -10,6 +8,7 @@ import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
@@ -49,7 +48,7 @@ public class MechanismManager {
 	
 
 	public MechanismManager(HardwareMap hw, MatchSettings match) {
-		allHubs = hardwareMap.getAll(LynxModule.class);
+		allHubs = hw.getAll(LynxModule.class);
 		drivetrain = new Drivetrain(hw, match);
 		matchSettings = match;
 
@@ -87,17 +86,15 @@ public class MechanismManager {
 	private SingleWheelTransfer createTransfer(HardwareMap hw, FlywheelIntake intake) {
 		if (!Settings.Deploy.TRANSFER)
 			return null;
-		try {
-			CRServo transferWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_WHEEL_SERVO);
-			CRServo entranceWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_ENTRANCE_WHEEL);
-			ServoImplEx exitWheel = hw.get(ServoImplEx.class, Settings.HardwareIDs.TRANSFER_EXIT_KICKER);
-			RevColorSensorV3 sensor = hw.get(RevColorSensorV3.class, Settings.HardwareIDs.TRANSFER_COLOR_SENSOR);
-			ColorSensor color = new ColorSensor(sensor);
-			// ColorRangefinder color = new ColorRangefinder(hw);
-			return new SingleWheelTransfer(transferWheel, entranceWheel, exitWheel, color, intake);
-		} catch (Exception e) {
-			return null;
-		}
+		
+		CRServo transferWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_WHEEL_SERVO);
+		CRServo entranceWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_ENTRANCE_WHEEL);
+		ServoImplEx exitWheel = hw.get(ServoImplEx.class, Settings.HardwareIDs.TRANSFER_EXIT_KICKER);
+		RevColorSensorV3 sensor = hw.get(RevColorSensorV3.class, Settings.HardwareIDs.TRANSFER_COLOR_SENSOR);
+		ColorSensor color = new ColorSensor(sensor);
+		// ColorRangefinder color = new ColorRangefinder(hw);
+		return new SingleWheelTransfer(transferWheel, entranceWheel, exitWheel, color, intake);
+		
 	}
 	
 	private LimelightManager createLimelight(HardwareMap hw, MatchSettings match) {
@@ -121,23 +118,20 @@ public class MechanismManager {
 	}
 	
 	private HorizontalLauncher createLauncher(HardwareMap hw, TrajectoryEngine traj, MatchSettings matchSettings) {
-		if (!Settings.Deploy.LAUNCHER)
-			return null;
-		try {
-			DcMotorEx right = hw.get(DcMotorEx.class, Settings.HardwareIDs.LAUNCHER_RIGHT);
-			DcMotorEx left = hw.get(DcMotorEx.class, Settings.HardwareIDs.LAUNCHER_LEFT);
-			ServoImplEx horizontal;
-			if (Settings.Launcher.CORRECT_YAW) {
-				horizontal = hw.get(ServoImplEx.class, Settings.HardwareIDs.LAUNCHER_YAW_SERVO);
-			} else {
-				// make a dummy servo instead
-				horizontal = dummyServo();
-			}
-			ServoImplEx vertical = hw.get(ServoImplEx.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
-			return new HorizontalLauncher(right, left, horizontal, vertical, traj, matchSettings);
-		} catch (Exception e) {
+		if (!Settings.Deploy.LAUNCHER) {
 			return null;
 		}
+		DcMotorEx right = hw.get(DcMotorEx.class, Settings.HardwareIDs.LAUNCHER_RIGHT);
+		DcMotorEx left = hw.get(DcMotorEx.class, Settings.HardwareIDs.LAUNCHER_LEFT);
+		Servo horizontal;
+		if (Settings.Launcher.CORRECT_YAW) {
+			horizontal = hw.get(ServoImplEx.class, Settings.HardwareIDs.LAUNCHER_YAW_SERVO);
+		} else {
+			// make a dummy servo instead
+			horizontal = dummyServo();
+		}
+		Servo vertical = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
+		return new HorizontalLauncher(right, left, horizontal, vertical, traj, matchSettings);
 	}
 	
 	/**
@@ -146,10 +140,10 @@ public class MechanismManager {
 	 *
 	 * @return A proxy servo that does nothing
 	 */
-	public ServoImplEx dummyServo() {
-		return (ServoImplEx) Proxy.newProxyInstance(
-				ServoImplEx.class.getClassLoader(),
-				new Class[]{ServoImplEx.class},
+	public Servo dummyServo() {
+		return (Servo) Proxy.newProxyInstance(
+				Servo.class.getClassLoader(),
+				new Class[]{Servo.class},
 				(proxy, method, args) -> {
 					return null; // swallow exceptions
 				});

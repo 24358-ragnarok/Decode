@@ -11,16 +11,16 @@ import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
 public class HorizontalLauncher extends Mechanism {
 	private final TrajectoryEngine trajectoryEngine;
-	private final ServoImplEx horizontalServo;
-	private final ServoImplEx verticalServo;
+	private final Servo horizontalServo;
+	private final Servo verticalServo;
 	private final SyncBelt belt;
 	private final MatchSettings matchSettings;
 	
 	public HorizontalLauncher(
 			DcMotorEx beltRight,
 			DcMotorEx beltLeft,
-			ServoImplEx horizontalServo,
-			ServoImplEx verticalServo,
+			Servo horizontalServo,
+			Servo verticalServo,
 			TrajectoryEngine trajectoryEngine, MatchSettings matchSettings) {
 		this.trajectoryEngine = trajectoryEngine;
 		this.horizontalServo = horizontalServo;
