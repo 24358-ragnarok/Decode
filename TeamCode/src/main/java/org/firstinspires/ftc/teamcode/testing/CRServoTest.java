@@ -10,10 +10,10 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
 public class CRServoTest extends OpMode {
 	CRServo servo;
 	double speed = 0.0;
-	
+
 	@Override
 	public void init() {
-		servo = hardwareMap.get(CRServo.class, Settings.HardwareIDs.TRANSFER_WHEEL_SERVO);
+		servo = Settings.Hardware.TRANSFER_WHEEL_SERVO.fromHardwareMap(hardwareMap);
 	}
 	
 	@Override

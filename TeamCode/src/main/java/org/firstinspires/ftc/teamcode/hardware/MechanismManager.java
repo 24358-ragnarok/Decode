@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import androidx.annotation.Nullable;
 
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -45,7 +44,6 @@ public class MechanismManager {
 	public final TrajectoryEngine trajectoryEngine;
 	public final MatchSettings matchSettings;
 	List<LynxModule> allHubs;
-	
 
 	public MechanismManager(HardwareMap hw, MatchSettings match) {
 		allHubs = hw.getAll(LynxModule.class);
@@ -65,7 +63,8 @@ public class MechanismManager {
 		limelightManager = ll;
 		trajectoryEngine = traj;
 		
-		// Now that we've built all of the systems, begin caching system reads for efficiency
+		// Now that we've built all of the systems, begin caching system reads for
+		// efficiency
 		for (LynxModule hub : allHubs) {
 			hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
 			hub.setConstant(Settings.Color.RAGNAROK_RED);
@@ -76,7 +75,7 @@ public class MechanismManager {
 		if (!Settings.Deploy.INTAKE)
 			return null;
 		try {
-			DcMotorEx intakeMotor = hw.get(DcMotorEx.class, Settings.HardwareIDs.INTAKE_MOTOR);
+			DcMotorEx intakeMotor = Settings.Hardware.INTAKE_MOTOR.fromHardwareMap(hw);
 			return new FlywheelIntake(intakeMotor);
 		} catch (Exception e) {
 			return null;
@@ -87,26 +86,26 @@ public class MechanismManager {
 		if (!Settings.Deploy.TRANSFER)
 			return null;
 		
-		CRServo transferWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_WHEEL_SERVO);
-		CRServo entranceWheel = hw.get(CRServo.class, Settings.HardwareIDs.TRANSFER_ENTRANCE_WHEEL);
-		ServoImplEx exitWheel = hw.get(ServoImplEx.class, Settings.HardwareIDs.TRANSFER_EXIT_KICKER);
-		RevColorSensorV3 sensor = hw.get(RevColorSensorV3.class, Settings.HardwareIDs.TRANSFER_COLOR_SENSOR);
+		CRServo transferWheel = Settings.Hardware.TRANSFER_WHEEL_SERVO.fromHardwareMap(hw);
+		CRServo entranceWheel = Settings.Hardware.TRANSFER_ENTRANCE_WHEEL.fromHardwareMap(hw);
+		ServoImplEx exitWheel = Settings.Hardware.TRANSFER_EXIT_KICKER.fromHardwareMap(hw);
+		RevColorSensorV3 sensor = Settings.Hardware.TRANSFER_COLOR_SENSOR.fromHardwareMap(hw);
 		ColorSensor color = new ColorSensor(sensor);
 		// ColorRangefinder color = new ColorRangefinder(hw);
 		return new SingleWheelTransfer(transferWheel, entranceWheel, exitWheel, color, intake);
-		
+
 	}
-	
+
 	private LimelightManager createLimelight(HardwareMap hw, MatchSettings match) {
 		if (!Settings.Deploy.LIMELIGHT)
 			return null;
 		try {
-			return new LimelightManager(hw.get(Limelight3A.class, Settings.HardwareIDs.LIMELIGHT), match);
+			return new LimelightManager(Settings.Hardware.LIMELIGHT.fromHardwareMap(hw), match);
 		} catch (Exception e) {
 			return null;
 		}
 	}
-	
+
 	private TrajectoryEngine createTrajectory(LimelightManager ll, MatchSettings match) {
 		if (!Settings.Deploy.TRAJECTORY_ENGINE)
 			return null;
@@ -116,21 +115,21 @@ public class MechanismManager {
 			return null;
 		}
 	}
-	
+
 	private HorizontalLauncher createLauncher(HardwareMap hw, TrajectoryEngine traj, MatchSettings matchSettings) {
 		if (!Settings.Deploy.LAUNCHER) {
 			return null;
 		}
-		DcMotorEx right = hw.get(DcMotorEx.class, Settings.HardwareIDs.LAUNCHER_RIGHT);
-		DcMotorEx left = hw.get(DcMotorEx.class, Settings.HardwareIDs.LAUNCHER_LEFT);
+		DcMotorEx right = Settings.Hardware.LAUNCHER_RIGHT.fromHardwareMap(hw);
+		DcMotorEx left = Settings.Hardware.LAUNCHER_LEFT.fromHardwareMap(hw);
 		Servo horizontal;
 		if (Settings.Launcher.CORRECT_YAW) {
-			horizontal = hw.get(ServoImplEx.class, Settings.HardwareIDs.LAUNCHER_YAW_SERVO);
+			horizontal = Settings.Hardware.LAUNCHER_YAW_SERVO.fromHardwareMap(hw);
 		} else {
 			// make a dummy servo instead
 			horizontal = dummyServo();
 		}
-		Servo vertical = hw.get(Servo.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
+		Servo vertical = Settings.Hardware.LAUNCHER_PITCH_SERVO.fromHardwareMap(hw); // ServoImplEx is a Servo
 		return new HorizontalLauncher(right, left, horizontal, vertical, traj, matchSettings);
 	}
 	

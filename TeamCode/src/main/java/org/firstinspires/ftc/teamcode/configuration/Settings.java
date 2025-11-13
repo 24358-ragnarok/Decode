@@ -2,6 +2,13 @@ package org.firstinspires.ftc.teamcode.configuration;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.software.Controller;
 
@@ -71,31 +78,52 @@ public class Settings {
 
 	/**
 	 * Hardware device name mapping.
+	 * Each HardwareConfig stores both the device type and string name,
+	 * allowing for type-safe hardware retrieval via the get() method.
 	 */
 	@Configurable
-	public static class HardwareIDs {
+	public static class Hardware {
 		// Drive motors
-		public static final String FRONT_LEFT_MOTOR = "frontLeft";
-		public static final String FRONT_RIGHT_MOTOR = "frontRight";
-		public static final String REAR_LEFT_MOTOR = "rearLeft";
-		public static final String REAR_RIGHT_MOTOR = "rearRight";
-		public static final String PINPOINT = "pinpoint";
+		public static final HardwareConfig FRONT_LEFT_MOTOR = new HardwareConfig(DcMotorEx.class, "frontLeft");
+		public static final HardwareConfig FRONT_RIGHT_MOTOR = new HardwareConfig(DcMotorEx.class, "frontRight");
+		public static final HardwareConfig REAR_LEFT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearLeft");
+		public static final HardwareConfig REAR_RIGHT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearRight");
+		public static final HardwareConfig PINPOINT = new HardwareConfig(GoBildaPinpointDriver.class, "pinpoint");
 
 		// Subsystem motors and servos
-		public static final String INTAKE_MOTOR = "intakeMotor";
-		public static final String LAUNCHER_RIGHT = "launcherRight";
-		public static final String LAUNCHER_LEFT = "launcherLeft";
-		public static final String LAUNCHER_YAW_SERVO = "launcherYawServo";
-		public static final String LAUNCHER_PITCH_SERVO = "launcherPitchServo";
+		public static final HardwareConfig INTAKE_MOTOR = new HardwareConfig(DcMotorEx.class, "intakeMotor");
+		public static final HardwareConfig LAUNCHER_RIGHT = new HardwareConfig(DcMotorEx.class, "launcherRight");
+		public static final HardwareConfig LAUNCHER_LEFT = new HardwareConfig(DcMotorEx.class, "launcherLeft");
+		public static final HardwareConfig LAUNCHER_YAW_SERVO = new HardwareConfig(ServoImplEx.class,
+				"launcherYawServo");
+		public static final HardwareConfig LAUNCHER_PITCH_SERVO = new HardwareConfig(ServoImplEx.class,
+				"launcherPitchServo");
 
 		// Transfer mechanism
-		public static final String TRANSFER_WHEEL_SERVO = "transferMainServo";
-		public static final String TRANSFER_ENTRANCE_WHEEL = "transferEntranceServo"; // CR wheel at color sensor
-		public static final String TRANSFER_EXIT_KICKER = "transferExitServo"; // CR wheel at kicker position
+		public static final HardwareConfig TRANSFER_WHEEL_SERVO = new HardwareConfig(CRServo.class,
+				"transferMainServo");
+		public static final HardwareConfig TRANSFER_ENTRANCE_WHEEL = new HardwareConfig(CRServo.class,
+				"transferEntranceServo"); // CR wheel at color sensor
+		public static final HardwareConfig TRANSFER_EXIT_KICKER = new HardwareConfig(ServoImplEx.class,
+				"transferExitServo"); // CR wheel at kicker position
 
 		// Sensors
-		public static final String TRANSFER_COLOR_SENSOR = "transferColorSensor";
-		public static final String LIMELIGHT = "limelight";
+		public static final HardwareConfig TRANSFER_COLOR_SENSOR = new HardwareConfig(
+				RevColorSensorV3.class, "transferColorSensor");
+		public static final HardwareConfig LIMELIGHT = new HardwareConfig(Limelight3A.class, "limelight");
+		
+		/**
+		 * Static method to retrieve hardware from a HardwareMap.
+		 * Allows usage like: Settings.Hardware.get(FRONT_LEFT_MOTOR, hw)
+		 *
+		 * @param config      The hardware configuration
+		 * @param hardwareMap The hardware map to retrieve from
+		 * @param <T>         The type of hardware device to return
+		 * @return The hardware device instance
+		 */
+		public static <T> T get(HardwareConfig config, HardwareMap hardwareMap) {
+			return config.fromHardwareMap(hardwareMap);
+		}
 	}
 
 	/**
@@ -111,7 +139,7 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Spindex {
-		public static double[] SLOT_INTAKE_POSITIONS = {0.10, 0.43, 0.77}; // Calibrated servo positions for slots at
+		public static double[] SLOT_INTAKE_POSITIONS = {0.10, 0.43, 0.77 }; // Calibrated servo positions for slots at
 		// intake
 		public static double EXIT_OFFSET = 0.25; // Offset from intake to exit alignment
 		public static double RAPID_FIRE_COOLDOWN_MS = 200;

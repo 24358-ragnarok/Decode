@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
  */
 @TeleOp(name = "Test: Outtake", group = "Tests")
 public class OuttakeTest extends LinearOpMode {
-	
+
 	// Motor Configuration
 	final double TICKS_PER_REVOLUTION = 28;
 	// State & Control
@@ -33,21 +33,20 @@ public class OuttakeTest extends LinearOpMode {
 	private ServoImplEx pitchServo;
 	private IMU imu; // The Inertial Measurement Unit
 	private double commandedAngle = Settings.Launcher.DEFAULT_PITCH_ANGLE;
-	
+
 	@Override
 	public final void runOpMode() {
 		// --- Motor Initialization ---
-		rightLauncherMotor = hardwareMap.get(DcMotorEx.class, Settings.HardwareIDs.LAUNCHER_RIGHT);
-		leftLauncherMotor = hardwareMap.get(DcMotorEx.class, Settings.HardwareIDs.LAUNCHER_LEFT);
+		rightLauncherMotor = Settings.Hardware.LAUNCHER_RIGHT.fromHardwareMap(hardwareMap);
+		leftLauncherMotor = Settings.Hardware.LAUNCHER_LEFT.fromHardwareMap(hardwareMap);
 		
 		rightLauncherMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 		leftLauncherMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-		
-		
+
 		syncBelt = new HorizontalLauncher.SyncBelt(rightLauncherMotor, leftLauncherMotor);
-		pitchServo = hardwareMap.get(ServoImplEx.class, Settings.HardwareIDs.LAUNCHER_PITCH_SERVO);
+		pitchServo = Settings.Hardware.LAUNCHER_PITCH_SERVO.fromHardwareMap(hardwareMap);
 		pitchServo.setPosition(commandedAngle);
-		kickerServo = hardwareMap.get(ServoImplEx.class, Settings.HardwareIDs.TRANSFER_EXIT_KICKER);
+		kickerServo = Settings.Hardware.TRANSFER_EXIT_KICKER.fromHardwareMap(hardwareMap);
 		kickerServo.setPosition(Settings.Transfer.EXIT_LOCK_POSITION);
 		
 		telemetry.addLine("✅ Initialization Complete");
@@ -82,7 +81,8 @@ public class OuttakeTest extends LinearOpMode {
 			}
 			
 			commandedRPM = Math.max(0, Math.min(6000, commandedRPM));
-			commandedAngle = Math.max(Settings.Launcher.PITCH_SERVO_AT_MAX, Math.min(Settings.Launcher.PITCH_SERVO_AT_MIN, commandedAngle));
+			commandedAngle = Math.max(Settings.Launcher.PITCH_SERVO_AT_MAX,
+					Math.min(Settings.Launcher.PITCH_SERVO_AT_MIN, commandedAngle));
 			
 			if (gamepad1.left_trigger > 0.1) {
 				syncBelt.setTargetSpeed(commandedRPM);

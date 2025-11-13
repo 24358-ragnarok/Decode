@@ -31,10 +31,10 @@ public class Constants {
 			.mass(11.0)
 			.forwardZeroPowerAcceleration(-36.0)
 			.lateralZeroPowerAcceleration(-57.0)
-			
+
 			.translationalPIDFCoefficients(new PIDFCoefficients(0.15, 0, 0.01, 0.075))
 			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.15, 0, 0.015, 0.03))
-			
+
 			.headingPIDFCoefficients(new PIDFCoefficients(1.3, 0, 0.02, 0.055))
 			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.6, 0, 0.05, 0.03))
 			
@@ -47,10 +47,10 @@ public class Constants {
 	
 	public static final MecanumConstants driveConstants = new MecanumConstants()
 			.maxPower(1)
-			.leftFrontMotorName(Settings.HardwareIDs.FRONT_LEFT_MOTOR)
-			.leftRearMotorName(Settings.HardwareIDs.REAR_LEFT_MOTOR)
-			.rightFrontMotorName(Settings.HardwareIDs.FRONT_RIGHT_MOTOR)
-			.rightRearMotorName(Settings.HardwareIDs.REAR_RIGHT_MOTOR)
+			.leftFrontMotorName(Settings.Hardware.FRONT_LEFT_MOTOR.getName())
+			.leftRearMotorName(Settings.Hardware.REAR_LEFT_MOTOR.getName())
+			.rightFrontMotorName(Settings.Hardware.FRONT_RIGHT_MOTOR.getName())
+			.rightRearMotorName(Settings.Hardware.REAR_RIGHT_MOTOR.getName())
 			.leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
 			.leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
 			.rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
@@ -64,7 +64,7 @@ public class Constants {
 			.forwardPodY(6)
 			.strafePodX(-6)
 			.distanceUnit(DistanceUnit.INCH)
-			.hardwareMapName(Settings.HardwareIDs.PINPOINT)
+			.hardwareMapName(Settings.Hardware.PINPOINT.getName())
 			.encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
 			.forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
 			.strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
@@ -90,8 +90,7 @@ public class Constants {
 			50,
 			1.5,
 			10,
-			1.0
-	);
+			1.0);
 	
 	/**
 	 * Factory method to create a configured Follower instance.

@@ -85,9 +85,9 @@ public class MatchConfigurationWizard {
 		}
 		
 		if (autoStartingPosition == MatchSettings.AutoStartingPosition.CLOSE) {
-			logging.addLine("\uD83D\uDD0D Close Starting Position Selected");
+			logging.addLine("\uD83D\uDD0D Close (GOAL) Starting Position Selected");
 		} else {
-			logging.addLine("\uD83D\uDD2D Far Starting Position Selected");
+			logging.addLine("\uD83D\uDD2D Far (SMALL TRIANGLE) Starting Position Selected");
 		}
 		
 		logging.addData("Starting Pose", matchSettings.getAutonomousStartingPose());
