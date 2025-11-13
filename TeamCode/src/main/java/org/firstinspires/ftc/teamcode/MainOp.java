@@ -191,6 +191,10 @@ public class MainOp extends OpMode {
 		if (subController.wasJustPressed(Controller.Action.OVERRIDE_BALL_DETECTION)) {
 			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::openEntrance);
 		}
+		if (subController.wasJustPressed(Controller.Action.OVERRIDE_CLEAR)) {
+			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::clearEntrance);
+		}
+		
 		
 		// Intake & Transfer
 		if (subController.wasJustPressed(Controller.Action.INTAKE_IN)) {

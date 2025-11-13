@@ -316,13 +316,14 @@ public final class SingleWheelTransfer extends Mechanism {
 		// - Transfer wheel is already running
 		// - Entrance wheel is open (intaking)
 		// - Exit wheel is firing
+		// - Slots not able to advance
 		// - Not enough time since last detection (grace period)
 		if (transferWheelRunning || entranceWheelOpen || exitWheelFiring || isEmpty()) {
 			return;
 		}
 		
 		// Check if we need a grace period after detection
-		if (now - lastDetectTimeMs < AUTO_ADVANCE_GRACE_PERIOD_MS + ENTRANCE_OPEN_DURATION_MS) {
+		if (now - lastDetectTimeMs < AUTO_ADVANCE_GRACE_PERIOD_MS) {
 			return;
 		}
 		

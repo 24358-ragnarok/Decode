@@ -70,6 +70,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.OVERRIDE_ADVANCE, Controller.Control.DPAD_UP);
 			actionControlMap.put(Controller.Action.OVERRIDE_BALL_DETECTION, Controller.Control.DPAD_DOWN);
 			actionControlMap.put(Controller.Action.OVERRIDE_SPINUP, Controller.Control.LEFT_BUMPER);
+			actionControlMap.put(Controller.Action.OVERRIDE_CLEAR, Controller.Control.DPAD_RIGHT);
 			for (Controller.Action action : Controller.Action.values()) {
 				actionControlMap.putIfAbsent(action, Controller.Control.UNKNOWN);
 			}
@@ -183,7 +184,7 @@ public class Settings {
 		
 		// Automatic advance settings
 		public static final boolean AUTO_ADVANCE_ENABLED = true; // Enable automatic ball advancement
-		public static final long AUTO_ADVANCE_GRACE_PERIOD_MS = 100; // Wait time after detection before auto-advancing
+		public static final long AUTO_ADVANCE_GRACE_PERIOD_MS = 750; // Wait time after detection before advancing
 	}
 	
 	/**
@@ -340,7 +341,7 @@ public class Settings {
 		 * YAW refers to the launcher horizontal angle
 		 * PITCH refers to the launcher vertical angle
 		 */
-		public static double MAX_ROTATIONAL_ERROR = Math.toRadians(20);
+		public static double MAX_ROTATIONAL_ERROR = Math.toRadians(2);
 		public static double MAX_YAW_ERROR = 3.0; // degrees
 		public static double MAX_PITCH_ERROR = 0.5; // degrees
 		
