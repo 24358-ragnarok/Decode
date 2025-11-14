@@ -129,6 +129,10 @@ public class HorizontalLauncher extends Mechanism {
 		return yawAligned && pitchAligned && belt.atSpeed();
 	}
 	
+	public double speed() {
+		return belt.getAverageRPM();
+	}
+	
 	/**
 	 * Checks if launcher is ready to fire.
 	 * <p>

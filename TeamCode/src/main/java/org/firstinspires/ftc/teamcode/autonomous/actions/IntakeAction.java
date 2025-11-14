@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous.actions;
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
 import org.firstinspires.ftc.teamcode.hardware.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
+import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 
 /**
  * Action that runs the intake mechanism.
@@ -35,6 +36,10 @@ public class IntakeAction implements AutonomousAction {
 		FlywheelIntake intake = mechanisms.get(FlywheelIntake.class);
 		if (intake != null) {
 			intake.in();
+		}
+		SingleWheelTransfer transfer = mechanisms.get(SingleWheelTransfer.class);
+		if (transfer != null) {
+			transfer.holdEntranceClosed();
 		}
 	}
 	

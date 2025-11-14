@@ -5,6 +5,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 
 /**
@@ -12,8 +13,6 @@ import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
  * Useful for precise movements like sample pickup.
  */
 public class SlowLinearPathAction extends PathAction {
-	
-	private static final double SLOW_SPEED = 0.23; // Same as current SequenceBuilder
 	
 	public SlowLinearPathAction(Pose targetPose, String name, MatchSettings.AllianceColor alliance) {
 		super(targetPose, name, alliance);
@@ -41,6 +40,6 @@ public class SlowLinearPathAction extends PathAction {
 	@Override
 	protected void followPath(MechanismManager mechanisms, PathChain path) {
 		// Use reduced speed for precise movement
-		mechanisms.drivetrain.follower.followPath(path, SLOW_SPEED, true);
+		mechanisms.drivetrain.follower.followPath(path, Settings.Autonomous.SLOW_SPEED, true);
 	}
 }

@@ -275,6 +275,8 @@ public class MainOp extends OpMode {
 						.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
 				return solution.hasTarget ? String.format("%.0f", solution.rpm) : "N/A";
 			});
+			
+			logging.addDataLazy("Belt RPM", launcher::speed);
 		});
 		
 		

@@ -168,7 +168,7 @@ public class Settings {
 		// Main transfer wheel settings
 		public static final double TRANSFER_WHEEL_FORWARD_POWER = 1.0; // Power when advancing balls
 		public static final double TRANSFER_WHEEL_REVERSE_POWER = -1.0; // Power when reversing
-		public static final long TRANSFER_TIME_MS = 550; // Time to run wheel to move one ball slot
+		public static final long TRANSFER_TIME_MS = 650; // Time to run wheel to move one ball slot
 
 		// Entrance wheel settings (at color sensor position)
 		public static final double ENTRANCE_WHEEL_INTAKE_POWER = 1.0; // Power when letting balls in
@@ -184,7 +184,7 @@ public class Settings {
 		
 		// Automatic advance settings
 		public static final boolean AUTO_ADVANCE_ENABLED = true; // Enable automatic ball advancement
-		public static final long AUTO_ADVANCE_GRACE_PERIOD_MS = 750; // Wait time after detection before advancing
+		public static final long AUTO_ADVANCE_GRACE_PERIOD_MS = 500; // Wait time after detection before advancing
 	}
 	
 	/**
@@ -332,8 +332,8 @@ public class Settings {
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 55.0; // Launch angle from horizontal for close position
 		public static double CLOSE_SHOOT_RPM = 2600.0; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 54; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3000.0; // Wheel RPM for far position
+		public static double FAR_SHOOT_PITCH_DEGREES = 53.0; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 3150.0; // Wheel RPM for far position
 		
 		/**
 		 * Alignment tolerances.
@@ -391,7 +391,7 @@ public class Settings {
 		 * Default/reset positions.
 		 */
 		public static class Default {
-			public static final Pose RESET = new Pose(72, 72, Math.toRadians(90)); // TODO set this to corner instead
+			public static final Pose RESET = new Pose(134, 7, Math.toRadians(90)); // TODO set this to corner instead
 		}
 		
 		/**
@@ -429,10 +429,10 @@ public class Settings {
 		 */
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 86, Math.toRadians(135));
-			public static final Pose FAR_SHOOT = new Pose(60, 15, Math.toRadians(115));
+			public static final Pose FAR_SHOOT = new Pose(60, 15, Math.toRadians(114));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(25, 68, Math.toRadians(0));
-			public static final Pose PARK = new Pose(109.5, 31, Math.toRadians(0));
+			public static final Pose PARK = new Pose(105, 32, Math.toRadians(0));
 		}
 		
 		/**
@@ -440,7 +440,7 @@ public class Settings {
 		 */
 		public static class AutoStart {
 			public static final Pose FAR = new Pose(56.25, 7.0, Math.toRadians(90));
-			public static final Pose CLOSE = new Pose(22, 126, Math.toRadians(145));
+			public static final Pose CLOSE = new Pose(21.84, 124.58, Math.toRadians(145));
 		}
 		
 		/**
@@ -452,7 +452,7 @@ public class Settings {
 			 * First preset group (closest to wall).
 			 */
 			public static class Preset1 {
-				public static final Pose PREP = new Pose(43, 34, Math.toRadians(180));
+				public static final Pose PREP = new Pose(45, 34, Math.toRadians(180));
 				public static final Pose GRAB_1 = new Pose(36.0, 34, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 34, Math.toRadians(180));
 				public static final Pose END = new Pose(20, 34, Math.toRadians(180));
@@ -462,20 +462,20 @@ public class Settings {
 			 * Second preset group (middle).
 			 */
 			public static class Preset2 {
-				public static final Pose PREP = new Pose(43, 60, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(36.0, 60, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(30.0, 60, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 60, Math.toRadians(180));
+				public static final Pose PREP = new Pose(45, 58, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(36.0, 58, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 58, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 58, Math.toRadians(180));
 			}
 			
 			/**
 			 * Third preset group (farthest from wall).
 			 */
 			public static class Preset3 {
-				public static final Pose PREP = new Pose(43, 86, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(35.0, 86, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(30.0, 86, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 86, Math.toRadians(180));
+				public static final Pose PREP = new Pose(45, 84, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(35.0, 84, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 84, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 84, Math.toRadians(180));
 			}
 		}
 		
@@ -484,8 +484,11 @@ public class Settings {
 		 */
 		public static class ControlPoints {
 			// From sample areas to shooting positions
-			public static final Pose FROM_PRESET1_TO_CLOSE = new Pose(67, 45);
+			public static final Pose CLOSE_LAUNCH_APPROACH_FAR = new Pose(67, 45);
+			public static final Pose PRESET_1_APPROACH = new Pose(63, 35);
 			public static final Pose FROM_PRESET2_TO_CLOSE = new Pose(64, 56);
+			public static final Pose PRESET_2_APPROACH = new Pose(62, 59);
+			
 			public static final Pose FROM_PRESET3_TO_CLOSE = new Pose(41, 81);
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
 		}
@@ -494,7 +497,8 @@ public class Settings {
 		 * Parking positions for end of autonomous.
 		 */
 		public static class Park {
-			public static final Pose DEFAULT = Samples.Preset1.GRAB_1; // Reuse a safe position
+			public static final Pose FAR = Samples.Preset1.GRAB_1; // Reuse a safe position
+			public static final Pose CLOSE = Samples.Preset3.GRAB_1;
 		}
 		
 	}
@@ -516,8 +520,10 @@ public class Settings {
 		public static boolean ALIGNMENT_ENGINE = true;
 	}
 	
-	// Autonomous settings - pose constants moved to AutonomousPoses class
 	public static class Autonomous {
-		public static double BALL_INTAKE_WAIT_S = 0.4;
+		public static double BALL_INTAKE_WAIT_S = 0.45;
+		public static double SLOW_SPEED = 0.27;
+		public static double LAUNCH_STABILITY_WAIT_S = 0.3;
+		
 	}
 }

@@ -29,17 +29,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Constants {
 	public static final FollowerConstants followerConstants = new FollowerConstants()
 			.mass(11.0)
-			.forwardZeroPowerAcceleration(-36.0)
-			.lateralZeroPowerAcceleration(-57.0)
-
-			.translationalPIDFCoefficients(new PIDFCoefficients(0.15, 0, 0.01, 0.075))
-			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.15, 0, 0.015, 0.03))
-
-			.headingPIDFCoefficients(new PIDFCoefficients(1.3, 0, 0.02, 0.055))
-			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.6, 0, 0.05, 0.03))
+			.forwardZeroPowerAcceleration(-34.0)
+			.lateralZeroPowerAcceleration(-59.0)
 			
-			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.015, 0, 0.000002, 0.6, 0.03))
-			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.2, 0, 0.0003, 0.6, 0.05))
+			.translationalPIDFCoefficients(new PIDFCoefficients(0.30, 0.00001, 0.030, 0.020))
+			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.15, 0.00001, 0.015, 0.018))
+			
+			.headingPIDFCoefficients(new PIDFCoefficients(1.2, 0.001, 0.06, 0.025))
+			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(0.2, 0.001, 0.01, 0.03))
+			
+			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.3, 0.00001, 0.001, 0.6, 0.02))
+			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.05, 0.00001, 0.001, 0.6, 0.05))
 			.automaticHoldEnd(true)
 			.useSecondaryDrivePIDF(true)
 			.useSecondaryHeadingPIDF(true)
@@ -55,14 +55,14 @@ public class Constants {
 			.leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
 			.rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
 			.rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-			.xVelocity(64.0).yVelocity(52)
+			.xVelocity(67.0).yVelocity(56)
 			.useVoltageCompensation(true)
 			.nominalVoltage(13)
 			.useBrakeModeInTeleOp(true);
 	
 	public static PinpointConstants localizerConstants = new PinpointConstants()
-			.forwardPodY(6)
-			.strafePodX(-6)
+			.forwardPodY(5.5)
+			.strafePodX(-2.75)
 			.distanceUnit(DistanceUnit.INCH)
 			.hardwareMapName(Settings.Hardware.PINPOINT.getName())
 			.encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
@@ -83,14 +83,14 @@ public class Constants {
 	 * - brakingStart: When to start braking relative to path end (1)
 	 */
 	public static PathConstraints pathConstraints = new PathConstraints(
-			0.998,
+			0.999,
 			0.01,
 			0.01,
 			0.001,
 			50,
 			1.5,
 			10,
-			1.0);
+			2.0);
 	
 	/**
 	 * Factory method to create a configured Follower instance.

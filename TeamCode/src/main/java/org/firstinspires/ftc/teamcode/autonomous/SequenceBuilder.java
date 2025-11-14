@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.BALL_INTAKE_WAIT_S;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.LAUNCH_STABILITY_WAIT_S;
 
 import com.pedropathing.geometry.Pose;
 
@@ -62,31 +63,35 @@ public class SequenceBuilder {
 				// Launch preloads
 				.prepLaunch()
 				.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
-				.wait(0.25)
+				.wait(LAUNCH_STABILITY_WAIT_S)
 				.launch()
 
 				// Get ball set I
 				.clearIntake()
-				.moveTo(Settings.Positions.Samples.Preset1.PREP, "Prep Preset1")
+				.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
+						"Prep Preset 1",
+						Settings.Positions.ControlPoints.PRESET_1_APPROACH)
 				.startIntake()
-				.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_1, "Grab1 Preset1")
+				.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_1, "Grab Preset 1 Ball 1")
 				.wait(BALL_INTAKE_WAIT_S)
-				.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab2 Preset1")
+				.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab Preset 1 Ball 2")
 				.wait(BALL_INTAKE_WAIT_S)
-				.moveSlowlyTo(Settings.Positions.Samples.Preset1.END, "End Preset1")
+				.moveSlowlyTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
 				.wait(BALL_INTAKE_WAIT_S)
 				.stopIntake()
 
 				// Launch ball set I
 				.prepLaunch()
-				.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-						Settings.Positions.ControlPoints.FROM_PRESET1_TO_CLOSE, "Launch Preset1")
-				.wait(0.25)
+				.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
+						Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
+				.wait(LAUNCH_STABILITY_WAIT_S)
 				.launch()
 
 				// Get ball set II
 				.clearIntake()
-				.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
+				.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
+						"Prep Preset2",
+						Settings.Positions.ControlPoints.PRESET_2_APPROACH)
 				.startIntake()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
 				.wait(BALL_INTAKE_WAIT_S)
@@ -98,36 +103,14 @@ public class SequenceBuilder {
 
 				// Launch ball set II
 				.prepLaunch()
-				.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-						Settings.Positions.ControlPoints.FROM_PRESET2_TO_CLOSE, "Launch Preset2")
-				.wait(0.25)
+				.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preset2")
+				.wait(LAUNCH_STABILITY_WAIT_S)
 				.launch()
-				
-				// Get ball set III (commented out for now)
-				/*
-				 * .clearIntake()
-				 * .moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
-				 * .startIntake()
-				 * .moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_1, "Grab1 Preset3")
-				 * .wait(BALL_INTAKE_WAIT_S)
-				 * .moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_2, "Grab2 Preset3")
-				 * .wait(BALL_INTAKE_WAIT_S)
-				 * .moveSlowlyTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
-				 * .wait(BALL_INTAKE_WAIT_S)
-				 * .stopIntake()
-				 *
-				 * // Launch ball set III
-				 * .prepLaunch()
-				 * .moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-				 * Settings.Positions.ControlPoints.FROM_PRESET3_TO_CLOSE, "Launch Preset3")
-				 * .wait(0.25)
-				 * .launch()
-				 */
 
 				// Park
 				.stopIntake()
-				.moveTo(Settings.Positions.Park.DEFAULT, "Park")
-				.endAt(Settings.Positions.Park.DEFAULT)
+				.moveTo(Settings.Positions.Park.FAR, "Park")
+				.endAt(Settings.Positions.Park.FAR)
 				.build();
 	}
 
@@ -139,7 +122,7 @@ public class SequenceBuilder {
 				// Launch preload
 				.prepLaunch()
 				.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
-				.wait(0.25)
+				.wait(LAUNCH_STABILITY_WAIT_S)
 				.launch()
 				
 				// Get ball set I (Preset3 for close sequence)
@@ -158,7 +141,7 @@ public class SequenceBuilder {
 				.prepLaunch()
 				.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 						Settings.Positions.ControlPoints.FROM_PRESET3_TO_CLOSE, "Launch Preset3")
-				.wait(0.25)
+				.wait(LAUNCH_STABILITY_WAIT_S)
 				.launch()
 				
 				// Get ball set II (Preset2 for close sequence)
@@ -177,34 +160,13 @@ public class SequenceBuilder {
 				.prepLaunch()
 				.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 						Settings.Positions.ControlPoints.FROM_PRESET2_TO_CLOSE, "Launch Preset2")
-				.wait(0.25)
+				.wait(LAUNCH_STABILITY_WAIT_S)
 				.launch()
-				
-				// Get ball set III (commented out for now)
-				/*
-				 * .clearIntake()
-				 * .moveTo(Settings.Positions.Samples.Preset1.PREP, "Prep Preset1")
-				 * .startIntake()
-				 * .moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_1, "Grab1 Preset1")
-				 * .wait(BALL_INTAKE_WAIT_S)
-				 * .moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab2 Preset1")
-				 * .wait(BALL_INTAKE_WAIT_S)
-				 * .moveSlowlyTo(Settings.Positions.Samples.Preset1.END, "End Preset1")
-				 * .wait(BALL_INTAKE_WAIT_S)
-				 * .stopIntake()
-				 *
-				 * // Launch ball set III
-				 * .prepLaunch()
-				 * .moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
-				 * Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
-				 * .wait(0.25)
-				 * .launch()
-				 */
 
 				// Park
 				.stopIntake()
-				.moveTo(Settings.Positions.Park.DEFAULT, "Park")
-				.endAt(Settings.Positions.Park.DEFAULT)
+				.moveTo(Settings.Positions.Park.CLOSE, "Park")
+				.endAt(Settings.Positions.Park.CLOSE)
 				.build();
 	}
 

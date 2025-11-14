@@ -123,7 +123,7 @@ public class MatchSettings {
 		AutoStartingPosition startingPosition = getAutoStartingPosition();
 		
 		// Get BLUE pose (our reference)
-		Pose bluePose = Settings.Positions.Park.DEFAULT;
+		Pose bluePose = Settings.Positions.Default.RESET;
 		
 		// Mirror for RED alliance
 		if (allianceColor == AllianceColor.RED) {
