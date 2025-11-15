@@ -32,14 +32,14 @@ public class Constants {
 			.forwardZeroPowerAcceleration(-34.0)
 			.lateralZeroPowerAcceleration(-59.0)
 			
-			.translationalPIDFCoefficients(new PIDFCoefficients(0.30, 0.00001, 0.030, 0.020))
-			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.15, 0.00001, 0.015, 0.018))
+			.translationalPIDFCoefficients(new PIDFCoefficients(0.30, 0.00001, 0.04, 0.020))
+			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.22, 0.0001, 0.02, 0.018))
 			
-			.headingPIDFCoefficients(new PIDFCoefficients(1.2, 0.001, 0.06, 0.025))
-			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(0.2, 0.001, 0.01, 0.03))
+			.headingPIDFCoefficients(new PIDFCoefficients(1.2, 0.001, 0.1, 0.025))
+			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.5, 0.005, 0.03, 0.03))
 			
-			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.3, 0.00001, 0.001, 0.6, 0.02))
-			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.05, 0.00001, 0.001, 0.6, 0.05))
+			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.03, 0.00001, 0.01, 0.6, 0.02))
+			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.002, 0.00001, 0.0001, 0.6, 0.05))
 			.automaticHoldEnd(true)
 			.useSecondaryDrivePIDF(true)
 			.useSecondaryHeadingPIDF(true)
@@ -58,7 +58,7 @@ public class Constants {
 			.xVelocity(67.0).yVelocity(56)
 			.useVoltageCompensation(true)
 			.nominalVoltage(13)
-			.useBrakeModeInTeleOp(true);
+			.useBrakeModeInTeleOp(false);
 	
 	public static PinpointConstants localizerConstants = new PinpointConstants()
 			.forwardPodY(5.5)
@@ -88,9 +88,9 @@ public class Constants {
 			0.01,
 			0.001,
 			50,
-			1.5,
+			1.8,
 			10,
-			2.0);
+			0.9);
 	
 	/**
 	 * Factory method to create a configured Follower instance.

@@ -69,7 +69,10 @@ public abstract class PathAction implements AutonomousAction {
 	@Override
 	public void end(MechanismManager mechanisms, boolean interrupted) {
 		// Path following will naturally stop when complete
-		// If interrupted, the next action will handle it
+		// If interrupted, break
+		if (interrupted) {
+			mechanisms.drivetrain.follower.breakFollowing();
+		}
 	}
 	
 	@Override

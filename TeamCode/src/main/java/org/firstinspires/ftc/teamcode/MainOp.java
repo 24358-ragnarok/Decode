@@ -47,10 +47,9 @@ public class MainOp extends OpMode {
 		subController = new Controller(gamepad2, mechanisms.drivetrain.follower, matchSettings);
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
 		slewThrottle = new SlewThrottle();
+		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getTeleOpStartingPose());
+		mechanisms.drivetrain.switchToManual();
 		setupLogging();
-
-		logging.addData("Alliance", matchSettings.getAllianceColor());
-
 		// Show whether we're using stored pose or fallback
 		Pose storedPose = matchSettings.getStoredPose();
 		if (storedPose != null) {
@@ -59,11 +58,7 @@ public class MainOp extends OpMode {
 		} else {
 			logging.addData("Starting Pose Source", "FALLBACK/PREDEFINED");
 		}
-
-		logging.update();
-
-		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getTeleOpStartingPose());
-		mechanisms.drivetrain.switchToManual();
+		logging.addData("Alliance", matchSettings.getAllianceColor());
 	}
 
 	/**
@@ -188,10 +183,13 @@ public class MainOp extends OpMode {
 		if (subController.wasJustPressed(Controller.Action.OVERRIDE_ADVANCE)) {
 			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::advance);
 		}
+		if (subController.wasJustPressed(Controller.Action.OVERRIDE_REVERSE)) {
+			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::reverse);
+		}
 		if (subController.wasJustPressed(Controller.Action.OVERRIDE_BALL_DETECTION)) {
 			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::openEntrance);
 		}
-		if (subController.wasJustPressed(Controller.Action.OVERRIDE_CLEAR)) {
+		if (subController.getProcessedValue(Controller.Action.OVERRIDE_CLEAR) > 0.0) {
 			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::clearEntrance);
 		}
 		
@@ -241,7 +239,7 @@ public class MainOp extends OpMode {
 		logging.addDataLazy("Heading°", () -> Math.toDegrees(mechanisms.drivetrain.follower.getHeading()));
 		logging.addDataLazy("X", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getX());
 		logging.addDataLazy("Y", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getY());
-
+		
 		// Transfer telemetry
 		mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
 			logging.addDataLazy("Transfer Slots", () -> {

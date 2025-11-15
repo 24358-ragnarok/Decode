@@ -65,12 +65,12 @@ public class Settings {
 			actionControlMap.put(Controller.Action.LAUNCHER_STEEPNESS_AXIS, Controller.Control.RIGHT_STICK_Y);
 			actionControlMap.put(Controller.Action.LAUNCHER_ROTATION_AXIS, Controller.Control.RIGHT_STICK_X);
 			actionControlMap.put(Controller.Action.INTAKE_IN, Controller.Control.SQUARE);
-			actionControlMap.put(Controller.Action.INTAKE_STOP, Controller.Control.CIRCLE);
-			actionControlMap.put(Controller.Action.INTAKE_OUT, Controller.Control.CROSS);
+			actionControlMap.put(Controller.Action.INTAKE_STOP, Controller.Control.CROSS);
+			actionControlMap.put(Controller.Action.INTAKE_OUT, Controller.Control.CIRCLE);
 			actionControlMap.put(Controller.Action.OVERRIDE_ADVANCE, Controller.Control.DPAD_UP);
-			actionControlMap.put(Controller.Action.OVERRIDE_BALL_DETECTION, Controller.Control.DPAD_DOWN);
-			actionControlMap.put(Controller.Action.OVERRIDE_SPINUP, Controller.Control.LEFT_BUMPER);
+			actionControlMap.put(Controller.Action.OVERRIDE_BALL_DETECTION, Controller.Control.DPAD_LEFT);
 			actionControlMap.put(Controller.Action.OVERRIDE_CLEAR, Controller.Control.DPAD_RIGHT);
+			actionControlMap.put(Controller.Action.OVERRIDE_REVERSE, Controller.Control.DPAD_DOWN);
 			for (Controller.Action action : Controller.Action.values()) {
 				actionControlMap.putIfAbsent(action, Controller.Control.UNKNOWN);
 			}
@@ -429,7 +429,7 @@ public class Settings {
 		 */
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 86, Math.toRadians(135));
-			public static final Pose FAR_SHOOT = new Pose(60, 15, Math.toRadians(114));
+			public static final Pose FAR_SHOOT = new Pose(60, 15, Math.toRadians(115));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(25, 68, Math.toRadians(0));
 			public static final Pose PARK = new Pose(105, 32, Math.toRadians(0));
@@ -472,10 +472,10 @@ public class Settings {
 			 * Third preset group (farthest from wall).
 			 */
 			public static class Preset3 {
-				public static final Pose PREP = new Pose(45, 84, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(35.0, 84, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(30.0, 84, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 84, Math.toRadians(180));
+				public static final Pose PREP = new Pose(45, 83, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(35.0, 83, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 83, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 83, Math.toRadians(180));
 			}
 		}
 		
@@ -521,9 +521,10 @@ public class Settings {
 	}
 	
 	public static class Autonomous {
-		public static double BALL_INTAKE_WAIT_S = 0.45;
+		public static double BALL_INTAKE_WAIT_S = 0.35;
 		public static double SLOW_SPEED = 0.27;
 		public static double LAUNCH_STABILITY_WAIT_S = 0.3;
+		public static double MAX_ACTION_TIME_S = 4.5;
 		
 	}
 }

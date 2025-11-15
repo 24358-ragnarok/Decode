@@ -254,6 +254,10 @@ public final class SingleWheelTransfer extends Mechanism {
 		advanceSteps(1);
 	}
 	
+	public void reverse() {
+		reverseSteps(1);
+	}
+	
 	/**
 	 * Request N single-slot shifts. The transfer wheel will run for N *
 	 * TRANSFER_TIME_MS total.
@@ -380,7 +384,8 @@ public final class SingleWheelTransfer extends Mechanism {
 	public void clearEntrance() {
 		entranceWheel.setPower(ENTRANCE_WHEEL_OUT_POWER);
 		intake.out();
-		entranceWheelOpen = false;
+		lastDetectTimeMs = System.currentTimeMillis();
+		entranceWheelOpen = true;
 	}
 	
 	/*

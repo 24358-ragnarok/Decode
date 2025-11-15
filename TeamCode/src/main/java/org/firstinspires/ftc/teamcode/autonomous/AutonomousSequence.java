@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
+import com.pedropathing.util.Timer;
+
+import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ import java.util.List;
  */
 public class AutonomousSequence {
 	
+	public final Timer sequenceTimer;
 	private final List<AutonomousAction> actions;
 	private int currentActionIndex;
 	private boolean initialized;
@@ -27,6 +31,7 @@ public class AutonomousSequence {
 	 */
 	public AutonomousSequence() {
 		this.actions = new ArrayList<>();
+		this.sequenceTimer = new Timer();
 		this.currentActionIndex = 0;
 		this.initialized = false;
 	}
@@ -63,6 +68,7 @@ public class AutonomousSequence {
 		initialized = false;
 		
 		if (!actions.isEmpty()) {
+			sequenceTimer.resetTimer();
 			actions.get(0).initialize(mechanisms);
 			initialized = true;
 		}
@@ -83,13 +89,16 @@ public class AutonomousSequence {
 		
 		// Execute the current action
 		boolean actionComplete = currentAction.execute(mechanisms);
+		boolean robotIsStuck = mechanisms.drivetrain.follower.isRobotStuck()
+				|| sequenceTimer.getElapsedTimeSeconds() > Settings.Autonomous.MAX_ACTION_TIME_S;
 		
-		if (actionComplete) {
+		if (actionComplete || robotIsStuck) {
 			// End the current action
-			currentAction.end(mechanisms, false);
+			currentAction.end(mechanisms, robotIsStuck);
 			
 			// Move to the next action
 			currentActionIndex++;
+			sequenceTimer.resetTimer();
 			
 			// Initialize the next action if it exists
 			if (currentActionIndex < actions.size()) {
