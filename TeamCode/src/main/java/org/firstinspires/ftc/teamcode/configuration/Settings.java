@@ -333,7 +333,7 @@ public class Settings {
 		public static double CLOSE_SHOOT_RPM = 2600.0; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 53.0; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3150.0; // Wheel RPM for far position
+		public static double FAR_SHOOT_RPM = 3000.0; // Wheel RPM for far position
 		
 		/**
 		 * Alignment tolerances.
@@ -429,7 +429,7 @@ public class Settings {
 		 */
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 86, Math.toRadians(135));
-			public static final Pose FAR_SHOOT = new Pose(60, 15, Math.toRadians(115));
+			public static final Pose FAR_SHOOT = new Pose(60, 15, Math.toRadians(112));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(25, 68, Math.toRadians(0));
 			public static final Pose PARK = new Pose(105, 32, Math.toRadians(0));
