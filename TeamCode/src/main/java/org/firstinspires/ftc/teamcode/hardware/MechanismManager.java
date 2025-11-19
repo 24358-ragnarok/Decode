@@ -51,11 +51,11 @@ public class MechanismManager {
 		matchSettings = match;
 
 		// Build mechanisms safely
-		FlywheelIntake intake = createIntake(hw);
+		FlexVectorIntake intake = createIntake(hw);
 		SingleWheelTransfer transfer = createTransfer(hw, intake);
 		LimelightManager ll = createLimelight(hw, match);
 		TrajectoryEngine traj = createTrajectory(ll, match);
-		HorizontalLauncher launcher = createLauncher(hw, traj, match);
+		PairedLauncher launcher = createLauncher(hw, traj, match);
 		
 		mechanismArray = new Mechanism[]{intake, transfer, launcher};
 
@@ -70,19 +70,34 @@ public class MechanismManager {
 			hub.setConstant(Settings.Color.RAGNAROK_RED);
 		}
 	}
-
-	private FlywheelIntake createIntake(HardwareMap hw) {
+	
+	/**
+	 * Creates a dummy servo that swallows all method calls.
+	 * Used when hardware is not available but code expects a servo instance.
+	 *
+	 * @return A proxy servo that does nothing
+	 */
+	public static Servo dummyServo() {
+		return (Servo) Proxy.newProxyInstance(
+				Servo.class.getClassLoader(),
+				new Class[]{Servo.class},
+				(proxy, method, args) -> {
+					return null; // swallow exceptions
+				});
+	}
+	
+	private FlexVectorIntake createIntake(HardwareMap hw) {
 		if (!Settings.Deploy.INTAKE)
 			return null;
 		try {
 			DcMotorEx intakeMotor = Settings.Hardware.INTAKE_MOTOR.fromHardwareMap(hw);
-			return new FlywheelIntake(intakeMotor);
+			return new FlexVectorIntake(intakeMotor);
 		} catch (Exception e) {
 			return null;
 		}
 	}
-
-	private SingleWheelTransfer createTransfer(HardwareMap hw, FlywheelIntake intake) {
+	
+	private SingleWheelTransfer createTransfer(HardwareMap hw, FlexVectorIntake intake) {
 		if (!Settings.Deploy.TRANSFER)
 			return null;
 		
@@ -110,42 +125,21 @@ public class MechanismManager {
 		if (!Settings.Deploy.TRAJECTORY_ENGINE)
 			return null;
 		try {
-			return new TrajectoryEngine(ll, match, drivetrain);
+			return new TrajectoryEngine(match, drivetrain);
 		} catch (Exception e) {
 			return null;
 		}
 	}
-
-	private HorizontalLauncher createLauncher(HardwareMap hw, TrajectoryEngine traj, MatchSettings matchSettings) {
+	
+	private PairedLauncher createLauncher(HardwareMap hw, TrajectoryEngine traj, MatchSettings matchSettings) {
 		if (!Settings.Deploy.LAUNCHER) {
 			return null;
 		}
 		DcMotorEx right = Settings.Hardware.LAUNCHER_RIGHT.fromHardwareMap(hw);
 		DcMotorEx left = Settings.Hardware.LAUNCHER_LEFT.fromHardwareMap(hw);
 		Servo horizontal;
-		if (Settings.Launcher.CORRECT_YAW) {
-			horizontal = Settings.Hardware.LAUNCHER_YAW_SERVO.fromHardwareMap(hw);
-		} else {
-			// make a dummy servo instead
-			horizontal = dummyServo();
-		}
 		Servo vertical = Settings.Hardware.LAUNCHER_PITCH_SERVO.fromHardwareMap(hw); // ServoImplEx is a Servo
-		return new HorizontalLauncher(right, left, horizontal, vertical, traj, matchSettings);
-	}
-	
-	/**
-	 * Creates a dummy servo that swallows all method calls.
-	 * Used when hardware is not available but code expects a servo instance.
-	 *
-	 * @return A proxy servo that does nothing
-	 */
-	public Servo dummyServo() {
-		return (Servo) Proxy.newProxyInstance(
-				Servo.class.getClassLoader(),
-				new Class[]{Servo.class},
-				(proxy, method, args) -> {
-					return null; // swallow exceptions
-				});
+		return new PairedLauncher(right, left, vertical, traj, matchSettings);
 	}
 	
 	/**

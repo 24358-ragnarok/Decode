@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
  * to start intaking, bypassing normal transfer logic.
  * <p>
  * This action directly controls:
- * - FlywheelIntake: Sets to IN state
+ * - FlexVectorIntake: Sets to IN state
  * - SingleWheelTransfer entrance wheel: Forces open for intake
  * <p>
  * Useful for testing, debugging, or emergency intake operations where normal

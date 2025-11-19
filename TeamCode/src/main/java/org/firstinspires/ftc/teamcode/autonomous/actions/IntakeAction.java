@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous.actions;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
-import org.firstinspires.ftc.teamcode.hardware.FlywheelIntake;
+import org.firstinspires.ftc.teamcode.hardware.FlexVectorIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 
@@ -33,7 +33,7 @@ public class IntakeAction implements AutonomousAction {
 		// The SingleWheelTransfer update() loop handles color detection and advancement
 		
 		// Start intake motor to pull samples in
-		FlywheelIntake intake = mechanisms.get(FlywheelIntake.class);
+		FlexVectorIntake intake = mechanisms.get(FlexVectorIntake.class);
 		if (intake != null) {
 			intake.in();
 		}
@@ -54,7 +54,7 @@ public class IntakeAction implements AutonomousAction {
 	@Override
 	public void end(MechanismManager mechanisms, boolean interrupted) {
 		if (stopOnComplete) {
-			FlywheelIntake intake = mechanisms.get(FlywheelIntake.class);
+			FlexVectorIntake intake = mechanisms.get(FlexVectorIntake.class);
 			if (intake != null) {
 				intake.stop();
 			}

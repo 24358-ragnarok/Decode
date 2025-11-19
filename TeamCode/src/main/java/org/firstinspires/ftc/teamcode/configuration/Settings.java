@@ -95,8 +95,7 @@ public class Settings {
 		public static final HardwareConfig INTAKE_MOTOR = new HardwareConfig(DcMotorEx.class, "intakeMotor");
 		public static final HardwareConfig LAUNCHER_RIGHT = new HardwareConfig(DcMotorEx.class, "launcherRight");
 		public static final HardwareConfig LAUNCHER_LEFT = new HardwareConfig(DcMotorEx.class, "launcherLeft");
-		public static final HardwareConfig LAUNCHER_YAW_SERVO = new HardwareConfig(ServoImplEx.class,
-				"launcherYawServo");
+
 		public static final HardwareConfig LAUNCHER_PITCH_SERVO = new HardwareConfig(ServoImplEx.class,
 				"launcherPitchServo");
 
@@ -132,7 +131,9 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Intake {
-		public static double SPEED = -1.0;
+		public static double IN_SPEED = 1.0;
+		public static double OUT_SPEED = -1.0;
+		public static double STOPPED_SPEED = 0.0;
 	}
 
 	/**
@@ -209,8 +210,11 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Launcher {
-		public static long BELT_SPINUP_TIME_MS = 650;
-		public static double BELT_SYNC_KP = 0.1; // Proportional gain for synchronizing belt speeds
+		public static long BELT_SPINUP_TIME_MS = 500;
+		public static long TICKS_PER_REVOLUTION = 28;
+		public static long MAX_SPEED_ERROR = 100;
+
+		
 		// Pitch servo calibration (physical limits)
 		public static double PITCH_SERVO_AT_MIN = 0.692; // Servo position at minimum pitch angle
 		public static double PITCH_SERVO_AT_MAX = 0.415; // Servo position at maximum pitch angle
@@ -218,17 +222,9 @@ public class Settings {
 		// Pitch angle window (absolute angles from horizontal, for launch physics)
 		public static double PITCH_MIN_ANGLE = 30.0; // Minimum pitch angle in degrees (horizontal)
 		public static double PITCH_MAX_ANGLE = 80.0; // Maximum pitch angle in degrees (straight up, 90° total window)
-		// Yaw servo calibration (physical limits)
-		public static double YAW_SERVO_AT_MIN = 0.0; // Servo position at minimum yaw angle
-		public static double YAW_SERVO_AT_MAX = 1.0; // Servo position at maximum yaw angle
-		// Yaw angle window (centered around 0°)
-		public static double YAW_MIN_ANGLE = -10.0; // Minimum yaw angle in degrees
-		public static double YAW_MAX_ANGLE = 10.0; // Maximum yaw angle in degrees (20° total window)
-		public static boolean CORRECT_YAW = false && Deploy.LIMELIGHT;
 		public static boolean CORRECT_PITCH = true;
-		public static double[] OUTTAKE_DATA_X = {0.0, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0};
-		public static double[] OUTTAKE_DATA_Y = {0.0, 90, 180, 257, 340, 423, 660};
-
+		
+		
 		/**
 		 * Converts pitch angle (degrees) to servo position using calibration points.
 		 * Maps angle range [PITCH_MIN_ANGLE, PITCH_MAX_ANGLE] to servo range
@@ -256,35 +252,6 @@ public class Settings {
 			double normalizedServo = (servoPosition - PITCH_SERVO_AT_MIN) / servoRange;
 			
 			return PITCH_MIN_ANGLE + normalizedServo * angleRange;
-		}
-		
-		/**
-		 * Converts yaw angle (degrees) to servo position using calibration points.
-		 * Maps angle range [YAW_MIN_ANGLE, YAW_MAX_ANGLE] to servo range
-		 * [YAW_SERVO_AT_MIN, YAW_SERVO_AT_MAX].
-		 */
-		public static double yawToServo(double yawDegrees) {
-			// Clamp to valid angle range
-			yawDegrees = Math.max(YAW_MIN_ANGLE, Math.min(YAW_MAX_ANGLE, yawDegrees));
-			
-			// Linear mapping: angle range to servo range
-			double angleRange = YAW_MAX_ANGLE - YAW_MIN_ANGLE;
-			double servoRange = YAW_SERVO_AT_MAX - YAW_SERVO_AT_MIN;
-			double normalizedAngle = (yawDegrees - YAW_MIN_ANGLE) / angleRange;
-			
-			return YAW_SERVO_AT_MIN + normalizedAngle * servoRange;
-		}
-		
-		/**
-		 * Converts servo position to yaw angle (degrees) using calibration points.
-		 */
-		public static double servoToYaw(double servoPosition) {
-			// Inverse mapping: servo range to angle range
-			double angleRange = YAW_MAX_ANGLE - YAW_MIN_ANGLE;
-			double servoRange = YAW_SERVO_AT_MAX - YAW_SERVO_AT_MIN;
-			double normalizedServo = (servoPosition - YAW_SERVO_AT_MIN) / servoRange;
-			
-			return YAW_MIN_ANGLE + normalizedServo * angleRange;
 		}
 	}
 	
@@ -345,13 +312,6 @@ public class Settings {
 		public static double MAX_YAW_ERROR = 3.0; // degrees
 		public static double MAX_PITCH_ERROR = 0.5; // degrees
 		
-		// Legacy constants kept for compatibility
-		public static double DEFAULT_WHEEL_SPEED_RPM = 4000; // Default wheel speed in RPM
-		public static double MIN_WHEEL_SPEED_RPM = 2500; // Minimum useful wheel speed
-		public static double MAX_WHEEL_SPEED_RPM = 5000; // Maximum safe wheel speed
-		
-		// Legacy constant for field geometry (used by Field class)
-		public static double GOAL_HEIGHT_INCHES = 37.5; // Height of goal center above field
 	}
 	
 	/**
@@ -400,12 +360,6 @@ public class Settings {
 		public static class Goals {
 			public static final Pose RED_GOAL = new Pose(130.0, 130.0, Math.toRadians(225));
 			public static final Pose BLUE_GOAL = new Pose(14.0, 130.0, Math.toRadians(315));
-			
-			// 3D aiming coordinates (x, y, z) for trajectory calculations
-			public static final double[] RED_GOAL_AIM_3D = new double[]{
-					RED_GOAL.getX(), RED_GOAL.getY(), 7 + Aiming.GOAL_HEIGHT_INCHES};
-			public static final double[] BLUE_GOAL_AIM_3D = new double[]{
-					BLUE_GOAL.getX(), BLUE_GOAL.getY(), 7 + Aiming.GOAL_HEIGHT_INCHES};
 		}
 		
 		/**

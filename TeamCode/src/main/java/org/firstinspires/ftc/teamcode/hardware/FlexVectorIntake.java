@@ -1,24 +1,26 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.SPEED;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.IN_SPEED;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.OUT_SPEED;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.STOPPED_SPEED;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 /**
- * FlywheelIntake controls the robot's intake mechanism using a flywheel motor.
+ * The flex-vector intake controls the robot's intake mechanism using a flywheel motor.
  * Supports intake, outtake, and stop operations with state tracking.
  */
-public class FlywheelIntake extends Mechanism {
-	private final DcMotorEx intakeMotor;
+public class FlexVectorIntake extends Mechanism {
+	private final DcMotorEx motor;
 	public IntakeState state;
 	
 	/**
-	 * Creates a new FlywheelIntake instance.
+	 * Creates a new FlexVectorIntake instance.
 	 *
 	 * @param intakeMotor The DC motor that controls the intake flywheel
 	 */
-	public FlywheelIntake(DcMotorEx intakeMotor) {
-		this.intakeMotor = intakeMotor;
+	public FlexVectorIntake(DcMotorEx intakeMotor) {
+		this.motor = intakeMotor;
 		this.state = IntakeState.STOPPED;
 	}
 	
@@ -27,7 +29,7 @@ public class FlywheelIntake extends Mechanism {
 	 */
 	public void in() {
 		state = IntakeState.IN;
-		intakeMotor.setPower(SPEED);
+		motor.setPower(IN_SPEED);
 	}
 	
 	/**
@@ -35,7 +37,7 @@ public class FlywheelIntake extends Mechanism {
 	 */
 	public void out() {
 		state = IntakeState.OUT;
-		intakeMotor.setPower(-SPEED);
+		motor.setPower(OUT_SPEED);
 	}
 	
 	/**
@@ -43,37 +45,15 @@ public class FlywheelIntake extends Mechanism {
 	 */
 	public void stop() {
 		state = IntakeState.STOPPED;
-		intakeMotor.setPower(0);
+		motor.setPower(STOPPED_SPEED);
 	}
 	
 	/**
-	 * Initializes the intake by starting the motor.
+	 * The Intake should begin stopped.
 	 */
 	@Override
 	public void start() {
 		stop();
-	}
-	
-	/**
-	 * Toggles between intake and stopped states.
-	 */
-	public void toggleIn() {
-		if (state == IntakeState.IN) {
-			stop();
-		} else {
-			in();
-		}
-	}
-	
-	/**
-	 * Toggles between outtake and stopped states.
-	 */
-	public void toggleOut() {
-		if (state == IntakeState.OUT) {
-			stop();
-		} else {
-			out();
-		}
 	}
 	
 	/**

@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.autonomous.actions;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
-import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
+import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
 import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 
 /**
@@ -18,14 +18,14 @@ public class PrepareLaunchAction implements AutonomousAction {
 	@Override
 	public void initialize(MechanismManager mechanisms) {
 		hasTransfer = mechanisms.get(SingleWheelTransfer.class) != null;
-		hasLauncher = mechanisms.get(HorizontalLauncher.class) != null;
+		hasLauncher = mechanisms.get(PairedLauncher.class) != null;
 	}
 
 	@Override
 	public boolean execute(MechanismManager mechanisms) {
 		// Start spinning up launcher if available
 		if (hasLauncher) {
-			HorizontalLauncher launcher = mechanisms.get(HorizontalLauncher.class);
+			PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
 			launcher.ready();
 		}
 

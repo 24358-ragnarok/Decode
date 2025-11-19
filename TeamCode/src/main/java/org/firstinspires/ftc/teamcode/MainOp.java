@@ -9,9 +9,9 @@ import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
-import org.firstinspires.ftc.teamcode.hardware.FlywheelIntake;
-import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
+import org.firstinspires.ftc.teamcode.hardware.FlexVectorIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
+import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
 import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 import org.firstinspires.ftc.teamcode.software.Controller;
 import org.firstinspires.ftc.teamcode.software.SlewThrottle;
@@ -153,7 +153,7 @@ public class MainOp extends OpMode {
 					dt.goTo(action);
 					// Stop intake when going to park
 					if (dt.actionToPosition(action) == Drivetrain.Position.PARK) {
-						mechanisms.ifValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::stop);
+						mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::stop);
 					}
 				});
 			} else if (mainController.wasJustReleased(action)) {
@@ -167,9 +167,9 @@ public class MainOp extends OpMode {
 		
 		// Alignment & Launcher
 		if (subController.getProcessedValue(Controller.Action.AIM) > 0.1) {
-			mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::ready);
+			mechanisms.ifValid(mechanisms.get(PairedLauncher.class), PairedLauncher::ready);
 		} else {
-			mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class), HorizontalLauncher::stop);
+			mechanisms.ifValid(mechanisms.get(PairedLauncher.class), PairedLauncher::stop);
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.AIM)) {
@@ -196,15 +196,15 @@ public class MainOp extends OpMode {
 		
 		// Intake & Transfer
 		if (subController.wasJustPressed(Controller.Action.INTAKE_IN)) {
-			mechanisms.ifValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::in);
+			mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::in);
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.INTAKE_OUT)) {
-			mechanisms.ifValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::out);
+			mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::out);
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.INTAKE_STOP)) {
-			mechanisms.ifValid(mechanisms.get(FlywheelIntake.class), FlywheelIntake::stop);
+			mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::stop);
 		}
 		
 		// Classifier controls
@@ -255,13 +255,7 @@ public class MainOp extends OpMode {
 			});
 		});
 		
-		mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class), launcher -> {
-			logging.addDataLazy("Launch Solution Yaw Offset°", () -> {
-				TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine
-						.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
-				return solution.hasTarget ? String.format("%.2f", solution.horizontalOffsetDegrees) : "N/A";
-			});
-			
+		mechanisms.ifValid(mechanisms.get(PairedLauncher.class), launcher -> {
 			logging.addDataLazy("Launch Solution Absolute Pitch°", () -> {
 				TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine
 						.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
@@ -274,15 +268,14 @@ public class MainOp extends OpMode {
 				return solution.hasTarget ? String.format("%.0f", solution.rpm) : "N/A";
 			});
 			
-			logging.addDataLazy("Belt RPM", launcher::speed);
+			logging.addDataLazy("Belt RPM", launcher::getRPM);
 		});
 		
 		
 		// Launcher mechanism status
-		mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class), launcher -> {
+		mechanisms.ifValid(mechanisms.get(PairedLauncher.class), launcher -> {
 			logging.addDataLazy("Launch Ready", launcher::okayToLaunch);
 			logging.addDataLazy("Current Pitch°", () -> String.format("%.2f", launcher.getPitch()));
-			logging.addDataLazy("Current Yaw°", () -> String.format("%.2f", launcher.getYaw()));
 		});
 		
 		logging.addDataLazy("pathing", () -> {

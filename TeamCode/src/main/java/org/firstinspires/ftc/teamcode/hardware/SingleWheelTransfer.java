@@ -59,7 +59,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	private final CRServo transferWheel; // Main wheel that moves balls through transfer
 	private final CRServo entranceWheel; // CR wheel at color sensor that lets balls in
 	private final ServoImplEx exitWheel; // CR wheel at kicker that fires balls out
-	private final FlywheelIntake intake;
+	private final FlexVectorIntake intake;
 	// Automatic advance timing
 	private final long lastAutoAdvanceCheckMs = 0;
 	// Detection gating
@@ -78,7 +78,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	private MatchSettings.ArtifactColor pendingBallAfterShift = MatchSettings.ArtifactColor.UNKNOWN;
 	
 	public SingleWheelTransfer(CRServo transferWheel, CRServo entranceWheel, ServoImplEx exitWheel,
-	                           ColorSensor color, FlywheelIntake intake) {
+	                           ColorSensor color, FlexVectorIntake intake) {
 		this.color = color;
 		this.transferWheel = transferWheel;
 		this.entranceWheel = entranceWheel;

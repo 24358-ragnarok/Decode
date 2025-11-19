@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.MAX_SPEED_ERROR;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.TICKS_PER_REVOLUTION;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -9,24 +12,30 @@ import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
-public class HorizontalLauncher extends Mechanism {
+public class PairedLauncher extends Mechanism {
 	private final TrajectoryEngine trajectoryEngine;
-	private final Servo horizontalServo;
 	private final Servo verticalServo;
-	private final SyncBelt belt;
+	private final DcMotorEx rightMotor;
+	private final DcMotorEx leftMotor;
 	private final MatchSettings matchSettings;
+	public double targetSpeedAngular = 0;
+	private LauncherState state = LauncherState.IDLE;
 	
-	public HorizontalLauncher(
-			DcMotorEx beltRight,
-			DcMotorEx beltLeft,
-			Servo horizontalServo,
+	public PairedLauncher(
+			DcMotorEx launcherRight,
+			DcMotorEx launcherLeft,
 			Servo verticalServo,
 			TrajectoryEngine trajectoryEngine, MatchSettings matchSettings) {
 		this.trajectoryEngine = trajectoryEngine;
-		this.horizontalServo = horizontalServo;
 		this.verticalServo = verticalServo;
-		this.belt = new SyncBelt(beltRight, beltLeft);
 		this.matchSettings = matchSettings;
+		
+		this.rightMotor = launcherRight;
+		this.leftMotor = launcherLeft;
+		
+		leftMotor.setDirection(DcMotor.Direction.REVERSE);
+		rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+		leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 	}
 	
 	/**
@@ -55,7 +64,7 @@ public class HorizontalLauncher extends Mechanism {
 	
 	/**
 	 * Aims the launcher at the target using feedback from the TrajectoryEngine.
-	 * This is invoked by the {@link HorizontalLauncher#ready()} method which should
+	 * This is invoked by the {@link PairedLauncher#ready()} method which should
 	 * be called repeatedly in the main robot loop when aiming.
 	 * <p>
 	 * The TrajectoryEngine provides a standardized AimingSolution with:
@@ -80,18 +89,7 @@ public class HorizontalLauncher extends Mechanism {
 		
 		// Update belt speed based on the required launch rpm
 		double requiredRPM = solution.rpm;
-		belt.setTargetSpeed(requiredRPM);
-		
-		// Apply yaw correction: horizontalOffsetDegrees is the offset from center
-		// A positive value means target is right, negative means left
-		// We apply a proportional gain to smooth the correction
-		if (Settings.Launcher.CORRECT_YAW) {
-			double yawError = solution.horizontalOffsetDegrees;
-			// Apply correction by adjusting current yaw position
-			double currentYaw = getYaw();
-			double targetYaw = currentYaw + yawError;
-			setYaw(targetYaw);
-		}
+		setRPM(requiredRPM);
 		
 		// Set pitch directly: verticalOffsetDegrees is the absolute launch angle
 		// No proportional correction needed - just set it to the target angle
@@ -118,19 +116,12 @@ public class HorizontalLauncher extends Mechanism {
 			return false;
 		}
 		
-		// Check yaw alignment (horizontal offset from camera)
-		boolean yawAligned = Math.abs(solution.horizontalOffsetDegrees) < Settings.Aiming.MAX_YAW_ERROR;
-		
 		// Check pitch alignment (servo has reached target angle)
 		double pitchError = Math.abs(currentPitch - solution.verticalOffsetDegrees);
 		boolean pitchAligned = pitchError < Settings.Aiming.MAX_PITCH_ERROR;
 		
 		
-		return yawAligned && pitchAligned && belt.atSpeed();
-	}
-	
-	public double speed() {
-		return belt.getAverageRPM();
+		return pitchAligned && isAtSpeed();
 	}
 	
 	/**
@@ -163,9 +154,6 @@ public class HorizontalLauncher extends Mechanism {
 		spinUp();
 	}
 	
-	public void spinUp() {
-		belt.spinUp();
-	}
 	
 	/**
 	 * Maintains the launcher in a ready state without controlling the transfer.
@@ -177,36 +165,6 @@ public class HorizontalLauncher extends Mechanism {
 	public void maintainReady() {
 		aim();
 		spinUp(); // spinUp() is safe to call repeatedly - it checks internally
-	}
-	
-	public void stop() {
-		belt.spinDown();
-		setPitch(Settings.Launcher.DEFAULT_PITCH_ANGLE);
-	}
-	
-	/**
-	 * Gets the current yaw angle in degrees.
-	 * Yaw is centered at 0° for offset-based aiming.
-	 * Range: [YAW_MIN_ANGLE, YAW_MAX_ANGLE] (e.g., -10° to +10°).
-	 */
-	public double getYaw() {
-		if (Settings.Launcher.CORRECT_YAW) {
-			return Settings.Launcher.servoToYaw(horizontalServo.getPosition());
-		} else {
-			return 0; // Center position
-		}
-	}
-	
-	/**
-	 * Sets the yaw angle in degrees.
-	 * Yaw is centered at 0° for offset-based aiming.
-	 * Range: [YAW_MIN_ANGLE, YAW_MAX_ANGLE] (e.g., -10° to +10°).
-	 * Clamping is handled by the conversion function.
-	 */
-	public void setYaw(double yawDegrees) {
-		if (Settings.Launcher.CORRECT_YAW) {
-			horizontalServo.setPosition(Settings.Launcher.yawToServo(yawDegrees));
-		}
 	}
 	
 	/**
@@ -239,70 +197,45 @@ public class HorizontalLauncher extends Mechanism {
 	// ========== Testing/Utility Methods ==========
 	
 	public final void start() {
-		setYaw(0); // 0° yaw (center/forward)
-		setPitch(Settings.Launcher.DEFAULT_PITCH_ANGLE);
+		spinDown();
 	}
 	
 	public final void update() {
 	}
 	
-	/**
-	 * A synchronous combination of two motors that maintains equal speeds using
-	 * a proportional feedback controller.
-	 * Supports variable target speeds for physics-based aiming.
-	 * <p>
-	 * TODO: Implement differential speeds to control topspin/backspin on launched
-	 * artifacts
-	 */
-	public static class SyncBelt {
-		private static final double MAX_MOTOR_RPM = 6000.0;
-		private static final double RAMP_RATE = 0.001; // adjust for how fast power moves toward needed level
-		private final DcMotorEx beltRight;
-		private final DcMotorEx beltLeft;
-		private boolean active = false;
-		private double targetSpeedAngular = Settings.Aiming.DEFAULT_WHEEL_SPEED_RPM;
-		private double rightPower = 0;
-		private double leftPower = 0;
-		
-		public SyncBelt(DcMotorEx right, DcMotorEx left) {
-			this.beltRight = right;
-			this.beltLeft = left;
-			
-			left.setDirection(DcMotor.Direction.REVERSE);
-			right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-			left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-		}
-		
-		private static double clamp(double v, double min, double max) {
-			return Math.max(min, Math.min(max, v));
-		}
-		
-		public void setTargetSpeed(double rpm) {
-			targetSpeedAngular = rpm * 28 / 60;
-		}
-		
-		public void spinUp() {
-			active = true;
-			beltLeft.setVelocity(targetSpeedAngular);
-			beltRight.setVelocity(targetSpeedAngular);
-		}
-		
-		public void spinDown() {
-			active = false;
-			rightPower = leftPower = 0;
-			beltLeft.setVelocity(0);
-			beltRight.setVelocity(0);
-		}
-		
-		public double getAverageRPM() {
-			double ticksPerRev = 28;
-			double rightRPM = (beltRight.getVelocity() / ticksPerRev) / 60.0;
-			double leftRPM = (beltLeft.getVelocity() / ticksPerRev) / 60.0;
-			return (rightRPM + leftRPM) / 2.0;
-		}
-		
-		public boolean atSpeed() {
-			return active && Math.abs(targetSpeedAngular - getAverageRPM()) < 100;
-		}
+	@Override
+	public void stop() {
+		spinDown();
+	}
+	
+	public void spinUp() {
+		state = LauncherState.ACTIVE;
+		leftMotor.setVelocity(targetSpeedAngular);
+		rightMotor.setVelocity(targetSpeedAngular);
+	}
+	
+	public void spinDown() {
+		state = LauncherState.IDLE;
+		leftMotor.setVelocity(0);
+		rightMotor.setVelocity(0);
+	}
+	
+	public double getRPM() {
+		double rightRPM = (rightMotor.getVelocity() / TICKS_PER_REVOLUTION) / 60.0;
+		double leftRPM = (leftMotor.getVelocity() / TICKS_PER_REVOLUTION) / 60.0;
+		return (rightRPM + leftRPM) / 2.0;
+	}
+	
+	public void setRPM(double rpm) {
+		targetSpeedAngular = rpm * TICKS_PER_REVOLUTION / 60.0;
+	}
+	
+	public boolean isAtSpeed() {
+		return state == LauncherState.ACTIVE && Math.abs(targetSpeedAngular - getRPM()) < MAX_SPEED_ERROR;
+	}
+	
+	public enum LauncherState {
+		IDLE,
+		ACTIVE
 	}
 }
