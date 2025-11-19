@@ -13,7 +13,7 @@ public class CRServoTest extends OpMode {
 
 	@Override
 	public void init() {
-		servo = Settings.Hardware.TRANSFER_WHEEL_SERVO.fromHardwareMap(hardwareMap);
+		servo = Settings.Hardware.TRANSFER_WHEEL_MOTOR.fromHardwareMap(hardwareMap);
 	}
 	
 	@Override

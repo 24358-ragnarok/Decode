@@ -53,9 +53,9 @@ public class ColorRangefinder {
 	 *
 	 * @param hardwareMap The hardware map from the OpMode
 	 */
-	public ColorRangefinder(HardwareMap hardwareMap) {
-		this.pin0 = hardwareMap.get(DigitalChannel.class, "colorPin0");
-		this.pin1 = hardwareMap.get(DigitalChannel.class, "colorPin1");
+	public ColorRangefinder(HardwareMap hardwareMap, String pin0Name, String pin1Name) {
+		this.pin0 = hardwareMap.get(DigitalChannel.class, pin0Name);
+		this.pin1 = hardwareMap.get(DigitalChannel.class, pin1Name);
 		
 		pin0.setMode(DigitalChannel.Mode.INPUT);
 		pin1.setMode(DigitalChannel.Mode.INPUT);

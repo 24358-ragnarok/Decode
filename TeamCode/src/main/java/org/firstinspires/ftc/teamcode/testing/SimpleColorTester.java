@@ -30,7 +30,7 @@ public class SimpleColorTester extends OpMode {
 	@Override
 	public void init() {
 		// Initialize ColorRangefinder (reads digital pins only)
-		colorRangefinder = new ColorRangefinder(hardwareMap);
+		colorRangefinder = new ColorRangefinder(hardwareMap, "test0", "test1");
 		
 		telemetry.addLine("Color Rangefinder Test Ready");
 		telemetry.addLine();

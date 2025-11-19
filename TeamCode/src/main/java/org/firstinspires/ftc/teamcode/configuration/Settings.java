@@ -5,7 +5,6 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -92,24 +91,37 @@ public class Settings {
 		public static final HardwareConfig PINPOINT = new HardwareConfig(GoBildaPinpointDriver.class, "pinpoint");
 
 		// Subsystem motors and servos
-		public static final HardwareConfig INTAKE_MOTOR = new HardwareConfig(DcMotorEx.class, "intakeMotor");
+		public static final HardwareConfig INTAKE_MOTOR = new HardwareConfig(DcMotorEx.class, "intake");
 		public static final HardwareConfig LAUNCHER_RIGHT = new HardwareConfig(DcMotorEx.class, "launcherRight");
 		public static final HardwareConfig LAUNCHER_LEFT = new HardwareConfig(DcMotorEx.class, "launcherLeft");
-
+		
 		public static final HardwareConfig LAUNCHER_PITCH_SERVO = new HardwareConfig(ServoImplEx.class,
-				"launcherPitchServo");
+				"launcherPitch");
+		public static final HardwareConfig LAUNCHER_WALL_LEFT = new HardwareConfig(ServoImplEx.class,
+				"launcherWallRight");
+		public static final HardwareConfig LAUNCHER_WALL_RIGHT = new HardwareConfig(ServoImplEx.class,
+				"launcherWallLeft");
 
 		// Transfer mechanism
-		public static final HardwareConfig TRANSFER_WHEEL_SERVO = new HardwareConfig(CRServo.class,
-				"transferMainServo");
-		public static final HardwareConfig TRANSFER_ENTRANCE_WHEEL = new HardwareConfig(CRServo.class,
-				"transferEntranceServo"); // CR wheel at color sensor
-		public static final HardwareConfig TRANSFER_EXIT_KICKER = new HardwareConfig(ServoImplEx.class,
-				"transferExitServo"); // CR wheel at kicker position
-
+		public static final HardwareConfig TRANSFER_WHEEL_MOTOR = new HardwareConfig(DcMotorEx.class,
+				"transfer");
+		
+		
+		public static final HardwareConfig COMPARTMENT_LEFT = new HardwareConfig(ServoImplEx.class,
+				"compartmentLeft");
+		
+		public static final HardwareConfig COMPARTMENT_RIGHT = new HardwareConfig(ServoImplEx.class,
+				"compartmentLeft");
+		
+		
 		// Sensors
-		public static final HardwareConfig TRANSFER_COLOR_SENSOR = new HardwareConfig(
-				RevColorSensorV3.class, "transferColorSensor");
+		public static final String[] COLOR_RANGEFINDER_1 = {"crf1_0", "crf1_1"};
+		public static final String[] COLOR_RANGEFINDER_2 = {"crf2_0", "crf2_1"};
+		public static final HardwareConfig CONFIGURE_COLOR_SENSOR = new HardwareConfig(
+				RevColorSensorV3.class, "colorSensorConfigure");
+
+		
+		
 		public static final HardwareConfig LIMELIGHT = new HardwareConfig(Limelight3A.class, "limelight");
 		
 		/**
@@ -155,37 +167,11 @@ public class Settings {
 
 	/**
 	 * Settings for the transfer mechanism with CR management wheels.
-	 * <p>
-	 * The transfer has three wheels:
-	 * - Main transfer wheel: moves balls through the transfer
-	 * - Entrance wheel: CR wheel at color sensor that lets balls in
-	 * - Exit wheel: CR wheel at kicker that fires balls out
 	 */
 	public static class Transfer {
-		// Detection settings
-		public static final double BLIND_WINDOW_MS = 750; // Time after detection to ignore new detections
-		public static final int MAX_CAPACITY = 3; // Number of ball slots
-
 		// Main transfer wheel settings
-		public static final double TRANSFER_WHEEL_FORWARD_POWER = 1.0; // Power when advancing balls
-		public static final double TRANSFER_WHEEL_REVERSE_POWER = -1.0; // Power when reversing
-		public static final long TRANSFER_TIME_MS = 650; // Time to run wheel to move one ball slot
-
-		// Entrance wheel settings (at color sensor position)
-		public static final double ENTRANCE_WHEEL_INTAKE_POWER = 1.0; // Power when letting balls in
-		public static final double ENTRANCE_WHEEL_HOLD_POWER = 0.0; // No reverse to hold closed
-		public static final double ENTRANCE_WHEEL_OUT_POWER = -1.0;
-		public static final long ENTRANCE_OPEN_DURATION_MS = 750; // How long to open entrance when intaking
-
-		// Exit wheel settings (at kicker position)
-		public static final double EXIT_KICK_POSITION = 0.4; // Launch
-		public static final double EXIT_LOCK_POSITION = 1.0; // Closed
-		public static final long EXIT_FIRE_DURATION_MS = 300; // How long it needs to fire
-		public static final long EXIT_FIRE_RESET_MS = 300; // How long it needs to reset kicker to back position
-		
-		// Automatic advance settings
-		public static final boolean AUTO_ADVANCE_ENABLED = true; // Enable automatic ball advancement
-		public static final long AUTO_ADVANCE_GRACE_PERIOD_MS = 500; // Wait time after detection before advancing
+		public static final double SPEED = 1.0;
+		public static final int FIRING_POSITION_TICKS = 1000; // TODO
 	}
 	
 	/**
@@ -213,6 +199,8 @@ public class Settings {
 		public static long BELT_SPINUP_TIME_MS = 500;
 		public static long TICKS_PER_REVOLUTION = 28;
 		public static long MAX_SPEED_ERROR = 100;
+		public static long EXIT_FIRE_DURATION_MS = 250;
+		public static long EXIT_FIRE_RESET_MS = 250;
 
 		
 		// Pitch servo calibration (physical limits)
@@ -471,7 +459,7 @@ public class Settings {
 		public static boolean TRAJECTORY_ENGINE = true;
 		public static boolean LAUNCHER = TRAJECTORY_ENGINE && true;
 		
-		public static boolean ALIGNMENT_ENGINE = true;
+		public static boolean COMPARTMENT = true;
 	}
 	
 	public static class Autonomous {

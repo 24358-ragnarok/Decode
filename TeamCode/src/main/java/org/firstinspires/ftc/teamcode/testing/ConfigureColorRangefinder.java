@@ -58,7 +58,7 @@ public class ConfigureColorRangefinder extends OpMode {
 	@Override
 	public void init() {
 		// Initialize sensor on I2C
-		sensor = Settings.Hardware.TRANSFER_COLOR_SENSOR.fromHardwareMap(hardwareMap);
+		sensor = Settings.Hardware.CONFIGURE_COLOR_SENSOR.fromHardwareMap(hardwareMap);
 		sensor.initialize();
 		configurator = new ColorRangefinderConfigurator(sensor);
 		

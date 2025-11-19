@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous.actions;
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
-import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
+import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
 
 /**
  * Action that prepares both the transfer and launcher for an upcoming launch.
@@ -17,7 +17,7 @@ public class PrepareLaunchAction implements AutonomousAction {
 
 	@Override
 	public void initialize(MechanismManager mechanisms) {
-		hasTransfer = mechanisms.get(SingleWheelTransfer.class) != null;
+		hasTransfer = mechanisms.get(VerticalWheelTransfer.class) != null;
 		hasLauncher = mechanisms.get(PairedLauncher.class) != null;
 	}
 

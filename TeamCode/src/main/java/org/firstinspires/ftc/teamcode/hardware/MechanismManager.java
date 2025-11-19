@@ -3,20 +3,17 @@ package org.firstinspires.ftc.teamcode.hardware;
 import androidx.annotation.Nullable;
 
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.hardware.rev.RevColorSensorV3;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
-import org.firstinspires.ftc.teamcode.software.ColorSensor;
+import org.firstinspires.ftc.teamcode.software.ColorRangefinder;
+import org.firstinspires.ftc.teamcode.software.ColorUnifier;
 import org.firstinspires.ftc.teamcode.software.LimelightManager;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
-import java.lang.reflect.Proxy;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -43,20 +40,23 @@ public class MechanismManager {
 	public final LimelightManager limelightManager;
 	public final TrajectoryEngine trajectoryEngine;
 	public final MatchSettings matchSettings;
-	List<LynxModule> allHubs;
-
+	public final HardwareMap hardwareMap;
+	private final List<LynxModule> allHubs;
+	
+	
 	public MechanismManager(HardwareMap hw, MatchSettings match) {
-		allHubs = hw.getAll(LynxModule.class);
+		hardwareMap = hw;
+		allHubs = hardwareMap.getAll(LynxModule.class);
 		drivetrain = new Drivetrain(hw, match);
 		matchSettings = match;
-
-		// Build mechanisms safely
-		FlexVectorIntake intake = createIntake(hw);
-		SingleWheelTransfer transfer = createTransfer(hw, intake);
-		LimelightManager ll = createLimelight(hw, match);
-		TrajectoryEngine traj = createTrajectory(ll, match);
-		PairedLauncher launcher = createLauncher(hw, traj, match);
 		
+		// Build mechanisms safely
+		FlexVectorIntake intake = createIntake();
+		VerticalWheelTransfer transfer = createTransfer();
+		LimelightManager ll = createLimelight();
+		TrajectoryEngine traj = createTrajectory();
+		PairedLauncher launcher = createLauncher();
+		DualBallCompartment dbc = createCompartment();
 		mechanismArray = new Mechanism[]{intake, transfer, launcher};
 
 		// Save helpers
@@ -71,75 +71,65 @@ public class MechanismManager {
 		}
 	}
 	
-	/**
-	 * Creates a dummy servo that swallows all method calls.
-	 * Used when hardware is not available but code expects a servo instance.
-	 *
-	 * @return A proxy servo that does nothing
-	 */
-	public static Servo dummyServo() {
-		return (Servo) Proxy.newProxyInstance(
-				Servo.class.getClassLoader(),
-				new Class[]{Servo.class},
-				(proxy, method, args) -> {
-					return null; // swallow exceptions
-				});
-	}
-	
-	private FlexVectorIntake createIntake(HardwareMap hw) {
+	private FlexVectorIntake createIntake() {
 		if (!Settings.Deploy.INTAKE)
 			return null;
 		try {
-			DcMotorEx intakeMotor = Settings.Hardware.INTAKE_MOTOR.fromHardwareMap(hw);
-			return new FlexVectorIntake(intakeMotor);
+			DcMotorEx intakeMotor = Settings.Hardware.INTAKE_MOTOR.fromHardwareMap(hardwareMap);
+			ColorRangefinder color1 = new ColorRangefinder(
+					hardwareMap, Settings.Hardware.COLOR_RANGEFINDER_1[0], Settings.Hardware.COLOR_RANGEFINDER_1[1]);
+			ColorRangefinder[] array = {color1};
+			ColorUnifier color = new ColorUnifier(array);
+			return new FlexVectorIntake(intakeMotor, color);
 		} catch (Exception e) {
 			return null;
 		}
 	}
 	
-	private SingleWheelTransfer createTransfer(HardwareMap hw, FlexVectorIntake intake) {
+	private VerticalWheelTransfer createTransfer() {
 		if (!Settings.Deploy.TRANSFER)
 			return null;
 		
-		CRServo transferWheel = Settings.Hardware.TRANSFER_WHEEL_SERVO.fromHardwareMap(hw);
-		CRServo entranceWheel = Settings.Hardware.TRANSFER_ENTRANCE_WHEEL.fromHardwareMap(hw);
-		ServoImplEx exitWheel = Settings.Hardware.TRANSFER_EXIT_KICKER.fromHardwareMap(hw);
-		RevColorSensorV3 sensor = Settings.Hardware.TRANSFER_COLOR_SENSOR.fromHardwareMap(hw);
-		ColorSensor color = new ColorSensor(sensor);
-		// ColorRangefinder color = new ColorRangefinder(hw);
-		return new SingleWheelTransfer(transferWheel, entranceWheel, exitWheel, color, intake);
-
+		DcMotorEx transferWheel = Settings.Hardware.TRANSFER_WHEEL_MOTOR.fromHardwareMap(hardwareMap);
+		return new VerticalWheelTransfer(transferWheel);
 	}
-
-	private LimelightManager createLimelight(HardwareMap hw, MatchSettings match) {
+	
+	private LimelightManager createLimelight() {
 		if (!Settings.Deploy.LIMELIGHT)
 			return null;
-		try {
-			return new LimelightManager(Settings.Hardware.LIMELIGHT.fromHardwareMap(hw), match);
-		} catch (Exception e) {
-			return null;
-		}
+		
+		return new LimelightManager(Settings.Hardware.LIMELIGHT.fromHardwareMap(hardwareMap), matchSettings);
 	}
-
-	private TrajectoryEngine createTrajectory(LimelightManager ll, MatchSettings match) {
+	
+	private TrajectoryEngine createTrajectory() {
 		if (!Settings.Deploy.TRAJECTORY_ENGINE)
 			return null;
 		try {
-			return new TrajectoryEngine(match, drivetrain);
+			return new TrajectoryEngine(this);
 		} catch (Exception e) {
 			return null;
 		}
 	}
 	
-	private PairedLauncher createLauncher(HardwareMap hw, TrajectoryEngine traj, MatchSettings matchSettings) {
+	private PairedLauncher createLauncher() {
 		if (!Settings.Deploy.LAUNCHER) {
 			return null;
 		}
-		DcMotorEx right = Settings.Hardware.LAUNCHER_RIGHT.fromHardwareMap(hw);
-		DcMotorEx left = Settings.Hardware.LAUNCHER_LEFT.fromHardwareMap(hw);
-		Servo horizontal;
-		Servo vertical = Settings.Hardware.LAUNCHER_PITCH_SERVO.fromHardwareMap(hw); // ServoImplEx is a Servo
-		return new PairedLauncher(right, left, vertical, traj, matchSettings);
+		DcMotorEx right = Settings.Hardware.LAUNCHER_RIGHT.fromHardwareMap(hardwareMap);
+		DcMotorEx left = Settings.Hardware.LAUNCHER_LEFT.fromHardwareMap(hardwareMap);
+		ServoImplEx vertical = Settings.Hardware.LAUNCHER_PITCH_SERVO.fromHardwareMap(hardwareMap);
+		ServoImplEx leftWall = Settings.Hardware.LAUNCHER_WALL_LEFT.fromHardwareMap(hardwareMap);
+		ServoImplEx rightWall = Settings.Hardware.LAUNCHER_WALL_RIGHT.fromHardwareMap(hardwareMap);
+		return new PairedLauncher(this, right, left, vertical, leftWall, rightWall);
+	}
+	
+	private DualBallCompartment createCompartment() {
+		if (!Settings.Deploy.COMPARTMENT) {
+			return null;
+		}
+		ServoImplEx right = Settings.Hardware.COMPARTMENT_RIGHT.fromHardwareMap(hardwareMap);
+		ServoImplEx left = Settings.Hardware.COMPARTMENT_LEFT.fromHardwareMap(hardwareMap);
+		return new DualBallCompartment(this, right, left);
 	}
 	
 	/**

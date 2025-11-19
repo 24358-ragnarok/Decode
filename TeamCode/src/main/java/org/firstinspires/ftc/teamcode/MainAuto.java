@@ -11,9 +11,7 @@ import org.firstinspires.ftc.teamcode.configuration.MatchConfigurationWizard;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
-import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
-
-import java.util.Arrays;
+import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
 
 /**
  * The main Autonomous script that makes the robot move by itself during the
@@ -91,8 +89,8 @@ public class MainAuto extends OpMode {
 		// Initialize all mechanisms
 		mechanisms.start();
 		
-		mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
-			Arrays.fill(transfer.slots, MatchSettings.ArtifactColor.PURPLE);
+		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), transfer -> {
+			transfer.setUpForAuto();
 		});
 		
 		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getAutonomousStartingPose());

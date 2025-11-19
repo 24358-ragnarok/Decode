@@ -12,7 +12,8 @@ import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.FlexVectorIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
-import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
+import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
+import org.firstinspires.ftc.teamcode.software.Artifact;
 import org.firstinspires.ftc.teamcode.software.Controller;
 import org.firstinspires.ftc.teamcode.software.SlewThrottle;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
@@ -172,25 +173,19 @@ public class MainOp extends OpMode {
 			mechanisms.ifValid(mechanisms.get(PairedLauncher.class), PairedLauncher::stop);
 		}
 		
-		if (subController.wasJustPressed(Controller.Action.AIM)) {
-			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::moveNextBallToKicker);
+		if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
+			mechanisms.ifValid(mechanisms.get(PairedLauncher.class), PairedLauncher::fire);
 		}
 		
-		if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
-			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::fire);
+		if (subController.wasJustPressed(Controller.Action.AIM)) {
+			mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::moveNextArtifactToLauncher);
 		}
 		
 		if (subController.wasJustPressed(Controller.Action.OVERRIDE_ADVANCE)) {
-			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::advance);
+			mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::advance);
 		}
 		if (subController.wasJustPressed(Controller.Action.OVERRIDE_REVERSE)) {
-			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::reverse);
-		}
-		if (subController.wasJustPressed(Controller.Action.OVERRIDE_BALL_DETECTION)) {
-			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::openEntrance);
-		}
-		if (subController.getProcessedValue(Controller.Action.OVERRIDE_CLEAR) > 0.0) {
-			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::clearEntrance);
+			mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::reverse);
 		}
 		
 		
@@ -241,9 +236,9 @@ public class MainOp extends OpMode {
 		logging.addDataLazy("Y", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getY());
 		
 		// Transfer telemetry
-		mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), transfer -> {
+		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), transfer -> {
 			logging.addDataLazy("Transfer Slots", () -> {
-				MatchSettings.ArtifactColor[] slots = transfer.getSlotsSnapshot();
+				Artifact[] slots = transfer.getArtifactSnapshot();
 				StringBuilder slotsDisplay = new StringBuilder();
 				for (int i = 0; i < slots.length; i++) {
 					slotsDisplay.append(i)

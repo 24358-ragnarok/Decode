@@ -49,8 +49,6 @@ public class OuttakeTest extends LinearOpMode {
 		
 		pitchServo = Settings.Hardware.LAUNCHER_PITCH_SERVO.fromHardwareMap(hardwareMap);
 		pitchServo.setPosition(commandedAngle);
-		kickerServo = Settings.Hardware.TRANSFER_EXIT_KICKER.fromHardwareMap(hardwareMap);
-		kickerServo.setPosition(Settings.Transfer.EXIT_LOCK_POSITION);
 		
 		telemetry.addLine("✅ Initialization Complete");
 		telemetry.addLine("Controls:");
@@ -76,11 +74,6 @@ public class OuttakeTest extends LinearOpMode {
 			}
 			if (gamepad1.right_bumper) {
 				commandedRPM += 5;
-			}
-			if (gamepad1.right_trigger > 0.1) {
-				kickerServo.setPosition(Settings.Transfer.EXIT_KICK_POSITION);
-			} else {
-				kickerServo.setPosition(Settings.Transfer.EXIT_LOCK_POSITION);
 			}
 			
 			commandedRPM = Math.max(0, Math.min(6000, commandedRPM));

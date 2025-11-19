@@ -6,21 +6,24 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.STOPP
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.software.ColorUnifier;
+
 /**
  * The flex-vector intake controls the robot's intake mechanism using a flywheel motor.
  * Supports intake, outtake, and stop operations with state tracking.
  */
 public class FlexVectorIntake extends Mechanism {
 	private final DcMotorEx motor;
+	private final ColorUnifier unifier;
 	public IntakeState state;
-	
 	/**
 	 * Creates a new FlexVectorIntake instance.
 	 *
 	 * @param intakeMotor The DC motor that controls the intake flywheel
 	 */
-	public FlexVectorIntake(DcMotorEx intakeMotor) {
+	public FlexVectorIntake(DcMotorEx intakeMotor, ColorUnifier color) {
 		this.motor = intakeMotor;
+		this.unifier = color;
 		this.state = IntakeState.STOPPED;
 	}
 	

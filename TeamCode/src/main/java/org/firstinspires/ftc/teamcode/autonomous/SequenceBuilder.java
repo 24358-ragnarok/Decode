@@ -5,14 +5,11 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.L
 
 import com.pedropathing.geometry.Pose;
 
-import org.firstinspires.ftc.teamcode.autonomous.actions.ClearIntakeAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.CurvePathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.EndAtAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.IntakeAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LinearPathAction;
-import org.firstinspires.ftc.teamcode.autonomous.actions.OverrideIntakeInAction;
-import org.firstinspires.ftc.teamcode.autonomous.actions.OverrideTransferStateAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ParallelAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PrepareLaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SlowLinearPathAction;
@@ -67,7 +64,6 @@ public class SequenceBuilder {
 				.launch()
 
 				// Get ball set I
-				.clearIntake()
 				.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
 						"Prep Preset 1",
 						Settings.Positions.ControlPoints.PRESET_1_APPROACH)
@@ -88,7 +84,6 @@ public class SequenceBuilder {
 				.launch()
 
 				// Get ball set II
-				.clearIntake()
 				.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
 						"Prep Preset2",
 						Settings.Positions.ControlPoints.PRESET_2_APPROACH)
@@ -126,7 +121,6 @@ public class SequenceBuilder {
 				.launch()
 				
 				// Get ball set I (Preset3 for close sequence)
-				.clearIntake()
 				.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
 				.startIntake()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_1, "Grab1 Preset3")
@@ -145,7 +139,6 @@ public class SequenceBuilder {
 				.launch()
 				
 				// Get ball set II (Preset2 for close sequence)
-				.clearIntake()
 				.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
 				.startIntake()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
@@ -266,11 +259,6 @@ public class SequenceBuilder {
 		sequence.addAction(new IntakeAction());
 		return this;
 	}
-	
-	public SequenceBuilder clearIntake() {
-		sequence.addAction(new ClearIntakeAction());
-		return this;
-	}
 
 	public SequenceBuilder prepLaunch() {
 		sequence.addAction(new PrepareLaunchAction());
@@ -359,42 +347,6 @@ public class SequenceBuilder {
 				.moveTo(nextPose);
 	}
 	
-	/**
-	 * Adds an override action to force all transfer slots to be full with the
-	 * specified color.
-	 * Useful for testing and debugging autonomous sequences.
-	 *
-	 * @param artifactColor The color to fill all slots with
-	 * @return this (for method chaining)
-	 */
-	public SequenceBuilder overrideTransferState(MatchSettings.ArtifactColor artifactColor) {
-		sequence.addAction(new OverrideTransferStateAction(artifactColor));
-		return this;
-	}
-	
-	/**
-	 * Adds an override action to force all transfer slots to be full with PURPLE
-	 * artifacts.
-	 * This is a convenience method for the most common test case.
-	 *
-	 * @return this (for method chaining)
-	 */
-	public SequenceBuilder overrideTransferStateFull() {
-		sequence.addAction(new OverrideTransferStateAction());
-		return this;
-	}
-	
-	/**
-	 * Adds an override action to force both intake motor and transfer entrance
-	 * wheel to start.
-	 * Leaves intake running when complete
-	 *
-	 * @return this (for method chaining)
-	 */
-	public SequenceBuilder overrideIntakeIn() {
-		sequence.addAction(new OverrideIntakeInAction());
-		return this;
-	}
 	
 	/**
 	 * Builds the sequence.

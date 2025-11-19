@@ -8,30 +8,31 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
 public class PairedLauncher extends Mechanism {
-	private final TrajectoryEngine trajectoryEngine;
-	private final Servo verticalServo;
+	private final ServoImplEx verticalServo;
 	private final DcMotorEx rightMotor;
 	private final DcMotorEx leftMotor;
-	private final MatchSettings matchSettings;
+	private final ServoImplEx leftServo;
+	private final ServoImplEx rightServo;
+	private final MechanismManager mechanisms;
 	public double targetSpeedAngular = 0;
 	private LauncherState state = LauncherState.IDLE;
 	
 	public PairedLauncher(
+			MechanismManager mechanisms,
 			DcMotorEx launcherRight,
 			DcMotorEx launcherLeft,
-			Servo verticalServo,
-			TrajectoryEngine trajectoryEngine, MatchSettings matchSettings) {
-		this.trajectoryEngine = trajectoryEngine;
+			ServoImplEx verticalServo, ServoImplEx wallRight, ServoImplEx wallLeft) {
+		this.mechanisms = mechanisms;
 		this.verticalServo = verticalServo;
-		this.matchSettings = matchSettings;
 		
 		this.rightMotor = launcherRight;
 		this.leftMotor = launcherLeft;
+		this.rightServo = wallRight;
+		this.leftServo = wallLeft;
 		
 		leftMotor.setDirection(DcMotor.Direction.REVERSE);
 		rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -79,8 +80,8 @@ public class PairedLauncher extends Mechanism {
 		// Pass current pitch angle to trajectory engine so it can account for limelight
 		// rotation
 		double currentPitch = getPitch();
-		TrajectoryEngine.AimingSolution solution = trajectoryEngine.getAimingOffsets(
-				matchSettings.getAllianceColor(), currentPitch);
+		TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine.getAimingOffsets(
+				mechanisms.matchSettings.getAllianceColor(), currentPitch);
 		
 		// If we don't have a target, do not adjust.
 		if (!solution.hasTarget) {
@@ -109,8 +110,8 @@ public class PairedLauncher extends Mechanism {
 	 */
 	public boolean okayToLaunch() {
 		double currentPitch = getPitch();
-		TrajectoryEngine.AimingSolution solution = trajectoryEngine.getAimingOffsets(
-				matchSettings.getAllianceColor(), currentPitch);
+		TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine.getAimingOffsets(
+				mechanisms.matchSettings.getAllianceColor(), currentPitch);
 		
 		if (!solution.hasTarget) {
 			return false;
@@ -124,21 +125,9 @@ public class PairedLauncher extends Mechanism {
 		return pitchAligned && isAtSpeed();
 	}
 	
-	/**
-	 * Checks if launcher is ready to fire.
-	 * <p>
-	 * Note: This method only verifies launcher readiness. The actual firing
-	 * of balls is handled by the SingleWheelTransfer mechanism, which should
-	 * be controlled separately in autonomous or teleop code.
-	 *
-	 * @deprecated Use {@link #okayToLaunch()} to check readiness and control
-	 * SingleWheelTransfer directly for firing.
-	 */
-	@Deprecated
-	public void launch() {
-		// This method is deprecated. Firing is now handled by SingleWheelTransfer.
-		// In teleop: Call transfer.fire() when ready
-		// In autonomous: LaunchAction coordinates launcher + transfer
+	public void fire() {
+		leftServo.setPosition(1);
+		rightServo.setPosition(1); // TODO
 	}
 	
 	/**

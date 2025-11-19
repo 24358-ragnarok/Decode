@@ -4,20 +4,18 @@ import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
-import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain.Position;
+import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 
 /**
  * Simplified Trajectory Engine that uses preset launch angles based on
  * which shooting position (CLOSE_SHOOT or FAR_SHOOT) is closer.
  */
 public class TrajectoryEngine {
-	private final MatchSettings matchSettings;
-	private final Drivetrain drivetrain;
+	MechanismManager mechanisms;
 	
-	public TrajectoryEngine(MatchSettings matchSettings, Drivetrain drivetrain) {
-		this.matchSettings = matchSettings;
-		this.drivetrain = drivetrain;
+	public TrajectoryEngine(MechanismManager mechanisms) {
+		this.mechanisms = mechanisms;
 	}
 	
 	/**
@@ -30,9 +28,9 @@ public class TrajectoryEngine {
 	 * position
 	 */
 	public AimingSolution getAimingOffsets(MatchSettings.AllianceColor allianceColor, double currentPitchDegrees) {
-		Pose currentPose = drivetrain.getPose();
-		Pose closeShootPose = drivetrain.getPositionPose(Position.CLOSE_SHOOT);
-		Pose farShootPose = drivetrain.getPositionPose(Position.FAR_SHOOT);
+		Pose currentPose = mechanisms.drivetrain.getPose();
+		Pose closeShootPose = mechanisms.drivetrain.getPositionPose(Position.CLOSE_SHOOT);
+		Pose farShootPose = mechanisms.drivetrain.getPositionPose(Position.FAR_SHOOT);
 		
 		// Determine which position is closer
 		double distanceToClose = getDistance(currentPose, closeShootPose);

@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.autonomous.actions;
 
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_FIRE_DURATION_MS;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_FIRE_RESET_MS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.EXIT_FIRE_DURATION_MS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.EXIT_FIRE_RESET_MS;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
-import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
+import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
 
 /**
  * Action that launches all samples using the launcher mechanism.
@@ -31,7 +31,7 @@ public class LaunchAction implements AutonomousAction {
 	@Override
 	public void initialize(MechanismManager mechanisms) {
 		hasLauncher = mechanisms.get(PairedLauncher.class) != null;
-		hasTransfer = mechanisms.get(SingleWheelTransfer.class) != null;
+		hasTransfer = mechanisms.get(VerticalWheelTransfer.class) != null;
 		state = State.READY_TO_LAUNCH;
 		lastFireTimeMs = 0;
 		
@@ -50,7 +50,7 @@ public class LaunchAction implements AutonomousAction {
 		}
 		
 		PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
-		SingleWheelTransfer transfer = mechanisms.get(SingleWheelTransfer.class);
+		VerticalWheelTransfer transfer = mechanisms.get(VerticalWheelTransfer.class);
 		
 		if (transfer.isEmpty() && state == State.READY_TO_LAUNCH) {
 			state = State.COMPLETE; // nothing to fire initially, just quit
@@ -75,13 +75,13 @@ public class LaunchAction implements AutonomousAction {
 				}
 				
 				if (System.currentTimeMillis() - lastFireTimeMs > EXIT_FIRE_DURATION_MS + EXIT_FIRE_RESET_MS) {
-					transfer.moveNextBallToKicker();
+					transfer.moveNextArtifactToLauncher();
 					state = State.WAITING_TO_FIRE;
 				}
 				break;
 			
 			case WAITING_TO_FIRE:
-				if (transfer.canFire()) {
+				if (transfer.artifactInFiringPosition()) {
 					state = State.FIRING;
 				}
 				if (transfer.isEmpty()) {
@@ -91,7 +91,7 @@ public class LaunchAction implements AutonomousAction {
 			
 			case FIRING:
 				// Fire the ball
-				transfer.fire();
+				launcher.fire();
 				lastFireTimeMs = System.currentTimeMillis();
 				// Go back to advancing the next ball
 				state = State.ADVANCING_BALL;

@@ -5,7 +5,6 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
-import org.firstinspires.ftc.teamcode.hardware.Mechanism;
 
 /**
  * Interface between the Limelight camera and the robot, providing vision processing
@@ -19,7 +18,7 @@ import org.firstinspires.ftc.teamcode.hardware.Mechanism;
  * Optimized to minimize overhead by avoiding unnecessary pipeline switches and
  * providing efficient result caching.
  */
-public class LimelightManager extends Mechanism {
+public class LimelightManager {
 	public final Limelight3A limelight;
 	public final MatchSettings matchSettings;
 	LLResult currentResult;

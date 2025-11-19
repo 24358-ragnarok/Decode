@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.autonomous.actions;
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
 import org.firstinspires.ftc.teamcode.hardware.FlexVectorIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
-import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 
 /**
  * Action that runs the intake mechanism.
@@ -30,16 +29,12 @@ public class IntakeAction implements AutonomousAction {
 	@Override
 	public void initialize(MechanismManager mechanisms) {
 		// Transfer doesn't need preparation - it automatically detects and stores balls
-		// The SingleWheelTransfer update() loop handles color detection and advancement
+		// The VerticalWheelTransfer update() loop handles color detection and advancement
 		
 		// Start intake motor to pull samples in
 		FlexVectorIntake intake = mechanisms.get(FlexVectorIntake.class);
 		if (intake != null) {
 			intake.in();
-		}
-		SingleWheelTransfer transfer = mechanisms.get(SingleWheelTransfer.class);
-		if (transfer != null) {
-			transfer.holdEntranceClosed();
 		}
 	}
 	
