@@ -76,6 +76,7 @@ public class LaunchAction implements AutonomousAction {
 				
 				if (System.currentTimeMillis() - lastFireTimeMs > EXIT_FIRE_DURATION_MS + EXIT_FIRE_RESET_MS) {
 					transfer.moveNextBallToKicker();
+					transfer.forceOpenEntrance();
 					state = State.WAITING_TO_FIRE;
 				}
 				break;

@@ -452,7 +452,7 @@ public class Settings {
 			 * First preset group (closest to wall).
 			 */
 			public static class Preset1 {
-				public static final Pose PREP = new Pose(45, 34, Math.toRadians(180));
+				public static final Pose PREP = new Pose(46, 34, Math.toRadians(180));
 				public static final Pose GRAB_1 = new Pose(36.0, 34, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 34, Math.toRadians(180));
 				public static final Pose END = new Pose(20, 34, Math.toRadians(180));
@@ -462,7 +462,7 @@ public class Settings {
 			 * Second preset group (middle).
 			 */
 			public static class Preset2 {
-				public static final Pose PREP = new Pose(45, 58, Math.toRadians(180));
+				public static final Pose PREP = new Pose(46, 58, Math.toRadians(180));
 				public static final Pose GRAB_1 = new Pose(36.0, 58, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 58, Math.toRadians(180));
 				public static final Pose END = new Pose(20, 58, Math.toRadians(180));
@@ -472,8 +472,8 @@ public class Settings {
 			 * Third preset group (farthest from wall).
 			 */
 			public static class Preset3 {
-				public static final Pose PREP = new Pose(45, 83, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(35.0, 83, Math.toRadians(180));
+				public static final Pose PREP = new Pose(46, 83, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(36.0, 83, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 83, Math.toRadians(180));
 				public static final Pose END = new Pose(20, 83, Math.toRadians(180));
 			}
@@ -521,8 +521,8 @@ public class Settings {
 	}
 	
 	public static class Autonomous {
-		public static double BALL_INTAKE_WAIT_S = 0.35;
-		public static double SLOW_SPEED = 0.27;
+		public static double BALL_INTAKE_WAIT_S = 0.1;
+		public static double SLOW_SPEED = 0.25;
 		public static double LAUNCH_STABILITY_WAIT_S = 0.3;
 		public static double MAX_ACTION_TIME_S = 4.5;
 		

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
+import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.configuration.Constants;
@@ -149,6 +150,9 @@ public class Drivetrain extends Mechanism {
 		}
 		
 		this.state = State.PATHING;
+		PathConstraints c = Constants.pathConstraints;
+		c.setTimeoutConstraint(250);
+		follower.setConstraints(c);
 		follower.holdPoint(targetPose);
 	}
 	
@@ -170,6 +174,7 @@ public class Drivetrain extends Mechanism {
 		}
 		this.state = State.MANUAL;
 		follower.startTeleopDrive();
+		follower.setConstraints(Constants.pathConstraints);
 	}
 	
 	/**
