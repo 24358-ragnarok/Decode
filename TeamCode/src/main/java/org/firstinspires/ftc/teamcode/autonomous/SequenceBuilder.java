@@ -41,10 +41,10 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
  * </pre>
  */
 public class SequenceBuilder {
-
+	
 	private final AutonomousSequence sequence;
 	private final MatchSettings matchSettings;
-
+	
 	/**
 	 * Creates a new sequence builder.
 	 *
@@ -54,7 +54,7 @@ public class SequenceBuilder {
 		this.sequence = new AutonomousSequence();
 		this.matchSettings = matchSettings;
 	}
-
+	
 	/**
 	 * Static factory method to create Far position sequences.
 	 */
@@ -65,7 +65,7 @@ public class SequenceBuilder {
 				.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
 				.wait(LAUNCH_STABILITY_WAIT_S)
 				.launch()
-
+				
 				// Get ball set I
 				.clearIntake()
 				.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
@@ -73,20 +73,24 @@ public class SequenceBuilder {
 						Settings.Positions.ControlPoints.PRESET_1_APPROACH)
 				.startIntake()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_1, "Grab Preset 1 Ball 1")
+				.overrideIntakeIn()
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab Preset 1 Ball 2")
+				.overrideIntakeIn()
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
+				.overrideIntakeIn()
 				.wait(BALL_INTAKE_WAIT_S)
+				.overrideTransferStateFull()
 				.stopIntake()
-
+				
 				// Launch ball set I
 				.prepLaunch()
 				.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
 						Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
 				.wait(LAUNCH_STABILITY_WAIT_S)
 				.launch()
-
+				
 				// Get ball set II
 				.clearIntake()
 				.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
@@ -94,26 +98,30 @@ public class SequenceBuilder {
 						Settings.Positions.ControlPoints.PRESET_2_APPROACH)
 				.startIntake()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
+				.overrideIntakeIn()
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
+				.overrideIntakeIn()
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
+				.overrideIntakeIn()
 				.wait(BALL_INTAKE_WAIT_S)
+				.overrideTransferStateFull()
 				.stopIntake()
-
+				
 				// Launch ball set II
 				.prepLaunch()
 				.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preset2")
 				.wait(LAUNCH_STABILITY_WAIT_S)
 				.launch()
-
+				
 				// Park
 				.stopIntake()
 				.moveTo(Settings.Positions.Park.FAR, "Park")
 				.endAt(Settings.Positions.Park.FAR)
 				.build();
 	}
-
+	
 	/**
 	 * Static factory method to create Close position sequences.
 	 */
@@ -130,13 +138,17 @@ public class SequenceBuilder {
 				.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
 				.startIntake()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_1, "Grab1 Preset3")
+				.overrideIntakeIn()
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_2, "Grab2 Preset3")
+				.overrideIntakeIn()
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
+				.overrideIntakeIn()
 				.wait(BALL_INTAKE_WAIT_S)
+				.overrideTransferStateFull()
 				.stopIntake()
-
+				
 				// Launch ball set I
 				.prepLaunch()
 				.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
@@ -149,27 +161,31 @@ public class SequenceBuilder {
 				.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
 				.startIntake()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
+				.overrideIntakeIn()
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
+				.overrideIntakeIn()
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
+				.overrideIntakeIn()
 				.wait(BALL_INTAKE_WAIT_S)
+				.overrideTransferStateFull()
 				.stopIntake()
-
+				
 				// Launch ball set II
 				.prepLaunch()
 				.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 						Settings.Positions.ControlPoints.FROM_PRESET2_TO_CLOSE, "Launch Preset2")
 				.wait(LAUNCH_STABILITY_WAIT_S)
 				.launch()
-
+				
 				// Park
 				.stopIntake()
 				.moveTo(Settings.Positions.Park.CLOSE, "Park")
 				.endAt(Settings.Positions.Park.CLOSE)
 				.build();
 	}
-
+	
 	/**
 	 * Adds a linear path action to a target pose.
 	 *
@@ -256,7 +272,7 @@ public class SequenceBuilder {
 		sequence.addAction(new EndAtAction(finalPose));
 		return this;
 	}
-
+	
 	/**
 	 * Adds an action to start the intake.
 	 *
@@ -271,12 +287,12 @@ public class SequenceBuilder {
 		sequence.addAction(new ClearIntakeAction());
 		return this;
 	}
-
+	
 	public SequenceBuilder prepLaunch() {
 		sequence.addAction(new PrepareLaunchAction());
 		return this;
 	}
-
+	
 	/**
 	 * Adds an action to stop the intake.
 	 *
@@ -286,7 +302,7 @@ public class SequenceBuilder {
 		sequence.addAction(new StopIntakeAction());
 		return this;
 	}
-
+	
 	/**
 	 * Adds a launch action (waits for spindex to empty).
 	 *

@@ -307,15 +307,15 @@ public class Settings {
 	@Configurable
 	public static class ColorSensor {
 		// Purple HSV hue range (160-190 degrees scaled to 0-255)
-		public static double PURPLE_HUE_LOW = 160.0 / 360.0 * 255.0; // ~113
-		public static double PURPLE_HUE_HIGH = 190.0 / 360.0 * 255.0; // ~134
+		public static double PURPLE_HUE_LOW = 0 / 360.0 * 255.0; // ~113
+		public static double PURPLE_HUE_HIGH = 0 / 360.0 * 255.0; // ~134
 		
 		// Green HSV hue range (110-140 degrees scaled to 0-255)
-		public static double GREEN_HUE_LOW = 110.0 / 360.0 * 255.0; // ~78
-		public static double GREEN_HUE_HIGH = 140.0 / 360.0 * 255.0; // ~99
+		public static double GREEN_HUE_LOW = 0 / 360.0 * 255.0; // ~78
+		public static double GREEN_HUE_HIGH = 0 / 360.0 * 255.0; // ~99
 		
 		// Maximum detection distance (objects must be within this range)
-		public static double MAX_DETECTION_DISTANCE_MM = 20.0; // millimeters
+		public static double MAX_DETECTION_DISTANCE_MM = 60.0; // millimeters
 		
 		// LEGACY
 		public static double[] GREEN_TARGET = {70, 200, 150};
