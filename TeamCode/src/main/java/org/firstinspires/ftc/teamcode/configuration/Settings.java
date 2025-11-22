@@ -25,7 +25,7 @@ public class Settings {
 		public final static int RAGNAROK_RED = 0xFF0000;
 		public final static int ELITE_GOLD = 0xFFEB29;
 	}
-
+	
 	/**
 	 * Maps controller inputs to robot actions for TeleOp.
 	 */
@@ -39,7 +39,7 @@ public class Settings {
 				Controller.Action.GOTO_PARK,
 				Controller.Action.GOTO_GATE
 		};
-
+		
 		static {
 			// Main Controller (Driver)
 			actionControlMap.put(Controller.Action.MOVE_Y, Controller.Control.LEFT_STICK_Y);
@@ -58,7 +58,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.CANCEL_ASSISTED_DRIVING, Controller.Control.RIGHT_STICK_BUTTON);
 			actionControlMap.put(Controller.Action.RESET_FOLLOWER, Controller.Control.BACK);
 			actionControlMap.put(Controller.Action.TOGGLE_CENTRICITY, Controller.Control.LEFT_STICK_BUTTON);
-
+			
 			// Secondary Controller (Operator)
 			actionControlMap.put(Controller.Action.AIM, Controller.Control.LEFT_TRIGGER);
 			actionControlMap.put(Controller.Action.LAUNCH, Controller.Control.RIGHT_TRIGGER);
@@ -76,7 +76,7 @@ public class Settings {
 			}
 		}
 	}
-
+	
 	/**
 	 * Hardware device name mapping.
 	 * Each HardwareConfig stores both the device type and string name,
@@ -90,7 +90,7 @@ public class Settings {
 		public static final HardwareConfig REAR_LEFT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearLeft");
 		public static final HardwareConfig REAR_RIGHT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearRight");
 		public static final HardwareConfig PINPOINT = new HardwareConfig(GoBildaPinpointDriver.class, "pinpoint");
-
+		
 		// Subsystem motors and servos
 		public static final HardwareConfig INTAKE_MOTOR = new HardwareConfig(DcMotorEx.class, "intakeMotor");
 		public static final HardwareConfig LAUNCHER_RIGHT = new HardwareConfig(DcMotorEx.class, "launcherRight");
@@ -99,7 +99,7 @@ public class Settings {
 				"launcherYawServo");
 		public static final HardwareConfig LAUNCHER_PITCH_SERVO = new HardwareConfig(ServoImplEx.class,
 				"launcherPitchServo");
-
+		
 		// Transfer mechanism
 		public static final HardwareConfig TRANSFER_WHEEL_SERVO = new HardwareConfig(CRServo.class,
 				"transferMainServo");
@@ -107,7 +107,7 @@ public class Settings {
 				"transferEntranceServo"); // CR wheel at color sensor
 		public static final HardwareConfig TRANSFER_EXIT_KICKER = new HardwareConfig(ServoImplEx.class,
 				"transferExitServo"); // CR wheel at kicker position
-
+		
 		// Sensors
 		public static final HardwareConfig TRANSFER_COLOR_SENSOR = new HardwareConfig(
 				RevColorSensorV3.class, "transferColorSensor");
@@ -126,7 +126,7 @@ public class Settings {
 			return config.fromHardwareMap(hardwareMap);
 		}
 	}
-
+	
 	/**
 	 * Settings for the Intake mechanism.
 	 */
@@ -134,7 +134,7 @@ public class Settings {
 	public static class Intake {
 		public static double SPEED = -1.0;
 	}
-
+	
 	/**
 	 * Settings for the Spindex (indexer/sorter) mechanism.
 	 */
@@ -151,7 +151,7 @@ public class Settings {
 		public static double INTAKE_SERVO_OPEN_POSITION = 0.0;
 		public static double TOLERANCE = 5.0 / 360.0; // how close a slot must be to the exit to launch
 	}
-
+	
 	/**
 	 * Settings for the transfer mechanism with CR management wheels.
 	 * <p>
@@ -164,18 +164,18 @@ public class Settings {
 		// Detection settings
 		public static final double BLIND_WINDOW_MS = 750; // Time after detection to ignore new detections
 		public static final int MAX_CAPACITY = 3; // Number of ball slots
-
+		
 		// Main transfer wheel settings
 		public static final double TRANSFER_WHEEL_FORWARD_POWER = 1.0; // Power when advancing balls
 		public static final double TRANSFER_WHEEL_REVERSE_POWER = -1.0; // Power when reversing
 		public static final long TRANSFER_TIME_MS = 650; // Time to run wheel to move one ball slot
-
+		
 		// Entrance wheel settings (at color sensor position)
 		public static final double ENTRANCE_WHEEL_INTAKE_POWER = 1.0; // Power when letting balls in
 		public static final double ENTRANCE_WHEEL_HOLD_POWER = 0.0; // No reverse to hold closed
 		public static final double ENTRANCE_WHEEL_OUT_POWER = -1.0;
 		public static final long ENTRANCE_OPEN_DURATION_MS = 750; // How long to open entrance when intaking
-
+		
 		// Exit wheel settings (at kicker position)
 		public static final double EXIT_KICK_POSITION = 0.4; // Launch
 		public static final double EXIT_LOCK_POSITION = 1.0; // Closed
@@ -228,7 +228,7 @@ public class Settings {
 		public static boolean CORRECT_PITCH = true;
 		public static double[] OUTTAKE_DATA_X = {0.0, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0};
 		public static double[] OUTTAKE_DATA_Y = {0.0, 90, 180, 257, 340, 423, 660};
-
+		
 		/**
 		 * Converts pitch angle (degrees) to servo position using calibration points.
 		 * Maps angle range [PITCH_MIN_ANGLE, PITCH_MAX_ANGLE] to servo range
@@ -307,8 +307,8 @@ public class Settings {
 	@Configurable
 	public static class ColorSensor {
 		// Purple HSV hue range (160-190 degrees scaled to 0-255)
-		public static double PURPLE_HUE_LOW = 0 / 360.0 * 255.0; // ~113
-		public static double PURPLE_HUE_HIGH = 0 / 360.0 * 255.0; // ~134
+		public static double PURPLE_HUE_LOW = 0 / 360.0 * 255.0; // ~142
+		public static double PURPLE_HUE_HIGH = 0 / 360.0 * 255.0; // ~160
 		
 		// Green HSV hue range (110-140 degrees scaled to 0-255)
 		public static double GREEN_HUE_LOW = 0 / 360.0 * 255.0; // ~78
@@ -452,30 +452,30 @@ public class Settings {
 			 * First preset group (closest to wall).
 			 */
 			public static class Preset1 {
-				public static final Pose PREP = new Pose(46, 34, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(36.0, 34, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(30.0, 34, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 34, Math.toRadians(180));
+				public static final Pose PREP = new Pose(40, 35.5, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(34.0, 35.5, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(28.0, 35.5, Math.toRadians(180));
+				public static final Pose END = new Pose(18, 35.5, Math.toRadians(180));
 			}
 			
 			/**
 			 * Second preset group (middle).
 			 */
 			public static class Preset2 {
-				public static final Pose PREP = new Pose(46, 58, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(36.0, 58, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(30.0, 58, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 58, Math.toRadians(180));
+				public static final Pose PREP = new Pose(40, 59.5, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(34.0, 59.5, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(28.0, 59.5, Math.toRadians(180));
+				public static final Pose END = new Pose(18, 59.5, Math.toRadians(180));
 			}
 			
 			/**
 			 * Third preset group (farthest from wall).
 			 */
 			public static class Preset3 {
-				public static final Pose PREP = new Pose(46, 83, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(36.0, 83, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(30.0, 83, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 83, Math.toRadians(180));
+				public static final Pose PREP = new Pose(40, 84.5, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(34.0, 84.5, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(28.0, 84.5, Math.toRadians(180));
+				public static final Pose END = new Pose(18, 84.5, Math.toRadians(180));
 			}
 		}
 		
