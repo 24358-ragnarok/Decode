@@ -83,7 +83,7 @@ public class Constants {
 	 * - brakingStart: When to start braking relative to path end (1)
 	 */
 	public static PathConstraints pathConstraints = new PathConstraints(
-			0.999,
+			0.995,
 			0.01,
 			0.01,
 			0.001,

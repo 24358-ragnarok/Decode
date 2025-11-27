@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.software;
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 
 import java.util.HashMap;
@@ -22,12 +21,9 @@ public class Controller extends Gamepad {
 	private final HashMap<Control, Double> previousControlState;
 	private final Follower follower;
 	
-	private final MatchSettings matchSettings;
-	
-	public Controller(Gamepad gamepad, Follower follower, MatchSettings matchSettings) {
+	public Controller(Gamepad gamepad, Follower follower) {
 		this.gamepad = gamepad;
 		this.follower = follower;
-		this.matchSettings = matchSettings;
 		this.previousControlState = new HashMap<>();
 		// Populate the initial state in the constructor
 		saveLastState();

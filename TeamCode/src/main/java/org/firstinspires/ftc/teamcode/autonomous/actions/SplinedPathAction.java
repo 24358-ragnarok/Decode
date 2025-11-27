@@ -4,7 +4,7 @@ import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 
@@ -13,9 +13,9 @@ import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
  * Automatically generates control points for natural movement.
  */
 public class SplinedPathAction extends PathAction {
-	
+
 	private final Pose[] controlPoints;
-	
+
 	/**
 	 * Creates a splined path with explicit control points.
 	 *
@@ -25,31 +25,31 @@ public class SplinedPathAction extends PathAction {
 	 * @param controlPoints Additional control points for the curve (in BLUE
 	 *                      coordinates)
 	 */
-	public SplinedPathAction(Pose targetPose, String name, MatchSettings.AllianceColor alliance,
+	public SplinedPathAction(Pose targetPose, String name, MatchState.AllianceColor alliance,
 	                         Pose... controlPoints) {
 		super(targetPose, name, alliance);
 		this.controlPoints = controlPoints;
 	}
 	
-	public SplinedPathAction(Pose targetPose, String name, MatchSettings matchSettings, Pose... controlPoints) {
-		super(targetPose, name, matchSettings);
+	public SplinedPathAction(Pose targetPose, String name, Pose... controlPoints) {
+		super(targetPose, name);
 		this.controlPoints = controlPoints;
 	}
-	
+
 	/**
 	 * Creates a splined path with auto-generated control points.
 	 * The control point is placed at the midpoint between start and end.
 	 */
-	public SplinedPathAction(Pose targetPose, String name, MatchSettings matchSettings) {
-		super(targetPose, name, matchSettings);
+	public SplinedPathAction(Pose targetPose, String name) {
+		super(targetPose, name);
 		this.controlPoints = null; // Will be auto-generated
 	}
 	
 	/**
 	 * Convenience constructor with auto-generated name and control points.
 	 */
-	public SplinedPathAction(Pose targetPose, MatchSettings matchSettings) {
-		super(targetPose, "SplinedPath", matchSettings);
+	public SplinedPathAction(Pose targetPose) {
+		super(targetPose, "SplinedPath");
 		this.controlPoints = null; // Will be auto-generated
 	}
 	
@@ -63,7 +63,7 @@ public class SplinedPathAction extends PathAction {
 			allPoints[0] = startPose;
 			
 			for (int i = 0; i < controlPoints.length; i++) {
-				allPoints[i + 1] = (alliance == MatchSettings.AllianceColor.BLUE)
+				allPoints[i + 1] = (alliance == MatchState.AllianceColor.BLUE)
 						? controlPoints[i]
 						: Settings.Field.mirrorPose(controlPoints[i]);
 			}

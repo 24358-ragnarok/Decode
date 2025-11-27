@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.software;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.software.game.Artifact;
 
 /**
  * Color Rangefinder wrapper for reading digital outputs from a pre-configured
@@ -71,17 +71,17 @@ public class ColorRangefinder {
 	 *
 	 * @return The detected artifact color (GREEN, PURPLE, or UNKNOWN)
 	 */
-	public MatchSettings.ArtifactColor getArtifactColor() {
+	public Artifact getArtifactColor() {
 		boolean purpleDetected = isPurpleDetected();
 		boolean greenDetected = isGreenDetected();
 		
 		if (purpleDetected && !greenDetected) {
-			return MatchSettings.ArtifactColor.PURPLE;
+			return Artifact.PURPLE;
 		} else if (greenDetected && !purpleDetected) {
-			return MatchSettings.ArtifactColor.GREEN;
+			return Artifact.GREEN;
 		} else {
 			// Both or neither detected
-			return MatchSettings.ArtifactColor.UNKNOWN;
+			return Artifact.NONE;
 		}
 	}
 	

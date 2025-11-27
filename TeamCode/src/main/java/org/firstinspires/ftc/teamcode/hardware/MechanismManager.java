@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.software.ColorRangefinder;
 import org.firstinspires.ftc.teamcode.software.ColorUnifier;
@@ -39,17 +38,14 @@ public class MechanismManager {
 	// Optional non-mechanism helpers
 	public final LimelightManager limelightManager;
 	public final TrajectoryEngine trajectoryEngine;
-	public final MatchSettings matchSettings;
 	public final HardwareMap hardwareMap;
 	private final List<LynxModule> allHubs;
 	
-	
-	public MechanismManager(HardwareMap hw, MatchSettings match) {
+	public MechanismManager(HardwareMap hw) {
 		hardwareMap = hw;
 		allHubs = hardwareMap.getAll(LynxModule.class);
-		drivetrain = new Drivetrain(hw, match);
-		matchSettings = match;
-		
+		drivetrain = new Drivetrain(hw);
+
 		// Build mechanisms safely
 		FlexVectorIntake intake = createIntake();
 		VerticalWheelTransfer transfer = createTransfer();
@@ -62,7 +58,7 @@ public class MechanismManager {
 		// Save helpers
 		limelightManager = ll;
 		trajectoryEngine = traj;
-		
+
 		// Now that we've built all of the systems, begin caching system reads for
 		// efficiency
 		for (LynxModule hub : allHubs) {
@@ -70,7 +66,7 @@ public class MechanismManager {
 			hub.setConstant(Settings.Color.RAGNAROK_RED);
 		}
 	}
-	
+
 	private FlexVectorIntake createIntake() {
 		if (!Settings.Deploy.INTAKE)
 			return null;
@@ -98,7 +94,7 @@ public class MechanismManager {
 		if (!Settings.Deploy.LIMELIGHT)
 			return null;
 		
-		return new LimelightManager(Settings.Hardware.LIMELIGHT.fromHardwareMap(hardwareMap), matchSettings);
+		return new LimelightManager(Settings.Hardware.LIMELIGHT.fromHardwareMap(hardwareMap));
 	}
 	
 	private TrajectoryEngine createTrajectory() {

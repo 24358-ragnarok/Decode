@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.software;
 
 import com.pedropathing.geometry.Pose;
 
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain.Position;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
@@ -27,7 +27,7 @@ public class TrajectoryEngine {
 	 * @return An {@link AimingSolution} with preset angles and RPM based on closest
 	 * position
 	 */
-	public AimingSolution getAimingOffsets(MatchSettings.AllianceColor allianceColor, double currentPitchDegrees) {
+	public AimingSolution getAimingOffsets(MatchState.AllianceColor allianceColor, double currentPitchDegrees) {
 		Pose currentPose = mechanisms.drivetrain.getPose();
 		Pose closeShootPose = mechanisms.drivetrain.getPositionPose(Position.CLOSE_SHOOT);
 		Pose farShootPose = mechanisms.drivetrain.getPositionPose(Position.FAR_SHOOT);

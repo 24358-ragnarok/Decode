@@ -135,17 +135,13 @@ public class UnifiedLogging {
 	 */
 	public <T> void addDataLazy(String key, Func<T> valueProducer) {
 		Telemetry.Item item = itemCache.get(key);
-		if (item == null) {
-			item = driverStation.addData(key, valueProducer);
-			item.setRetained(true); // Func items are always retained
-			itemCache.put(key, item);
-		} else {
+		if (item != null) {
 			// Update the item with new func (requires recreating)
 			driverStation.removeItem(item);
-			item = driverStation.addData(key, valueProducer);
-			item.setRetained(true);
-			itemCache.put(key, item);
 		}
+		item = driverStation.addData(key, valueProducer);
+		item.setRetained(true); // Func items are always retained
+		itemCache.put(key, item);
 	}
 	
 	/**
@@ -153,17 +149,13 @@ public class UnifiedLogging {
 	 */
 	public <T> void addDataLazy(String key, String format, Func<T> valueProducer) {
 		Telemetry.Item item = itemCache.get(key);
-		if (item == null) {
-			item = driverStation.addData(key, format, valueProducer);
-			item.setRetained(true);
-			itemCache.put(key, item);
-		} else {
+		if (item != null) {
 			// Update the item with new func (requires recreating)
 			driverStation.removeItem(item);
-			item = driverStation.addData(key, format, valueProducer);
-			item.setRetained(true);
-			itemCache.put(key, item);
 		}
+		item = driverStation.addData(key, format, valueProducer);
+		item.setRetained(true);
+		itemCache.put(key, item);
 	}
 	
 	/**

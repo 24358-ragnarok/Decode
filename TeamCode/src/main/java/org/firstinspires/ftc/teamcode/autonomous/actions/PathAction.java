@@ -4,7 +4,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 
@@ -19,10 +19,10 @@ import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 public abstract class PathAction implements AutonomousAction {
 	protected final Pose targetPose;
 	protected final String name;
-	protected final MatchSettings.AllianceColor alliance;
-	
+	protected final MatchState.AllianceColor alliance;
+
 	private PathChain generatedPath;
-	
+
 	/**
 	 * Creates a new path action.
 	 *
@@ -30,17 +30,17 @@ public abstract class PathAction implements AutonomousAction {
 	 * @param name       Human-readable name for telemetry
 	 * @param alliance   The alliance color for automatic mirroring
 	 */
-	public PathAction(Pose targetPose, String name, MatchSettings.AllianceColor alliance) {
+	public PathAction(Pose targetPose, String name, MatchState.AllianceColor alliance) {
 		this.targetPose = targetPose;
 		this.name = name;
 		this.alliance = alliance;
 	}
-	
+
 	/**
-	 * Convenience constructor that extracts alliance from MatchSettings.
+	 * Convenience constructor that extracts alliance from MatchState.
 	 */
-	public PathAction(Pose targetPose, String name, MatchSettings matchSettings) {
-		this(targetPose, name, matchSettings.getAllianceColor());
+	public PathAction(Pose targetPose, String name) {
+		this(targetPose, name, MatchState.getAllianceColor());
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public abstract class PathAction implements AutonomousAction {
 		Pose currentPose = mechanisms.drivetrain.follower.getPose();
 		
 		// Mirror target pose if we're on RED alliance
-		Pose actualTarget = (alliance == MatchSettings.AllianceColor.BLUE)
+		Pose actualTarget = (alliance == MatchState.AllianceColor.BLUE)
 				? targetPose
 				: Settings.Field.mirrorPose(targetPose);
 		
@@ -103,13 +103,12 @@ public abstract class PathAction implements AutonomousAction {
 		mechanisms.drivetrain.follower.followPath(path, true);
 	}
 	
-	
 	/**
 	 * Gets the final target pose (after alliance mirroring).
 	 * Useful for debugging and telemetry.
 	 */
 	public Pose getFinalTargetPose() {
-		return (alliance == MatchSettings.AllianceColor.BLUE)
+		return (alliance == MatchState.AllianceColor.BLUE)
 				? targetPose
 				: Settings.Field.mirrorPose(targetPose);
 	}

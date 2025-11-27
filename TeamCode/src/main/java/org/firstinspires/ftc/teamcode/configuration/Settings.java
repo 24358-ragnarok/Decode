@@ -146,6 +146,7 @@ public class Settings {
 		public static double IN_SPEED = 1.0;
 		public static double OUT_SPEED = -1.0;
 		public static double STOPPED_SPEED = 0.0;
+		public static long COLOR_SENSOR_DEBOUNCE_TIME = 500;
 	}
 
 	/**
@@ -197,6 +198,8 @@ public class Settings {
 	@Configurable
 	public static class Launcher {
 		public static long BELT_SPINUP_TIME_MS = 500;
+		public static double WALL_OPEN_POS = 1.0;
+		public static double WALL_CLOSED_POS = 0.5;
 		public static long TICKS_PER_REVOLUTION = 28;
 		public static long MAX_SPEED_ERROR = 100;
 		public static long EXIT_FIRE_DURATION_MS = 250;

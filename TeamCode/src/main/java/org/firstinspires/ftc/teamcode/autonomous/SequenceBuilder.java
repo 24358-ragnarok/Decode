@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.autonomous.actions.SlowLinearPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SplinedPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.StopIntakeAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.WaitAction;
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 
 /**
@@ -40,23 +40,19 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
 public class SequenceBuilder {
 
 	private final AutonomousSequence sequence;
-	private final MatchSettings matchSettings;
 
 	/**
 	 * Creates a new sequence builder.
-	 *
-	 * @param matchSettings The match settings for alliance color and position
 	 */
-	public SequenceBuilder(MatchSettings matchSettings) {
+	public SequenceBuilder() {
 		this.sequence = new AutonomousSequence();
-		this.matchSettings = matchSettings;
 	}
 
 	/**
 	 * Static factory method to create Far position sequences.
 	 */
-	public static AutonomousSequence buildFarSequence(MatchSettings matchSettings) {
-		return new SequenceBuilder(matchSettings)
+	public static AutonomousSequence buildFarSequence() {
+		return new SequenceBuilder()
 				// Launch preloads
 				.prepLaunch()
 				.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
@@ -112,14 +108,14 @@ public class SequenceBuilder {
 	/**
 	 * Static factory method to create Close position sequences.
 	 */
-	public static AutonomousSequence buildCloseSequence(MatchSettings matchSettings) {
-		return new SequenceBuilder(matchSettings)
+	public static AutonomousSequence buildCloseSequence() {
+		return new SequenceBuilder()
 				// Launch preload
 				.prepLaunch()
 				.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
 				.wait(LAUNCH_STABILITY_WAIT_S)
 				.launch()
-				
+
 				// Get ball set I (Preset3 for close sequence)
 				.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
 				.startIntake()
@@ -137,7 +133,7 @@ public class SequenceBuilder {
 						Settings.Positions.ControlPoints.FROM_PRESET3_TO_CLOSE, "Launch Preset3")
 				.wait(LAUNCH_STABILITY_WAIT_S)
 				.launch()
-				
+
 				// Get ball set II (Preset2 for close sequence)
 				.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
 				.startIntake()
@@ -171,39 +167,39 @@ public class SequenceBuilder {
 	 * @return this (for method chaining)
 	 */
 	public SequenceBuilder moveTo(Pose targetPose, String name) {
-		sequence.addAction(new LinearPathAction(targetPose, name, matchSettings));
+		sequence.addAction(new LinearPathAction(targetPose, name));
 		return this;
 	}
-	
+
 	/**
 	 * Adds a linear path action to a target pose with auto-generated name.
 	 */
 	public SequenceBuilder moveTo(Pose targetPose) {
-		sequence.addAction(new LinearPathAction(targetPose, matchSettings));
+		sequence.addAction(new LinearPathAction(targetPose));
 		return this;
 	}
-	
+
 	/**
 	 * Adds a slow linear path action to a target pose.
 	 */
 	public SequenceBuilder moveSlowlyTo(Pose targetPose, String name) {
-		sequence.addAction(new SlowLinearPathAction(targetPose, name, matchSettings));
+		sequence.addAction(new SlowLinearPathAction(targetPose, name));
 		return this;
 	}
-	
+
 	/**
 	 * Adds a slow linear path action to a target pose with auto-generated name.
 	 */
 	public SequenceBuilder moveSlowlyTo(Pose targetPose) {
-		sequence.addAction(new SlowLinearPathAction(targetPose, matchSettings));
+		sequence.addAction(new SlowLinearPathAction(targetPose));
 		return this;
 	}
-	
+
 	/**
 	 * Adds a splined path action to a target pose.
 	 */
 	public SequenceBuilder moveSplineTo(Pose targetPose, String name, Pose... controlPoints) {
-		sequence.addAction(new SplinedPathAction(targetPose, name, matchSettings, controlPoints));
+		sequence.addAction(new SplinedPathAction(targetPose, name, controlPoints));
 		return this;
 	}
 	
@@ -211,7 +207,7 @@ public class SequenceBuilder {
 	 * Adds a splined path action with auto-generated control points.
 	 */
 	public SequenceBuilder moveSplineTo(Pose targetPose, String name) {
-		sequence.addAction(new SplinedPathAction(targetPose, name, matchSettings));
+		sequence.addAction(new SplinedPathAction(targetPose, name));
 		return this;
 	}
 	
@@ -219,7 +215,7 @@ public class SequenceBuilder {
 	 * Adds a curve path action with control points.
 	 */
 	public SequenceBuilder moveCurveTo(Pose targetPose, String name, Pose... controlPoints) {
-		sequence.addAction(new CurvePathAction(targetPose, name, matchSettings, controlPoints));
+		sequence.addAction(new CurvePathAction(targetPose, name, controlPoints));
 		return this;
 	}
 	
@@ -227,7 +223,7 @@ public class SequenceBuilder {
 	 * Adds a curve path action with control points and auto-generated name.
 	 */
 	public SequenceBuilder moveCurveTo(Pose targetPose, Pose... controlPoints) {
-		sequence.addAction(new CurvePathAction(targetPose, matchSettings, controlPoints));
+		sequence.addAction(new CurvePathAction(targetPose, controlPoints));
 		return this;
 	}
 	
@@ -235,7 +231,7 @@ public class SequenceBuilder {
 	 * Convenience method for single control point curves.
 	 */
 	public SequenceBuilder moveCurveToVia(Pose targetPose, Pose controlPoint, String name) {
-		sequence.addAction(CurvePathAction.withSingleControlPoint(targetPose, controlPoint, name, matchSettings));
+		sequence.addAction(CurvePathAction.withSingleControlPoint(targetPose, controlPoint, name));
 		return this;
 	}
 	
@@ -243,7 +239,7 @@ public class SequenceBuilder {
 	 * Adds an end-at action to hold position at a target pose.
 	 */
 	public SequenceBuilder endAt(Pose targetPose) {
-		Pose finalPose = (matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE)
+		Pose finalPose = (MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE)
 				? targetPose
 				: Settings.Field.mirrorPose(targetPose);
 		sequence.addAction(new EndAtAction(finalPose));
@@ -346,7 +342,6 @@ public class SequenceBuilder {
 				.launch()
 				.moveTo(nextPose);
 	}
-	
 	
 	/**
 	 * Builds the sequence.

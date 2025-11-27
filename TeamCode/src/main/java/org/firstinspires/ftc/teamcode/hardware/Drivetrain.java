@@ -6,7 +6,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.configuration.Constants;
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.software.Controller;
 
@@ -23,7 +23,6 @@ public class Drivetrain extends Mechanism {
 	// Define field-centric poses for autonomous targets.
 	// Automatically mirrored for RED alliance.
 	private final Map<Position, Pose> positionPoses = new HashMap<>();
-	private final MatchSettings matchSettings;
 	public boolean robotCentric = true;
 	private State state;
 
@@ -34,17 +33,15 @@ public class Drivetrain extends Mechanism {
 	 * not in this constructor.
 	 *
 	 * @param hardwareMap   The robot's hardware map.
-	 * @param matchSettings The match settings (contains alliance color)
 	 */
-	public Drivetrain(HardwareMap hardwareMap, MatchSettings matchSettings) {
+	public Drivetrain(HardwareMap hardwareMap) {
 		// The Constants class now holds all hardware and tuning configurations.
 		this.follower = Constants.createFollower(hardwareMap);
-		this.matchSettings = matchSettings;
 		// Don't set starting pose here - let each OpMode handle it
 
 		// Initialize the poses for each predefined position
 		// Use BLUE as reference, mirror for RED alliance
-		boolean isBlue = matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE;
+		boolean isBlue = MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE;
 
 		positionPoses.put(Position.CLOSE_SHOOT,
 				isBlue ? Settings.Positions.TeleOp.CLOSE_SHOOT
@@ -93,7 +90,7 @@ public class Drivetrain extends Mechanism {
 		}
 		
 		double offsetHeading = robotCentric ? Math.toRadians(0) :
-				matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE
+				MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE
 						? Math.toRadians(180)
 						: Math.toRadians(0);
 		

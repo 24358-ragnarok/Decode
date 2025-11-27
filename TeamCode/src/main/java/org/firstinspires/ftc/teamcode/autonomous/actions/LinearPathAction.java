@@ -4,7 +4,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 
 /**
@@ -14,19 +14,19 @@ import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
  */
 public class LinearPathAction extends PathAction {
 	
-	public LinearPathAction(Pose targetPose, String name, MatchSettings.AllianceColor alliance) {
+	public LinearPathAction(Pose targetPose, String name, MatchState.AllianceColor alliance) {
 		super(targetPose, name, alliance);
 	}
 	
-	public LinearPathAction(Pose targetPose, String name, MatchSettings matchSettings) {
-		super(targetPose, name, matchSettings);
+	public LinearPathAction(Pose targetPose, String name) {
+		super(targetPose, name);
 	}
 	
 	/**
 	 * Convenience constructor with auto-generated name.
 	 */
-	public LinearPathAction(Pose targetPose, MatchSettings matchSettings) {
-		super(targetPose, "LinearPath", matchSettings);
+	public LinearPathAction(Pose targetPose) {
+		super(targetPose, "LinearPath");
 	}
 	
 	@Override

@@ -5,7 +5,7 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
@@ -13,10 +13,10 @@ import org.firstinspires.ftc.teamcode.hardware.FlexVectorIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
 import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
-import org.firstinspires.ftc.teamcode.software.Artifact;
 import org.firstinspires.ftc.teamcode.software.Controller;
 import org.firstinspires.ftc.teamcode.software.SlewThrottle;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
+import org.firstinspires.ftc.teamcode.software.game.Artifact;
 
 /**
  * This is our main TeleOp class for the driver-controlled period, which occurs
@@ -25,7 +25,6 @@ import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
  */
 @TeleOp(name = "MainOp", group = ".Competition Modes")
 public class MainOp extends OpMode {
-	public MatchSettings matchSettings;
 	public SlewThrottle slewThrottle;
 	private UnifiedLogging logging;
 	private MechanismManager mechanisms;
@@ -40,26 +39,25 @@ public class MainOp extends OpMode {
 	@Override
 	public final void init() {
 		// Pull the stored match state and settings from when they were set during auto
-		matchSettings = new MatchSettings(blackboard);
 
 		// Initialize robot systems
-		mechanisms = new MechanismManager(hardwareMap, matchSettings);
-		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower, matchSettings);
-		subController = new Controller(gamepad2, mechanisms.drivetrain.follower, matchSettings);
+		mechanisms = new MechanismManager(hardwareMap);
+		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower);
+		subController = new Controller(gamepad2, mechanisms.drivetrain.follower);
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
 		slewThrottle = new SlewThrottle();
-		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getTeleOpStartingPose());
+		mechanisms.drivetrain.follower.setStartingPose(MatchState.getTeleOpStartingPose());
 		mechanisms.drivetrain.switchToManual();
 		setupLogging();
 		// Show whether we're using stored pose or fallback
-		Pose storedPose = matchSettings.getStoredPose();
+		Pose storedPose = MatchState.getStoredPose();
 		if (storedPose != null) {
 			logging.addData("Starting Pose Source", "STORED FROM PREVIOUS");
 			logging.addData("Stored Pose", storedPose);
 		} else {
 			logging.addData("Starting Pose Source", "FALLBACK/PREDEFINED");
 		}
-		logging.addData("Alliance", matchSettings.getAllianceColor());
+		logging.addData("Alliance", MatchState.getAllianceColor());
 	}
 
 	/**
@@ -79,7 +77,7 @@ public class MainOp extends OpMode {
 		// Initialize mechanisms and start teleop drive
 		mechanisms.ifValid(mechanisms, MechanismManager::start);
 		mechanisms.drivetrain.follower.startTeleopDrive(); // or pass in true to enable braking
-		matchSettings.clearStoredPose();
+		MatchState.clearStoredPose();
 		logging.enableRetainedMode();
 	}
 
@@ -111,7 +109,7 @@ public class MainOp extends OpMode {
 	public final void stop() {
 		// Store the actual robot pose for future reference or debugging
 		if (mechanisms != null && mechanisms.drivetrain.follower != null) {
-			matchSettings.setStoredPose(mechanisms.drivetrain.follower.getPose());
+			MatchState.setStoredPose(mechanisms.drivetrain.follower.getPose());
 			mechanisms.stop();
 		}
 	}
@@ -126,12 +124,6 @@ public class MainOp extends OpMode {
 		double d = mainController.getProcessedDrive();
 		double s = mainController.getProcessedStrafe();
 		double r = mainController.getProcessedRotation();
-//		double[] throttledValues = slewThrottle.throttled(drive, strafe, rotate);
-//		double throttledDrive = throttledValues[0];
-//		double throttledStrafe = throttledValues[1];
-//		double throttledRotate = throttledValues[2];
-//		logging.addData("REAL DRIVE", d);
-//		logging.addData("SMOOTH DRIVE", throttledDrive);
 
 		if (mainController.wasJustPressed(Controller.Action.TOGGLE_CENTRICITY)) {
 			mechanisms.ifValid(mechanisms.drivetrain, Drivetrain::toggleCentricity);
@@ -139,7 +131,7 @@ public class MainOp extends OpMode {
 
 		if (mainController.wasJustPressed(Controller.Action.RESET_FOLLOWER)) {
 			mechanisms.ifValid(mechanisms.drivetrain, dt -> dt.follower.setPose(
-					(matchSettings.getAllianceColor() == MatchSettings.AllianceColor.BLUE)
+					(MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE)
 							? Settings.Positions.Default.RESET
 							: Settings.Field.mirrorPose(Settings.Positions.Default.RESET)));
 		}
@@ -202,13 +194,6 @@ public class MainOp extends OpMode {
 			mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::stop);
 		}
 		
-		// Classifier controls
-		if (subController.getProcessedValue(Controller.Action.EMPTY_CLASSIFIER_STATE) > 0)
-			matchSettings.emptyClassifier();
-		
-		if (subController.getProcessedValue(Controller.Action.INCREMENT_CLASSIFIER_STATE) > 0)
-			matchSettings.incrementClassifier();
-		
 		mainController.saveLastState();
 		subController.saveLastState();
 	}
@@ -219,9 +204,9 @@ public class MainOp extends OpMode {
 	 * artifact needed.
 	 */
 	private void setControllerLEDs() {
-		if (matchSettings.nextArtifactNeeded() == MatchSettings.ArtifactColor.GREEN) {
+		if (MatchState.nextArtifactNeeded() == Artifact.Color.GREEN) {
 			subController.setLedColor(0, 255, 0, 100);
-		} else if (matchSettings.nextArtifactNeeded() == MatchSettings.ArtifactColor.PURPLE) {
+		} else if (MatchState.nextArtifactNeeded() == Artifact.Color.PURPLE) {
 			subController.setLedColor(255, 0, 255, 100);
 		} else {
 			subController.setLedColor(0, 0, 0, 0);
@@ -253,13 +238,13 @@ public class MainOp extends OpMode {
 		mechanisms.ifValid(mechanisms.get(PairedLauncher.class), launcher -> {
 			logging.addDataLazy("Launch Solution Absolute Pitch°", () -> {
 				TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine
-						.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
+						.getAimingOffsets(MatchState.getAllianceColor(), launcher.getPitch());
 				return solution.hasTarget ? String.format("%.2f", solution.verticalOffsetDegrees) : "N/A";
 			});
 			
 			logging.addDataLazy("Launch Solution Required RPM", () -> {
 				TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine
-						.getAimingOffsets(matchSettings.getAllianceColor(), launcher.getPitch());
+						.getAimingOffsets(MatchState.getAllianceColor(), launcher.getPitch());
 				return solution.hasTarget ? String.format("%.0f", solution.rpm) : "N/A";
 			});
 			

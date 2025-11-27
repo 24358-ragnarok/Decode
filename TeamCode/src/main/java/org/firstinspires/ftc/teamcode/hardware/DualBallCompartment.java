@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.software.game.Artifact;
 
 public class DualBallCompartment extends Mechanism {
 	private final Compartment left;
@@ -35,31 +35,31 @@ public class DualBallCompartment extends Mechanism {
 	
 	
 	public class Compartment extends Mechanism {
-		public MatchSettings.ArtifactColor stored;
+		public Artifact stored;
 		public ServoImplEx servo;
 		public double activationTime;
 		
 		public Compartment(ServoImplEx servo) {
 			this.servo = servo;
-			stored = MatchSettings.ArtifactColor.UNKNOWN;
+			stored = Artifact.NONE;
 			activationTime = System.currentTimeMillis();
 		}
 		
-		public void store(MatchSettings.ArtifactColor color) {
+		public void store(Artifact color) {
 			servo.setPosition(1);
 			stored = color;
 			activationTime = System.currentTimeMillis();
 		}
 		
-		public MatchSettings.ArtifactColor release() {
+		public Artifact release() {
 			servo.setPosition(1);
-			MatchSettings.ArtifactColor released = stored;
-			stored = MatchSettings.ArtifactColor.UNKNOWN;
+			Artifact released = stored;
+			stored = Artifact.NONE;
 			activationTime = System.currentTimeMillis();
 			return released;
 		}
 		
-		public MatchSettings.ArtifactColor getStoredBall() {
+		public Artifact getStoredBall() {
 			return stored;
 		}
 		

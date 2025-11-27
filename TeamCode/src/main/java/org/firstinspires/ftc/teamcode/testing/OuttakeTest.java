@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
@@ -44,8 +43,7 @@ public class OuttakeTest extends LinearOpMode {
 		rightLauncherMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 		leftLauncherMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 		
-		MatchSettings matchSettings = new MatchSettings(blackboard);
-		MechanismManager m = new MechanismManager(hardwareMap, matchSettings);
+		MechanismManager m = new MechanismManager(hardwareMap);
 		
 		pitchServo = Settings.Hardware.LAUNCHER_PITCH_SERVO.fromHardwareMap(hardwareMap);
 		pitchServo.setPosition(commandedAngle);

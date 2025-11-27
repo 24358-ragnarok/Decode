@@ -6,7 +6,7 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.SPE
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.software.Artifact;
+import org.firstinspires.ftc.teamcode.software.game.Artifact;
 
 import java.util.Arrays;
 

@@ -4,7 +4,7 @@ import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 
@@ -31,30 +31,29 @@ public class CurvePathAction extends PathAction {
 	 * @param controlPoints Intermediate control points for the curve (in BLUE
 	 *                      coordinates)
 	 */
-	public CurvePathAction(Pose targetPose, String name, MatchSettings.AllianceColor alliance, Pose... controlPoints) {
+	public CurvePathAction(Pose targetPose, String name, MatchState.AllianceColor alliance, Pose... controlPoints) {
 		super(targetPose, name, alliance);
 		this.controlPoints = controlPoints;
 	}
 	
-	public CurvePathAction(Pose targetPose, String name, MatchSettings matchSettings, Pose... controlPoints) {
-		super(targetPose, name, matchSettings);
+	public CurvePathAction(Pose targetPose, String name, Pose... controlPoints) {
+		super(targetPose, name);
 		this.controlPoints = controlPoints;
 	}
 	
 	/**
 	 * Convenience constructor with auto-generated name.
 	 */
-	public CurvePathAction(Pose targetPose, MatchSettings matchSettings, Pose... controlPoints) {
-		super(targetPose, "CurvePath", matchSettings);
+	public CurvePathAction(Pose targetPose, Pose... controlPoints) {
+		super(targetPose, "CurvePath");
 		this.controlPoints = controlPoints;
 	}
 	
 	/**
 	 * Creates a curve with a single control point (simple 3-point curve).
 	 */
-	public static CurvePathAction withSingleControlPoint(Pose targetPose, Pose controlPoint, String name,
-	                                                     MatchSettings matchSettings) {
-		return new CurvePathAction(targetPose, name, matchSettings, controlPoint);
+	public static CurvePathAction withSingleControlPoint(Pose targetPose, Pose controlPoint, String name) {
+		return new CurvePathAction(targetPose, name, controlPoint);
 	}
 	
 	@Override
@@ -65,7 +64,7 @@ public class CurvePathAction extends PathAction {
 		
 		// Add control points (mirror them if RED alliance)
 		for (int i = 0; i < controlPoints.length; i++) {
-			allPoints[i + 1] = (alliance == MatchSettings.AllianceColor.BLUE)
+			allPoints[i + 1] = (alliance == MatchState.AllianceColor.BLUE)
 					? controlPoints[i]
 					: Settings.Field.mirrorPose(controlPoints[i]);
 		}

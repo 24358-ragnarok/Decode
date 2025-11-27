@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousSequence;
 import org.firstinspires.ftc.teamcode.autonomous.SequenceBuilder;
 import org.firstinspires.ftc.teamcode.configuration.MatchConfigurationWizard;
-import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
@@ -33,7 +33,6 @@ public class MainAuto extends OpMode {
 	private Timer opmodeTimer;
 	private MatchConfigurationWizard wizard;
 	private MechanismManager mechanisms;
-	private MatchSettings matchSettings;
 	private UnifiedLogging logging;
 	// The new optimal structure
 	private AutonomousSequence autonomousSequence;
@@ -48,18 +47,17 @@ public class MainAuto extends OpMode {
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
 
 		// Match settings will be configured by the driver during init_loop
-		matchSettings = new MatchSettings(blackboard);
 		blackboard.clear(); // do not save match settings in between matches
 
 		// Initialize blackboard with default values to ensure clean state
 		// This prevents stale data from previous runs from affecting the current run
-		matchSettings.setAllianceColor(MatchSettings.AllianceColor.BLUE);
-		matchSettings.setAutoStartingPosition(MatchSettings.AutoStartingPosition.CLOSE);
-
-		wizard = new MatchConfigurationWizard(matchSettings, gamepad1, logging);
+		MatchState.setAllianceColor(MatchState.AllianceColor.BLUE);
+		MatchState.setAutoStartingPosition(MatchState.AutoStartingPosition.CLOSE);
+		
+		wizard = new MatchConfigurationWizard(gamepad1, logging);
 
 		// Initialize robot mechanisms
-		mechanisms = new MechanismManager(hardwareMap, matchSettings);
+		mechanisms = new MechanismManager(hardwareMap);
 		
 		// Enable retained mode for efficient telemetry during autonomous
 		logging.enableRetainedMode();
@@ -72,7 +70,7 @@ public class MainAuto extends OpMode {
 	public void init_loop() {
 		logging.clearDynamic();
 		// Draw the initial pose of the robot
-		logging.drawRobot(matchSettings.getAutonomousStartingPose());
+		logging.drawRobot(MatchState.getAutonomousStartingPose());
 		
 		// Allow driver to select match settings using the wizard
 		wizard.refresh();
@@ -93,15 +91,15 @@ public class MainAuto extends OpMode {
 			transfer.setUpForAuto();
 		});
 		
-		mechanisms.drivetrain.follower.setStartingPose(matchSettings.getAutonomousStartingPose());
+		mechanisms.drivetrain.follower.setStartingPose(MatchState.getAutonomousStartingPose());
 		// Build the autonomous sequence based on configuration
 		// This is where the magic happens - the new PathAction system automatically
 		// handles alliance mirroring and dynamic path building from current position
 		
-		if (matchSettings.getAutoStartingPosition() == MatchSettings.AutoStartingPosition.FAR) {
-			autonomousSequence = SequenceBuilder.buildFarSequence(matchSettings);
+		if (MatchState.getAutoStartingPosition() == MatchState.AutoStartingPosition.FAR) {
+			autonomousSequence = SequenceBuilder.buildFarSequence();
 		} else {
-			autonomousSequence = SequenceBuilder.buildCloseSequence(matchSettings);
+			autonomousSequence = SequenceBuilder.buildCloseSequence();
 		}
 		
 		// Start the sequence
@@ -138,7 +136,7 @@ public class MainAuto extends OpMode {
 	public void stop() {
 		// Store the actual robot pose for TeleOp to use as starting position
 		if (mechanisms != null && mechanisms.drivetrain.follower != null) {
-			matchSettings.setStoredPose(mechanisms.drivetrain.follower.getPose());
+			MatchState.setStoredPose(mechanisms.drivetrain.follower.getPose());
 			mechanisms.stop();
 		}
 		
