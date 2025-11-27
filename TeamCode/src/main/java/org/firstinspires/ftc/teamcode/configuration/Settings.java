@@ -162,7 +162,7 @@ public class Settings {
 	 */
 	public static class Transfer {
 		// Detection settings
-		public static final double BLIND_WINDOW_MS = 750; // Time after detection to ignore new detections
+		public static final double BLIND_WINDOW_MS = 1250; // Time after detection to ignore new detections
 		public static final int MAX_CAPACITY = 3; // Number of ball slots
 		
 		// Main transfer wheel settings
