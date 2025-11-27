@@ -2,12 +2,15 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.MAX_SPEED_ERROR;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.TICKS_PER_REVOLUTION;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.WALL_CLOSED_POS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.WALL_OPEN_POS;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
+import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
@@ -81,7 +84,7 @@ public class PairedLauncher extends Mechanism {
 		// rotation
 		double currentPitch = getPitch();
 		TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine.getAimingOffsets(
-				mechanisms.matchSettings.getAllianceColor(), currentPitch);
+				MatchState.getAllianceColor(), currentPitch);
 		
 		// If we don't have a target, do not adjust.
 		if (!solution.hasTarget) {
@@ -111,7 +114,7 @@ public class PairedLauncher extends Mechanism {
 	public boolean okayToLaunch() {
 		double currentPitch = getPitch();
 		TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine.getAimingOffsets(
-				mechanisms.matchSettings.getAllianceColor(), currentPitch);
+				MatchState.getAllianceColor(), currentPitch);
 		
 		if (!solution.hasTarget) {
 			return false;
@@ -126,8 +129,13 @@ public class PairedLauncher extends Mechanism {
 	}
 	
 	public void fire() {
-		leftServo.setPosition(1);
-		rightServo.setPosition(1); // TODO
+		leftServo.setPosition(WALL_OPEN_POS);
+		rightServo.setPosition(WALL_OPEN_POS);
+	}
+	
+	public void close() {
+		leftServo.setPosition(WALL_CLOSED_POS);
+		rightServo.setPosition(WALL_CLOSED_POS);
 	}
 	
 	/**
@@ -187,6 +195,7 @@ public class PairedLauncher extends Mechanism {
 	
 	public final void start() {
 		spinDown();
+		close();
 	}
 	
 	public final void update() {
