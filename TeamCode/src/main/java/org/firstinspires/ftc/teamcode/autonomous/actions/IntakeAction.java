@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.autonomous.actions;
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
 import org.firstinspires.ftc.teamcode.hardware.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
-import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 
 /**
  * Action that runs the intake mechanism.
@@ -18,7 +17,7 @@ import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
  */
 public class IntakeAction implements AutonomousAction {
 	private final boolean stopOnComplete;
-	
+
 	public IntakeAction(boolean stopOnComplete) {
 		this.stopOnComplete = stopOnComplete;
 	}
@@ -30,16 +29,13 @@ public class IntakeAction implements AutonomousAction {
 	@Override
 	public void initialize(MechanismManager mechanisms) {
 		// Transfer doesn't need preparation - it automatically detects and stores balls
-		// The SingleWheelTransfer update() loop handles color detection and advancement
+		// The FlywheelIntake update() loop handles color detection during intake
+		// and registers balls with the transfer after travel time delay
 		
 		// Start intake motor to pull samples in
 		FlywheelIntake intake = mechanisms.get(FlywheelIntake.class);
 		if (intake != null) {
 			intake.in();
-		}
-		SingleWheelTransfer transfer = mechanisms.get(SingleWheelTransfer.class);
-		if (transfer != null) {
-			transfer.holdEntranceClosed();
 		}
 	}
 	

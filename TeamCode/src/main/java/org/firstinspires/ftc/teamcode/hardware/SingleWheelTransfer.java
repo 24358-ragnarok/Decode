@@ -2,11 +2,6 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.AUTO_ADVANCE_ENABLED;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.AUTO_ADVANCE_GRACE_PERIOD_MS;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.BLIND_WINDOW_MS;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.ENTRANCE_OPEN_DURATION_MS;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.ENTRANCE_WHEEL_HOLD_POWER;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.ENTRANCE_WHEEL_INTAKE_POWER;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.ENTRANCE_WHEEL_OUT_POWER;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_FIRE_DURATION_MS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_KICK_POSITION;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_LOCK_POSITION;
@@ -19,35 +14,34 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
-import org.firstinspires.ftc.teamcode.software.ColorSensor;
 
 import java.util.Arrays;
 
 /**
  * Transfer subsystem with positional awareness and CR wheel management.
  * <p>
- * Positions: index 0 = entrance (color sensor), index MAX_CAPACITY-1 = exit
- * (kicker).
+ * Positions: index 0 = entrance, index MAX_CAPACITY-1 = exit (kicker).
  * <p>
- * Three CR wheels work in tandem:
+ * Two CR wheels work in tandem:
  * - Main transfer wheel: moves balls through the slots
- * - Entrance wheel: spins to let balls in at the color sensor, holds closed
- * otherwise
  * - Exit wheel: spins to fire balls out, holds closed otherwise
  * <p>
- * Detection places a ball into the first available entrance slot and opens the
- * entrance
- * wheel briefly to allow entry. Advances shift slots toward the exit. Detection
- * uses a
- * blind window to avoid duplicate reads.
+ * Ball detection occurs at the intake location (via FlywheelIntake's color
+ * sensor).
+ * When a ball is detected, it is registered with a travel time delay to account
+ * for
+ * physical movement from intake to transfer entrance. The ball is placed into
+ * the
+ * first available entrance slot (slot 0). If slot 0 is occupied, balls are
+ * shifted
+ * forward first (if possible) before placing the new ball.
  * <p>
  * Automatic advance feature: The system automatically moves balls forward to
- * keep
- * one ready at the exit position when possible. This happens without
- * interfering
- * with intake operations - if a new ball is detected, it will be pulled in
- * before
- * continuing the advance. A grace period after detection ensures new balls have
+ * keep one ready at the exit position when possible. This happens without
+ * interfering with intake operations - if a new ball is detected, it will be
+ * pulled in
+ * before continuing the advance. A grace period after detection ensures new
+ * balls have
  * time to enter the system.
  */
 public final class SingleWheelTransfer extends Mechanism {
@@ -55,64 +49,62 @@ public final class SingleWheelTransfer extends Mechanism {
 	public final MatchSettings.ArtifactColor[] slots = new MatchSettings.ArtifactColor[MAX_CAPACITY];
 
 	// Hardware
-	private final ColorSensor color;
 	private final CRServo transferWheel; // Main wheel that moves balls through transfer
-	private final CRServo entranceWheel; // CR wheel at color sensor that lets balls in
 	private final ServoImplEx exitWheel; // CR wheel at kicker that fires balls out
 	private final FlywheelIntake intake;
-	// Automatic advance timing
-	private final long lastAutoAdvanceCheckMs = 0;
-	// Detection gating
-	private long lastDetectTimeMs = 0;
 	// Transfer wheel timing and scheduled shifts
 	private boolean transferWheelRunning = false;
 	private long transferWheelEndTimeMs = 0;
 	private int pendingShifts = 0; // number of single-slot shifts to perform when wheel run ends
-	// Entrance wheel timing
-	private boolean entranceWheelOpen = false;
-	private long entranceOpenStartTimeMs = 0;
 	// Exit wheel timing
 	private boolean exitWheelFiring = false;
 	private long exitFireStartTimeMs = 0;
 	// Pending ball to place after shift completes
 	private MatchSettings.ArtifactColor pendingBallAfterShift = MatchSettings.ArtifactColor.UNKNOWN;
+	// Delayed ball registration from intake (travel time compensation)
+	private MatchSettings.ArtifactColor pendingBallFromIntake = MatchSettings.ArtifactColor.UNKNOWN;
+	private long pendingBallRegistrationTimeMs = 0;
+	// Last detection time for grace period tracking
+	private long lastDetectTimeMs = 0;
 	
-	public SingleWheelTransfer(CRServo transferWheel, CRServo entranceWheel, ServoImplEx exitWheel,
-	                           ColorSensor color, FlywheelIntake intake) {
-		this.color = color;
+	public SingleWheelTransfer(CRServo transferWheel, ServoImplEx exitWheel, FlywheelIntake intake) {
 		this.transferWheel = transferWheel;
-		this.entranceWheel = entranceWheel;
 		this.exitWheel = exitWheel;
 		this.intake = intake;
 		Arrays.fill(slots, MatchSettings.ArtifactColor.UNKNOWN);
+		
+		// Set transfer reference in intake for callbacks
+		if (intake != null) {
+			intake.setTransfer(this);
+		}
 	}
-	
+
 	@Override
 	public void start() {
-		holdEntranceClosed();
 		holdExitClosed();
 		stopTransferWheelImmediate();
 	}
-	
+
 	@Override
 	public void update() {
 		long now = System.currentTimeMillis();
-		
-		// Auto-close entrance wheel after open duration
-		if (entranceWheelOpen && now - entranceOpenStartTimeMs > ENTRANCE_OPEN_DURATION_MS) {
-			holdEntranceClosed();
-		}
-		
+
 		// Auto-close exit wheel after fire duration
 		if (exitWheelFiring && now - exitFireStartTimeMs > EXIT_FIRE_DURATION_MS) {
 			holdExitClosed();
 		}
 		
+		// Handle delayed ball registration from intake (travel time compensation)
+		if (pendingBallFromIntake != MatchSettings.ArtifactColor.UNKNOWN && now >= pendingBallRegistrationTimeMs) {
+			onBallDetected(pendingBallFromIntake);
+			pendingBallFromIntake = MatchSettings.ArtifactColor.UNKNOWN;
+		}
+
 		// Handle transfer wheel run completion and perform scheduled shifts
 		if (transferWheelRunning && now >= transferWheelEndTimeMs) {
 			// Stop the transfer wheel first
 			stopTransferWheelImmediate();
-			
+
 			// Perform the scheduled shifts. Each shift moves every ball one index towards
 			// exit.
 			for (int s = 0; s < pendingShifts; s++) {
@@ -123,9 +115,8 @@ public final class SingleWheelTransfer extends Mechanism {
 				performSingleReverseShift();
 			}
 			pendingShifts = 0;
-			
+
 			// If there's a pending ball to place after shift, place it now
-			// (entrance was already opened when the ball was detected)
 			if (pendingBallAfterShift != MatchSettings.ArtifactColor.UNKNOWN) {
 				// Safety check: ensure slot 0 is empty before placing the pending ball
 				// (should always be true after shift, but check for robustness)
@@ -139,75 +130,94 @@ public final class SingleWheelTransfer extends Mechanism {
 				}
 			}
 		}
-		
-		// Detection with blind window
-		MatchSettings.ArtifactColor detected = color.getArtifactColor();
-		if (detected != MatchSettings.ArtifactColor.UNKNOWN && now - lastDetectTimeMs > BLIND_WINDOW_MS) {
-			lastDetectTimeMs = now;
-			onBallDetected(detected);
-		}
-		
+
 		// Automatic advance logic - keep a ball ready at exit if possible
 		if (AUTO_ADVANCE_ENABLED) {
 			checkAndPerformAutoAdvance(now);
 		}
 	}
-	
+
 	@Override
 	public void stop() {
 		stopTransferWheelImmediate();
-		holdEntranceClosed();
 		holdExitClosed();
 		clearAllSlots();
 	}
-	
+
 	/*
 	 * ------------------------------
 	 * Detection and positional model
 	 * ------------------------------
 	 */
+
+	/**
+	 * Called by FlywheelIntake when a ball is detected at the intake location.
+	 * Schedules the ball to be registered after travel time delay.
+	 *
+	 * @param color              The detected artifact color
+	 * @param registrationTimeMs The system time when the ball should be registered
+	 *                           (now + travel time)
+	 */
+	public void registerBallFromIntake(MatchSettings.ArtifactColor color, long registrationTimeMs) {
+		// Update last detection time for grace period tracking
+		lastDetectTimeMs = System.currentTimeMillis();
+		
+		// If there's already a pending ball, replace it with the newer detection
+		// (newer detection is more recent and likely more accurate)
+		// This handles rapid successive detections better than ignoring them
+		pendingBallFromIntake = color;
+		pendingBallRegistrationTimeMs = registrationTimeMs;
+	}
 	
 	/**
-	 * Called when the sensor reports a new ball (after blind window).
+	 * Called when a ball should be registered in the transfer (after travel time
+	 * delay).
 	 * Always attempts to place the ball into slot 0 (lowest position).
-	 * If slot 0 is empty, places the ball directly and opens the entrance.
-	 * If slot 0 is occupied, opens entrance immediately to let the physical ball
-	 * in,
-	 * shifts all balls forward first (if possible), then places the new ball in
-	 * slot 0
-	 * after the shift completes.
+	 * If slot 0 is empty, places the ball directly.
+	 * If slot 0 is occupied, shifts all balls forward first (if possible), then
+	 * places
+	 * the new ball in slot 0 after the shift completes.
 	 * If slot 0 is occupied and we cannot shift forward (exit slot is full),
 	 * the detection is ignored (transfer is full).
-	 * Opens the entrance wheel briefly to let the ball in.
 	 */
-	public void onBallDetected(MatchSettings.ArtifactColor color) {
+	private void onBallDetected(MatchSettings.ArtifactColor color) {
 		// If slot 0 is empty, place the ball directly without shifting
 		if (slots[0] == MatchSettings.ArtifactColor.UNKNOWN) {
 			slots[0] = color;
-			openEntrance();
+			// Start intake to help pull the ball in, but only if it's stopped
+			// (don't override user's outtake command)
+			if (intake != null && intake.state == FlywheelIntake.IntakeState.STOPPED) {
+				intake.in();
+			}
 			return;
 		}
-		
+
 		// Slot 0 is occupied. Check if we can shift forward.
 		// We can shift forward only if the exit slot is not occupied.
 		if (isFull()) {
 			// Exit slot is full, cannot shift forward, cannot take in new ball
-			holdEntranceClosed(); // Transfer is full
+			// Transfer is full - ignore this detection
+			return;
 		}
-		
+
 		// If there's already a pending ball waiting for a shift, we can't queue another
 		// one.
-		// This should be rare due to the blind window, but we need to handle it.
+		// This should be rare, but we need to handle it.
 		if (pendingBallAfterShift != MatchSettings.ArtifactColor.UNKNOWN) {
 			// Already have a pending ball, cannot queue another
 			return; // Will be handled after current shift completes
 		}
 		
-		// We can shift forward. Open entrance immediately to let the physical ball in.
+		// We can shift forward. Start intake to help pull the ball in.
 		// Store the new ball to be placed after the shift completes.
 		// The physical wheel will move first, then we'll place the ball in slot 0.
-		openEntrance();
+		// Only start intake if it's stopped (don't override user's outtake command)
+		if (intake != null && intake.state == FlywheelIntake.IntakeState.STOPPED) {
+			intake.in();
+		}
 		pendingBallAfterShift = color;
+		// Initiate the shift to make room for the new ball
+		advance();
 	}
 	
 	/**
@@ -318,22 +328,26 @@ public final class SingleWheelTransfer extends Mechanism {
 	private void checkAndPerformAutoAdvance(long now) {
 		// Don't auto-advance if:
 		// - Transfer wheel is already running
-		// - Entrance wheel is open (intaking)
 		// - Exit wheel is firing
 		// - Slots not able to advance
 		// - Not enough time since last detection (grace period)
-		if (transferWheelRunning || entranceWheelOpen || exitWheelFiring || isEmpty()) {
+		// - There's a pending ball from intake (ball is still traveling)
+		if (transferWheelRunning || exitWheelFiring || isEmpty() ||
+				pendingBallFromIntake != MatchSettings.ArtifactColor.UNKNOWN) {
 			return;
 		}
 		
 		// Check if we need a grace period after detection
+		// This handles both transfer-started and user-started intake scenarios
+		// where a ball was recently detected
 		if (now - lastDetectTimeMs < AUTO_ADVANCE_GRACE_PERIOD_MS) {
 			return;
 		}
 		
 		// Check if exit slot is empty and intake slot is full
-		if (slots[MAX_CAPACITY - 1] != MatchSettings.ArtifactColor.UNKNOWN || slots[0] == MatchSettings.ArtifactColor.UNKNOWN) {
-			return; // Exit already has a ball
+		if (slots[MAX_CAPACITY - 1] != MatchSettings.ArtifactColor.UNKNOWN
+				|| slots[0] == MatchSettings.ArtifactColor.UNKNOWN) {
+			return; // Exit already has a ball or entrance is empty
 		}
 		
 		advance();
@@ -349,43 +363,29 @@ public final class SingleWheelTransfer extends Mechanism {
 	
 	/*
 	 * ------------------------------
-	 * Entrance wheel control
+	 * Intake coordination (entrance wheel removed)
 	 * ------------------------------
 	 */
 	
 	/**
-	 * Open the entrance wheel to let balls in.
-	 * The wheel will automatically close after ENTRANCE_OPEN_DURATION_MS.
+	 * Start intake to pull balls in. This is a convenience method that coordinates
+	 * with the intake mechanism. The entrance wheel has been removed, so this
+	 * only controls the intake motor.
 	 */
-	public void openEntrance() {
-		entranceWheel.setPower(ENTRANCE_WHEEL_INTAKE_POWER);
-		intake.in();
-		entranceWheelOpen = true;
-		entranceOpenStartTimeMs = System.currentTimeMillis();
+	public void startIntake() {
+		if (intake != null) {
+			intake.in();
+		}
 	}
 	
 	/**
-	 * Force open the entrance wheel for intake operations.
-	 * This is a public method for override actions and testing.
-	 * The wheel will automatically close after ENTRANCE_OPEN_DURATION_MS.
+	 * Clear/outtake from entrance. Reverses intake to push balls out.
 	 */
-	public void forceOpenEntrance() {
-		openEntrance();
-	}
-	
-	/**
-	 * Hold entrance closed with slight reverse power.
-	 */
-	public void holdEntranceClosed() {
-		entranceWheel.setPower(ENTRANCE_WHEEL_HOLD_POWER);
-		entranceWheelOpen = false;
-	}
-	
 	public void clearEntrance() {
-		entranceWheel.setPower(ENTRANCE_WHEEL_OUT_POWER);
-		intake.out();
+		if (intake != null) {
+			intake.out();
+		}
 		lastDetectTimeMs = System.currentTimeMillis();
-		entranceWheelOpen = true;
 	}
 	
 	/*
@@ -506,10 +506,6 @@ public final class SingleWheelTransfer extends Mechanism {
 		return transferWheelRunning;
 	}
 	
-	public boolean isEntranceWheelOpen() {
-		return entranceWheelOpen;
-	}
-	
 	public boolean isExitWheelFiring() {
 		return exitWheelFiring;
 	}
@@ -528,6 +524,8 @@ public final class SingleWheelTransfer extends Mechanism {
 		lastDetectTimeMs = 0;
 		pendingShifts = 0;
 		pendingBallAfterShift = MatchSettings.ArtifactColor.UNKNOWN;
+		pendingBallFromIntake = MatchSettings.ArtifactColor.UNKNOWN;
+		pendingBallRegistrationTimeMs = 0;
 	}
 	
 	/**

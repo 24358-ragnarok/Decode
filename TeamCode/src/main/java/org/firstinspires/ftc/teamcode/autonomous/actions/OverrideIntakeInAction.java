@@ -1,22 +1,24 @@
 package org.firstinspires.ftc.teamcode.autonomous.actions;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
+import org.firstinspires.ftc.teamcode.hardware.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
-import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 
 /**
- * Override action that forces both the intake motor and transfer entrance wheel
- * to start intaking, bypassing normal transfer logic.
+ * Override action that forces the intake motor to start intaking, bypassing
+ * normal transfer logic.
  * <p>
  * This action directly controls:
  * - FlywheelIntake: Sets to IN state
- * - SingleWheelTransfer entrance wheel: Forces open for intake
  * <p>
  * Useful for testing, debugging, or emergency intake operations where normal
  * transfer state management needs to be overridden.
+ * <p>
+ * Note: Entrance wheel has been removed. Intake now handles color detection
+ * directly.
  */
 public class OverrideIntakeInAction implements AutonomousAction {
-	
+
 	/**
 	 * Creates an override intake action.
 	 */
@@ -26,11 +28,10 @@ public class OverrideIntakeInAction implements AutonomousAction {
 	
 	@Override
 	public void initialize(MechanismManager mechanisms) {
-		// Force transfer entrance wheel to open for intake
-		SingleWheelTransfer transfer = mechanisms.get(SingleWheelTransfer.class);
-		if (transfer != null) {
-			// Use the public forceOpenEntrance method to directly open the entrance wheel
-			transfer.forceOpenEntrance();
+		// Start intake motor directly
+		FlywheelIntake intake = mechanisms.get(FlywheelIntake.class);
+		if (intake != null) {
+			intake.in();
 		}
 	}
 	
