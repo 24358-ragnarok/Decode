@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.actions;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_FIRE_DURATION_MS;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_FIRE_RESET_MS;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
 import org.firstinspires.ftc.teamcode.hardware.HorizontalLauncher;
@@ -74,7 +73,8 @@ public class LaunchAction implements AutonomousAction {
 					break;
 				}
 				
-				if (System.currentTimeMillis() - lastFireTimeMs > EXIT_FIRE_DURATION_MS + EXIT_FIRE_RESET_MS) {
+				// With CR servo, no reset time needed - can advance immediately after fire duration
+				if (System.currentTimeMillis() - lastFireTimeMs > EXIT_FIRE_DURATION_MS) {
 					transfer.moveNextBallToKicker();
 //					transfer.forceOpenEntrance();
 					state = State.WAITING_TO_FIRE;

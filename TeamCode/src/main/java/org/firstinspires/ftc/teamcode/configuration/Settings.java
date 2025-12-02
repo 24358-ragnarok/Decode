@@ -103,14 +103,14 @@ public class Settings {
 		// Transfer mechanism
 		public static final HardwareConfig TRANSFER_WHEEL_SERVO = new HardwareConfig(CRServo.class,
 				"transferMainServo");
-		public static final HardwareConfig TRANSFER_EXIT_KICKER = new HardwareConfig(ServoImplEx.class,
-				"transferExitServo"); // CR wheel at kicker position
+		public static final HardwareConfig TRANSFER_EXIT_KICKER = new HardwareConfig(CRServo.class,
+				"transferExitServo"); // CR servo at kicker position
 		
 		// Sensors (color sensor is now at intake location)
 		public static final HardwareConfig TRANSFER_COLOR_SENSOR = new HardwareConfig(
 				RevColorSensorV3.class, "transferColorSensor");
 		public static final HardwareConfig LIMELIGHT = new HardwareConfig(Limelight3A.class, "limelight");
-		
+
 		/**
 		 * Static method to retrieve hardware from a HardwareMap.
 		 * Allows usage like: Settings.Hardware.get(FRONT_LEFT_MOTOR, hw)
@@ -171,11 +171,10 @@ public class Settings {
 		public static final double TRANSFER_WHEEL_REVERSE_POWER = -1.0; // Power when reversing
 		public static final long TRANSFER_TIME_MS = 650; // Time to run wheel to move one ball slot
 		
-		// Exit wheel settings (at kicker position)
-		public static final double EXIT_KICK_POSITION = 0.4; // Launch
-		public static final double EXIT_LOCK_POSITION = 1.0; // Closed
-		public static final long EXIT_FIRE_DURATION_MS = 300; // How long it needs to fire
-		public static final long EXIT_FIRE_RESET_MS = 300; // How long it needs to reset kicker to back position
+		// Exit wheel settings (CR servo at kicker position)
+		public static final double EXIT_FIRE_POWER = 1.0; // Power when firing ball out
+		public static final double EXIT_HOLD_POWER = 0.0; // Power to hold closed (0 = stopped)
+		public static final long EXIT_FIRE_DURATION_MS = 300; // How long to spin wheel to fire one ball
 		
 		// Automatic advance settings
 		public static final boolean AUTO_ADVANCE_ENABLED = true; // Enable automatic ball advancement

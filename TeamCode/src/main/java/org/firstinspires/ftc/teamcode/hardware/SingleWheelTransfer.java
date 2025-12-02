@@ -3,15 +3,14 @@ package org.firstinspires.ftc.teamcode.hardware;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.AUTO_ADVANCE_ENABLED;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.AUTO_ADVANCE_GRACE_PERIOD_MS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_FIRE_DURATION_MS;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_KICK_POSITION;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_LOCK_POSITION;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_FIRE_POWER;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.EXIT_HOLD_POWER;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.MAX_CAPACITY;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.TRANSFER_TIME_MS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.TRANSFER_WHEEL_FORWARD_POWER;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.TRANSFER_WHEEL_REVERSE_POWER;
 
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 
@@ -50,7 +49,7 @@ public final class SingleWheelTransfer extends Mechanism {
 
 	// Hardware
 	private final CRServo transferWheel; // Main wheel that moves balls through transfer
-	private final ServoImplEx exitWheel; // CR wheel at kicker that fires balls out
+	private final CRServo exitWheel; // CR wheel at kicker that fires balls out
 	private final FlywheelIntake intake;
 	// Transfer wheel timing and scheduled shifts
 	private boolean transferWheelRunning = false;
@@ -67,12 +66,12 @@ public final class SingleWheelTransfer extends Mechanism {
 	// Last detection time for grace period tracking
 	private long lastDetectTimeMs = 0;
 	
-	public SingleWheelTransfer(CRServo transferWheel, ServoImplEx exitWheel, FlywheelIntake intake) {
+	public SingleWheelTransfer(CRServo transferWheel, CRServo exitWheel, FlywheelIntake intake) {
 		this.transferWheel = transferWheel;
 		this.exitWheel = exitWheel;
 		this.intake = intake;
 		Arrays.fill(slots, MatchSettings.ArtifactColor.UNKNOWN);
-		
+
 		// Set transfer reference in intake for callbacks
 		if (intake != null) {
 			intake.setTransfer(this);
@@ -93,7 +92,7 @@ public final class SingleWheelTransfer extends Mechanism {
 		if (exitWheelFiring && now - exitFireStartTimeMs > EXIT_FIRE_DURATION_MS) {
 			holdExitClosed();
 		}
-		
+
 		// Handle delayed ball registration from intake (travel time compensation)
 		if (pendingBallFromIntake != MatchSettings.ArtifactColor.UNKNOWN && now >= pendingBallRegistrationTimeMs) {
 			onBallDetected(pendingBallFromIntake);
@@ -161,14 +160,14 @@ public final class SingleWheelTransfer extends Mechanism {
 	public void registerBallFromIntake(MatchSettings.ArtifactColor color, long registrationTimeMs) {
 		// Update last detection time for grace period tracking
 		lastDetectTimeMs = System.currentTimeMillis();
-		
+
 		// If there's already a pending ball, replace it with the newer detection
 		// (newer detection is more recent and likely more accurate)
 		// This handles rapid successive detections better than ignoring them
 		pendingBallFromIntake = color;
 		pendingBallRegistrationTimeMs = registrationTimeMs;
 	}
-	
+
 	/**
 	 * Called when a ball should be registered in the transfer (after travel time
 	 * delay).
@@ -398,7 +397,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	 * Fire the ball currently at the exit index (if present).
 	 * Spins the exit wheel to kick the ball out and removes it from the model
 	 * immediately.
-	 * Auto-closes after EXIT_FIRE_DURATION_MS.
+	 * Auto-stops after EXIT_FIRE_DURATION_MS.
 	 */
 	public void fire() {
 		int exitIndex = MAX_CAPACITY - 1;
@@ -409,16 +408,16 @@ public final class SingleWheelTransfer extends Mechanism {
 		slots[exitIndex] = MatchSettings.ArtifactColor.UNKNOWN;
 		
 		// Spin exit wheel to kick ball out
-		exitWheel.setPosition(EXIT_KICK_POSITION);
+		exitWheel.setPower(EXIT_FIRE_POWER);
 		exitWheelFiring = true;
 		exitFireStartTimeMs = System.currentTimeMillis();
 	}
 	
 	/**
-	 * Hold exit closed with slight reverse power.
+	 * Hold exit closed (stop the wheel or apply slight reverse power if needed).
 	 */
 	private void holdExitClosed() {
-		exitWheel.setPosition(EXIT_LOCK_POSITION);
+		exitWheel.setPower(EXIT_HOLD_POWER);
 		exitWheelFiring = false;
 	}
 	
