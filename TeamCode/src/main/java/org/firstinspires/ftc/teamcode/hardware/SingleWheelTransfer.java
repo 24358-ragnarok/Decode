@@ -188,6 +188,7 @@ public final class SingleWheelTransfer extends Mechanism {
 			if (intake != null && intake.state == FlywheelIntake.IntakeState.STOPPED) {
 				intake.in();
 			}
+			
 			return;
 		}
 

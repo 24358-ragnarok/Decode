@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.testing;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
@@ -30,7 +30,7 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
  *
  * @author Created for launcher motor PIDF tuning
  */
-@Autonomous(name = "Launcher PIDF Tuner", group = "Testing")
+@TeleOp(name = "Launcher PIDF Tuner", group = "Testing")
 public class LauncherPIDFTuner extends LinearOpMode {
 	
 	private static final long STATUS_MESSAGE_DURATION_MS = 5000;

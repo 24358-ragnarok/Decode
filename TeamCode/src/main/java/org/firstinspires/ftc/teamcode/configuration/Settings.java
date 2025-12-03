@@ -131,9 +131,9 @@ public class Settings {
 	@Configurable
 	public static class Intake {
 		// Color detection settings
-		public static final long COLOR_DETECTION_DEBOUNCE_MS = 500; // Minimum time between detections
-		public static final long BALL_TRAVEL_TIME_MS = 500; // Time for ball to travel from intake sensor to transfer
-		public static double SPEED = -1.0;
+		public static final long COLOR_DETECTION_DEBOUNCE_MS = 300; // Minimum time between detections
+		public static final long BALL_TRAVEL_TIME_MS = 300; // Time for ball to travel from intake sensor to transfer
+		public static double SPEED = 1.0;
 		// entrance
 	}
 	
@@ -169,11 +169,11 @@ public class Settings {
 		// Main transfer wheel settings
 		public static final double TRANSFER_WHEEL_FORWARD_POWER = 1.0; // Power when advancing balls
 		public static final double TRANSFER_WHEEL_REVERSE_POWER = -1.0; // Power when reversing
-		public static final long TRANSFER_TIME_MS = 650; // Time to run wheel to move one ball slot
+		public static final long TRANSFER_TIME_MS = 900; // Time to run wheel to move one ball slot
 		
 		// Exit wheel settings (CR servo at kicker position)
-		public static final double EXIT_FIRE_POWER = 1.0; // Power when firing ball out
-		public static final double EXIT_HOLD_POWER = 0.0; // Power to hold closed (0 = stopped)
+		public static final double EXIT_FIRE_POWER = 0.0; // Power when firing ball out
+		public static final double EXIT_HOLD_POWER = 1.0; // Power to hold closed (0 = stopped)
 		public static final long EXIT_FIRE_DURATION_MS = 300; // How long to spin wheel to fire one ball
 		
 		// Automatic advance settings
@@ -324,7 +324,7 @@ public class Settings {
 		 * These values are used when AIM is called based on which position is closer.
 		 */
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 55.0; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2600.0; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_RPM = 2500.0; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 53.0; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 3000.0; // Wheel RPM for far position
@@ -456,20 +456,20 @@ public class Settings {
 			 * Second preset group (middle).
 			 */
 			public static class Preset2 {
-				public static final Pose PREP = new Pose(40, 59.5, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(34.0, 59.5, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(28.0, 59.5, Math.toRadians(180));
-				public static final Pose END = new Pose(18, 59.5, Math.toRadians(180));
+				public static final Pose PREP = new Pose(42, 58.5, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(34.0, 58.5, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(28.0, 58.5, Math.toRadians(180));
+				public static final Pose END = new Pose(18, 58.5, Math.toRadians(180));
 			}
 			
 			/**
 			 * Third preset group (farthest from wall).
 			 */
 			public static class Preset3 {
-				public static final Pose PREP = new Pose(40, 84.5, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(34.0, 84.5, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(28.0, 84.5, Math.toRadians(180));
-				public static final Pose END = new Pose(18, 84.5, Math.toRadians(180));
+				public static final Pose PREP = new Pose(40, 83, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(34.0, 83, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(28.0, 83, Math.toRadians(180));
+				public static final Pose END = new Pose(18, 83, Math.toRadians(180));
 			}
 		}
 		
@@ -480,10 +480,10 @@ public class Settings {
 			// From sample areas to shooting positions
 			public static final Pose CLOSE_LAUNCH_APPROACH_FAR = new Pose(67, 45);
 			public static final Pose PRESET_1_APPROACH = new Pose(63, 35);
-			public static final Pose FROM_PRESET2_TO_CLOSE = new Pose(64, 56);
+			public static final Pose CLOSE_TO_PRESET_2 = new Pose(64, 56);
+			
 			public static final Pose PRESET_2_APPROACH = new Pose(62, 59);
 			
-			public static final Pose FROM_PRESET3_TO_CLOSE = new Pose(41, 81);
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
 		}
 		

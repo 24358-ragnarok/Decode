@@ -117,19 +117,13 @@ public class FlywheelIntake extends Mechanism {
 			if (now - lastDetectionTimeMs >= COLOR_DETECTION_DEBOUNCE_MS) {
 				MatchSettings.ArtifactColor detected = colorSensor.getArtifactColor();
 				
-				// Only register if we detect a valid color and it's different from last
-				// detection
-				if (detected != MatchSettings.ArtifactColor.UNKNOWN && detected != lastDetectedColor) {
+				// Only register if we detect a valid color
+				if (detected != MatchSettings.ArtifactColor.UNKNOWN) {
 					lastDetectionTimeMs = now;
 					lastDetectedColor = detected;
 					
 					// Register the ball with the transfer, accounting for travel time
 					transfer.registerBallFromIntake(detected, now + BALL_TRAVEL_TIME_MS);
-				} else if (detected == MatchSettings.ArtifactColor.UNKNOWN) {
-					// Reset last detected color when sensor sees nothing
-					// Update timestamp to prevent false detections if sensor flickers
-					lastDetectedColor = MatchSettings.ArtifactColor.UNKNOWN;
-					lastDetectionTimeMs = now;
 				}
 			}
 		}
