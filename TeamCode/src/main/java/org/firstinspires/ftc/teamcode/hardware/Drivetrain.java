@@ -151,7 +151,7 @@ public class Drivetrain extends Mechanism {
 		
 		this.state = State.PATHING;
 		PathConstraints c = Constants.pathConstraints;
-		c.setTimeoutConstraint(250);
+		c.setTimeoutConstraint(150);
 		follower.setConstraints(c);
 		follower.holdPoint(targetPose);
 	}

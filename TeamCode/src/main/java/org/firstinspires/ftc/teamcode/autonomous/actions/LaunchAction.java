@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
  * throughout the launch sequence.
  */
 public class LaunchAction implements AutonomousAction {
+	private int launchCount = 0;
 	private boolean hasTransfer;
 	private boolean hasLauncher;
 	private State state;
@@ -48,10 +49,14 @@ public class LaunchAction implements AutonomousAction {
 			return true;
 		}
 		
+		
 		HorizontalLauncher launcher = mechanisms.get(HorizontalLauncher.class);
 		SingleWheelTransfer transfer = mechanisms.get(SingleWheelTransfer.class);
 		
-		if (transfer.isEmpty() && state == State.READY_TO_LAUNCH) {
+		assert transfer != null;
+		
+		
+		if (launchCount > 2 && state == State.READY_TO_LAUNCH) {
 			state = State.COMPLETE; // nothing to fire initially, just quit
 		}
 		
@@ -68,7 +73,7 @@ public class LaunchAction implements AutonomousAction {
 			
 			case ADVANCING_BALL:
 				// Check if transfer is empty and done with previous launch
-				if (transfer.isEmpty() && System.currentTimeMillis() - lastFireTimeMs > EXIT_FIRE_DURATION_MS) {
+				if (launchCount > 2 && System.currentTimeMillis() - lastFireTimeMs > EXIT_FIRE_DURATION_MS) {
 					state = State.COMPLETE;
 					break;
 				}
@@ -85,7 +90,7 @@ public class LaunchAction implements AutonomousAction {
 				if (transfer.canFire()) {
 					state = State.FIRING;
 				}
-				if (transfer.isEmpty()) {
+				if (launchCount > 2) {
 					state = State.COMPLETE;
 				}
 				break;
@@ -93,6 +98,7 @@ public class LaunchAction implements AutonomousAction {
 			case FIRING:
 				// Fire the ball
 				transfer.fire();
+				launchCount += 1;
 				lastFireTimeMs = System.currentTimeMillis();
 				// Go back to advancing the next ball
 				state = State.ADVANCING_BALL;

@@ -131,8 +131,8 @@ public class Settings {
 	@Configurable
 	public static class Intake {
 		// Color detection settings
-		public static final long COLOR_DETECTION_DEBOUNCE_MS = 300; // Minimum time between detections
-		public static final long BALL_TRAVEL_TIME_MS = 300; // Time for ball to travel from intake sensor to transfer
+		public static final long COLOR_DETECTION_DEBOUNCE_MS = 250; // Minimum time between detections
+		public static final long BALL_TRAVEL_TIME_MS = 250; // Time for ball to travel from intake sensor to transfer
 		public static double SPEED = 1.0;
 		// entrance
 	}
@@ -516,7 +516,7 @@ public class Settings {
 	
 	public static class Autonomous {
 		public static double BALL_INTAKE_WAIT_S = 0.1;
-		public static double SLOW_SPEED = 0.25;
+		public static double SLOW_SPEED = 0.4;
 		public static double LAUNCH_STABILITY_WAIT_S = 0.3;
 		public static double MAX_ACTION_TIME_S = 4.5;
 		

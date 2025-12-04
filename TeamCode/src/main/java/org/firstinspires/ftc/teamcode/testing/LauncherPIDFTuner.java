@@ -30,7 +30,7 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
  *
  * @author Created for launcher motor PIDF tuning
  */
-@TeleOp(name = "Launcher PIDF Tuner", group = "Testing")
+@TeleOp(name = "Launcher PIDF Tuner", group = "Tests")
 public class LauncherPIDFTuner extends LinearOpMode {
 	
 	private static final long STATUS_MESSAGE_DURATION_MS = 5000;
