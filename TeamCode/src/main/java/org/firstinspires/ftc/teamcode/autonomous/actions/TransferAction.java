@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.actions;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
-import org.firstinspires.ftc.teamcode.hardware.FlywheelIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
 
@@ -16,23 +15,27 @@ import org.firstinspires.ftc.teamcode.hardware.SingleWheelTransfer;
  * <p>
  * Can be configured to stop on complete or leave running.
  */
-public class ClearIntakeAction implements AutonomousAction {
+public class TransferAction implements AutonomousAction {
 	private final boolean stopOnComplete;
-
-	public ClearIntakeAction(boolean stopOnComplete) {
+	
+	public TransferAction(boolean stopOnComplete) {
 		this.stopOnComplete = stopOnComplete;
 	}
-
-	public ClearIntakeAction() {
+	
+	public TransferAction() {
 		this(false);
 	}
 	
 	@Override
 	public void initialize(MechanismManager mechanisms) {
-		// Start outtake to clear balls from intake
+		// Transfer doesn't need preparation - it automatically detects and stores balls
+		// The FlywheelIntake update() loop handles color detection during intake
+		// and registers balls with the transfer after travel time delay
+		
+		// Start intake motor to pull samples in
 		SingleWheelTransfer transfer = mechanisms.get(SingleWheelTransfer.class);
 		if (transfer != null) {
-			transfer.clearEntrance();
+			transfer.advance();
 		}
 	}
 	
@@ -46,17 +49,10 @@ public class ClearIntakeAction implements AutonomousAction {
 	
 	@Override
 	public void end(MechanismManager mechanisms, boolean interrupted) {
-		if (stopOnComplete) {
-			// Stop outtake when clearing is complete
-			FlywheelIntake intake = mechanisms.get(FlywheelIntake.class);
-			if (intake != null) {
-				intake.stop();
-			}
-		}
 	}
 	
 	@Override
 	public String getName() {
-		return "Intake" + (stopOnComplete ? "AndStop" : "Start");
+		return "Step Intake";
 	}
 }

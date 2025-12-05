@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.ColorSensor.
 
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 
 /**
@@ -53,6 +54,13 @@ public class ColorSensor {
 		} else if (purpleConfidence < greenConfidence && purpleConfidence < CONFIDENCE_THRESHOLD) {
 			return MatchSettings.ArtifactColor.PURPLE;
 		} else {
+			if (colorSensor.getDistance(DistanceUnit.INCH) < 2.7) {
+				// we cannot sort;
+				// our color sensor sucks;
+				// the distance is usually accurate enough;
+				// just return purple.
+				return MatchSettings.ArtifactColor.PURPLE;
+			}
 			return MatchSettings.ArtifactColor.UNKNOWN;
 		}
 	}

@@ -25,7 +25,7 @@ public class Settings {
 		public final static int RAGNAROK_RED = 0xFF0000;
 		public final static int ELITE_GOLD = 0xFFEB29;
 	}
-	
+
 	/**
 	 * Maps controller inputs to robot actions for TeleOp.
 	 */
@@ -39,7 +39,7 @@ public class Settings {
 				Controller.Action.GOTO_PARK,
 				Controller.Action.GOTO_GATE
 		};
-		
+
 		static {
 			// Main Controller (Driver)
 			actionControlMap.put(Controller.Action.MOVE_Y, Controller.Control.LEFT_STICK_Y);
@@ -58,7 +58,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.CANCEL_ASSISTED_DRIVING, Controller.Control.RIGHT_STICK_BUTTON);
 			actionControlMap.put(Controller.Action.RESET_FOLLOWER, Controller.Control.BACK);
 			actionControlMap.put(Controller.Action.TOGGLE_CENTRICITY, Controller.Control.LEFT_STICK_BUTTON);
-			
+
 			// Secondary Controller (Operator)
 			actionControlMap.put(Controller.Action.AIM, Controller.Control.LEFT_TRIGGER);
 			actionControlMap.put(Controller.Action.LAUNCH, Controller.Control.RIGHT_TRIGGER);
@@ -76,7 +76,7 @@ public class Settings {
 			}
 		}
 	}
-	
+
 	/**
 	 * Hardware device name mapping.
 	 * Each HardwareConfig stores both the device type and string name,
@@ -90,7 +90,7 @@ public class Settings {
 		public static final HardwareConfig REAR_LEFT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearLeft");
 		public static final HardwareConfig REAR_RIGHT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearRight");
 		public static final HardwareConfig PINPOINT = new HardwareConfig(GoBildaPinpointDriver.class, "pinpoint");
-		
+
 		// Subsystem motors and servos
 		public static final HardwareConfig INTAKE_MOTOR = new HardwareConfig(DcMotorEx.class, "intakeMotor");
 		public static final HardwareConfig LAUNCHER_RIGHT = new HardwareConfig(DcMotorEx.class, "launcherRight");
@@ -99,20 +99,18 @@ public class Settings {
 				"launcherYawServo");
 		public static final HardwareConfig LAUNCHER_PITCH_SERVO = new HardwareConfig(ServoImplEx.class,
 				"launcherPitchServo");
-		
+
 		// Transfer mechanism
 		public static final HardwareConfig TRANSFER_WHEEL_SERVO = new HardwareConfig(CRServo.class,
 				"transferMainServo");
-		public static final HardwareConfig TRANSFER_ENTRANCE_WHEEL = new HardwareConfig(CRServo.class,
-				"transferEntranceServo"); // CR wheel at color sensor
-		public static final HardwareConfig TRANSFER_EXIT_KICKER = new HardwareConfig(ServoImplEx.class,
-				"transferExitServo"); // CR wheel at kicker position
+		public static final HardwareConfig TRANSFER_EXIT_KICKER = new HardwareConfig(CRServo.class,
+				"transferExitServo"); // CR servo at kicker position
 		
-		// Sensors
+		// Sensors (color sensor is now at intake location)
 		public static final HardwareConfig TRANSFER_COLOR_SENSOR = new HardwareConfig(
 				RevColorSensorV3.class, "transferColorSensor");
 		public static final HardwareConfig LIMELIGHT = new HardwareConfig(Limelight3A.class, "limelight");
-		
+
 		/**
 		 * Static method to retrieve hardware from a HardwareMap.
 		 * Allows usage like: Settings.Hardware.get(FRONT_LEFT_MOTOR, hw)
@@ -132,7 +130,11 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Intake {
-		public static double SPEED = -1.0;
+		// Color detection settings
+		public static final long COLOR_DETECTION_DEBOUNCE_MS = 250; // Minimum time between detections
+		public static final long BALL_TRAVEL_TIME_MS = 250; // Time for ball to travel from intake sensor to transfer
+		public static double SPEED = 1.0;
+		// entrance
 	}
 	
 	/**
@@ -140,7 +142,7 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Spindex {
-		public static double[] SLOT_INTAKE_POSITIONS = {0.10, 0.43, 0.77 }; // Calibrated servo positions for slots at
+		public static double[] SLOT_INTAKE_POSITIONS = {0.10, 0.43, 0.77}; // Calibrated servo positions for slots at
 		// intake
 		public static double EXIT_OFFSET = 0.25; // Offset from intake to exit alignment
 		public static double RAPID_FIRE_COOLDOWN_MS = 200;
@@ -155,32 +157,24 @@ public class Settings {
 	/**
 	 * Settings for the transfer mechanism with CR management wheels.
 	 * <p>
-	 * The transfer has three wheels:
+	 * The transfer has two wheels:
 	 * - Main transfer wheel: moves balls through the transfer
-	 * - Entrance wheel: CR wheel at color sensor that lets balls in
 	 * - Exit wheel: CR wheel at kicker that fires balls out
+	 * <p>
+	 * Color detection and entrance control have been moved to the intake mechanism.
 	 */
 	public static class Transfer {
-		// Detection settings
-		public static final double BLIND_WINDOW_MS = 1250; // Time after detection to ignore new detections
 		public static final int MAX_CAPACITY = 3; // Number of ball slots
 		
 		// Main transfer wheel settings
 		public static final double TRANSFER_WHEEL_FORWARD_POWER = 1.0; // Power when advancing balls
 		public static final double TRANSFER_WHEEL_REVERSE_POWER = -1.0; // Power when reversing
-		public static final long TRANSFER_TIME_MS = 650; // Time to run wheel to move one ball slot
+		public static final long TRANSFER_TIME_MS = 900; // Time to run wheel to move one ball slot
 		
-		// Entrance wheel settings (at color sensor position)
-		public static final double ENTRANCE_WHEEL_INTAKE_POWER = 1.0; // Power when letting balls in
-		public static final double ENTRANCE_WHEEL_HOLD_POWER = 0.0; // No reverse to hold closed
-		public static final double ENTRANCE_WHEEL_OUT_POWER = -1.0;
-		public static final long ENTRANCE_OPEN_DURATION_MS = 750; // How long to open entrance when intaking
-		
-		// Exit wheel settings (at kicker position)
-		public static final double EXIT_KICK_POSITION = 0.4; // Launch
-		public static final double EXIT_LOCK_POSITION = 1.0; // Closed
-		public static final long EXIT_FIRE_DURATION_MS = 300; // How long it needs to fire
-		public static final long EXIT_FIRE_RESET_MS = 300; // How long it needs to reset kicker to back position
+		// Exit wheel settings (CR servo at kicker position)
+		public static final double EXIT_FIRE_POWER = 0.0; // Power when firing ball out
+		public static final double EXIT_HOLD_POWER = 1.0; // Power to hold closed (0 = stopped)
+		public static final long EXIT_FIRE_DURATION_MS = 300; // How long to spin wheel to fire one ball
 		
 		// Automatic advance settings
 		public static final boolean AUTO_ADVANCE_ENABLED = true; // Enable automatic ball advancement
@@ -330,7 +324,7 @@ public class Settings {
 		 * These values are used when AIM is called based on which position is closer.
 		 */
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 55.0; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2600.0; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_RPM = 2500.0; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 53.0; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 3000.0; // Wheel RPM for far position
@@ -462,20 +456,20 @@ public class Settings {
 			 * Second preset group (middle).
 			 */
 			public static class Preset2 {
-				public static final Pose PREP = new Pose(40, 59.5, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(34.0, 59.5, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(28.0, 59.5, Math.toRadians(180));
-				public static final Pose END = new Pose(18, 59.5, Math.toRadians(180));
+				public static final Pose PREP = new Pose(42, 58.5, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(34.0, 58.5, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(28.0, 58.5, Math.toRadians(180));
+				public static final Pose END = new Pose(18, 58.5, Math.toRadians(180));
 			}
 			
 			/**
 			 * Third preset group (farthest from wall).
 			 */
 			public static class Preset3 {
-				public static final Pose PREP = new Pose(40, 84.5, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(34.0, 84.5, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(28.0, 84.5, Math.toRadians(180));
-				public static final Pose END = new Pose(18, 84.5, Math.toRadians(180));
+				public static final Pose PREP = new Pose(40, 83, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(34.0, 83, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(28.0, 83, Math.toRadians(180));
+				public static final Pose END = new Pose(18, 83, Math.toRadians(180));
 			}
 		}
 		
@@ -486,10 +480,10 @@ public class Settings {
 			// From sample areas to shooting positions
 			public static final Pose CLOSE_LAUNCH_APPROACH_FAR = new Pose(67, 45);
 			public static final Pose PRESET_1_APPROACH = new Pose(63, 35);
-			public static final Pose FROM_PRESET2_TO_CLOSE = new Pose(64, 56);
+			public static final Pose CLOSE_TO_PRESET_2 = new Pose(64, 56);
+			
 			public static final Pose PRESET_2_APPROACH = new Pose(62, 59);
 			
-			public static final Pose FROM_PRESET3_TO_CLOSE = new Pose(41, 81);
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
 		}
 		
@@ -522,7 +516,7 @@ public class Settings {
 	
 	public static class Autonomous {
 		public static double BALL_INTAKE_WAIT_S = 0.1;
-		public static double SLOW_SPEED = 0.25;
+		public static double SLOW_SPEED = 0.4;
 		public static double LAUNCH_STABILITY_WAIT_S = 0.3;
 		public static double MAX_ACTION_TIME_S = 4.5;
 		

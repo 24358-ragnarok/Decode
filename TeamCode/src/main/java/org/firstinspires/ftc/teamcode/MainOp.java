@@ -89,7 +89,7 @@ public class MainOp extends OpMode {
 	@Override
 	public final void loop() {
 		logging.clearDynamic();
-		
+
 		mechanisms.update();
 
 		processControllerInputs();
@@ -125,12 +125,12 @@ public class MainOp extends OpMode {
 		double d = mainController.getProcessedDrive();
 		double s = mainController.getProcessedStrafe();
 		double r = mainController.getProcessedRotation();
-//		double[] throttledValues = slewThrottle.throttled(drive, strafe, rotate);
-//		double throttledDrive = throttledValues[0];
-//		double throttledStrafe = throttledValues[1];
-//		double throttledRotate = throttledValues[2];
-//		logging.addData("REAL DRIVE", d);
-//		logging.addData("SMOOTH DRIVE", throttledDrive);
+		// double[] throttledValues = slewThrottle.throttled(drive, strafe, rotate);
+		// double throttledDrive = throttledValues[0];
+		// double throttledStrafe = throttledValues[1];
+		// double throttledRotate = throttledValues[2];
+		// logging.addData("REAL DRIVE", d);
+		// logging.addData("SMOOTH DRIVE", throttledDrive);
 
 		if (mainController.wasJustPressed(Controller.Action.TOGGLE_CENTRICITY)) {
 			mechanisms.ifValid(mechanisms.drivetrain, Drivetrain::toggleCentricity);
@@ -187,12 +187,12 @@ public class MainOp extends OpMode {
 			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::reverse);
 		}
 		if (subController.wasJustPressed(Controller.Action.OVERRIDE_BALL_DETECTION)) {
-			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::openEntrance);
+			// Start intake to pull balls in (entrance wheel removed)
+			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::startIntake);
 		}
 		if (subController.getProcessedValue(Controller.Action.OVERRIDE_CLEAR) > 0.0) {
 			mechanisms.ifValid(mechanisms.get(SingleWheelTransfer.class), SingleWheelTransfer::clearEntrance);
 		}
-		
 		
 		// Intake & Transfer
 		if (subController.wasJustPressed(Controller.Action.INTAKE_IN)) {
@@ -276,7 +276,6 @@ public class MainOp extends OpMode {
 			
 			logging.addDataLazy("Belt RPM", launcher::speed);
 		});
-		
 		
 		// Launcher mechanism status
 		mechanisms.ifValid(mechanisms.get(HorizontalLauncher.class), launcher -> {

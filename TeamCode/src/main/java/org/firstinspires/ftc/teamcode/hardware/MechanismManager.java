@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
@@ -62,7 +61,7 @@ public class MechanismManager {
 		// Save helpers
 		limelightManager = ll;
 		trajectoryEngine = traj;
-		
+
 		// Now that we've built all of the systems, begin caching system reads for
 		// efficiency
 		for (LynxModule hub : allHubs) {
@@ -76,7 +75,10 @@ public class MechanismManager {
 			return null;
 		try {
 			DcMotorEx intakeMotor = Settings.Hardware.INTAKE_MOTOR.fromHardwareMap(hw);
-			return new FlywheelIntake(intakeMotor);
+			// Color sensor is now at the intake location
+			RevColorSensorV3 sensor = Settings.Hardware.TRANSFER_COLOR_SENSOR.fromHardwareMap(hw);
+			ColorSensor color = new ColorSensor(sensor);
+			return new FlywheelIntake(intakeMotor, color);
 		} catch (Exception e) {
 			return null;
 		}
@@ -87,12 +89,9 @@ public class MechanismManager {
 			return null;
 		
 		CRServo transferWheel = Settings.Hardware.TRANSFER_WHEEL_SERVO.fromHardwareMap(hw);
-		CRServo entranceWheel = Settings.Hardware.TRANSFER_ENTRANCE_WHEEL.fromHardwareMap(hw);
-		ServoImplEx exitWheel = Settings.Hardware.TRANSFER_EXIT_KICKER.fromHardwareMap(hw);
-		RevColorSensorV3 sensor = Settings.Hardware.TRANSFER_COLOR_SENSOR.fromHardwareMap(hw);
-		ColorSensor color = new ColorSensor(sensor);
-		// ColorRangefinder color = new ColorRangefinder(hw);
-		return new SingleWheelTransfer(transferWheel, entranceWheel, exitWheel, color, intake);
+		CRServo exitWheel = Settings.Hardware.TRANSFER_EXIT_KICKER.fromHardwareMap(hw);
+		// Color sensor and entrance wheel removed - color sensor is now in intake
+		return new SingleWheelTransfer(transferWheel, exitWheel, intake);
 
 	}
 

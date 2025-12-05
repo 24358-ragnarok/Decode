@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.autonomous.actions.PrepareLaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SlowLinearPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SplinedPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.StopIntakeAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.TransferAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.WaitAction;
 import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
@@ -73,15 +74,18 @@ public class SequenceBuilder {
 						Settings.Positions.ControlPoints.PRESET_1_APPROACH)
 				.startIntake()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_1, "Grab Preset 1 Ball 1")
-				.overrideIntakeIn()
+				.transfer()
+				
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab Preset 1 Ball 2")
-				.overrideIntakeIn()
+				.transfer()
+				
 				.wait(BALL_INTAKE_WAIT_S)
-				.moveSlowlyTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
-				.overrideIntakeIn()
+				.moveTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
+				.transfer()
+				
 				.wait(BALL_INTAKE_WAIT_S)
-				.overrideTransferStateFull()
+				
 				.stopIntake()
 				
 				// Launch ball set I
@@ -89,6 +93,7 @@ public class SequenceBuilder {
 				.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
 						Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
 				.wait(LAUNCH_STABILITY_WAIT_S)
+				.overrideTransferStateFull()
 				.launch()
 				
 				// Get ball set II
@@ -98,21 +103,25 @@ public class SequenceBuilder {
 						Settings.Positions.ControlPoints.PRESET_2_APPROACH)
 				.startIntake()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
-				.overrideIntakeIn()
+				.transfer()
+				
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
-				.overrideIntakeIn()
+				.transfer()
+				
 				.wait(BALL_INTAKE_WAIT_S)
-				.moveSlowlyTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
-				.overrideIntakeIn()
+				.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
+				.transfer()
+				
 				.wait(BALL_INTAKE_WAIT_S)
-				.overrideTransferStateFull()
+				
 				.stopIntake()
 				
 				// Launch ball set II
 				.prepLaunch()
 				.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preset2")
 				.wait(LAUNCH_STABILITY_WAIT_S)
+				.overrideTransferStateFull()
 				.launch()
 				
 				// Park
@@ -138,45 +147,51 @@ public class SequenceBuilder {
 				.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
 				.startIntake()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_1, "Grab1 Preset3")
-				.overrideIntakeIn()
+				.transfer()
+				
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_2, "Grab2 Preset3")
-				.overrideIntakeIn()
+				.transfer()
+				
 				.wait(BALL_INTAKE_WAIT_S)
-				.moveSlowlyTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
-				.overrideIntakeIn()
+				.moveTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
+				.transfer()
+				
 				.wait(BALL_INTAKE_WAIT_S)
-				.overrideTransferStateFull()
+				
 				.stopIntake()
 				
 				// Launch ball set I
 				.prepLaunch()
-				.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-						Settings.Positions.ControlPoints.FROM_PRESET3_TO_CLOSE, "Launch Preset3")
+				.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preset3")
 				.wait(LAUNCH_STABILITY_WAIT_S)
+				.overrideTransferStateFull()
 				.launch()
 				
 				// Get ball set II (Preset2 for close sequence)
 				.clearIntake()
-				.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
+				.moveCurveToVia(Settings.Positions.Samples.Preset2.PREP, Settings.Positions.ControlPoints.CLOSE_TO_PRESET_2, "Prep Preset2")
 				.startIntake()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
-				.overrideIntakeIn()
+				.transfer()
+				
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
-				.overrideIntakeIn()
+				.transfer()
+				
 				.wait(BALL_INTAKE_WAIT_S)
-				.moveSlowlyTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
-				.overrideIntakeIn()
+				.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
+				.transfer()
+				
 				.wait(BALL_INTAKE_WAIT_S)
-				.overrideTransferStateFull()
+				
 				.stopIntake()
 				
 				// Launch ball set II
 				.prepLaunch()
-				.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-						Settings.Positions.ControlPoints.FROM_PRESET2_TO_CLOSE, "Launch Preset2")
+				.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preset2")
 				.wait(LAUNCH_STABILITY_WAIT_S)
+				.overrideTransferStateFull()
 				.launch()
 				
 				// Park
@@ -300,6 +315,11 @@ public class SequenceBuilder {
 	 */
 	public SequenceBuilder stopIntake() {
 		sequence.addAction(new StopIntakeAction());
+		return this;
+	}
+	
+	public SequenceBuilder transfer() {
+		sequence.addAction(new TransferAction());
 		return this;
 	}
 	

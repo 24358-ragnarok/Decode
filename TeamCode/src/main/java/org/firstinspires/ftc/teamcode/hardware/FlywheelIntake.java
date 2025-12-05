@@ -1,27 +1,55 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.BALL_TRAVEL_TIME_MS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.COLOR_DETECTION_DEBOUNCE_MS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.SPEED;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.configuration.MatchSettings;
+import org.firstinspires.ftc.teamcode.software.ColorSensor;
+
 /**
  * FlywheelIntake controls the robot's intake mechanism using a flywheel motor.
  * Supports intake, outtake, and stop operations with state tracking.
+ * <p>
+ * Also manages color detection at the intake location. When intaking, polls the
+ * color sensor with debounce and notifies the transfer system of detected balls
+ * with a travel time delay to account for physical movement from intake to
+ * transfer.
  */
 public class FlywheelIntake extends Mechanism {
 	private final DcMotorEx intakeMotor;
+	private final ColorSensor colorSensor;
 	public IntakeState state;
-	
+	private SingleWheelTransfer transfer; // Set by transfer during construction
+	// Color detection state
+	private long lastDetectionTimeMs = 0;
+	private MatchSettings.ArtifactColor lastDetectedColor = MatchSettings.ArtifactColor.UNKNOWN;
+
 	/**
 	 * Creates a new FlywheelIntake instance.
 	 *
 	 * @param intakeMotor The DC motor that controls the intake flywheel
+	 * @param colorSensor The color sensor at the intake location
 	 */
-	public FlywheelIntake(DcMotorEx intakeMotor) {
+	public FlywheelIntake(DcMotorEx intakeMotor, ColorSensor colorSensor) {
 		this.intakeMotor = intakeMotor;
+		this.colorSensor = colorSensor;
 		this.state = IntakeState.STOPPED;
+		if (colorSensor != null) {
+			colorSensor.init();
+		}
 	}
 	
+	/**
+	 * Sets the transfer mechanism reference for ball registration callbacks.
+	 * Called by SingleWheelTransfer during construction.
+	 */
+	void setTransfer(SingleWheelTransfer transfer) {
+		this.transfer = transfer;
+	}
+
 	/**
 	 * Starts the intake motor to pull artifacts in.
 	 */
@@ -29,7 +57,7 @@ public class FlywheelIntake extends Mechanism {
 		state = IntakeState.IN;
 		intakeMotor.setPower(SPEED);
 	}
-	
+
 	/**
 	 * Reverses the intake motor to push artifacts out.
 	 */
@@ -77,11 +105,28 @@ public class FlywheelIntake extends Mechanism {
 	}
 	
 	/**
-	 * Updates the intake mechanism. Currently no periodic updates needed.
+	 * Updates the intake mechanism. Polls color sensor during intake with debounce.
 	 */
 	@Override
 	public void update() {
-		// No periodic updates required for this mechanism
+		// Poll color sensor only when actively intaking
+		if (state == IntakeState.IN && colorSensor != null && transfer != null) {
+			long now = System.currentTimeMillis();
+			
+			// Check if enough time has passed since last detection (debounce)
+			if (now - lastDetectionTimeMs >= COLOR_DETECTION_DEBOUNCE_MS) {
+				MatchSettings.ArtifactColor detected = colorSensor.getArtifactColor();
+				
+				// Only register if we detect a valid color
+				if (detected != MatchSettings.ArtifactColor.UNKNOWN) {
+					lastDetectionTimeMs = now;
+					lastDetectedColor = detected;
+					
+					// Register the ball with the transfer, accounting for travel time
+					transfer.registerBallFromIntake(detected, now + BALL_TRAVEL_TIME_MS);
+				}
+			}
+		}
 	}
 	
 	/**

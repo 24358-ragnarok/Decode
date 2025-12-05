@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -29,7 +30,7 @@ public class OuttakeTest extends LinearOpMode {
 	private HorizontalLauncher.SyncBelt syncBelt;
 	private DcMotorEx rightLauncherMotor;
 	private DcMotorEx leftLauncherMotor;
-	private ServoImplEx kickerServo;
+	private CRServo kickerServo;
 	private ServoImplEx pitchServo;
 	private IMU imu; // The Inertial Measurement Unit
 	private double commandedAngle = Settings.Launcher.DEFAULT_PITCH_ANGLE;
@@ -47,7 +48,7 @@ public class OuttakeTest extends LinearOpMode {
 		pitchServo = Settings.Hardware.LAUNCHER_PITCH_SERVO.fromHardwareMap(hardwareMap);
 		pitchServo.setPosition(commandedAngle);
 		kickerServo = Settings.Hardware.TRANSFER_EXIT_KICKER.fromHardwareMap(hardwareMap);
-		kickerServo.setPosition(Settings.Transfer.EXIT_LOCK_POSITION);
+		kickerServo.setPower(Settings.Transfer.EXIT_HOLD_POWER);
 		
 		telemetry.addLine("✅ Initialization Complete");
 		telemetry.addLine("Controls:");
@@ -75,9 +76,9 @@ public class OuttakeTest extends LinearOpMode {
 				commandedRPM += 5;
 			}
 			if (gamepad1.right_trigger > 0.1) {
-				kickerServo.setPosition(Settings.Transfer.EXIT_KICK_POSITION);
+				kickerServo.setPower(Settings.Transfer.EXIT_FIRE_POWER);
 			} else {
-				kickerServo.setPosition(Settings.Transfer.EXIT_LOCK_POSITION);
+				kickerServo.setPower(Settings.Transfer.EXIT_HOLD_POWER);
 			}
 			
 			commandedRPM = Math.max(0, Math.min(6000, commandedRPM));
