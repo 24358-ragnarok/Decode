@@ -72,6 +72,11 @@ public class LaunchAction implements AutonomousAction {
 				break;
 			
 			case ADVANCING_BALL:
+				if (launchCount == 0) {
+					// we're good to go probably
+					state = State.WAITING_TO_FIRE;
+					break;
+				}
 				// Check if transfer is empty and done with previous launch
 				if (launchCount > 2 && System.currentTimeMillis() - lastFireTimeMs > EXIT_FIRE_DURATION_MS) {
 					state = State.COMPLETE;
@@ -80,14 +85,13 @@ public class LaunchAction implements AutonomousAction {
 				
 				// With CR servo, no reset time needed - can advance immediately after fire duration
 				if (System.currentTimeMillis() - lastFireTimeMs > EXIT_FIRE_DURATION_MS) {
-					transfer.moveNextBallToKicker();
-//					transfer.forceOpenEntrance();
+					transfer.advance();
 					state = State.WAITING_TO_FIRE;
 				}
 				break;
 			
 			case WAITING_TO_FIRE:
-				if (transfer.canFire()) {
+				if (!transfer.isTransferWheelRunning()) {
 					state = State.FIRING;
 				}
 				if (launchCount > 2) {

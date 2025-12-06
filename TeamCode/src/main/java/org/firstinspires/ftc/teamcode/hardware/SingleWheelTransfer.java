@@ -503,7 +503,7 @@ public final class SingleWheelTransfer extends Mechanism {
 	}
 	
 	public boolean isTransferWheelRunning() {
-		return transferWheelRunning;
+		return transferWheelRunning && pendingShifts != 0;
 	}
 	
 	public boolean isExitWheelFiring() {

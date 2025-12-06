@@ -174,10 +174,10 @@ public class Settings {
 		// Exit wheel settings (CR servo at kicker position)
 		public static final double EXIT_FIRE_POWER = 0.0; // Power when firing ball out
 		public static final double EXIT_HOLD_POWER = 1.0; // Power to hold closed (0 = stopped)
-		public static final long EXIT_FIRE_DURATION_MS = 300; // How long to spin wheel to fire one ball
+		public static final long EXIT_FIRE_DURATION_MS = 250; // How long to spin wheel to fire one ball
 		
 		// Automatic advance settings
-		public static final boolean AUTO_ADVANCE_ENABLED = true; // Enable automatic ball advancement
+		public static final boolean AUTO_ADVANCE_ENABLED = false; // Enable automatic ball advancement
 		public static final long AUTO_ADVANCE_GRACE_PERIOD_MS = 500; // Wait time after detection before advancing
 	}
 	
@@ -203,7 +203,7 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Launcher {
-		public static long BELT_SPINUP_TIME_MS = 650;
+		public static long BELT_SPINUP_TIME_MS = 500;
 		public static double BELT_SYNC_KP = 0.1; // Proportional gain for synchronizing belt speeds
 		// Pitch servo calibration (physical limits)
 		public static double PITCH_SERVO_AT_MIN = 0.692; // Servo position at minimum pitch angle

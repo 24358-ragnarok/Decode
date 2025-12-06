@@ -77,15 +77,17 @@ public class SequenceBuilder {
 				.transfer()
 				
 				.wait(BALL_INTAKE_WAIT_S)
+				.transfer()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab Preset 1 Ball 2")
 				.transfer()
 				
 				.wait(BALL_INTAKE_WAIT_S)
+				.transfer()
 				.moveTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
 				.transfer()
 				
 				.wait(BALL_INTAKE_WAIT_S)
-				
+				.transfer()
 				.stopIntake()
 				
 				// Launch ball set I
@@ -106,15 +108,17 @@ public class SequenceBuilder {
 				.transfer()
 				
 				.wait(BALL_INTAKE_WAIT_S)
+				.transfer()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
 				.transfer()
 				
 				.wait(BALL_INTAKE_WAIT_S)
+				.transfer()
 				.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
 				.transfer()
 				
 				.wait(BALL_INTAKE_WAIT_S)
-				
+				.transfer()
 				.stopIntake()
 				
 				// Launch ball set II
@@ -150,15 +154,17 @@ public class SequenceBuilder {
 				.transfer()
 				
 				.wait(BALL_INTAKE_WAIT_S)
+				.transfer()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_2, "Grab2 Preset3")
 				.transfer()
 				
 				.wait(BALL_INTAKE_WAIT_S)
+				.transfer()
 				.moveTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
 				.transfer()
 				
 				.wait(BALL_INTAKE_WAIT_S)
-				
+				.transfer()
 				.stopIntake()
 				
 				// Launch ball set I
