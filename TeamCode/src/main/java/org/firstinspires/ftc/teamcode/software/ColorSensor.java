@@ -49,20 +49,20 @@ public class ColorSensor {
 		double greenConfidence = computeDistance(rgbValues, GREEN_TARGET);
 		double purpleConfidence = computeDistance(rgbValues, PURPLE_TARGET);
 		
-		if (greenConfidence < purpleConfidence && greenConfidence < CONFIDENCE_THRESHOLD) {
+		/** if (greenConfidence < purpleConfidence && greenConfidence < CONFIDENCE_THRESHOLD) {
 			return MatchSettings.ArtifactColor.GREEN;
 		} else if (purpleConfidence < greenConfidence && purpleConfidence < CONFIDENCE_THRESHOLD) {
 			return MatchSettings.ArtifactColor.PURPLE;
-		} else {
-			if (colorSensor.getDistance(DistanceUnit.INCH) < 2.7) {
-				// we cannot sort;
-				// our color sensor sucks;
-				// the distance is usually accurate enough;
-				// just return purple.
-				return MatchSettings.ArtifactColor.PURPLE;
-			}
-			return MatchSettings.ArtifactColor.UNKNOWN;
+		} else { **/
+		if (colorSensor.getDistance(DistanceUnit.INCH) < 2.3) {
+			// we cannot sort;
+			// our color sensor sucks;
+			// the distance is usually accurate enough;
+			// just return purple.
+			return MatchSettings.ArtifactColor.PURPLE;
 		}
+		return MatchSettings.ArtifactColor.UNKNOWN;
+		//Ï}
 	}
 	
 	/**
