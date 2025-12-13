@@ -5,16 +5,16 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 import org.firstinspires.ftc.teamcode.software.game.Artifact;
 
 public class DualBallCompartment extends Mechanism {
-	private final Compartment left;
-	private final Compartment right;
+	private final Cartridge left;
+	private final Cartridge right;
 	private final MechanismManager mechanisms;
 	
 	public DualBallCompartment(MechanismManager mechanisms,
 	                           ServoImplEx compartmentLeft,
 	                           ServoImplEx compartmentRight) {
 		this.mechanisms = mechanisms;
-		this.left = new Compartment(compartmentLeft);
-		this.right = new Compartment(compartmentRight);
+		this.left = new Cartridge(compartmentLeft);
+		this.right = new Cartridge(compartmentRight);
 	}
 	
 	public final void start() {
@@ -34,12 +34,12 @@ public class DualBallCompartment extends Mechanism {
 	}
 	
 	
-	public class Compartment extends Mechanism {
+	public static class Cartridge extends Mechanism {
 		public Artifact stored;
 		public ServoImplEx servo;
 		public double activationTime;
 		
-		public Compartment(ServoImplEx servo) {
+		public Cartridge(ServoImplEx servo) {
 			this.servo = servo;
 			stored = Artifact.NONE;
 			activationTime = System.currentTimeMillis();
@@ -65,7 +65,7 @@ public class DualBallCompartment extends Mechanism {
 		
 		@Override
 		public void start() {
-			servo.setPosition(1);
+			servo.setPosition(1); // lock by default
 		}
 		
 		@Override

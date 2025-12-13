@@ -254,7 +254,6 @@ public class MainOp extends OpMode {
 		
 		// Launcher mechanism status
 		mechanisms.ifValid(mechanisms.get(PairedLauncher.class), launcher -> {
-			logging.addDataLazy("Launch Ready", launcher::okayToLaunch);
 			logging.addDataLazy("Current Pitch°", () -> String.format("%.2f", launcher.getPitch()));
 		});
 		

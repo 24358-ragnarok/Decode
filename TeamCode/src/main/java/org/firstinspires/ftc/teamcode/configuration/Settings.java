@@ -148,31 +148,14 @@ public class Settings {
 		public static double STOPPED_SPEED = 0.0;
 		public static long COLOR_SENSOR_DEBOUNCE_TIME = 500;
 	}
-
+	
 	/**
-	 * Settings for the Spindex (indexer/sorter) mechanism.
-	 */
-	@Configurable
-	public static class Spindex {
-		public static double[] SLOT_INTAKE_POSITIONS = {0.10, 0.43, 0.77 }; // Calibrated servo positions for slots at
-		// intake
-		public static double EXIT_OFFSET = 0.25; // Offset from intake to exit alignment
-		public static double RAPID_FIRE_COOLDOWN_MS = 200;
-		public static long EJECT_EXIT_TIME_MS = 200; // ms for ball to fully leave the spindex after servo opens
-		public static double EXIT_SERVO_CLOSED_POSITION = 0.5;
-		public static double EXIT_SERVO_OPEN_POSITION = 0.0;
-		public static double INTAKE_SERVO_CLOSED_POSITION = 1.0;
-		public static double INTAKE_SERVO_OPEN_POSITION = 0.0;
-		public static double TOLERANCE = 5.0 / 360.0; // how close a slot must be to the exit to launch
-	}
-
-	/**
-	 * Settings for the transfer mechanism with CR management wheels.
+	 * Settings for the main transfer wheel.
 	 */
 	public static class Transfer {
-		// Main transfer wheel settings
 		public static final double SPEED = 1.0;
 		public static final int FIRING_POSITION_TICKS = 1000; // TODO
+		public static final double INCREMENT_MS = 300;
 	}
 	
 	/**
@@ -197,9 +180,9 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Launcher {
-		public static long BELT_SPINUP_TIME_MS = 500;
-		public static double WALL_OPEN_POS = 1.0;
-		public static double WALL_CLOSED_POS = 0.5;
+		public static long BELT_SPINUP_TIME_MS = 400;
+		public static double CARTRIDGE_OPEN_POS = 1.0;
+		public static double CARTRIDGE_CLOSED_POS = 0.0;
 		public static long TICKS_PER_REVOLUTION = 28;
 		public static long MAX_SPEED_ERROR = 100;
 		public static long EXIT_FIRE_DURATION_MS = 250;
@@ -210,10 +193,8 @@ public class Settings {
 		public static double PITCH_SERVO_AT_MIN = 0.692; // Servo position at minimum pitch angle
 		public static double PITCH_SERVO_AT_MAX = 0.415; // Servo position at maximum pitch angle
 		public static double DEFAULT_PITCH_ANGLE = 46.0; // degrees from horizontal
-		// Pitch angle window (absolute angles from horizontal, for launch physics)
 		public static double PITCH_MIN_ANGLE = 30.0; // Minimum pitch angle in degrees (horizontal)
 		public static double PITCH_MAX_ANGLE = 80.0; // Maximum pitch angle in degrees (straight up, 90° total window)
-		public static boolean CORRECT_PITCH = true;
 		
 		
 		/**
@@ -292,16 +273,6 @@ public class Settings {
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 53.0; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 3150.0; // Wheel RPM for far position
-		
-		/**
-		 * Alignment tolerances.
-		 * ROTATIONAL error refers to the chassis rotation relative to the goal.
-		 * YAW refers to the launcher horizontal angle
-		 * PITCH refers to the launcher vertical angle
-		 */
-		public static double MAX_ROTATIONAL_ERROR = Math.toRadians(2);
-		public static double MAX_YAW_ERROR = 3.0; // degrees
-		public static double MAX_PITCH_ERROR = 0.5; // degrees
 		
 	}
 	
