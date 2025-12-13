@@ -31,6 +31,7 @@ import java.util.function.Consumer;
  * - Centralized lifecycle management (init, update, stop)
  * - Automatic dependency resolution between mechanisms
  */
+@SuppressWarnings("SpellCheckingInspection")
 public class MechanismManager {
 	public final Drivetrain drivetrain;
 	public final Mechanism[] mechanismArray;
@@ -158,6 +159,7 @@ public class MechanismManager {
 	/**
 	 * Updates all available mechanisms and the drivetrain.
 	 */
+	@SuppressWarnings("MethodWithMultipleLoops")
 	public void update() {
 		// prepare for new hardware reads
 		for (LynxModule hub : allHubs) {

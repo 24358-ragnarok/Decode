@@ -34,6 +34,7 @@ public class DualBallCompartment extends Mechanism {
 	}
 	
 	
+	@SuppressWarnings("InnerClassMayBeStatic")
 	public class Compartment extends Mechanism {
 		public Artifact stored;
 		public ServoImplEx servo;

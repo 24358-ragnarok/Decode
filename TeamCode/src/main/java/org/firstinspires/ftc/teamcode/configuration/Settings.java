@@ -193,7 +193,6 @@ public class Settings {
 	 * <p>
 	 * - Physical servo calibration points map these angle ranges to servo positions
 	 *
-	 * @noinspection PointlessBooleanExpression
 	 */
 	@Configurable
 	public static class Launcher {
@@ -341,6 +340,7 @@ public class Settings {
 		/**
 		 * Default/reset positions.
 		 */
+		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class Default {
 			public static final Pose RESET = new Pose(134, 7, Math.toRadians(90)); // TODO set this to corner instead
 		}
@@ -348,6 +348,7 @@ public class Settings {
 		/**
 		 * Goal positions for scoring.
 		 */
+		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class Goals {
 			public static final Pose RED_GOAL = new Pose(130.0, 130.0, Math.toRadians(225));
 			public static final Pose BLUE_GOAL = new Pose(14.0, 130.0, Math.toRadians(315));
@@ -356,6 +357,7 @@ public class Settings {
 		/**
 		 * Launch zone boundaries for field awareness.
 		 */
+		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class LaunchZones {
 			// Far launch zone (closer to wall)
 			public static final Pose FAR_FRONT_CORNER = new Pose(72, 24);
@@ -372,6 +374,7 @@ public class Settings {
 		 * TeleOp operational positions (BLUE alliance reference).
 		 * These are used for goto commands during driver control.
 		 */
+		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 86, Math.toRadians(135));
 			public static final Pose FAR_SHOOT = new Pose(60, 15, Math.toRadians(115));
@@ -383,6 +386,7 @@ public class Settings {
 		/**
 		 * Autonomous starting positions.
 		 */
+		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class AutoStart {
 			public static final Pose FAR = new Pose(56.25, 7.0, Math.toRadians(90));
 			public static final Pose CLOSE = new Pose(21.84, 124.58, Math.toRadians(145));
@@ -391,6 +395,7 @@ public class Settings {
 		/**
 		 * Sample pickup locations organized by preset groups.
 		 */
+		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class Samples {
 			
 			/**
@@ -427,6 +432,7 @@ public class Settings {
 		/**
 		 * Control points for curved autonomous paths.
 		 */
+		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class ControlPoints {
 			// From sample areas to shooting positions
 			public static final Pose CLOSE_LAUNCH_APPROACH_FAR = new Pose(67, 45);
@@ -441,6 +447,7 @@ public class Settings {
 		/**
 		 * Parking positions for end of autonomous.
 		 */
+		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class Park {
 			public static final Pose FAR = Samples.Preset1.GRAB_1; // Reuse a safe position
 			public static final Pose CLOSE = Samples.Preset3.GRAB_1;
