@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.software.game;
 
 import androidx.annotation.NonNull;
 
+import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
+
 import java.util.Objects;
 
 public class Artifact {
@@ -10,7 +12,7 @@ public class Artifact {
 	public static final Artifact PURPLE = new Artifact(Color.PURPLE, 0);
 	public static final Artifact NONE = new Artifact(Color.NONE, 0);
 	
-	public int transferTicksWhenAtEntrance;
+	public double transferTicksWhenAtEntrance;
 	public Color color;
 	
 	// Default constructor for an empty artifact
@@ -20,9 +22,13 @@ public class Artifact {
 	}
 	
 	// Constructor to set color and ticks (used when reading from configuration or placing)
-	public Artifact(Color color, int ticks) {
+	public Artifact(Color color, double ticks) {
 		this.color = color;
 		this.transferTicksWhenAtEntrance = ticks;
+	}
+	
+	public double calculatedTicks(VerticalWheelTransfer transfer) {
+		return transfer.getTicks() - transferTicksWhenAtEntrance;
 	}
 	
 	@NonNull
@@ -30,9 +36,9 @@ public class Artifact {
 	public String toString() {
 		if (color == Color.NONE) return "NONE";
 		return String.format(
-				"%s ball which started at %.2f ticks",
+				"%s ball which started at %.2d ticks",
 				color.name().charAt(0) + color.name().substring(1).toLowerCase(),
-				(double) transferTicksWhenAtEntrance
+				transferTicksWhenAtEntrance
 		);
 	}
 	

@@ -75,8 +75,8 @@ public class MechanismManager {
 			ColorRangefinder color1 = new ColorRangefinder(
 					hardwareMap, Settings.Hardware.COLOR_RANGEFINDER_1[0], Settings.Hardware.COLOR_RANGEFINDER_1[1]);
 			ColorRangefinder[] array = {color1};
-			ColorUnifier color = new ColorUnifier(array);
-			return new FlexVectorIntake(intakeMotor, color);
+			ColorUnifier color = new ColorUnifier(this, array);
+			return new FlexVectorIntake(this, intakeMotor, color);
 		} catch (Exception e) {
 			return null;
 		}

@@ -154,8 +154,9 @@ public class Settings {
 	 */
 	public static class Transfer {
 		public static final double SPEED = 1.0;
-		public static final int FIRING_POSITION_TICKS = 1000; // TODO
-		public static final double INCREMENT_MS = 300;
+		public static final double TICKS_PER_REVOLUTION = 384.5 / 2; // 2:1 gear ratio
+		public static final double FIRING_POSITION_TICKS = TICKS_PER_REVOLUTION / 2; // TODO tune; about half a total rotation to bring up next
+		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS; // TODO tune; get a ball out of the way back down etc
 	}
 	
 	/**

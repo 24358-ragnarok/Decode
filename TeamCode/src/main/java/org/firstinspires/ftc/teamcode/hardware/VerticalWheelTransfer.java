@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.FIRING_POSITION_TICKS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.INCREMENT_TICKS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.SPEED;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -40,7 +41,7 @@ import java.util.Arrays;
 public class VerticalWheelTransfer extends Mechanism {
 	private final DcMotorEx motor;
 	public Artifact[] artifacts;
-	private int targetTicks;
+	private double targetTicks;
 	
 	public VerticalWheelTransfer(DcMotorEx motor) {
 		this.motor = motor;
@@ -64,7 +65,7 @@ public class VerticalWheelTransfer extends Mechanism {
 	
 	@Override
 	public void update() {
-		motor.setTargetPosition(targetTicks);
+		motor.setTargetPosition((int) targetTicks);
 	}
 	
 	@Override
@@ -78,14 +79,14 @@ public class VerticalWheelTransfer extends Mechanism {
 	 * and extend the run time accordingly (non-destructive).
 	 */
 	public void advance() {
-		targetTicks += 100; // TODO convert ticks to rotation and use that as an input
+		targetTicks += INCREMENT_TICKS; // TODO convert ticks to rotation and use that as an input
 	}
 	
 	public void reverse() {
-		targetTicks -= 100;
+		targetTicks -= INCREMENT_TICKS;
 	}
 	
-	public void move(int ticks) {
+	public void move(double ticks) {
 		targetTicks += ticks;
 	}
 	
@@ -105,12 +106,12 @@ public class VerticalWheelTransfer extends Mechanism {
 	public void moveNextArtifactToLauncher() {
 		// find the artifact who's closest to the end, and then move the motor so that it gets to the end
 		double greatest = Double.NaN;
-		int greatestTicks = 0;
+		double greatestTicks = 0;
 		for (int i = 0; i < artifacts.length - 1; i++) {
 			if (artifacts[i].color == Artifact.Color.NONE) {
 				continue;
 			}
-			int ticksTraveled = motor.getCurrentPosition() - artifacts[i].transferTicksWhenAtEntrance;
+			double ticksTraveled = motor.getCurrentPosition() - artifacts[i].transferTicksWhenAtEntrance;
 			if (Math.abs(ticksTraveled) > greatestTicks) {
 				greatestTicks = Math.abs(ticksTraveled);
 			}
@@ -124,7 +125,7 @@ public class VerticalWheelTransfer extends Mechanism {
 			if (artifacts[i].color == Artifact.Color.NONE) {
 				continue;
 			}
-			int ticksTraveled = motor.getCurrentPosition() - artifacts[i].transferTicksWhenAtEntrance;
+			double ticksTraveled = motor.getCurrentPosition() - artifacts[i].transferTicksWhenAtEntrance;
 			if (ticksTraveled > FIRING_POSITION_TICKS) {
 				return true;
 			}
@@ -146,5 +147,9 @@ public class VerticalWheelTransfer extends Mechanism {
 			}
 		}
 		return true;
+	}
+	
+	public int getTicks() {
+		return motor.getCurrentPosition();
 	}
 }
