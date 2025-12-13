@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.CARTRIDGE_CLOSED_POS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.CARTRIDGE_OPEN_POS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.MAX_SPEED_ERROR;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.TICKS_PER_REVOLUTION;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.WALL_CLOSED_POS;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.WALL_OPEN_POS;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -48,9 +48,7 @@ public class PairedLauncher extends Mechanism {
 	 * logic.
 	 */
 	public static void setPitchDirect(ServoImplEx servo, double pitchDegrees) {
-		if (Settings.Launcher.CORRECT_PITCH) {
-			servo.setPosition(Settings.Launcher.pitchToServo(pitchDegrees));
-		}
+		servo.setPosition(Settings.Launcher.pitchToServo(pitchDegrees));
 	}
 	
 	/**
@@ -59,11 +57,7 @@ public class PairedLauncher extends Mechanism {
 	 * logic.
 	 */
 	public static double getPitchDirect(Servo servo) {
-		if (Settings.Launcher.CORRECT_PITCH) {
-			return Settings.Launcher.servoToPitch(servo.getPosition());
-		} else {
-			return Settings.Launcher.DEFAULT_PITCH_ANGLE; // Default launch angle
-		}
+		return Settings.Launcher.servoToPitch(servo.getPosition());
 	}
 	
 	/**
@@ -100,42 +94,15 @@ public class PairedLauncher extends Mechanism {
 		setPitch(solution.verticalOffsetDegrees);
 	}
 	
-	/**
-	 * Checks if all conditions are met for a successful launch.
-	 * <p>
-	 * Verifies:
-	 * - Target is detected by vision system
-	 * - Yaw is centered on target (horizontal offset within tolerance)
-	 * - Pitch servo has reached target launch angle
-	 * - Belt is spun up to target speed
-	 *
-	 * @return True if the launcher is aimed, up to speed, and ready to launch.
-	 */
-	public boolean okayToLaunch() {
-		double currentPitch = getPitch();
-		TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine.getAimingOffsets(
-				MatchState.getAllianceColor(), currentPitch);
-		
-		if (!solution.hasTarget) {
-			return false;
-		}
-		
-		// Check pitch alignment (servo has reached target angle)
-		double pitchError = Math.abs(currentPitch - solution.verticalOffsetDegrees);
-		boolean pitchAligned = pitchError < Settings.Aiming.MAX_PITCH_ERROR;
-		
-		
-		return pitchAligned && isAtSpeed();
-	}
 	
 	public void fire() {
-		leftServo.setPosition(WALL_OPEN_POS);
-		rightServo.setPosition(WALL_OPEN_POS);
+		leftServo.setPosition(CARTRIDGE_OPEN_POS);
+		rightServo.setPosition(CARTRIDGE_OPEN_POS);
 	}
 	
 	public void close() {
-		leftServo.setPosition(WALL_CLOSED_POS);
-		rightServo.setPosition(WALL_CLOSED_POS);
+		leftServo.setPosition(CARTRIDGE_CLOSED_POS);
+		rightServo.setPosition(CARTRIDGE_CLOSED_POS);
 	}
 	
 	/**
@@ -171,11 +138,7 @@ public class PairedLauncher extends Mechanism {
 	 * 0° = horizontal, 45° = 45° launch angle, 90° = straight up.
 	 */
 	public double getPitch() {
-		if (Settings.Launcher.CORRECT_PITCH) {
-			return Settings.Launcher.servoToPitch(verticalServo.getPosition());
-		} else {
-			return Settings.Launcher.DEFAULT_PITCH_ANGLE; // Default launch angle
-		}
+		return Settings.Launcher.servoToPitch(verticalServo.getPosition());
 	}
 	
 	/**
@@ -186,9 +149,7 @@ public class PairedLauncher extends Mechanism {
 	 * Clamping is handled by the conversion function.
 	 */
 	public void setPitch(double pitchDegrees) {
-		if (Settings.Launcher.CORRECT_PITCH) {
-			verticalServo.setPosition(Settings.Launcher.pitchToServo(pitchDegrees));
-		}
+		verticalServo.setPosition(Settings.Launcher.pitchToServo(pitchDegrees));
 	}
 	
 	// ========== Testing/Utility Methods ==========
