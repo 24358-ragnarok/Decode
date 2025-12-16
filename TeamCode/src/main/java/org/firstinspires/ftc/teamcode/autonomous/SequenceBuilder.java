@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.autonomous.actions.LaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LinearPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ParallelAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PrepareLaunchAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.ScanAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SlowLinearPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SplinedPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.StopIntakeAction;
@@ -53,6 +54,7 @@ public class SequenceBuilder {
 	 */
 	public static AutonomousSequence buildFarSequence() {
 		return new SequenceBuilder()
+				.scanObelisk()
 				// Launch preloads
 				.prepLaunch()
 				.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
@@ -110,6 +112,7 @@ public class SequenceBuilder {
 	 */
 	public static AutonomousSequence buildCloseSequence() {
 		return new SequenceBuilder()
+				.scanObelisk()
 				// Launch preload
 				.prepLaunch()
 				.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
@@ -245,7 +248,7 @@ public class SequenceBuilder {
 		sequence.addAction(new EndAtAction(finalPose));
 		return this;
 	}
-
+	
 	/**
 	 * Adds an action to start the intake.
 	 *
@@ -253,6 +256,16 @@ public class SequenceBuilder {
 	 */
 	public SequenceBuilder startIntake() {
 		sequence.addAction(new IntakeAction());
+		return this;
+	}
+	
+	/**
+	 * Adds an action to scan the Motif obelisk.
+	 *
+	 * @return this (for method chaining)
+	 */
+	public SequenceBuilder scanObelisk() {
+		sequence.addAction(new ScanAction());
 		return this;
 	}
 

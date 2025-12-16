@@ -318,9 +318,10 @@ public class Settings {
 		/**
 		 * Goal positions for scoring.
 		 */
-		public static class Goals {
+		public static class Towers {
 			public static final Pose RED_GOAL = new Pose(130.0, 130.0, Math.toRadians(225));
 			public static final Pose BLUE_GOAL = new Pose(14.0, 130.0, Math.toRadians(315));
+			public static final Pose OBELISK = new Pose(72.0, 150.0, Math.toRadians(0));
 		}
 		
 		/**

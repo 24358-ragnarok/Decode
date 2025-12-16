@@ -149,6 +149,7 @@ public class MainAuto extends OpMode {
 	 * Comprehensive telemetry logging - optimized with lazy evaluation.
 	 */
 	private void setupLogging() {
+		logging.addDataLazy("Classifier", MatchState::getClassifier);
 		logging.addDataLazy("Current Position", () -> mechanisms.drivetrain.follower.getPose());
 		logging.addDataLazy("Current Action", () -> autonomousSequence.getCurrentActionName());
 		logging.addDataLazy("Action", () -> {

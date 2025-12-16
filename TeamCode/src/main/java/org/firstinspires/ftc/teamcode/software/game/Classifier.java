@@ -41,6 +41,13 @@ public class Classifier {
 	}
 	
 	/**
+	 * build a classifier with an known motif and default empty state
+	 **/
+	public Classifier(Motif classifierMotif) {
+		this(classifierMotif, new Artifact[0]);
+	}
+	
+	/**
 	 * Factory method to create an empty Classifier for initial use.
 	 * Initializes with an UNKNOWN motif and zero balls stored.
 	 *
