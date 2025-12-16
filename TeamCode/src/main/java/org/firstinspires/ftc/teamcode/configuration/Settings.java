@@ -96,11 +96,9 @@ public class Settings {
 		public static final HardwareConfig LAUNCHER_LEFT = new HardwareConfig(DcMotorEx.class, "launcherLeft");
 		
 		public static final HardwareConfig LAUNCHER_PITCH_SERVO = new HardwareConfig(ServoImplEx.class,
-				"launcherPitch");
-		public static final HardwareConfig LAUNCHER_WALL_LEFT = new HardwareConfig(ServoImplEx.class,
-				"launcherWallRight");
-		public static final HardwareConfig LAUNCHER_WALL_RIGHT = new HardwareConfig(ServoImplEx.class,
-				"launcherWallLeft");
+				"pitch");
+		public static final HardwareConfig LAUNCHER_GATE = new HardwareConfig(ServoImplEx.class,
+				"gate");
 
 		// Transfer mechanism
 		public static final HardwareConfig TRANSFER_WHEEL_MOTOR = new HardwareConfig(DcMotorEx.class,
@@ -155,8 +153,8 @@ public class Settings {
 	public static class Transfer {
 		public static final double SPEED = 1.0;
 		public static final double TICKS_PER_REVOLUTION = 384.5 / 2; // 2:1 gear ratio
-		public static final double FIRING_POSITION_TICKS = TICKS_PER_REVOLUTION / 2; // TODO tune; about half a total rotation to bring up next
-		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS; // TODO tune; get a ball out of the way back down etc
+		public static final double FIRING_POSITION_TICKS = 500;
+		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 2;
 	}
 	
 	/**
@@ -182,8 +180,8 @@ public class Settings {
 	@Configurable
 	public static class Launcher {
 		public static long BELT_SPINUP_TIME_MS = 400;
-		public static double CARTRIDGE_OPEN_POS = 1.0;
-		public static double CARTRIDGE_CLOSED_POS = 0.0;
+		public static double GATE_FIRE_POSITION = 0.0;
+		public static double GATE_CLOSED_POSITION = 0.2;
 		public static long TICKS_PER_REVOLUTION = 28;
 		public static long MAX_SPEED_ERROR = 100;
 		public static long EXIT_FIRE_DURATION_MS = 250;
@@ -270,10 +268,10 @@ public class Settings {
 		 * These values are used when AIM is called based on which position is closer.
 		 */
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 55.0; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2600.0; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_RPM = 2600.0 * 3 / 2; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 53.0; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3150.0; // Wheel RPM for far position
+		public static double FAR_SHOOT_RPM = 3150.0 * 3 / 2; // Wheel RPM for far position
 		
 	}
 	
@@ -434,7 +432,7 @@ public class Settings {
 		public static boolean TRAJECTORY_ENGINE = true;
 		public static boolean LAUNCHER = TRAJECTORY_ENGINE && true;
 		
-		public static boolean COMPARTMENT = true;
+		public static boolean COMPARTMENT = false;
 	}
 	
 	public static class Autonomous {

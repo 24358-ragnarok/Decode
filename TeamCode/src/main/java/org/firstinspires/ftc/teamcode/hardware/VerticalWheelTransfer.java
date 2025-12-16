@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.SPE
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.software.game.Artifact;
 
@@ -45,8 +46,10 @@ public class VerticalWheelTransfer extends Mechanism {
 	
 	public VerticalWheelTransfer(DcMotorEx motor) {
 		this.motor = motor;
-		motor.setPower(SPEED);
+		motor.setTargetPosition(motor.getCurrentPosition());
 		motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		motor.setPower(SPEED);
+		motor.setDirection(DcMotorSimple.Direction.REVERSE);
 		artifacts = new Artifact[]{new Artifact(), new Artifact(), new Artifact()};
 		this.targetTicks = motor.getCurrentPosition();
 	}

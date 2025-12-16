@@ -167,13 +167,11 @@ public class MainOp extends OpMode {
 		
 		if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
 			mechanisms.ifValid(mechanisms.get(PairedLauncher.class), PairedLauncher::fire);
+		} else if (subController.wasJustReleased(Controller.Action.LAUNCH)) {
+			mechanisms.ifValid(mechanisms.get(PairedLauncher.class), PairedLauncher::close);
 		}
 		
-		if (subController.wasJustPressed(Controller.Action.AIM)) {
-			mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::moveNextArtifactToLauncher);
-		}
-		
-		if (subController.wasJustPressed(Controller.Action.OVERRIDE_ADVANCE)) {
+		if (subController.getProcessedValue(Controller.Action.OVERRIDE_ADVANCE) > 0) {
 			mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::advance);
 		}
 		if (subController.wasJustPressed(Controller.Action.OVERRIDE_REVERSE)) {

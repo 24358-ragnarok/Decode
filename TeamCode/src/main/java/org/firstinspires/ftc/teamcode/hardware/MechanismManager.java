@@ -114,9 +114,8 @@ public class MechanismManager {
 		DcMotorEx right = Settings.Hardware.LAUNCHER_RIGHT.fromHardwareMap(hardwareMap);
 		DcMotorEx left = Settings.Hardware.LAUNCHER_LEFT.fromHardwareMap(hardwareMap);
 		ServoImplEx vertical = Settings.Hardware.LAUNCHER_PITCH_SERVO.fromHardwareMap(hardwareMap);
-		ServoImplEx leftWall = Settings.Hardware.LAUNCHER_WALL_LEFT.fromHardwareMap(hardwareMap);
-		ServoImplEx rightWall = Settings.Hardware.LAUNCHER_WALL_RIGHT.fromHardwareMap(hardwareMap);
-		return new PairedLauncher(this, right, left, vertical, leftWall, rightWall);
+		ServoImplEx gate = Settings.Hardware.LAUNCHER_GATE.fromHardwareMap(hardwareMap);
+		return new PairedLauncher(this, right, left, vertical, gate);
 	}
 	
 	private DualBallCompartment createCompartment() {

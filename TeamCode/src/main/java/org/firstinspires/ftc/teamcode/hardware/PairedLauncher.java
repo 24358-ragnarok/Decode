@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.CARTRIDGE_CLOSED_POS;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.CARTRIDGE_OPEN_POS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_CLOSED_POSITION;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_FIRE_POSITION;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.MAX_SPEED_ERROR;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.TICKS_PER_REVOLUTION;
 
@@ -18,8 +18,7 @@ public class PairedLauncher extends Mechanism {
 	private final ServoImplEx verticalServo;
 	private final DcMotorEx rightMotor;
 	private final DcMotorEx leftMotor;
-	private final ServoImplEx leftServo;
-	private final ServoImplEx rightServo;
+	private final ServoImplEx gateServo;
 	private final MechanismManager mechanisms;
 	public double targetSpeedAngular = 0;
 	private LauncherState state = LauncherState.IDLE;
@@ -28,14 +27,13 @@ public class PairedLauncher extends Mechanism {
 			MechanismManager mechanisms,
 			DcMotorEx launcherRight,
 			DcMotorEx launcherLeft,
-			ServoImplEx verticalServo, ServoImplEx wallRight, ServoImplEx wallLeft) {
+			ServoImplEx verticalServo, ServoImplEx gate) {
 		this.mechanisms = mechanisms;
 		this.verticalServo = verticalServo;
 		
 		this.rightMotor = launcherRight;
 		this.leftMotor = launcherLeft;
-		this.rightServo = wallRight;
-		this.leftServo = wallLeft;
+		this.gateServo = gate;
 		
 		leftMotor.setDirection(DcMotor.Direction.REVERSE);
 		rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -96,13 +94,11 @@ public class PairedLauncher extends Mechanism {
 	
 	
 	public void fire() {
-		leftServo.setPosition(CARTRIDGE_OPEN_POS);
-		rightServo.setPosition(CARTRIDGE_OPEN_POS);
+		gateServo.setPosition(GATE_FIRE_POSITION);
 	}
 	
 	public void close() {
-		leftServo.setPosition(CARTRIDGE_CLOSED_POS);
-		rightServo.setPosition(CARTRIDGE_CLOSED_POS);
+		gateServo.setPosition(GATE_CLOSED_POSITION);
 	}
 	
 	/**
