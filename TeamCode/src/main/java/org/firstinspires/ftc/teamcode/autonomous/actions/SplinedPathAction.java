@@ -13,9 +13,9 @@ import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
  * Automatically generates control points for natural movement.
  */
 public class SplinedPathAction extends PathAction {
-
+	
 	private final Pose[] controlPoints;
-
+	
 	/**
 	 * Creates a splined path with explicit control points.
 	 *
@@ -35,7 +35,7 @@ public class SplinedPathAction extends PathAction {
 		super(targetPose, name);
 		this.controlPoints = controlPoints;
 	}
-
+	
 	/**
 	 * Creates a splined path with auto-generated control points.
 	 * The control point is placed at the midpoint between start and end.

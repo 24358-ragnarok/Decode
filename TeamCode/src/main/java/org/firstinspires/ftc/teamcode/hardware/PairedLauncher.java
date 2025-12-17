@@ -26,7 +26,7 @@ public class PairedLauncher extends Mechanism {
 	// Time-averaged velocity readings (exponential moving average)
 	private double averagedRightRPM = 0;
 	private double averagedLeftRPM = 0;
-
+	
 	public PairedLauncher(
 			MechanismManager mechanisms,
 			DcMotorEx launcherRight,
@@ -34,16 +34,16 @@ public class PairedLauncher extends Mechanism {
 			ServoImplEx verticalServo, ServoImplEx gate) {
 		this.mechanisms = mechanisms;
 		this.verticalServo = verticalServo;
-
+		
 		this.rightMotor = launcherRight;
 		this.leftMotor = launcherLeft;
 		this.gateServo = gate;
-
+		
 		leftMotor.setDirection(DcMotor.Direction.REVERSE);
 		rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 		leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 	}
-
+	
 	/**
 	 * Aims the launcher at the target using feedback from the TrajectoryEngine.
 	 * This is invoked by the {@link PairedLauncher#ready()} method which should
@@ -61,7 +61,7 @@ public class PairedLauncher extends Mechanism {
 		// rotation
 		TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine.getAimingOffsets(
 				MatchState.getAllianceColor(), getPitch());
-
+		
 		if (!solution.hasTarget) {
 			return;
 		}
@@ -73,11 +73,11 @@ public class PairedLauncher extends Mechanism {
 	public void open() {
 		gateServo.setPosition(GATE_FIRE_POSITION);
 	}
-
+	
 	public void close() {
 		gateServo.setPosition(GATE_CLOSED_POSITION);
 	}
-
+	
 	/**
 	 * Readies the launcher to fire.
 	 * This spins up the belt and aims at the target.
@@ -90,7 +90,7 @@ public class PairedLauncher extends Mechanism {
 		aim();
 		spinUp();
 	}
-
+	
 	/**
 	 * Gets the current pitch angle in degrees.
 	 * Pitch uses absolute launch angles from horizontal.
@@ -100,7 +100,7 @@ public class PairedLauncher extends Mechanism {
 	public double getPitch() {
 		return Settings.Launcher.servoToPitch(verticalServo.getPosition());
 	}
-
+	
 	/**
 	 * Sets the pitch angle in degrees.
 	 * Pitch uses absolute launch angles from horizontal.

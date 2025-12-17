@@ -19,11 +19,11 @@ import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
  */
 @TeleOp(name = "Test: Outtake", group = "Tests")
 public class OuttakeTest extends LinearOpMode {
-
+	
 	// State & Control
 	private double commandedRPM = 3000;
 	private double commandedAngle = DEFAULT_PITCH_ANGLE; // Now in degrees, not servo position
-
+	
 	@Override
 	public final void runOpMode() {
 		MechanismManager m = new MechanismManager(hardwareMap);
@@ -32,7 +32,7 @@ public class OuttakeTest extends LinearOpMode {
 		m.ifValid(m.get(PairedLauncher.class), pairedLauncher -> {
 			pairedLauncher.setPitch(commandedAngle);
 		});
-
+		
 		telemetry.addLine("✅ Initialization Complete");
 		telemetry.addLine("Controls:");
 		telemetry.addLine("  DPAD Up&Down: Adjust Pitch (degrees)");
@@ -41,13 +41,13 @@ public class OuttakeTest extends LinearOpMode {
 		telemetry.addLine("  B: Advance transfer");
 		telemetry.setMsTransmissionInterval(50);
 		telemetry.update();
-
+		
 		waitForStart();
-
+		
 		// --- Main Loop ---
 		while (opModeIsActive()) {
 			m.update(); // Required for mechanisms to apply motor commands
-
+			
 			// --- Gamepad Input for fine-tuning ---
 			if (gamepad1.dpad_up) {
 				commandedAngle += 0.1; // Degrees increment
@@ -61,7 +61,7 @@ public class OuttakeTest extends LinearOpMode {
 			if (gamepad1.right_bumper) {
 				commandedRPM += 5;
 			}
-
+			
 			commandedRPM = Math.max(0, Math.min(6000, commandedRPM));
 			
 			if (gamepad1.aWasPressed()) {
@@ -77,11 +77,11 @@ public class OuttakeTest extends LinearOpMode {
 			if (gamepad1.bWasPressed()) {
 				m.ifValid(m.get(VerticalWheelTransfer.class), VerticalWheelTransfer::advance);
 			}
-
+			
 			// --- Telemetry ---
 			telemetry.addData("Commanded Motor RPM", "%.0f (%.0f wheel RPM)", commandedRPM, commandedRPM * 2.0 / 3.0);
 			telemetry.addData("Commanded Angle", "%.1f", commandedAngle);
-
+			
 			m.ifValid(m.get(PairedLauncher.class), pairedLauncher -> {
 				telemetry.addData("Smoothed RPM", "%.2f", pairedLauncher.getRPM());
 				telemetry.addData("Actual Angle", "%.1f", pairedLauncher.getPitch());

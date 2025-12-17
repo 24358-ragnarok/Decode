@@ -17,9 +17,9 @@ import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
  * movements.
  */
 public class CurvePathAction extends PathAction {
-
+	
 	private final Pose[] controlPoints;
-
+	
 	/**
 	 * Creates a curve path action with explicit control points.
 	 * The curve will be built dynamically from current position → control points →

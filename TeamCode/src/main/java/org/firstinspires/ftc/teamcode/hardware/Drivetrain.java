@@ -25,24 +25,25 @@ public class Drivetrain extends Mechanism {
 	private final Map<Position, Pose> positionPoses = new HashMap<>();
 	public boolean robotCentric = true;
 	private State state;
-
+	
 	/**
 	 * Initializes the Drivetrain and the PedroPathing Follower.
 	 * <p>
 	 * Note: Starting pose should be set by the OpMode (MainAuto or MainOp),
 	 * not in this constructor.
 	 *
-	 * @param hardwareMap   The robot's hardware map.
+	 * @param hardwareMap The robot's hardware map.
 	 */
 	public Drivetrain(HardwareMap hardwareMap) {
 		// The Constants class now holds all hardware and tuning configurations.
 		this.follower = Constants.createFollower(hardwareMap);
+		state = State.MANUAL;
 		// Don't set starting pose here - let each OpMode handle it
-
+		
 		// Initialize the poses for each predefined position
 		// Use BLUE as reference, mirror for RED alliance
 		boolean isBlue = MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE;
-
+		
 		positionPoses.put(Position.CLOSE_SHOOT,
 				isBlue ? Settings.Positions.TeleOp.CLOSE_SHOOT
 						: Settings.Field.mirrorPose(Settings.Positions.TeleOp.CLOSE_SHOOT));
@@ -54,7 +55,7 @@ public class Drivetrain extends Mechanism {
 		positionPoses.put(Position.GATE,
 				isBlue ? Settings.Positions.TeleOp.GATE : Settings.Field.mirrorPose(Settings.Positions.TeleOp.GATE));
 	}
-
+	
 	@Override
 	public void start() {
 		// No initialization required - drivetrain is initialized in constructor
@@ -89,10 +90,10 @@ public class Drivetrain extends Mechanism {
 			return; // Automation is handling driving, so ignore manual input.
 		}
 		
-		double offsetHeading = robotCentric ? Math.toRadians(0) :
-				MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE
-						? Math.toRadians(180)
-						: Math.toRadians(0);
+		double offsetHeading = robotCentric ? Math.toRadians(0)
+				: MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE
+				? Math.toRadians(180)
+				: Math.toRadians(0);
 		
 		// The Follower expects a standard coordinate system (forward is positive).
 		follower.setTeleOpDrive(drivePower, strafePower, -rotation, robotCentric, offsetHeading);

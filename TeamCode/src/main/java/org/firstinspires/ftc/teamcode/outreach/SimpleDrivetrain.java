@@ -84,8 +84,9 @@ public class SimpleDrivetrain extends OpMode {
 	
 	/**
 	 * Calculates and applies mecanum drive motor powers.
+	 *
 	 * @param strafePower Left/right movement power (-1.0 to 1.0)
-	 * @param drivePower Forward/backward movement power (-1.0 to 1.0)
+	 * @param drivePower  Forward/backward movement power (-1.0 to 1.0)
 	 * @param rotatePower Rotational power (-1.0 to 1.0)
 	 */
 	public void mecanumDrive(double strafePower, double drivePower, double rotatePower) {

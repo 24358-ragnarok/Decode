@@ -34,7 +34,7 @@ import java.util.function.Consumer;
 public class MechanismManager {
 	public final Drivetrain drivetrain;
 	public final Mechanism[] mechanismArray;
-
+	
 	// Optional non-mechanism helpers
 	public final LimelightManager limelightManager;
 	public final TrajectoryEngine trajectoryEngine;
@@ -45,7 +45,7 @@ public class MechanismManager {
 		hardwareMap = hw;
 		allHubs = hardwareMap.getAll(LynxModule.class);
 		drivetrain = new Drivetrain(hw);
-
+		
 		// Build mechanisms safely
 		FlexVectorIntake intake = createIntake();
 		VerticalWheelTransfer transfer = createTransfer();
@@ -54,11 +54,11 @@ public class MechanismManager {
 		PairedLauncher launcher = createLauncher();
 		DualBallCompartment dbc = createCompartment();
 		mechanismArray = new Mechanism[]{intake, transfer, launcher};
-
+		
 		// Save helpers
 		limelightManager = ll;
 		trajectoryEngine = traj;
-
+		
 		// Now that we've built all of the systems, begin caching system reads for
 		// efficiency
 		for (LynxModule hub : allHubs) {
@@ -66,7 +66,7 @@ public class MechanismManager {
 			hub.setConstant(Settings.Color.RAGNAROK_RED);
 		}
 	}
-
+	
 	private FlexVectorIntake createIntake() {
 		if (!Settings.Deploy.INTAKE)
 			return null;
@@ -129,7 +129,7 @@ public class MechanismManager {
 	
 	/**
 	 * Retrieves a mechanism of the specified type.
-	 * 
+	 *
 	 * @param type The class type of the mechanism to retrieve
 	 * @return The mechanism instance, or null if not available
 	 */

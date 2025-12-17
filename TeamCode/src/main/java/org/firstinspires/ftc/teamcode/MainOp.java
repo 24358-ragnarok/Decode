@@ -30,7 +30,7 @@ public class MainOp extends OpMode {
 	private MechanismManager mechanisms;
 	private Controller mainController;
 	private Controller subController;
-
+	
 	/**
 	 * Runs when "init" is pressed on the Driver Station.
 	 * Initializes all robot systems, controllers, and telemetry for TeleOp
@@ -39,7 +39,7 @@ public class MainOp extends OpMode {
 	@Override
 	public final void init() {
 		// Pull the stored match state and settings from when they were set during auto
-
+		
 		// Initialize robot systems
 		mechanisms = new MechanismManager(hardwareMap);
 		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower);
@@ -59,7 +59,7 @@ public class MainOp extends OpMode {
 		}
 		logging.addData("Alliance", MatchState.getAllianceColor());
 	}
-
+	
 	/**
 	 * Runs after "init" and before "start" repeatedly.
 	 */
@@ -68,7 +68,7 @@ public class MainOp extends OpMode {
 		logging.drawDebug(mechanisms.drivetrain.follower);
 		logging.update();
 	}
-
+	
 	/**
 	 * Runs when "start" is pressed on the Driver Station.
 	 */
@@ -80,7 +80,7 @@ public class MainOp extends OpMode {
 		MatchState.clearStoredPose();
 		logging.enableRetainedMode();
 	}
-
+	
 	/**
 	 * Runs repeatedly after "start" is pressed on the Driver Station, during the
 	 * actual game.
@@ -90,17 +90,17 @@ public class MainOp extends OpMode {
 		logging.clearDynamic();
 		
 		mechanisms.update();
-
+		
 		processControllerInputs();
 		setControllerLEDs();
 		setControllerRumble();
-
+		
 		// Draw debug visualization (retained items like Heading, X, Y are auto-updated
 		// via Func)
 		logging.drawDebug(mechanisms.drivetrain.follower);
 		logging.update();
 	}
-
+	
 	/**
 	 * Runs when "stop" is pressed on the Driver Station.
 	 * Cleanup and shutdown should occur instantaneously and be non-blocking.
@@ -113,7 +113,7 @@ public class MainOp extends OpMode {
 			mechanisms.stop();
 		}
 	}
-
+	
 	/**
 	 * Process controller inputs for both main and sub controllers.
 	 * Handles drivetrain movement, launcher controls, intake operations, and
@@ -124,11 +124,11 @@ public class MainOp extends OpMode {
 		double d = mainController.getProcessedDrive();
 		double s = mainController.getProcessedStrafe();
 		double r = mainController.getProcessedRotation();
-
+		
 		if (mainController.wasJustPressed(Controller.Action.TOGGLE_CENTRICITY)) {
 			mechanisms.ifValid(mechanisms.drivetrain, Drivetrain::toggleCentricity);
 		}
-
+		
 		if (mainController.wasJustPressed(Controller.Action.RESET_FOLLOWER)) {
 			mechanisms.ifValid(mechanisms.drivetrain, dt -> dt.follower.setPose(
 					(MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE)

@@ -29,7 +29,7 @@ import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
  */
 @Autonomous(name = "Main Auto", group = ".Competition Modes", preselectTeleOp = "MainOp")
 public class MainAuto extends OpMode {
-
+	
 	private Timer opmodeTimer;
 	private MatchConfigurationWizard wizard;
 	private MechanismManager mechanisms;
@@ -45,12 +45,12 @@ public class MainAuto extends OpMode {
 		// Create fresh timer and logging
 		opmodeTimer = new Timer();
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
-
+		
 		// Match settings will be configured by the driver during init_loop
 		MatchState.reset();
 		
 		wizard = new MatchConfigurationWizard(gamepad1, logging);
-
+		
 		// Initialize robot mechanisms
 		mechanisms = new MechanismManager(hardwareMap);
 		

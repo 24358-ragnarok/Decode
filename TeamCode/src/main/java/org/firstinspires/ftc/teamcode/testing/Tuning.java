@@ -42,16 +42,16 @@ import java.util.List;
 @TeleOp(name = "PedroPathing Tuner", group = ".Pedro Pathing")
 public class Tuning extends SelectableOpMode {
 	public static Follower follower;
-
+	
 	@IgnoreConfigurable
 	static PoseHistory poseHistory;
-
+	
 	@IgnoreConfigurable
 	static TelemetryManager telemetryM;
-
+	
 	@IgnoreConfigurable
 	static ArrayList<String> changes = new ArrayList<>();
-
+	
 	public Tuning() {
 		super("Select a Tuning OpMode", s -> {
 			s.folder("Localization", l -> {
@@ -79,7 +79,7 @@ public class Tuning extends SelectableOpMode {
 			});
 		});
 	}
-
+	
 	public static void drawOnlyCurrent() {
 		try {
 			Drawing.drawRobot(follower.getPose());
@@ -88,12 +88,12 @@ public class Tuning extends SelectableOpMode {
 			throw new RuntimeException("Drawing failed " + e);
 		}
 	}
-
+	
 	public static void draw() {
 		Drawing.drawDebug(follower);
 		Drawing.update();
 	}
-
+	
 	/**
 	 * This creates a full stop of the robot by setting the drive motors to run at 0
 	 * power.
@@ -102,7 +102,7 @@ public class Tuning extends SelectableOpMode {
 		follower.startTeleopDrive(true);
 		follower.setTeleOpDrive(0, 0, 0, true);
 	}
-
+	
 	@Override
 	public void onSelect() {
 		if (follower == null) {
@@ -111,16 +111,16 @@ public class Tuning extends SelectableOpMode {
 		} else {
 			follower = Constants.createFollower(hardwareMap);
 		}
-
+		
 		follower.setStartingPose(new Pose());
-
+		
 		poseHistory = follower.getPoseHistory();
-
+		
 		telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
-
+		
 		Drawing.init();
 	}
-
+	
 	@Override
 	public void onLog(List<String> lines) {
 	}
@@ -142,7 +142,7 @@ class LocalizationTest extends OpMode {
 	public void init() {
 		follower.setStartingPose(new Pose(72, 72));
 	}
-
+	
 	/**
 	 * This initializes the PoseUpdater, the mecanum drive motors, and the Panels
 	 * telemetry.
@@ -155,13 +155,13 @@ class LocalizationTest extends OpMode {
 		follower.update();
 		drawOnlyCurrent();
 	}
-
+	
 	@Override
 	public void start() {
 		follower.startTeleopDrive();
 		follower.update();
 	}
-
+	
 	/**
 	 * This updates the robot's pose estimate, the simple mecanum drive, and updates
 	 * the
@@ -172,13 +172,13 @@ class LocalizationTest extends OpMode {
 	public void loop() {
 		follower.setTeleOpDrive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x, true);
 		follower.update();
-
+		
 		telemetryM.debug("x:" + follower.getPose().getX());
 		telemetryM.debug("y:" + follower.getPose().getY());
 		telemetryM.debug("heading:" + follower.getPose().getHeading());
 		telemetryM.debug("total heading:" + follower.getTotalHeading());
 		telemetryM.update(telemetry);
-
+		
 		draw();
 	}
 }
@@ -204,14 +204,14 @@ class LocalizationTest extends OpMode {
  */
 class ForwardTuner extends OpMode {
 	public static double DISTANCE = 100;
-
+	
 	@Override
 	public void init() {
 		follower.setStartingPose(new Pose(72, 72));
 		follower.update();
 		drawOnlyCurrent();
 	}
-
+	
 	/**
 	 * This initializes the PoseUpdater as well as the Panels telemetry.
 	 */
@@ -222,7 +222,7 @@ class ForwardTuner extends OpMode {
 		telemetryM.update(telemetry);
 		drawOnlyCurrent();
 	}
-
+	
 	/**
 	 * This updates the robot's pose estimate, and updates the Panels telemetry with
 	 * the
@@ -231,7 +231,7 @@ class ForwardTuner extends OpMode {
 	@Override
 	public void loop() {
 		follower.update();
-
+		
 		telemetryM.debug("Distance Moved: " + follower.getPose().getX());
 		telemetryM.debug(
 				"The multiplier will display what your forward ticks to inches should be to scale your current distance to "
@@ -240,7 +240,7 @@ class ForwardTuner extends OpMode {
 				/ ((follower.getPose().getX() - 72)
 				/ follower.getPoseTracker().getLocalizer().getForwardMultiplier())));
 		telemetryM.update(telemetry);
-
+		
 		draw();
 	}
 }
@@ -266,14 +266,14 @@ class ForwardTuner extends OpMode {
  */
 class LateralTuner extends OpMode {
 	public static double DISTANCE = 100;
-
+	
 	@Override
 	public void init() {
 		follower.setStartingPose(new Pose(72, 72));
 		follower.update();
 		drawOnlyCurrent();
 	}
-
+	
 	/**
 	 * This initializes the PoseUpdater as well as the Panels telemetry.
 	 */
@@ -284,7 +284,7 @@ class LateralTuner extends OpMode {
 		telemetryM.update(telemetry);
 		drawOnlyCurrent();
 	}
-
+	
 	/**
 	 * This updates the robot's pose estimate, and updates the Panels telemetry with
 	 * the
@@ -293,7 +293,7 @@ class LateralTuner extends OpMode {
 	@Override
 	public void loop() {
 		follower.update();
-
+		
 		telemetryM.debug("Distance Moved: " + follower.getPose().getY());
 		telemetryM.debug(
 				"The multiplier will display what your strafe ticks to inches should be to scale your current distance to "
@@ -301,7 +301,7 @@ class LateralTuner extends OpMode {
 		telemetryM.debug("Multiplier: " + (DISTANCE
 				/ (follower.getPose().getY() / follower.getPoseTracker().getLocalizer().getLateralMultiplier())));
 		telemetryM.update(telemetry);
-
+		
 		draw();
 	}
 }
@@ -327,14 +327,14 @@ class LateralTuner extends OpMode {
  */
 class TurnTuner extends OpMode {
 	public static double ANGLE = 2 * Math.PI;
-
+	
 	@Override
 	public void init() {
 		follower.setStartingPose(new Pose(72, 72));
 		follower.update();
 		drawOnlyCurrent();
 	}
-
+	
 	/**
 	 * This initializes the PoseUpdater as well as the Panels telemetry.
 	 */
@@ -343,10 +343,10 @@ class TurnTuner extends OpMode {
 		telemetryM.debug(
 				"Turn your robot " + ANGLE + " radians. Your turn ticks to inches will be shown on the telemetry.");
 		telemetryM.update(telemetry);
-
+		
 		drawOnlyCurrent();
 	}
-
+	
 	/**
 	 * This updates the robot's pose estimate, and updates the Panels telemetry with
 	 * the
@@ -355,7 +355,7 @@ class TurnTuner extends OpMode {
 	@Override
 	public void loop() {
 		follower.update();
-
+		
 		telemetryM.debug("Total Angle: " + follower.getTotalHeading());
 		telemetryM.debug(
 				"The multiplier will display what your turn ticks to inches should be to scale your current angle to "
@@ -363,7 +363,7 @@ class TurnTuner extends OpMode {
 		telemetryM.debug("Multiplier: " + (ANGLE
 				/ (follower.getTotalHeading() / follower.getPoseTracker().getLocalizer().getTurningMultiplier())));
 		telemetryM.update(telemetry);
-
+		
 		draw();
 	}
 }
@@ -394,11 +394,11 @@ class ForwardVelocityTuner extends OpMode {
 	public static double RECORD_NUMBER = 10;
 	private final ArrayList<Double> velocities = new ArrayList<>();
 	private boolean end;
-
+	
 	@Override
 	public void init() {
 	}
-
+	
 	/**
 	 * This initializes the drive motors as well as the cache of velocities and the
 	 * Panels telemetry.
@@ -412,11 +412,11 @@ class ForwardVelocityTuner extends OpMode {
 		telemetryM.debug("Press B on game pad 1 to stop.");
 		telemetryM.debug("pose", follower.getPose());
 		telemetryM.update(telemetry);
-
+		
 		follower.update();
 		drawOnlyCurrent();
 	}
-
+	
 	/**
 	 * This starts the OpMode by setting the drive motors to run forward at full
 	 * power.
@@ -430,7 +430,7 @@ class ForwardVelocityTuner extends OpMode {
 		follower.update();
 		end = false;
 	}
-
+	
 	/**
 	 * This runs the OpMode. At any point during the running of the OpMode, pressing
 	 * B on
@@ -446,7 +446,7 @@ class ForwardVelocityTuner extends OpMode {
 			stopRobot();
 			requestOpModeStop();
 		}
-
+		
 		follower.update();
 		draw();
 		

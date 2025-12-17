@@ -24,7 +24,7 @@ public class Settings {
 		public final static int RAGNAROK_RED = 0xFF0000;
 		public final static int ELITE_GOLD = 0xFFEB29;
 	}
-
+	
 	/**
 	 * Maps controller inputs to robot actions for TeleOp.
 	 */
@@ -38,7 +38,7 @@ public class Settings {
 				Controller.Action.GOTO_PARK,
 				Controller.Action.GOTO_GATE
 		};
-
+		
 		static {
 			// Main Controller (Driver)
 			actionControlMap.put(Controller.Action.MOVE_Y, Controller.Control.LEFT_STICK_Y);
@@ -57,7 +57,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.CANCEL_ASSISTED_DRIVING, Controller.Control.RIGHT_STICK_BUTTON);
 			actionControlMap.put(Controller.Action.RESET_FOLLOWER, Controller.Control.BACK);
 			actionControlMap.put(Controller.Action.TOGGLE_CENTRICITY, Controller.Control.LEFT_STICK_BUTTON);
-
+			
 			// Secondary Controller (Operator)
 			actionControlMap.put(Controller.Action.AIM, Controller.Control.LEFT_TRIGGER);
 			actionControlMap.put(Controller.Action.LAUNCH, Controller.Control.RIGHT_TRIGGER);
@@ -75,7 +75,7 @@ public class Settings {
 			}
 		}
 	}
-
+	
 	/**
 	 * Hardware device name mapping.
 	 * Each HardwareConfig stores both the device type and string name,
@@ -89,35 +89,35 @@ public class Settings {
 		public static final HardwareConfig REAR_LEFT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearLeft");
 		public static final HardwareConfig REAR_RIGHT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearRight");
 		public static final HardwareConfig PINPOINT = new HardwareConfig(GoBildaPinpointDriver.class, "pinpoint");
-
+		
 		// Subsystem motors and servos
 		public static final HardwareConfig INTAKE_MOTOR = new HardwareConfig(DcMotorEx.class, "intake");
 		public static final HardwareConfig LAUNCHER_RIGHT = new HardwareConfig(DcMotorEx.class, "launcherRight");
 		public static final HardwareConfig LAUNCHER_LEFT = new HardwareConfig(DcMotorEx.class, "launcherLeft");
-
+		
 		public static final HardwareConfig LAUNCHER_PITCH_SERVO = new HardwareConfig(ServoImplEx.class,
 				"pitch");
 		public static final HardwareConfig LAUNCHER_GATE = new HardwareConfig(ServoImplEx.class,
 				"gate");
-
+		
 		// Transfer mechanism
 		public static final HardwareConfig TRANSFER_WHEEL_MOTOR = new HardwareConfig(DcMotorEx.class,
 				"transfer");
-
+		
 		public static final HardwareConfig COMPARTMENT_LEFT = new HardwareConfig(ServoImplEx.class,
 				"compartmentLeft");
-
+		
 		public static final HardwareConfig COMPARTMENT_RIGHT = new HardwareConfig(ServoImplEx.class,
-				"compartmentLeft");
-
+				"compartmentRight");
+		
 		// Sensors
 		public static final String[] COLOR_RANGEFINDER_1 = {"crf1_0", "crf1_1"};
 		public static final String[] COLOR_RANGEFINDER_2 = {"crf2_0", "crf2_1"};
 		public static final HardwareConfig CONFIGURE_COLOR_SENSOR = new HardwareConfig(
 				RevColorSensorV3.class, "colorSensorConfigure");
-
+		
 		public static final HardwareConfig LIMELIGHT = new HardwareConfig(Limelight3A.class, "limelight");
-
+		
 		/**
 		 * Static method to retrieve hardware from a HardwareMap.
 		 * Allows usage like: Settings.Hardware.get(FRONT_LEFT_MOTOR, hw)
@@ -131,7 +131,7 @@ public class Settings {
 			return config.fromHardwareMap(hardwareMap);
 		}
 	}
-
+	
 	/**
 	 * Settings for the Intake mechanism.
 	 */
@@ -142,7 +142,7 @@ public class Settings {
 		public static double STOPPED_SPEED = 0.0;
 		public static long COLOR_SENSOR_DEBOUNCE_TIME = 500;
 	}
-
+	
 	/**
 	 * Settings for the main transfer wheel.
 	 * <p>
@@ -169,7 +169,7 @@ public class Settings {
 		public static double MAX_ACCELERATION = 1600; // Max acceleration (ticks/sec²)
 		public static double POSITION_TOLERANCE = 10; // Acceptable position error (ticks)
 	}
-
+	
 	/**
 	 * Settings for the Launcher mechanism.
 	 * <p>
@@ -219,7 +219,7 @@ public class Settings {
 		public static double VELOCITY_KD = 0.000100; // Derivative gain
 		public static double VELOCITY_KF = 0.000360; // Feedforward gain
 		public static double MAX_INTEGRAL = 0.3; // Anti-windup limit
-
+		
 		// Pitch servo calibration (physical limits)
 		public static double PITCH_SERVO_AT_MIN = 0.2; // Servo position at minimum pitch angle
 		public static double PITCH_SERVO_AT_MAX = 0.806; // Servo position at maximum pitch angle
@@ -322,10 +322,10 @@ public class Settings {
 		 */
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 55.0; // Launch angle from horizontal for close position
 		public static double CLOSE_SHOOT_RPM = 3900; // Wheel RPM for close position
-
+		
 		public static double FAR_SHOOT_PITCH_DEGREES = 53.0; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 4725; // Wheel RPM for far position
-
+		
 	}
 	
 	/**

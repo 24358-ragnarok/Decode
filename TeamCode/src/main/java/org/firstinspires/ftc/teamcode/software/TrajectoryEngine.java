@@ -67,7 +67,7 @@ public class TrajectoryEngine {
 		return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 	}
 	
-
+	
 	/**
 	 * Data class to hold the complete aiming solution including angles and launch
 	 * velocity.

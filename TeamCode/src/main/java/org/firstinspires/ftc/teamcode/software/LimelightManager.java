@@ -96,7 +96,7 @@ public class LimelightManager extends Mechanism {
 	 * Switches the current pipeline to a new pipeline, optimized to avoid redundant switches.
 	 *
 	 * @param newPipeline The new pipeline to switch to:
-	 * APRILTAG (1), GREEN (2), PURPLE (3)
+	 *                    APRILTAG (1), GREEN (2), PURPLE (3)
 	 */
 	public void setCurrentPipeline(Pipeline newPipeline) {
 		if (newPipeline == currentPipeline) {

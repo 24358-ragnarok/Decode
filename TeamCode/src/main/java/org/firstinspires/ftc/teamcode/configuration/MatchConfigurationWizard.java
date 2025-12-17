@@ -12,7 +12,7 @@ public class MatchConfigurationWizard {
 	private final Gamepad gamepad1;
 	private final UnifiedLogging logging;
 	private boolean confirmed = false;
-
+	
 	/**
 	 * Creates a new MatchConfigurationWizard
 	 *
@@ -23,7 +23,7 @@ public class MatchConfigurationWizard {
 		this.gamepad1 = gamepad1;
 		this.logging = logging;
 	}
-
+	
 	/**
 	 * Call this method repeatedly in init_loop to process input and update display
 	 */
@@ -32,16 +32,16 @@ public class MatchConfigurationWizard {
 		if (gamepad1.bWasPressed()) {
 			MatchState.setAllianceColor(MatchState.AllianceColor.RED);
 		}
-
+		
 		// Detect rising edge of dpad_down (just pressed)
 		if (gamepad1.xWasPressed()) {
 			MatchState.setAllianceColor(MatchState.AllianceColor.BLUE);
 		}
-
+		
 		if (gamepad1.aWasPressed()) {
 			MatchState.setAutoStartingPosition(MatchState.AutoStartingPosition.CLOSE);
 		}
-
+		
 		if (gamepad1.yWasPressed()) {
 			MatchState.setAutoStartingPosition(MatchState.AutoStartingPosition.FAR);
 		}
@@ -60,7 +60,7 @@ public class MatchConfigurationWizard {
 	private void updateTelemetry() {
 		MatchState.AllianceColor currentColor = MatchState.getAllianceColor();
 		MatchState.AutoStartingPosition autoStartingPosition = MatchState.getAutoStartingPosition();
-
+		
 		if (!confirmed) {
 			logging.addLine("=== MATCH CONFIGURATION ===");
 			logging.addLine("  X           → BLUE Alliance");

@@ -107,8 +107,8 @@ public class VerticalWheelTransfer extends Mechanism {
 	}
 	
 	public void moveNextArtifactToLauncher() {
-		// find the artifact who's closest to the end, and then move the motor so that it gets to the end
-		double greatest = Double.NaN;
+		// find the artifact who's closest to the end, and then move the motor so that
+		// it gets to the end
 		double greatestTicks = 0;
 		for (int i = 0; i < artifacts.length - 1; i++) {
 			if (artifacts[i].color == Artifact.Color.NONE) {

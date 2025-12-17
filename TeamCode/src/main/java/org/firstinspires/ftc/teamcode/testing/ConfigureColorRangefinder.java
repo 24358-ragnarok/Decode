@@ -43,7 +43,7 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
 public class ConfigureColorRangefinder extends OpMode {
 	private RevColorSensorV3 sensor;
 	private ColorRangefinderConfigurator configurator;
-
+	
 	// Adjustable thresholds (HSV 0-255 scale)
 	private double purpleLow;
 	private double purpleHigh;

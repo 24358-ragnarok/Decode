@@ -14,13 +14,13 @@ import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
 public class PrepareLaunchAction implements AutonomousAction {
 	private boolean hasTransfer;
 	private boolean hasLauncher;
-
+	
 	@Override
 	public void initialize(MechanismManager mechanisms) {
 		hasTransfer = mechanisms.get(VerticalWheelTransfer.class) != null;
 		hasLauncher = mechanisms.get(PairedLauncher.class) != null;
 	}
-
+	
 	@Override
 	public boolean execute(MechanismManager mechanisms) {
 		// Start spinning up launcher if available
@@ -28,7 +28,7 @@ public class PrepareLaunchAction implements AutonomousAction {
 			PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
 			launcher.ready();
 		}
-
+		
 		return true;
 	}
 	

@@ -27,14 +27,14 @@ public class LaunchAction implements AutonomousAction {
 	private boolean hasLauncher;
 	private State state;
 	private Timer timer;
-
+	
 	@Override
 	public void initialize(MechanismManager mechanisms) {
 		hasLauncher = mechanisms.get(PairedLauncher.class) != null;
 		hasTransfer = mechanisms.get(VerticalWheelTransfer.class) != null;
 		state = State.WAITING_TO_FIRE;
 		timer = new Timer();
-
+		
 		// Start the launcher ready sequence (spin up, aim)
 		if (hasLauncher) {
 			PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
@@ -42,14 +42,14 @@ public class LaunchAction implements AutonomousAction {
 			launcher.open();
 		}
 	}
-
+	
 	@Override
 	public boolean execute(MechanismManager mechanisms) {
 		// If no parts, we can't launch anything
 		if (!hasTransfer || !hasLauncher) {
 			return true;
 		}
-
+		
 		PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
 		VerticalWheelTransfer transfer = mechanisms.get(VerticalWheelTransfer.class);
 		
@@ -57,7 +57,7 @@ public class LaunchAction implements AutonomousAction {
 		if (shots >= 3) {
 			state = State.COMPLETE;
 		}
-
+		
 		// State machine for sequential ball firing
 		switch (state) {
 			case WAITING_TO_FIRE:
@@ -66,7 +66,7 @@ public class LaunchAction implements AutonomousAction {
 					state = State.FIRING;
 				}
 				break;
-
+			
 			case FIRING:
 				transfer.advance();
 				shots += 1;

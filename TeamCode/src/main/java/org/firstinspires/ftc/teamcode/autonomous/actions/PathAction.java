@@ -20,9 +20,9 @@ public abstract class PathAction implements AutonomousAction {
 	protected final Pose targetPose;
 	protected final String name;
 	protected final MatchState.AllianceColor alliance;
-
+	
 	private PathChain generatedPath;
-
+	
 	/**
 	 * Creates a new path action.
 	 *
@@ -35,7 +35,7 @@ public abstract class PathAction implements AutonomousAction {
 		this.name = name;
 		this.alliance = alliance;
 	}
-
+	
 	/**
 	 * Convenience constructor that extracts alliance from MatchState.
 	 */

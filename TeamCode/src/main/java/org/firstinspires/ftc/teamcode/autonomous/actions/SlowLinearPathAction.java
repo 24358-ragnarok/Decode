@@ -21,7 +21,7 @@ public class SlowLinearPathAction extends PathAction {
 	public SlowLinearPathAction(Pose targetPose, String name) {
 		super(targetPose, name);
 	}
-
+	
 	/**
 	 * Convenience constructor with auto-generated name.
 	 */

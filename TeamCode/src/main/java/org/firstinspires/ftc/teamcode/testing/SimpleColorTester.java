@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.software.ColorRangefinder;
 @TeleOp(name = "Test: Digital Pin Color Rangefinder", group = "Tests")
 public class SimpleColorTester extends OpMode {
 	private ColorRangefinder colorRangefinder;
-
+	
 	@Override
 	public void init() {
 		// Initialize ColorRangefinder (reads digital pins only)
@@ -45,7 +45,7 @@ public class SimpleColorTester extends OpMode {
 		telemetry.addData("Max Distance", "%.0f mm", Settings.ColorSensor.MAX_DETECTION_DISTANCE_MM);
 		telemetry.update();
 	}
-
+	
 	@Override
 	public void loop() {
 		// Get hardware-accelerated detection results (digital pin reads)

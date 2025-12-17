@@ -18,6 +18,7 @@ public class FlexVectorIntake extends Mechanism {
 	private final ColorUnifier unifier;
 	private final MechanismManager mechanisms;
 	public IntakeState state;
+	
 	/**
 	 * Creates a new FlexVectorIntake instance.
 	 *
@@ -79,11 +80,17 @@ public class FlexVectorIntake extends Mechanism {
 	 * Represents the current state of the intake mechanism.
 	 */
 	public enum IntakeState {
-		/** Intake motor running forward to pull artifacts in */
+		/**
+		 * Intake motor running forward to pull artifacts in
+		 */
 		IN,
-		/** Intake motor running in reverse to push artifacts out */
+		/**
+		 * Intake motor running in reverse to push artifacts out
+		 */
 		OUT,
-		/** Intake motor stopped */
+		/**
+		 * Intake motor stopped
+		 */
 		STOPPED
 	}
 }
