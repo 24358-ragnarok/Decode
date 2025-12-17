@@ -47,12 +47,7 @@ public class MainAuto extends OpMode {
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
 
 		// Match settings will be configured by the driver during init_loop
-		blackboard.clear(); // do not save match settings in between matches
-
-		// Initialize blackboard with default values to ensure clean state
-		// This prevents stale data from previous runs from affecting the current run
-		MatchState.setAllianceColor(MatchState.AllianceColor.BLUE);
-		MatchState.setAutoStartingPosition(MatchState.AutoStartingPosition.CLOSE);
+		MatchState.reset();
 		
 		wizard = new MatchConfigurationWizard(gamepad1, logging);
 

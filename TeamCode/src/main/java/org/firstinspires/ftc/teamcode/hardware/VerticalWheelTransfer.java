@@ -152,6 +152,10 @@ public class VerticalWheelTransfer extends Mechanism {
 		return true;
 	}
 	
+	public boolean isBusy() {
+		return motor.isBusy();
+	}
+	
 	public int getTicks() {
 		return motor.getCurrentPosition();
 	}

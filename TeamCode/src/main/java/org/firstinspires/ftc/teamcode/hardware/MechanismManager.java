@@ -72,9 +72,9 @@ public class MechanismManager {
 			return null;
 		try {
 			DcMotorEx intakeMotor = Settings.Hardware.INTAKE_MOTOR.fromHardwareMap(hardwareMap);
-			ColorRangefinder color1 = new ColorRangefinder(
-					hardwareMap, Settings.Hardware.COLOR_RANGEFINDER_1[0], Settings.Hardware.COLOR_RANGEFINDER_1[1]);
-			ColorRangefinder[] array = {color1};
+//			ColorRangefinder color1 = new ColorRangefinder(
+//					hardwareMap, Settings.Hardware.COLOR_RANGEFINDER_1[0], Settings.Hardware.COLOR_RANGEFINDER_1[1]);
+			ColorRangefinder[] array = {};
 			ColorUnifier color = new ColorUnifier(this, array);
 			return new FlexVectorIntake(this, intakeMotor, color);
 		} catch (Exception e) {

@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode.hardware;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_CLOSED_POSITION;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_FIRE_POSITION;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.MAX_SPEED_ERROR;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.TICKS_PER_REVOLUTION;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.rpmToTicksPerSec;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.ticksPerSecToRPM;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchState;
@@ -15,14 +15,18 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
 public class PairedLauncher extends Mechanism {
+	private static final double VELOCITY_ALPHA = 0.15; // EMA smoothing factor (0-1), lower = more smoothing
 	private final ServoImplEx verticalServo;
 	private final DcMotorEx rightMotor;
 	private final DcMotorEx leftMotor;
 	private final ServoImplEx gateServo;
 	private final MechanismManager mechanisms;
-	public double targetSpeedAngular = 0;
+	public double targetTPS = 0;
 	private LauncherState state = LauncherState.IDLE;
-	
+	// Time-averaged velocity readings (exponential moving average)
+	private double averagedRightRPM = 0;
+	private double averagedLeftRPM = 0;
+
 	public PairedLauncher(
 			MechanismManager mechanisms,
 			DcMotorEx launcherRight,
@@ -30,77 +34,50 @@ public class PairedLauncher extends Mechanism {
 			ServoImplEx verticalServo, ServoImplEx gate) {
 		this.mechanisms = mechanisms;
 		this.verticalServo = verticalServo;
-		
+
 		this.rightMotor = launcherRight;
 		this.leftMotor = launcherLeft;
 		this.gateServo = gate;
-		
+
 		leftMotor.setDirection(DcMotor.Direction.REVERSE);
-		rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-		leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+		rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+		leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 	}
-	
-	/**
-	 * Static helper method for testing pitch control without full launcher setup.
-	 * Sets the pitch angle directly on a servo using the launcher's conversion
-	 * logic.
-	 */
-	public static void setPitchDirect(ServoImplEx servo, double pitchDegrees) {
-		servo.setPosition(Settings.Launcher.pitchToServo(pitchDegrees));
-	}
-	
-	/**
-	 * Static helper method for testing pitch control without full launcher setup.
-	 * Gets the current pitch angle from a servo using the launcher's conversion
-	 * logic.
-	 */
-	public static double getPitchDirect(Servo servo) {
-		return Settings.Launcher.servoToPitch(servo.getPosition());
-	}
-	
+
 	/**
 	 * Aims the launcher at the target using feedback from the TrajectoryEngine.
 	 * This is invoked by the {@link PairedLauncher#ready()} method which should
 	 * be called repeatedly in the main robot loop when aiming.
 	 * <p>
 	 * The TrajectoryEngine provides a standardized AimingSolution with:
-	 * - Yaw offset from camera center (-10° to +10°)
 	 * - Absolute pitch launch angle (0° to 90°)
 	 * - Required launch velocity
 	 * <p>
 	 * This method is public so it can be called independently when you want to
 	 * maintain aim and spin-up without controlling the transfer.
 	 */
-	public void aim() {
+	private void aim() {
 		// Pass current pitch angle to trajectory engine so it can account for limelight
 		// rotation
-		double currentPitch = getPitch();
 		TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine.getAimingOffsets(
-				MatchState.getAllianceColor(), currentPitch);
-		
-		// If we don't have a target, do not adjust.
+				MatchState.getAllianceColor(), getPitch());
+
 		if (!solution.hasTarget) {
 			return;
 		}
 		
-		// Update belt speed based on the required launch rpm
-		double requiredRPM = solution.rpm;
-		setRPM(requiredRPM);
-		
-		// Set pitch directly: verticalOffsetDegrees is the absolute launch angle
-		// No proportional correction needed - just set it to the target angle
+		setRPM(solution.rpm);
 		setPitch(solution.verticalOffsetDegrees);
 	}
 	
-	
-	public void fire() {
+	public void open() {
 		gateServo.setPosition(GATE_FIRE_POSITION);
 	}
-	
+
 	public void close() {
 		gateServo.setPosition(GATE_CLOSED_POSITION);
 	}
-	
+
 	/**
 	 * Readies the launcher to fire.
 	 * This spins up the belt and aims at the target.
@@ -113,20 +90,7 @@ public class PairedLauncher extends Mechanism {
 		aim();
 		spinUp();
 	}
-	
-	
-	/**
-	 * Maintains the launcher in a ready state without controlling the transfer.
-	 * This keeps the belt spinning and maintains aim, but leaves the transfer
-	 * free to be controlled by other commands (e.g., sequential firing).
-	 * <p>
-	 * Use this in loops when the transfer is being controlled separately.
-	 */
-	public void maintainReady() {
-		aim();
-		spinUp(); // spinUp() is safe to call repeatedly - it checks internally
-	}
-	
+
 	/**
 	 * Gets the current pitch angle in degrees.
 	 * Pitch uses absolute launch angles from horizontal.
@@ -136,7 +100,7 @@ public class PairedLauncher extends Mechanism {
 	public double getPitch() {
 		return Settings.Launcher.servoToPitch(verticalServo.getPosition());
 	}
-	
+
 	/**
 	 * Sets the pitch angle in degrees.
 	 * Pitch uses absolute launch angles from horizontal.
@@ -156,6 +120,16 @@ public class PairedLauncher extends Mechanism {
 	}
 	
 	public final void update() {
+		// Update time-averaged velocity readings using exponential moving average
+		// This smooths out noise from instantaneous velocity readings
+		double currentRightRPM = ticksPerSecToRPM(rightMotor.getVelocity());
+		double currentLeftRPM = ticksPerSecToRPM(leftMotor.getVelocity());
+		
+		// Apply exponential moving average: new = alpha * current + (1 - alpha) * old
+		// This naturally handles initialization (if averaged is 0, it will gradually
+		// build up)
+		averagedRightRPM = VELOCITY_ALPHA * currentRightRPM + (1 - VELOCITY_ALPHA) * averagedRightRPM;
+		averagedLeftRPM = VELOCITY_ALPHA * currentLeftRPM + (1 - VELOCITY_ALPHA) * averagedLeftRPM;
 	}
 	
 	@Override
@@ -165,8 +139,8 @@ public class PairedLauncher extends Mechanism {
 	
 	public void spinUp() {
 		state = LauncherState.ACTIVE;
-		leftMotor.setVelocity(targetSpeedAngular);
-		rightMotor.setVelocity(targetSpeedAngular);
+		leftMotor.setVelocity(targetTPS);
+		rightMotor.setVelocity(targetTPS);
 	}
 	
 	public void spinDown() {
@@ -175,18 +149,36 @@ public class PairedLauncher extends Mechanism {
 		rightMotor.setVelocity(0);
 	}
 	
+	/**
+	 * Gets the current RPM using time-averaged readings from both motors.
+	 * Returns the average of the two motors' smoothed velocity readings.
+	 */
 	public double getRPM() {
-		double rightRPM = (rightMotor.getVelocity() / TICKS_PER_REVOLUTION) / 60.0;
-		double leftRPM = (leftMotor.getVelocity() / TICKS_PER_REVOLUTION) / 60.0;
-		return (rightRPM + leftRPM) / 2.0;
+		return (averagedRightRPM + averagedLeftRPM) / 2.0;
 	}
 	
 	public void setRPM(double rpm) {
-		targetSpeedAngular = rpm * TICKS_PER_REVOLUTION / 60.0;
+		targetTPS = rpmToTicksPerSec(rpm);
 	}
 	
+	/**
+	 * Checks if the launcher is at the target speed.
+	 * Uses time-averaged velocity readings and checks both motors separately
+	 * to ensure both are within tolerance, preventing false positives from
+	 * averaging out errors between motors.
+	 */
 	public boolean isAtSpeed() {
-		return state == LauncherState.ACTIVE && Math.abs(targetSpeedAngular - getRPM()) < MAX_SPEED_ERROR;
+		if (state != LauncherState.ACTIVE) {
+			return false;
+		}
+		
+		double targetRPM = ticksPerSecToRPM(targetTPS);
+		
+		// Check both motors separately - both must be within tolerance
+		double rightError = Math.abs(targetRPM - averagedRightRPM);
+		double leftError = Math.abs(targetRPM - averagedLeftRPM);
+		
+		return rightError < MAX_SPEED_ERROR && leftError < MAX_SPEED_ERROR;
 	}
 	
 	public enum LauncherState {

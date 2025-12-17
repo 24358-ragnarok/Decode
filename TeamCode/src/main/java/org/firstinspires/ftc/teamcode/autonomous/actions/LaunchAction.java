@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.actions;
 
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.EXIT_FIRE_DURATION_MS;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.EXIT_FIRE_RESET_MS;
+import com.pedropathing.util.Timer;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
@@ -23,78 +22,61 @@ import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
  * throughout the launch sequence.
  */
 public class LaunchAction implements AutonomousAction {
+	private int shots = 0;
 	private boolean hasTransfer;
 	private boolean hasLauncher;
 	private State state;
-	private long lastFireTimeMs;
-	
+	private Timer timer;
+
 	@Override
 	public void initialize(MechanismManager mechanisms) {
 		hasLauncher = mechanisms.get(PairedLauncher.class) != null;
 		hasTransfer = mechanisms.get(VerticalWheelTransfer.class) != null;
-		state = State.READY_TO_LAUNCH;
-		lastFireTimeMs = 0;
-		
+		state = State.WAITING_TO_FIRE;
+		timer = new Timer();
+
 		// Start the launcher ready sequence (spin up, aim)
 		if (hasLauncher) {
 			PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
 			launcher.ready();
+			launcher.open();
 		}
 	}
-	
+
 	@Override
 	public boolean execute(MechanismManager mechanisms) {
 		// If no parts, we can't launch anything
 		if (!hasTransfer || !hasLauncher) {
 			return true;
 		}
-		
+
 		PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
 		VerticalWheelTransfer transfer = mechanisms.get(VerticalWheelTransfer.class);
 		
-		if (transfer.isEmpty() && state == State.READY_TO_LAUNCH) {
-			state = State.COMPLETE; // nothing to fire initially, just quit
+		// Check if we're done before processing state machine
+		if (shots >= 3) {
+			state = State.COMPLETE;
 		}
-		
-		// Maintain launcher ready state (spin-up and aim)
-		if (hasLauncher && launcher != null) {
-			launcher.maintainReady();
-		}
-		
+
 		// State machine for sequential ball firing
 		switch (state) {
-			case READY_TO_LAUNCH:
-				state = State.ADVANCING_BALL;
-				break;
-			
-			case ADVANCING_BALL:
-				// Check if transfer is empty and done with previous launch
-				if (transfer.isEmpty() && System.currentTimeMillis() - lastFireTimeMs > EXIT_FIRE_DURATION_MS) {
-					state = State.COMPLETE;
-					break;
-				}
-				
-				if (System.currentTimeMillis() - lastFireTimeMs > EXIT_FIRE_DURATION_MS + EXIT_FIRE_RESET_MS) {
-					transfer.moveNextArtifactToLauncher();
-					state = State.WAITING_TO_FIRE;
-				}
-				break;
-			
 			case WAITING_TO_FIRE:
-				if (transfer.artifactInFiringPosition()) {
+				// Only transition to FIRING if we haven't fired all shots yet
+				if (shots < 3 && launcher.isAtSpeed() && !transfer.isBusy() && timer.getElapsedTime() > 200) {
 					state = State.FIRING;
 				}
-				if (transfer.isEmpty()) {
-					state = State.COMPLETE;
-				}
 				break;
-			
+
 			case FIRING:
-				// Fire the ball
-				launcher.fire();
-				lastFireTimeMs = System.currentTimeMillis();
-				// Go back to advancing the next ball
-				state = State.ADVANCING_BALL;
+				transfer.advance();
+				shots += 1;
+				timer.resetTimer();
+				// Check if we're done after incrementing shots
+				if (shots >= 3) {
+					state = State.COMPLETE;
+				} else {
+					state = State.WAITING_TO_FIRE;
+				}
 				break;
 			
 			case COMPLETE:
@@ -104,6 +86,7 @@ public class LaunchAction implements AutonomousAction {
 		
 		if (state == State.COMPLETE) {
 			launcher.stop();
+			launcher.close();
 			return true;
 		} else {
 			return false;
@@ -117,6 +100,7 @@ public class LaunchAction implements AutonomousAction {
 			PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
 			if (launcher != null) {
 				launcher.stop();
+				launcher.close();
 			}
 		}
 		// Otherwise, launcher continues running for next action
@@ -124,12 +108,10 @@ public class LaunchAction implements AutonomousAction {
 	
 	@Override
 	public String getName() {
-		return "Launch, " + state.toString();
+		return "Launch, " + state.toString().toLowerCase();
 	}
 	
 	private enum State {
-		READY_TO_LAUNCH, // Waiting for launcher spin-up
-		ADVANCING_BALL, // Moving next ball to kicker
 		WAITING_TO_FIRE, // Ball at kicker, waiting for cooldown
 		FIRING, // Currently firing
 		COMPLETE // All balls fired

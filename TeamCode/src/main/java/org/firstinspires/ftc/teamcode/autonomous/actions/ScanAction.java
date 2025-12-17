@@ -23,7 +23,7 @@ public class ScanAction implements AutonomousAction {
 	}
 	
 	public ScanAction() {
-		this(true);
+		this(false);
 	}
 	
 	@Override

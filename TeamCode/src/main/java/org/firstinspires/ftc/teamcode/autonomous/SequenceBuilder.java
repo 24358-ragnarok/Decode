@@ -112,6 +112,7 @@ public class SequenceBuilder {
 	 */
 	public static AutonomousSequence buildCloseSequence() {
 		return new SequenceBuilder()
+				.moveTo(Settings.Positions.Towers.SCAN)
 				.scanObelisk()
 				// Launch preload
 				.prepLaunch()

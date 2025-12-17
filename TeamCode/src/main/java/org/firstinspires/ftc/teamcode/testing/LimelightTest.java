@@ -45,7 +45,6 @@ public class LimelightTest extends OpMode {
 			purpleDetected = limelightManager.detectArtifact(Artifact.Color.PURPLE);
 		}
 		if (gamepad1.yWasPressed()) {
-			telemetry.addData("ok", "ok");
 			lastClassifier = limelightManager.coerceClassifierState(lastDetectedMotif);
 			MatchState.setClassifier(lastClassifier);
 		}

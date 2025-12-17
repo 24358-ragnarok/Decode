@@ -94,7 +94,7 @@ public class Settings {
 		public static final HardwareConfig INTAKE_MOTOR = new HardwareConfig(DcMotorEx.class, "intake");
 		public static final HardwareConfig LAUNCHER_RIGHT = new HardwareConfig(DcMotorEx.class, "launcherRight");
 		public static final HardwareConfig LAUNCHER_LEFT = new HardwareConfig(DcMotorEx.class, "launcherLeft");
-		
+
 		public static final HardwareConfig LAUNCHER_PITCH_SERVO = new HardwareConfig(ServoImplEx.class,
 				"pitch");
 		public static final HardwareConfig LAUNCHER_GATE = new HardwareConfig(ServoImplEx.class,
@@ -103,25 +103,21 @@ public class Settings {
 		// Transfer mechanism
 		public static final HardwareConfig TRANSFER_WHEEL_MOTOR = new HardwareConfig(DcMotorEx.class,
 				"transfer");
-		
-		
+
 		public static final HardwareConfig COMPARTMENT_LEFT = new HardwareConfig(ServoImplEx.class,
 				"compartmentLeft");
-		
+
 		public static final HardwareConfig COMPARTMENT_RIGHT = new HardwareConfig(ServoImplEx.class,
 				"compartmentLeft");
-		
-		
+
 		// Sensors
 		public static final String[] COLOR_RANGEFINDER_1 = {"crf1_0", "crf1_1"};
 		public static final String[] COLOR_RANGEFINDER_2 = {"crf2_0", "crf2_1"};
 		public static final HardwareConfig CONFIGURE_COLOR_SENSOR = new HardwareConfig(
 				RevColorSensorV3.class, "colorSensorConfigure");
 
-		
-		
 		public static final HardwareConfig LIMELIGHT = new HardwareConfig(Limelight3A.class, "limelight");
-		
+
 		/**
 		 * Static method to retrieve hardware from a HardwareMap.
 		 * Allows usage like: Settings.Hardware.get(FRONT_LEFT_MOTOR, hw)
@@ -146,19 +142,41 @@ public class Settings {
 		public static double STOPPED_SPEED = 0.0;
 		public static long COLOR_SENSOR_DEBOUNCE_TIME = 500;
 	}
-	
+
 	/**
 	 * Settings for the main transfer wheel.
+	 * <p>
+	 * Uses motion-profiled position control for smooth, oscillation-free movement.
+	 * The controller uses a trapezoidal velocity profile to accelerate/decelerate
+	 * smoothly, preventing jerky movements that could jam balls.
+	 * <p>
+	 * Tuning Guide (see TUNING.md for detailed instructions):
+	 * - kP: Start low (0.01), increase until response is crisp but not oscillating
+	 * - kD: Add damping if oscillation occurs (typically 2-10x kP)
+	 * - maxVelocity: Maximum ticks/sec during movement
+	 * - maxAcceleration: How fast to ramp velocity (lower = smoother)
+	 * - tolerance: Position deadband to prevent hunting
 	 */
+	@Configurable
 	public static class Transfer {
-		public static final double SPEED = 1.0;
-		public static final double TICKS_PER_REVOLUTION = 384.5 / 2; // 2:1 gear ratio
 		public static final double FIRING_POSITION_TICKS = 500;
 		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 2;
+		public static double SPEED = 0.8;
+		// Motion Profile Position Controller Gains
+		public static double POSITION_KP = 0.015; // Position proportional gain
+		public static double POSITION_KD = 0.002; // Derivative gain (damping)
+		public static double MAX_VELOCITY = 800; // Max velocity (ticks/sec)
+		public static double MAX_ACCELERATION = 1600; // Max acceleration (ticks/sec²)
+		public static double POSITION_TOLERANCE = 10; // Acceptable position error (ticks)
 	}
-	
+
 	/**
 	 * Settings for the Launcher mechanism.
+	 * <p>
+	 * Uses PIDF velocity control for maximum spinup speed while maintaining
+	 * accuracy.
+	 * The feedforward (kF) term provides the base power needed for a given RPM,
+	 * while P/I/D terms correct for load variations and friction.
 	 * <p>
 	 * Servo Angle System:
 	 * - Yaw: 20° window (-10° to +10°), centered at 0° for camera offset
@@ -174,27 +192,62 @@ public class Settings {
 	 * * Matches projectile motion calculations in TrajectoryEngine
 	 * <p>
 	 * - Physical servo calibration points map these angle ranges to servo positions
+	 * <p>
+	 * PIDF Tuning Guide (see TUNING.md for detailed instructions):
+	 * - kF: Feedforward - set first, should get you ~90% of target speed
+	 * - kP: Proportional - increase for faster response, decrease if oscillating
+	 * - kI: Integral - use sparingly, eliminates steady-state error
+	 * - kD: Derivative - dampens oscillation, typically 10x kP
 	 *
 	 * @noinspection PointlessBooleanExpression
 	 */
 	@Configurable
 	public static class Launcher {
+		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static long BELT_SPINUP_TIME_MS = 400;
 		public static double GATE_FIRE_POSITION = 0.0;
 		public static double GATE_CLOSED_POSITION = 0.2;
-		public static long TICKS_PER_REVOLUTION = 28;
 		public static long MAX_SPEED_ERROR = 100;
 		public static long EXIT_FIRE_DURATION_MS = 250;
 		public static long EXIT_FIRE_RESET_MS = 250;
+		
+		// PIDF Velocity Controller Gains
+		// kF is power per unit of target velocity (ticks/sec)
+		// At 3000 RPM = 1400 ticks/sec, we need ~0.8 power, so kF ≈ 0.0006
+		public static double VELOCITY_KP = 0.001420; // Proportional gain
+		public static double VELOCITY_KI = 0.000015; // Integral gain (use sparingly)
+		public static double VELOCITY_KD = 0.000100; // Derivative gain
+		public static double VELOCITY_KF = 0.000360; // Feedforward gain
+		public static double MAX_INTEGRAL = 0.3; // Anti-windup limit
 
-		
 		// Pitch servo calibration (physical limits)
-		public static double PITCH_SERVO_AT_MIN = 0.692; // Servo position at minimum pitch angle
-		public static double PITCH_SERVO_AT_MAX = 0.415; // Servo position at maximum pitch angle
-		public static double DEFAULT_PITCH_ANGLE = 46.0; // degrees from horizontal
-		public static double PITCH_MIN_ANGLE = 30.0; // Minimum pitch angle in degrees (horizontal)
-		public static double PITCH_MAX_ANGLE = 80.0; // Maximum pitch angle in degrees (straight up, 90° total window)
+		public static double PITCH_SERVO_AT_MIN = 0.2; // Servo position at minimum pitch angle
+		public static double PITCH_SERVO_AT_MAX = 0.806; // Servo position at maximum pitch angle
+		public static double DEFAULT_PITCH_ANGLE = 10.0; // degrees from horizontal
+		public static double PITCH_MIN_ANGLE = 2.0; // Minimum pitch angle in degrees (horizontal)
+		public static double PITCH_MAX_ANGLE = 50.0; // Maximum pitch angle in degrees (straight up, 90° total window)
 		
+		/**
+		 * Converts RPM to motor velocity in ticks per second.
+		 * Use this when setting motor velocity from an RPM value.
+		 *
+		 * @param rpm revolutions per minute
+		 * @return velocity in ticks per second
+		 */
+		public static double rpmToTicksPerSec(double rpm) {
+			return rpm * TICKS_PER_REVOLUTION / 60.0;
+		}
+		
+		/**
+		 * Converts motor velocity in ticks per second to RPM.
+		 * Use this when reading motor velocity and displaying as RPM.
+		 *
+		 * @param ticksPerSec velocity in ticks per second
+		 * @return revolutions per minute
+		 */
+		public static double ticksPerSecToRPM(double ticksPerSec) {
+			return ticksPerSec / TICKS_PER_REVOLUTION * 60.0;
+		}
 		
 		/**
 		 * Converts pitch angle (degrees) to servo position using calibration points.
@@ -268,11 +321,11 @@ public class Settings {
 		 * These values are used when AIM is called based on which position is closer.
 		 */
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 55.0; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2600.0 * 3 / 2; // Wheel RPM for close position
-		
+		public static double CLOSE_SHOOT_RPM = 3900; // Wheel RPM for close position
+
 		public static double FAR_SHOOT_PITCH_DEGREES = 53.0; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3150.0 * 3 / 2; // Wheel RPM for far position
-		
+		public static double FAR_SHOOT_RPM = 4725; // Wheel RPM for far position
+
 	}
 	
 	/**
@@ -322,6 +375,7 @@ public class Settings {
 			public static final Pose RED_GOAL = new Pose(130.0, 130.0, Math.toRadians(225));
 			public static final Pose BLUE_GOAL = new Pose(14.0, 130.0, Math.toRadians(315));
 			public static final Pose OBELISK = new Pose(72.0, 150.0, Math.toRadians(0));
+			public static final Pose SCAN = new Pose(60, 100.0, Math.toRadians(80));
 		}
 		
 		/**
@@ -428,7 +482,7 @@ public class Settings {
 	@Configurable
 	public static class Deploy {
 		public static boolean INTAKE = true;
-		public static boolean LIMELIGHT = false;
+		public static boolean LIMELIGHT = true;
 		public static boolean TRANSFER = true;
 		public static boolean TRAJECTORY_ENGINE = true;
 		public static boolean LAUNCHER = TRAJECTORY_ENGINE && true;
