@@ -205,8 +205,8 @@ public class Settings {
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static long BELT_SPINUP_TIME_MS = 400;
-		public static double GATE_FIRE_POSITION = 0.0;
-		public static double GATE_CLOSED_POSITION = 0.2;
+		public static double GATE_FIRE_POSITION = 0.23;
+		public static double GATE_CLOSED_POSITION = 0.35;
 		public static long MAX_SPEED_ERROR = 100;
 		public static long EXIT_FIRE_DURATION_MS = 250;
 		public static long EXIT_FIRE_RESET_MS = 250;
@@ -221,11 +221,11 @@ public class Settings {
 		public static double MAX_INTEGRAL = 0.3; // Anti-windup limit
 		
 		// Pitch servo calibration (physical limits)
-		public static double PITCH_SERVO_AT_MIN = 0.2; // Servo position at minimum pitch angle
-		public static double PITCH_SERVO_AT_MAX = 0.806; // Servo position at maximum pitch angle
-		public static double DEFAULT_PITCH_ANGLE = 10.0; // degrees from horizontal
+		public static double PITCH_SERVO_AT_MIN = 0.0; // Servo position at minimum pitch angle
+		public static double PITCH_SERVO_AT_MAX = 0.94; // Servo position at maximum pitch angle
+		public static double DEFAULT_PITCH_ANGLE = 5.0; // degrees from horizontal
 		public static double PITCH_MIN_ANGLE = 2.0; // Minimum pitch angle in degrees (horizontal)
-		public static double PITCH_MAX_ANGLE = 50.0; // Maximum pitch angle in degrees (straight up, 90° total window)
+		public static double PITCH_MAX_ANGLE = 76.0; // Maximum pitch angle in degrees (straight up, 90° total window)
 		
 		/**
 		 * Converts RPM to motor velocity in ticks per second.
@@ -320,11 +320,11 @@ public class Settings {
 		 * Preset launch angles and RPM for each shooting position.
 		 * These values are used when AIM is called based on which position is closer.
 		 */
-		public static double CLOSE_SHOOT_PITCH_DEGREES = 55.0; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 3900; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_PITCH_DEGREES = 37.5; // Launch angle from horizontal for close position
+		public static double CLOSE_SHOOT_RPM = 3510; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 53.0; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 4725; // Wheel RPM for far position
+		public static double FAR_SHOOT_PITCH_DEGREES = 37.2; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 4320; // Wheel RPM for far position
 		
 	}
 	
@@ -481,8 +481,8 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Deploy {
-		public static boolean INTAKE = true;
-		public static boolean LIMELIGHT = true;
+		public static boolean INTAKE = false;
+		public static boolean LIMELIGHT = false;
 		public static boolean TRANSFER = true;
 		public static boolean TRAJECTORY_ENGINE = true;
 		public static boolean LAUNCHER = TRAJECTORY_ENGINE && true;

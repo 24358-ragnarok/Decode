@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.DEF
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
 import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
@@ -84,7 +85,7 @@ public class OuttakeTest extends LinearOpMode {
 			
 			m.ifValid(m.get(PairedLauncher.class), pairedLauncher -> {
 				telemetry.addData("Smoothed RPM", "%.2f", pairedLauncher.getRPM());
-				telemetry.addData("Actual Angle", "%.1f", pairedLauncher.getPitch());
+				telemetry.addData("Servo Position", "%.2f", Settings.Launcher.pitchToServo(pairedLauncher.getPitch()));
 				telemetry.addData("At speed?", pairedLauncher.isAtSpeed());
 			});
 			

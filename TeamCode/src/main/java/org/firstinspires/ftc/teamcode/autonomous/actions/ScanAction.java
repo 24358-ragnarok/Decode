@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
 import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
+import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
 import org.firstinspires.ftc.teamcode.software.LimelightManager;
 import org.firstinspires.ftc.teamcode.software.game.Classifier;
 import org.firstinspires.ftc.teamcode.software.game.Motif;
@@ -50,11 +51,19 @@ public class ScanAction implements AutonomousAction {
 		}
 		
 		// begin scanning
-		mechanisms.limelightManager.setCurrentPipeline(LimelightManager.Pipeline.APRILTAG);
+		mechanisms.ifValid(mechanisms.limelightManager, limelightManager ->
+				limelightManager.setCurrentPipeline(LimelightManager.Pipeline.APRILTAG));
+		
+		mechanisms.ifValid(mechanisms.get(PairedLauncher.class), launcher -> {
+			launcher.setPitch(1);
+		});
 	}
 	
 	@Override
 	public boolean execute(MechanismManager mechanisms) {
+		if (!Settings.Deploy.LIMELIGHT) {
+			return true;
+		}
 		Motif m = mechanisms.limelightManager.detectMotif();
 		if (m == Motif.UNKNOWN) {
 			return false;
