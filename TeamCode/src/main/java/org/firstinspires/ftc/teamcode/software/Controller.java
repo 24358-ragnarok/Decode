@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.software;
 
+import com.bylazar.gamepad.GamepadManager;
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -17,27 +18,35 @@ import java.util.HashMap;
  * TeleOp.
  */
 public class Controller extends Gamepad {
-	private final Gamepad gamepad;
+	private final Gamepad physical;
+	private final GamepadManager panelsManager;
 	private final HashMap<Control, Double> previousControlState;
 	private final Follower follower;
+	private Gamepad gamepad;
 	
-	public Controller(Gamepad gamepad, Follower follower) {
-		this.gamepad = gamepad;
+	public Controller(Gamepad physicalGamepad, Follower follower, GamepadManager panelsManager) {
+		this.physical = physicalGamepad;
+		this.panelsManager = panelsManager;
+		this.gamepad = panelsManager.asCombinedFTCGamepad(physical);
 		this.follower = follower;
 		this.previousControlState = new HashMap<>();
 		// Populate the initial state in the constructor
-		saveLastState();
+		update();
 	}
 	
 	/**
-	 * Stores the previous state of the controller.
+	 * Stores the previous state of the controller, then refreshes the gamepad.
+	 * Must be called at the START of each loop, before checking button states.
 	 * This is useful for figuring out if we just started pressing a button or if it
 	 * has been held.
 	 */
-	public final void saveLastState() {
+	public final void update() {
+		// First, save current state as "previous" (before refresh!)
 		for (Control control : Control.values()) {
 			previousControlState.put(control, getRawValue(control));
 		}
+		// Then, refresh the gamepad with new data
+		this.gamepad = panelsManager.asCombinedFTCGamepad(physical);
 	}
 	
 	/**
@@ -121,7 +130,8 @@ public class Controller extends Gamepad {
 	}
 	
 	/**
-	 * See above for function. getProcessedValue of an ACTION applies action-based processing to the processed input value.
+	 * See above for function. getProcessedValue of an ACTION applies action-based
+	 * processing to the processed input value.
 	 *
 	 * @param action The action to process
 	 * @return processed action value
@@ -131,7 +141,8 @@ public class Controller extends Gamepad {
 		if (action == Action.ROTATE_LEFT || action == Action.ROTATE_RIGHT) {
 			val /= 3;
 		}
-		if (action == Action.SLOW_FORWARD || action == Action.SLOW_BACKWARD || action == Action.SLOW_LEFT || action == Action.SLOW_RIGHT) {
+		if (action == Action.SLOW_FORWARD || action == Action.SLOW_BACKWARD || action == Action.SLOW_LEFT
+				|| action == Action.SLOW_RIGHT) {
 			val /= 7;
 		}
 		return val;
@@ -144,7 +155,8 @@ public class Controller extends Gamepad {
 	 * backward)
 	 */
 	public final double getProcessedDrive() {
-		double drive = getProcessedValue(Action.MOVE_Y) + getProcessedValue(Action.SLOW_FORWARD) - getProcessedValue(Action.SLOW_BACKWARD);
+		double drive = getProcessedValue(Action.MOVE_Y) + getProcessedValue(Action.SLOW_FORWARD)
+				- getProcessedValue(Action.SLOW_BACKWARD);
 		return Math.max(-1, Math.min(1, drive));
 	}
 	
@@ -155,7 +167,8 @@ public class Controller extends Gamepad {
 	 * right)
 	 */
 	public final double getProcessedStrafe() {
-		double strafe = getProcessedValue(Action.MOVE_X) - getProcessedValue(Action.SLOW_LEFT) + getProcessedValue(Action.SLOW_RIGHT);
+		double strafe = getProcessedValue(Action.MOVE_X) - getProcessedValue(Action.SLOW_LEFT)
+				+ getProcessedValue(Action.SLOW_RIGHT);
 		return Math.max(-1, Math.min(1, strafe));
 	}
 	

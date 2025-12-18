@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.bylazar.gamepad.PanelsGamepad;
 import com.bylazar.telemetry.PanelsTelemetry;
+import com.outoftheboxrobotics.photoncore.Photon;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -23,6 +25,7 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
  * after Auto.
  * Handles controller profile selection and robot operation during matches.
  */
+@Photon
 @TeleOp(name = "MainOp", group = ".Competition Modes")
 public class MainOp extends OpMode {
 	public SlewThrottle slewThrottle;
@@ -38,12 +41,12 @@ public class MainOp extends OpMode {
 	 */
 	@Override
 	public final void init() {
-		// Pull the stored match state and settings from when they were set during auto
-		
 		// Initialize robot systems
 		mechanisms = new MechanismManager(hardwareMap);
-		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower);
-		subController = new Controller(gamepad2, mechanisms.drivetrain.follower);
+		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower,
+				PanelsGamepad.INSTANCE.getFirstManager());
+		subController = new Controller(gamepad2, mechanisms.drivetrain.follower,
+				PanelsGamepad.INSTANCE.getSecondManager());
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
 		slewThrottle = new SlewThrottle();
 		mechanisms.drivetrain.follower.setStartingPose(MatchState.getTeleOpStartingPose());
@@ -57,7 +60,9 @@ public class MainOp extends OpMode {
 		} else {
 			logging.addData("Starting Pose Source", "FALLBACK/PREDEFINED");
 		}
-		logging.addData("Alliance", MatchState.getAllianceColor());
+		mechanisms.setHubColors(
+				MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE ? MechanismManager.PresetColor.BLUE
+						: MechanismManager.PresetColor.RED);
 	}
 	
 	/**
@@ -120,6 +125,10 @@ public class MainOp extends OpMode {
 	 * telemetry updates.
 	 */
 	private void processControllerInputs() {
+		// Refresh gamepad state FIRST (required for edge detection to work)
+		mainController.update();
+		subController.update();
+		
 		// Drivetrain
 		double d = mainController.getProcessedDrive();
 		double s = mainController.getProcessedStrafe();
@@ -178,7 +187,6 @@ public class MainOp extends OpMode {
 			mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::reverse);
 		}
 		
-		
 		// Intake & Transfer
 		if (subController.wasJustPressed(Controller.Action.INTAKE_IN)) {
 			mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::in);
@@ -191,9 +199,6 @@ public class MainOp extends OpMode {
 		if (subController.wasJustPressed(Controller.Action.INTAKE_STOP)) {
 			mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::stop);
 		}
-		
-		mainController.saveLastState();
-		subController.saveLastState();
 	}
 	
 	/**
@@ -248,7 +253,6 @@ public class MainOp extends OpMode {
 			
 			logging.addDataLazy("Belt RPM", launcher::getRPM);
 		});
-		
 		
 		// Launcher mechanism status
 		mechanisms.ifValid(mechanisms.get(PairedLauncher.class), launcher -> {

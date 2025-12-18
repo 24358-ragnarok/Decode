@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.bylazar.telemetry.PanelsTelemetry;
+import com.outoftheboxrobotics.photoncore.Photon;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -27,6 +28,7 @@ import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
  * The old state machine approach (600+ lines, lots of duplication) has been
  * replaced with a clean, maintainable structure (~150 lines).
  */
+@Photon
 @Autonomous(name = "Main Auto", group = ".Competition Modes", preselectTeleOp = "MainOp")
 public class MainAuto extends OpMode {
 	
@@ -69,6 +71,7 @@ public class MainAuto extends OpMode {
 		
 		// Allow driver to select match settings using the wizard
 		wizard.refresh();
+		mechanisms.setHubColors(MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE ? MechanismManager.PresetColor.BLUE : MechanismManager.PresetColor.RED);
 		
 		logging.update();
 	}

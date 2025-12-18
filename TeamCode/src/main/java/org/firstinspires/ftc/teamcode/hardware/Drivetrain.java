@@ -35,7 +35,6 @@ public class Drivetrain extends Mechanism {
 	 * @param hardwareMap The robot's hardware map.
 	 */
 	public Drivetrain(HardwareMap hardwareMap) {
-		// The Constants class now holds all hardware and tuning configurations.
 		this.follower = Constants.createFollower(hardwareMap);
 		state = State.MANUAL;
 		// Don't set starting pose here - let each OpMode handle it

@@ -20,11 +20,6 @@ import java.util.EnumMap;
  */
 @Configurable
 public class Settings {
-	public static class Color {
-		public final static int RAGNAROK_RED = 0xFF0000;
-		public final static int ELITE_GOLD = 0xFFEB29;
-	}
-	
 	/**
 	 * Maps controller inputs to robot actions for TeleOp.
 	 */
@@ -481,7 +476,7 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Deploy {
-		public static boolean INTAKE = false;
+		public static boolean INTAKE = true;
 		public static boolean LIMELIGHT = false;
 		public static boolean TRANSFER = true;
 		public static boolean TRAJECTORY_ENGINE = true;

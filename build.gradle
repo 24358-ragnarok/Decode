@@ -25,6 +25,7 @@ allprojects {
         maven {
             url = "https://mymaven.bylazar.com/releases"
         }
+        maven { url 'https://jitpack.io' }
     }
 
 }

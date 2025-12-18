@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import android.graphics.Color;
+
 import androidx.annotation.Nullable;
 
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -13,7 +16,9 @@ import org.firstinspires.ftc.teamcode.software.ColorUnifier;
 import org.firstinspires.ftc.teamcode.software.LimelightManager;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -62,8 +67,53 @@ public class MechanismManager {
 		// Now that we've built all of the systems, begin caching system reads for
 		// efficiency
 		for (LynxModule hub : allHubs) {
-			hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-			hub.setConstant(Settings.Color.RAGNAROK_RED);
+			createHub(hub);
+		}
+	}
+	
+	private void createHub(LynxModule hub) {
+		hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+	}
+	
+	public void setHubColors(PresetColor c) {
+		ArrayList<Blinker.Step> p = new ArrayList<>();
+		int maxPatternLength = allHubs.get(0).getBlinkerPatternMaxLength();
+		switch (c) {
+			case RED:
+				for (LynxModule hub : allHubs) {
+					hub.setConstant(Color.RED);
+				}
+				break;
+			case PURPLE:
+				for (LynxModule hub : allHubs) {
+					hub.setConstant(Color.MAGENTA);
+				}
+				break;
+			case BLUE:
+				for (LynxModule hub : allHubs) {
+					hub.setConstant(Color.BLUE);
+				}
+				break;
+			case RAINBOW:
+			default:
+				int targetLength = Math.max(1, maxPatternLength);
+				
+				int totalCycleTimeMs = 500;
+				int stepDuration = totalCycleTimeMs / targetLength;
+				
+				for (int i = 0; i < targetLength; i++) {
+					// Map the current step to a degree on the 360 degree color wheel
+					float hue = (i * 360f) / targetLength;
+					
+					// Convert HSV to Android Color (Full Saturation and Value)
+					int color = Color.HSVToColor(new float[]{hue, 1f, 1f});
+					
+					p.add(new Blinker.Step(color, stepDuration, TimeUnit.MILLISECONDS));
+				}
+				for (LynxModule hub : allHubs) {
+					hub.setPattern(p);
+				}
+				break;
 		}
 	}
 	
@@ -147,6 +197,7 @@ public class MechanismManager {
 	 * Initializes all available mechanisms.
 	 */
 	public void start() {
+		setHubColors(PresetColor.RAINBOW);
 		for (Mechanism m : mechanismArray) {
 			if (m != null) {
 				m.start();
@@ -175,6 +226,7 @@ public class MechanismManager {
 	 * Stops all available mechanisms safely.
 	 */
 	public void stop() {
+		setHubColors(PresetColor.PURPLE);
 		for (Mechanism m : mechanismArray) {
 			if (m != null) {
 				m.stop();
@@ -195,5 +247,12 @@ public class MechanismManager {
 		if (obj != null) {
 			action.accept(obj);
 		}
+	}
+	
+	public enum PresetColor {
+		RAINBOW,
+		PURPLE,
+		RED,
+		BLUE,
 	}
 }
