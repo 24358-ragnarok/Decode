@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous.actions;
 import com.pedropathing.util.Timer;
 
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
+import org.firstinspires.ftc.teamcode.hardware.FlexVectorIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
 import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
@@ -52,27 +53,24 @@ public class LaunchAction implements AutonomousAction {
 		
 		PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
 		VerticalWheelTransfer transfer = mechanisms.get(VerticalWheelTransfer.class);
-		
-		// Check if we're done before processing state machine
-		if (shots >= 3) {
-			state = State.COMPLETE;
-		}
+		FlexVectorIntake intake = mechanisms.get(FlexVectorIntake.class);
 		
 		// State machine for sequential ball firing
 		switch (state) {
 			case WAITING_TO_FIRE:
 				// Only transition to FIRING if we haven't fired all shots yet
-				if (shots < 3 && launcher.isAtSpeed() && !transfer.isBusy() && timer.getElapsedTime() > 200) {
+				if (launcher.isAtSpeed() && !transfer.isBusy() && timer.getElapsedTime() > 500) {
 					state = State.FIRING;
 				}
 				break;
 			
 			case FIRING:
 				transfer.advance();
+				intake.in();
 				shots += 1;
 				timer.resetTimer();
 				// Check if we're done after incrementing shots
-				if (shots >= 3) {
+				if (shots >= 4) {
 					state = State.COMPLETE;
 				} else {
 					state = State.WAITING_TO_FIRE;
@@ -108,7 +106,7 @@ public class LaunchAction implements AutonomousAction {
 	
 	@Override
 	public String getName() {
-		return "Launch, " + state.toString().toLowerCase();
+		return "Launch, " + state.toString().toLowerCase() + " (shots: " + shots + ")";
 	}
 	
 	private enum State {

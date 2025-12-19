@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous.actions;
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
 import org.firstinspires.ftc.teamcode.hardware.FlexVectorIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
+import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
 
 /**
  * Action that runs the intake mechanism.
@@ -15,14 +16,14 @@ import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
  * <p>
  * Can be configured to stop on complete or leave running.
  */
-public class IntakeAction implements AutonomousAction {
+public class PickupBallAction implements AutonomousAction {
 	private final boolean stopOnComplete;
 	
-	public IntakeAction(boolean stopOnComplete) {
+	public PickupBallAction(boolean stopOnComplete) {
 		this.stopOnComplete = stopOnComplete;
 	}
 	
-	public IntakeAction() {
+	public PickupBallAction() {
 		this(false);
 	}
 	
@@ -33,8 +34,13 @@ public class IntakeAction implements AutonomousAction {
 		
 		// Start intake motor to pull samples in
 		FlexVectorIntake intake = mechanisms.get(FlexVectorIntake.class);
+		
+		VerticalWheelTransfer transfer = mechanisms.get(VerticalWheelTransfer.class);
 		if (intake != null) {
 			intake.in();
+		}
+		if (transfer != null) {
+			transfer.crawl();
 		}
 	}
 	

@@ -155,16 +155,12 @@ public class MainOp extends OpMode {
 					dt.goTo(action);
 					// Stop intake when going to park
 					if (dt.actionToPosition(action) == Drivetrain.Position.PARK) {
-						mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::stop);
+						mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::freeze);
 					}
 				});
 			} else if (mainController.wasJustReleased(action)) {
 				mechanisms.drivetrain.switchToManual();
 			}
-		}
-		
-		if (mainController.wasJustPressed(Controller.Action.CANCEL_ASSISTED_DRIVING)) {
-			mechanisms.ifValid(mechanisms.drivetrain, Drivetrain::switchToManual);
 		}
 		
 		// Alignment & Launcher
@@ -180,10 +176,10 @@ public class MainOp extends OpMode {
 			mechanisms.ifValid(mechanisms.get(PairedLauncher.class), PairedLauncher::close);
 		}
 		
-		if (subController.wasJustPressed(Controller.Action.OVERRIDE_ADVANCE)) {
+		if (subController.wasJustPressed(Controller.Action.TRANSFER_ADVANCE)) {
 			mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::advance);
 		}
-		if (subController.wasJustPressed(Controller.Action.OVERRIDE_REVERSE)) {
+		if (subController.wasJustPressed(Controller.Action.TRANSFER_REVERSE)) {
 			mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::reverse);
 		}
 		
@@ -191,12 +187,14 @@ public class MainOp extends OpMode {
 		if (subController.wasJustPressed(Controller.Action.INTAKE_IN)) {
 			mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::in);
 		}
+		if (subController.wasJustReleased(Controller.Action.INTAKE_IN)) {
+			mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::stop);
+		}
 		
 		if (subController.wasJustPressed(Controller.Action.INTAKE_OUT)) {
 			mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::out);
 		}
-		
-		if (subController.wasJustPressed(Controller.Action.INTAKE_STOP)) {
+		if (subController.wasJustReleased(Controller.Action.INTAKE_OUT)) {
 			mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::stop);
 		}
 	}

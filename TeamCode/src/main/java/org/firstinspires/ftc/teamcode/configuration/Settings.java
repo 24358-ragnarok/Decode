@@ -58,13 +58,12 @@ public class Settings {
 			actionControlMap.put(Controller.Action.LAUNCH, Controller.Control.RIGHT_TRIGGER);
 			actionControlMap.put(Controller.Action.LAUNCHER_STEEPNESS_AXIS, Controller.Control.RIGHT_STICK_Y);
 			actionControlMap.put(Controller.Action.LAUNCHER_ROTATION_AXIS, Controller.Control.RIGHT_STICK_X);
-			actionControlMap.put(Controller.Action.INTAKE_IN, Controller.Control.SQUARE);
-			actionControlMap.put(Controller.Action.INTAKE_STOP, Controller.Control.CROSS);
-			actionControlMap.put(Controller.Action.INTAKE_OUT, Controller.Control.CIRCLE);
-			actionControlMap.put(Controller.Action.OVERRIDE_ADVANCE, Controller.Control.DPAD_UP);
+			actionControlMap.put(Controller.Action.INTAKE_IN, Controller.Control.CROSS);
+			actionControlMap.put(Controller.Action.INTAKE_OUT, Controller.Control.TRIANGLE);
+			actionControlMap.put(Controller.Action.TRANSFER_ADVANCE, Controller.Control.DPAD_UP);
 			actionControlMap.put(Controller.Action.OVERRIDE_BALL_DETECTION, Controller.Control.DPAD_LEFT);
 			actionControlMap.put(Controller.Action.OVERRIDE_CLEAR, Controller.Control.DPAD_RIGHT);
-			actionControlMap.put(Controller.Action.OVERRIDE_REVERSE, Controller.Control.DPAD_DOWN);
+			actionControlMap.put(Controller.Action.TRANSFER_REVERSE, Controller.Control.DPAD_DOWN);
 			for (Controller.Action action : Controller.Action.values()) {
 				actionControlMap.putIfAbsent(action, Controller.Control.UNKNOWN);
 			}
@@ -133,6 +132,7 @@ public class Settings {
 	@Configurable
 	public static class Intake {
 		public static double IN_SPEED = 1.0;
+		public static double CRAWL_SPEED = 0.3;
 		public static double OUT_SPEED = -1.0;
 		public static double STOPPED_SPEED = 0.0;
 		public static long COLOR_SENSOR_DEBOUNCE_TIME = 500;
@@ -157,6 +157,8 @@ public class Settings {
 		public static final double FIRING_POSITION_TICKS = 500;
 		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 2;
 		public static double SPEED = 0.8;
+		public static double CRAWL_SPEED = 0.2;
+		public static double CRAWL_TICKS = 2500;
 		// Motion Profile Position Controller Gains
 		public static double POSITION_KP = 0.015; // Position proportional gain
 		public static double POSITION_KD = 0.002; // Derivative gain (damping)
@@ -201,7 +203,7 @@ public class Settings {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static long BELT_SPINUP_TIME_MS = 400;
 		public static double GATE_FIRE_POSITION = 0.23;
-		public static double GATE_CLOSED_POSITION = 0.35;
+		public static double GATE_CLOSED_POSITION = 0.32;
 		public static long MAX_SPEED_ERROR = 100;
 		public static long EXIT_FIRE_DURATION_MS = 250;
 		public static long EXIT_FIRE_RESET_MS = 250;
@@ -315,8 +317,8 @@ public class Settings {
 		 * Preset launch angles and RPM for each shooting position.
 		 * These values are used when AIM is called based on which position is closer.
 		 */
-		public static double CLOSE_SHOOT_PITCH_DEGREES = 37.5; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 3510; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_PITCH_DEGREES = 52.6; // Launch angle from horizontal for close position
+		public static double CLOSE_SHOOT_RPM = 3230; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 37.2; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 4320; // Wheel RPM for far position
@@ -393,8 +395,8 @@ public class Settings {
 		 * These are used for goto commands during driver control.
 		 */
 		public static class TeleOp {
-			public static final Pose CLOSE_SHOOT = new Pose(58, 86, Math.toRadians(135));
-			public static final Pose FAR_SHOOT = new Pose(60, 15, Math.toRadians(115));
+			public static final Pose CLOSE_SHOOT = new Pose(58, 93, Math.toRadians(140.59));
+			public static final Pose FAR_SHOOT = new Pose(60, 15, Math.toRadians(114));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(25, 68, Math.toRadians(0));
 			public static final Pose PARK = new Pose(105, 32, Math.toRadians(0));
@@ -417,7 +419,7 @@ public class Settings {
 			 * First preset group (closest to wall).
 			 */
 			public static class Preset1 {
-				public static final Pose PREP = new Pose(45, 34, Math.toRadians(180));
+				public static final Pose PREP = new Pose(50, 34, Math.toRadians(180));
 				public static final Pose GRAB_1 = new Pose(36.0, 34, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 34, Math.toRadians(180));
 				public static final Pose END = new Pose(20, 34, Math.toRadians(180));
@@ -427,7 +429,7 @@ public class Settings {
 			 * Second preset group (middle).
 			 */
 			public static class Preset2 {
-				public static final Pose PREP = new Pose(45, 58, Math.toRadians(180));
+				public static final Pose PREP = new Pose(50, 58, Math.toRadians(180));
 				public static final Pose GRAB_1 = new Pose(36.0, 58, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 58, Math.toRadians(180));
 				public static final Pose END = new Pose(20, 58, Math.toRadians(180));
@@ -437,7 +439,7 @@ public class Settings {
 			 * Third preset group (farthest from wall).
 			 */
 			public static class Preset3 {
-				public static final Pose PREP = new Pose(45, 83, Math.toRadians(180));
+				public static final Pose PREP = new Pose(50, 83, Math.toRadians(180));
 				public static final Pose GRAB_1 = new Pose(35.0, 83, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 83, Math.toRadians(180));
 				public static final Pose END = new Pose(20, 83, Math.toRadians(180));

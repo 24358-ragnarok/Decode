@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.CRAWL_SPEED;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.CRAWL_TICKS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.FIRING_POSITION_TICKS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.INCREMENT_TICKS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.SPEED;
@@ -82,19 +84,25 @@ public class VerticalWheelTransfer extends Mechanism {
 	 * and extend the run time accordingly (non-destructive).
 	 */
 	public void advance() {
-		targetTicks += INCREMENT_TICKS; // TODO convert ticks to rotation and use that as an input
+		move(INCREMENT_TICKS);
 	}
 	
 	public void reverse() {
-		targetTicks -= INCREMENT_TICKS;
+		move(-INCREMENT_TICKS);
 	}
 	
 	public void move(double ticks) {
+		motor.setPower(SPEED);
 		targetTicks += ticks;
 	}
 	
 	public void freeze() {
 		targetTicks = motor.getCurrentPosition();
+	}
+	
+	public void crawl() {
+		motor.setPower(CRAWL_SPEED);
+		targetTicks += CRAWL_TICKS;
 	}
 	
 	public void artifactIncoming(Artifact artifact) {

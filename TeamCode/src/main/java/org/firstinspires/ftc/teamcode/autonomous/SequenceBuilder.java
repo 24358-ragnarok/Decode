@@ -7,15 +7,15 @@ import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.autonomous.actions.CurvePathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.EndAtAction;
-import org.firstinspires.ftc.teamcode.autonomous.actions.IntakeAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.EndPickupAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LinearPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ParallelAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.PickupBallAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PrepareLaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ScanAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SlowLinearPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SplinedPathAction;
-import org.firstinspires.ftc.teamcode.autonomous.actions.StopIntakeAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.WaitAction;
 import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
@@ -65,14 +65,14 @@ public class SequenceBuilder {
 				.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
 						"Prep Preset 1",
 						Settings.Positions.ControlPoints.PRESET_1_APPROACH)
-				.startIntake()
+				.startPickup()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_1, "Grab Preset 1 Ball 1")
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab Preset 1 Ball 2")
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
 				.wait(BALL_INTAKE_WAIT_S)
-				.stopIntake()
+				.endPickup()
 				
 				// Launch ball set I
 				.prepLaunch()
@@ -85,14 +85,14 @@ public class SequenceBuilder {
 				.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
 						"Prep Preset2",
 						Settings.Positions.ControlPoints.PRESET_2_APPROACH)
-				.startIntake()
+				.startPickup()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
 				.wait(BALL_INTAKE_WAIT_S)
-				.stopIntake()
+				.endPickup()
 				
 				// Launch ball set II
 				.prepLaunch()
@@ -101,7 +101,7 @@ public class SequenceBuilder {
 				.launch()
 				
 				// Park
-				.stopIntake()
+				.endPickup()
 				.moveTo(Settings.Positions.Park.FAR, "Park")
 				.endAt(Settings.Positions.Park.FAR)
 				.build();
@@ -122,14 +122,14 @@ public class SequenceBuilder {
 				
 				// Get ball set I (Preset3 for close sequence)
 				.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
-				.startIntake()
+				.startPickup()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_1, "Grab1 Preset3")
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_2, "Grab2 Preset3")
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
 				.wait(BALL_INTAKE_WAIT_S)
-				.stopIntake()
+				.endPickup()
 				
 				// Launch ball set I
 				.prepLaunch()
@@ -140,14 +140,14 @@ public class SequenceBuilder {
 				
 				// Get ball set II (Preset2 for close sequence)
 				.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
-				.startIntake()
+				.startPickup()
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
 				.wait(BALL_INTAKE_WAIT_S)
 				.moveSlowlyTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
 				.wait(BALL_INTAKE_WAIT_S)
-				.stopIntake()
+				.endPickup()
 				
 				// Launch ball set II
 				.prepLaunch()
@@ -157,7 +157,7 @@ public class SequenceBuilder {
 				.launch()
 				
 				// Park
-				.stopIntake()
+				.endPickup()
 				.moveTo(Settings.Positions.Park.CLOSE, "Park")
 				.endAt(Settings.Positions.Park.CLOSE)
 				.build();
@@ -255,8 +255,8 @@ public class SequenceBuilder {
 	 *
 	 * @return this (for method chaining)
 	 */
-	public SequenceBuilder startIntake() {
-		sequence.addAction(new IntakeAction());
+	public SequenceBuilder startPickup() {
+		sequence.addAction(new PickupBallAction());
 		return this;
 	}
 	
@@ -280,8 +280,8 @@ public class SequenceBuilder {
 	 *
 	 * @return this (for method chaining)
 	 */
-	public SequenceBuilder stopIntake() {
-		sequence.addAction(new StopIntakeAction());
+	public SequenceBuilder endPickup() {
+		sequence.addAction(new EndPickupAction());
 		return this;
 	}
 	
@@ -339,9 +339,9 @@ public class SequenceBuilder {
 	public SequenceBuilder intakeCycle(Pose prepPose, Pose endPose) {
 		return this
 				.moveTo(prepPose)
-				.startIntake()
+				.startPickup()
 				.moveSlowlyTo(endPose)
-				.stopIntake();
+				.endPickup();
 	}
 	
 	/**

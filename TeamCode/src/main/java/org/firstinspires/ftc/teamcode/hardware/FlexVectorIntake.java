@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.CRAWL_SPEED;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.IN_SPEED;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.OUT_SPEED;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.STOPPED_SPEED;
@@ -37,6 +38,11 @@ public class FlexVectorIntake extends Mechanism {
 	public void in() {
 		state = IntakeState.IN;
 		motor.setPower(IN_SPEED);
+	}
+	
+	public void crawl() {
+		state = IntakeState.IN;
+		motor.setPower(CRAWL_SPEED);
 	}
 	
 	/**
