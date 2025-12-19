@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.software.ColorRangefinder;
  * The sensor processes colors using onboard HSV detection and outputs digital
  * signals. This is ultra-fast (no I2C) and lighting-independent.
  */
-@TeleOp(name = "Test: Digital Pin Color Rangefinder", group = "Tests")
+@TeleOp(name = "Test: Color Rangefinder", group = "Tests")
 public class SimpleColorTester extends OpMode {
 	private ColorRangefinder colorRangefinder;
 	

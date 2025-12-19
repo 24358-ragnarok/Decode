@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.configuration;
 
 import com.pedropathing.geometry.Pose;
 
+import org.firstinspires.ftc.teamcode.autonomous.AutonomousRuntime;
 import org.firstinspires.ftc.teamcode.software.game.Artifact;
 import org.firstinspires.ftc.teamcode.software.game.Classifier;
 import org.firstinspires.ftc.teamcode.software.game.Motif;
@@ -41,6 +42,11 @@ public class MatchState {
 	private static AutoStartingPosition autoStartingPosition = AutoStartingPosition.FAR;
 	
 	/**
+	 * Stores the selected autonomous runtime strategy. Defaults to DEFAULT.
+	 */
+	private static AutonomousRuntime autonomousRuntime = AutonomousRuntime.DEFAULT;
+	
+	/**
 	 * Stores the robot's last known pose, set at the end of Autonomous for
 	 * TeleOp to use. Null if not set.
 	 */
@@ -55,6 +61,7 @@ public class MatchState {
 		classifier = Classifier.empty();
 		allianceColor = AllianceColor.BLUE;
 		autoStartingPosition = AutoStartingPosition.FAR;
+		autonomousRuntime = AutonomousRuntime.DEFAULT;
 		storedPose = null;
 	}
 	
@@ -166,6 +173,30 @@ public class MatchState {
 		if (position != null) {
 			MatchState.autoStartingPosition = position;
 		}
+	}
+	
+	public static AutonomousRuntime getAutonomousRuntime() {
+		return autonomousRuntime;
+	}
+	
+	public static void setAutonomousRuntime(AutonomousRuntime runtime) {
+		if (runtime != null) {
+			MatchState.autonomousRuntime = runtime;
+		}
+	}
+	
+	/**
+	 * Cycles to the next autonomous runtime.
+	 */
+	public static void nextAutonomousRuntime() {
+		autonomousRuntime = autonomousRuntime.next();
+	}
+	
+	/**
+	 * Cycles to the previous autonomous runtime.
+	 */
+	public static void previousAutonomousRuntime() {
+		autonomousRuntime = autonomousRuntime.previous();
 	}
 	
 	/**

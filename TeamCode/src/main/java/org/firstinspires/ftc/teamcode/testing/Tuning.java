@@ -39,7 +39,7 @@ import java.util.List;
  * @version 1.0, 6/26/2025
  */
 @Configurable
-@TeleOp(name = "PedroPathing Tuner", group = ".Pedro Pathing")
+@TeleOp(name = "Tune: PedroPathing", group = ".Pedro")
 public class Tuning extends SelectableOpMode {
 	public static Follower follower;
 	

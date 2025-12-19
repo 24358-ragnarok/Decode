@@ -50,6 +50,15 @@ public class MatchConfigurationWizard {
 			confirmed = !confirmed;
 		}
 		
+		// Cycle through runtimes with left/right d-pad
+		if (gamepad1.dpadRightWasPressed()) {
+			MatchState.nextAutonomousRuntime();
+		}
+		
+		if (gamepad1.dpadLeftWasPressed()) {
+			MatchState.previousAutonomousRuntime();
+		}
+		
 		// Update telemetry display
 		updateTelemetry();
 	}
@@ -63,30 +72,21 @@ public class MatchConfigurationWizard {
 		
 		if (!confirmed) {
 			logging.addLine("=== MATCH CONFIGURATION ===");
-			logging.addLine("  X           → BLUE Alliance");
-			logging.addLine("  B           → RED Alliance");
-			logging.addLine("  A           → Close Starting Position");
-			logging.addLine("  Y           → Far Starting Position");
-			logging.addLine("  START       → Confirm Configuration");
+			logging.addLine("  X/B           → Alliance Color");
+			logging.addLine("  A/Y           → Starting Position");
+			logging.addLine("  D-Pad L/R     → Runtime");
+			logging.addLine("  START         → Confirm");
 		} else {
 			logging.addLine("=== CONFIGURATION CONFIRMED ===");
-			logging.addLine("❎ Press start to cancel");
+			logging.addLine("press start to go back");
 		}
 		
 		logging.addLine("");
 		
-		if (currentColor == MatchState.AllianceColor.BLUE) {
-			logging.addLine("\uD83D\uDD35 BLUE Alliance Selected");
-		} else {
-			logging.addLine("\uD83D\uDD34 RED Alliance Selected");
-		}
+		logging.addLine(String.format("Starting Conditions: %s %s",
+				(currentColor == MatchState.AllianceColor.BLUE) ? "Blue" : "Red",
+				(autoStartingPosition == MatchState.AutoStartingPosition.CLOSE) ? "Close" : "Far"));
 		
-		if (autoStartingPosition == MatchState.AutoStartingPosition.CLOSE) {
-			logging.addLine("\uD83D\uDD0D Close (GOAL) Starting Position Selected");
-		} else {
-			logging.addLine("\uD83D\uDD2D Far (SMALL TRIANGLE) Starting Position Selected");
-		}
-		
-		logging.addData("Starting Pose", MatchState.getAutonomousStartingPose());
+		logging.addLine("Runtime: " + MatchState.getAutonomousRuntime().getDisplayName());
 	}
 }

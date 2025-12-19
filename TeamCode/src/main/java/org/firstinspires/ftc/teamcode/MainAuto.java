@@ -6,8 +6,8 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.autonomous.AutonomousRuntime;
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousSequence;
-import org.firstinspires.ftc.teamcode.autonomous.SequenceBuilder;
 import org.firstinspires.ftc.teamcode.configuration.MatchConfigurationWizard;
 import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
@@ -29,7 +29,7 @@ import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
  * replaced with a clean, maintainable structure (~150 lines).
  */
 @Photon
-@Autonomous(name = "Main Auto", group = ".Competition Modes", preselectTeleOp = "MainOp")
+@Autonomous(name = "Run: The Boonstra Special", group = ".Competition", preselectTeleOp = "Run: Jack Berns' Signature TeleOp")
 public class MainAuto extends OpMode {
 	
 	private Timer opmodeTimer;
@@ -71,7 +71,9 @@ public class MainAuto extends OpMode {
 		
 		// Allow driver to select match settings using the wizard
 		wizard.refresh();
-		mechanisms.setHubColors(MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE ? MechanismManager.PresetColor.BLUE : MechanismManager.PresetColor.RED);
+		mechanisms.setHubColors(
+				MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE ? MechanismManager.PresetColor.BLUE
+						: MechanismManager.PresetColor.RED);
 		
 		logging.update();
 	}
@@ -91,13 +93,14 @@ public class MainAuto extends OpMode {
 		
 		mechanisms.drivetrain.follower.setStartingPose(MatchState.getAutonomousStartingPose());
 		// Build the autonomous sequence based on configuration
-		// This is where the magic happens - the new PathAction system automatically
-		// handles alliance mirroring and dynamic path building from current position
+		// The runtime system allows hot-swapping between different strategies
+		// while the PathAction system handles alliance mirroring automatically
 		
+		AutonomousRuntime runtime = MatchState.getAutonomousRuntime();
 		if (MatchState.getAutoStartingPosition() == MatchState.AutoStartingPosition.FAR) {
-			autonomousSequence = SequenceBuilder.buildFarSequence();
+			autonomousSequence = runtime.buildFarSequence();
 		} else {
-			autonomousSequence = SequenceBuilder.buildCloseSequence();
+			autonomousSequence = runtime.buildCloseSequence();
 		}
 		
 		// Start the sequence

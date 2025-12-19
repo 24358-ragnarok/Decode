@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.configuration.Constants;
  *
  * @noinspection ClassWithoutConstructor
  */
-@TeleOp(name = "SimpleDrivetrain", group = "Outreach")
+@TeleOp(name = "Run: Drivetrain Only", group = "Outreach")
 public class SimpleDrivetrain extends OpMode {
 	public DcMotor frontLeftMotor;
 	public DcMotor frontRightMotor;

@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
 import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
 import org.firstinspires.ftc.teamcode.software.Controller;
-import org.firstinspires.ftc.teamcode.software.SlewThrottle;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 import org.firstinspires.ftc.teamcode.software.game.Artifact;
 
@@ -26,9 +25,8 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
  * Handles controller profile selection and robot operation during matches.
  */
 @Photon
-@TeleOp(name = "MainOp", group = ".Competition Modes")
+@TeleOp(name = "Run: Jack Berns' Signature TeleOp", group = ".Competition")
 public class MainOp extends OpMode {
-	public SlewThrottle slewThrottle;
 	private UnifiedLogging logging;
 	private MechanismManager mechanisms;
 	private Controller mainController;
@@ -48,7 +46,6 @@ public class MainOp extends OpMode {
 		subController = new Controller(gamepad2, mechanisms.drivetrain.follower,
 				PanelsGamepad.INSTANCE.getSecondManager());
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
-		slewThrottle = new SlewThrottle();
 		mechanisms.drivetrain.follower.setStartingPose(MatchState.getTeleOpStartingPose());
 		mechanisms.drivetrain.switchToManual();
 		setupLogging();
