@@ -46,7 +46,7 @@ public class MainAuto extends OpMode {
 	public void init() {
 		// Create fresh timer and logging
 		opmodeTimer = new Timer();
-		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
+		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
 		
 		// Match settings will be configured by the driver during init_loop
 		MatchState.reset();

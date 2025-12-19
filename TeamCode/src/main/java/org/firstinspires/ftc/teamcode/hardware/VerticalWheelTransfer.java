@@ -110,6 +110,7 @@ public class VerticalWheelTransfer extends Mechanism {
 			if (artifacts[i].color == Artifact.Color.NONE) {
 				artifacts[i] = artifact;
 				advance();
+				break; // Stop after placing into first available slot
 			}
 		}
 	}

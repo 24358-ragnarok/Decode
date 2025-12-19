@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 /**
  * MatchConfigurationWizard provides an interface for configuring match settings
  * during the init_loop phase of autonomous programs.
- * <p>
- * Uses gamepad1 d-pad up/down to toggle between RED and BLUE alliance colors.
  */
 public class MatchConfigurationWizard {
 	private final Gamepad gamepad1;
@@ -28,6 +26,15 @@ public class MatchConfigurationWizard {
 	 * Call this method repeatedly in init_loop to process input and update display
 	 */
 	public void refresh() {
+		// If settings are confirmed, only allow START to unlock; ignore other inputs
+		if (confirmed) {
+			if (gamepad1.startWasPressed()) {
+				confirmed = false;
+			}
+			updateTelemetry();
+			return;
+		}
+		
 		// Detect rising edge of dpad_up (just pressed)
 		if (gamepad1.bWasPressed()) {
 			MatchState.setAllianceColor(MatchState.AllianceColor.RED);

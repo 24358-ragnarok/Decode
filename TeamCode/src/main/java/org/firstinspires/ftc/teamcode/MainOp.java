@@ -45,7 +45,7 @@ public class MainOp extends OpMode {
 				PanelsGamepad.INSTANCE.getFirstManager());
 		subController = new Controller(gamepad2, mechanisms.drivetrain.follower,
 				PanelsGamepad.INSTANCE.getSecondManager());
-		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
+		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
 		mechanisms.drivetrain.follower.setStartingPose(MatchState.getTeleOpStartingPose());
 		mechanisms.drivetrain.switchToManual();
 		setupLogging();
