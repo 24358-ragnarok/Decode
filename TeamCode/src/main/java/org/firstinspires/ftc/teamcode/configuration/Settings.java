@@ -20,6 +20,11 @@ import java.util.EnumMap;
  */
 @Configurable
 public class Settings {
+	public static class Robot {
+		public static final double WIDTH = 16.25;
+		public static final double LENGTH = 15.6;
+		
+	}
 	/**
 	 * Maps controller inputs to robot actions for TeleOp.
 	 */
@@ -155,9 +160,9 @@ public class Settings {
 	@Configurable
 	public static class Transfer {
 		public static final double FIRING_POSITION_TICKS = 500;
-		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 2;
-		public static double SPEED = 0.6;
-		public static double CRAWL_SPEED = 0.2;
+		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 1.75;
+		public static double SPEED = 0.65;
+		public static double CRAWL_SPEED = 0.1;
 		public static double CRAWL_TICKS = 2500;
 		// Motion Profile Position Controller Gains
 		public static double POSITION_KP = 0.015; // Position proportional gain
@@ -202,11 +207,9 @@ public class Settings {
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static long BELT_SPINUP_TIME_MS = 400;
-		public static double GATE_FIRE_POSITION = 0.23;
+		public static double GATE_FIRE_POSITION = 0.22;
 		public static double GATE_CLOSED_POSITION = 0.32;
-		public static long MAX_SPEED_ERROR = 100;
-		public static long EXIT_FIRE_DURATION_MS = 250;
-		public static long EXIT_FIRE_RESET_MS = 250;
+		public static long MAX_SPEED_ERROR = 20;
 		
 		// PIDF Velocity Controller Gains
 		// kF is power per unit of target velocity (ticks/sec)
@@ -317,11 +320,11 @@ public class Settings {
 		 * Preset launch angles and RPM for each shooting position.
 		 * These values are used when AIM is called based on which position is closer.
 		 */
-		public static double CLOSE_SHOOT_PITCH_DEGREES = 52.6; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 3230; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_PITCH_DEGREES = 46.3; // Launch angle from horizontal for close position
+		public static double CLOSE_SHOOT_RPM = 3530; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 37.2; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 4320; // Wheel RPM for far position
+		public static double FAR_SHOOT_PITCH_DEGREES = 43.5; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 4360; // Wheel RPM for far position
 		
 	}
 	
@@ -362,7 +365,7 @@ public class Settings {
 		 * Default/reset positions.
 		 */
 		public static class Default {
-			public static final Pose RESET = new Pose(134, 7, Math.toRadians(90)); // TODO set this to corner instead
+			public static final Pose RESET = new Pose(134, Robot.LENGTH / 2, Math.toRadians(90)); // TODO set this to corner instead
 		}
 		
 		/**
@@ -376,21 +379,6 @@ public class Settings {
 		}
 		
 		/**
-		 * Launch zone boundaries for field awareness.
-		 */
-		public static class LaunchZones {
-			// Far launch zone (closer to wall)
-			public static final Pose FAR_FRONT_CORNER = new Pose(72, 24);
-			public static final Pose FAR_LEFT_CORNER = new Pose(50, 0);
-			public static final Pose FAR_RIGHT_CORNER = new Pose(95, 0);
-			
-			// Close launch zone (closer to goals)
-			public static final Pose CLOSE_FRONT_CORNER = new Pose(72, 72);
-			public static final Pose CLOSE_LEFT_CORNER = new Pose(15, 128);
-			public static final Pose CLOSE_RIGHT_CORNER = new Pose(129, 128);
-		}
-		
-		/**
 		 * TeleOp operational positions (BLUE alliance reference).
 		 * These are used for goto commands during driver control.
 		 */
@@ -399,15 +387,15 @@ public class Settings {
 			public static final Pose FAR_SHOOT = new Pose(60, 15, Math.toRadians(114));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(25, 68, Math.toRadians(0));
-			public static final Pose PARK = new Pose(105, 32, Math.toRadians(0));
+			public static final Pose PARK = new Pose(106, 32, Math.toRadians(0));
 		}
 		
 		/**
 		 * Autonomous starting positions.
 		 */
 		public static class AutoStart {
-			public static final Pose FAR = new Pose(56.25, 7.0, Math.toRadians(90));
-			public static final Pose CLOSE = new Pose(21.84, 124.58, Math.toRadians(145));
+			public static final Pose FAR = new Pose(59.00, Robot.LENGTH / 2, Math.toRadians(90));
+			public static final Pose CLOSE = new Pose(20.61, 122.47, Math.toRadians(145));
 		}
 		
 		/**
@@ -419,30 +407,30 @@ public class Settings {
 			 * First preset group (closest to wall).
 			 */
 			public static class Preset1 {
-				public static final Pose PREP = new Pose(50, 34, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(36.0, 34, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(30.0, 34, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 34, Math.toRadians(180));
+				public static final Pose PREP = new Pose(44, 35, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(36.0, 35, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 35, Math.toRadians(180));
+				public static final Pose END = new Pose(14, 35, Math.toRadians(180));
 			}
 			
 			/**
 			 * Second preset group (middle).
 			 */
 			public static class Preset2 {
-				public static final Pose PREP = new Pose(50, 58, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(36.0, 58, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(30.0, 58, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 58, Math.toRadians(180));
+				public static final Pose PREP = new Pose(44, 56.5, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(36.0, 56.5, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 56.5, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 56.5, Math.toRadians(180));
 			}
 			
 			/**
 			 * Third preset group (farthest from wall).
 			 */
 			public static class Preset3 {
-				public static final Pose PREP = new Pose(50, 83, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(35.0, 83, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(30.0, 83, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 83, Math.toRadians(180));
+				public static final Pose PREP = new Pose(44, 81, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(35.0, 81, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 81, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 81, Math.toRadians(180));
 			}
 		}
 		
@@ -452,9 +440,9 @@ public class Settings {
 		public static class ControlPoints {
 			// From sample areas to shooting positions
 			public static final Pose CLOSE_LAUNCH_APPROACH_FAR = new Pose(67, 45);
-			public static final Pose PRESET_1_APPROACH = new Pose(63, 35);
+			public static final Pose PRESET_1_APPROACH = new Pose(65, 37);
 			public static final Pose FROM_PRESET2_TO_CLOSE = new Pose(64, 56);
-			public static final Pose PRESET_2_APPROACH = new Pose(62, 59);
+			public static final Pose PRESET_2_APPROACH = new Pose(65, 59);
 			
 			public static final Pose FROM_PRESET3_TO_CLOSE = new Pose(41, 81);
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
@@ -478,7 +466,7 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Deploy {
-		public static boolean INTAKE = false;
+		public static boolean INTAKE = true;
 		public static boolean LIMELIGHT = false;
 		public static boolean TRANSFER = true;
 		public static boolean TRAJECTORY_ENGINE = true;
@@ -489,8 +477,8 @@ public class Settings {
 	
 	public static class Autonomous {
 		public static double BALL_INTAKE_WAIT_S = 0.3;
-		public static double SLOW_SPEED = 0.4;
-		public static double LAUNCH_STABILITY_WAIT_S = 0.3;
+		public static double SLOW_SPEED = 0.35;
+		public static double LAUNCH_STABILITY_WAIT_S = 0.2;
 		public static double MAX_ACTION_TIME_S = 4.5;
 		
 	}

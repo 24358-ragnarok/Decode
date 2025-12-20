@@ -26,6 +26,7 @@ public class LaunchAction implements AutonomousAction {
 	private int shots = 0;
 	private boolean hasTransfer;
 	private boolean hasLauncher;
+	private boolean hasIntake;
 	private State state;
 	private Timer timer;
 	
@@ -33,6 +34,7 @@ public class LaunchAction implements AutonomousAction {
 	public void initialize(MechanismManager mechanisms) {
 		hasLauncher = mechanisms.get(PairedLauncher.class) != null;
 		hasTransfer = mechanisms.get(VerticalWheelTransfer.class) != null;
+		hasIntake = mechanisms.get(FlexVectorIntake.class) != null;
 		state = State.WAITING_TO_FIRE;
 		timer = new Timer();
 		
@@ -42,12 +44,20 @@ public class LaunchAction implements AutonomousAction {
 			launcher.ready();
 			launcher.open();
 		}
+		if (hasTransfer) {
+			VerticalWheelTransfer transfer = mechanisms.get(VerticalWheelTransfer.class);
+			transfer.freeze();
+		}
+		if (hasIntake) {
+			FlexVectorIntake intake = mechanisms.get(FlexVectorIntake.class);
+			intake.crawl();
+		}
 	}
 	
 	@Override
 	public boolean execute(MechanismManager mechanisms) {
 		// If no parts, we can't launch anything
-		if (!hasTransfer || !hasLauncher) {
+		if (!hasTransfer || !hasLauncher || !hasIntake) {
 			return true;
 		}
 		
@@ -66,7 +76,6 @@ public class LaunchAction implements AutonomousAction {
 			
 			case FIRING:
 				transfer.advance();
-				intake.in();
 				shots += 1;
 				timer.resetTimer();
 				// Check if we're done after incrementing shots
@@ -82,7 +91,7 @@ public class LaunchAction implements AutonomousAction {
 				break;
 		}
 		
-		if (state == State.COMPLETE) {
+		if (state == State.COMPLETE && !transfer.isBusy()) {
 			launcher.stop();
 			launcher.close();
 			return true;

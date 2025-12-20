@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
  * Handles controller profile selection and robot operation during matches.
  */
 @Photon
-@TeleOp(name = "Run: Jack Berns' Signature TeleOp", group = ".Competition")
+@TeleOp(name = "Run: RAGNAROK", group = ".Competition")
 public class MainOp extends OpMode {
 	private final StringBuilder transferSlotsDisplayBuilder = new StringBuilder();
 	private UnifiedLogging logging;

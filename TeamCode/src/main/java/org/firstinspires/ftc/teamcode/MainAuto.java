@@ -29,7 +29,7 @@ import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
  * replaced with a clean, maintainable structure (~150 lines).
  */
 @Photon
-@Autonomous(name = "Run: The Boonstra Special", group = ".Competition", preselectTeleOp = "Run: Jack Berns' Signature TeleOp")
+@Autonomous(name = "Run: The Boonstra Special", group = ".Competition", preselectTeleOp = "Run: RAGNAROK")
 public class MainAuto extends OpMode {
 	
 	private Timer opmodeTimer;

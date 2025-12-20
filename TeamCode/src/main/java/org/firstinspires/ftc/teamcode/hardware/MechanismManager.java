@@ -37,7 +37,7 @@ import java.util.function.Consumer;
  * - Automatic dependency resolution between mechanisms
  */
 public class MechanismManager {
-	private static final LynxModule.BlinkerPolicy HUB_BLINKER_POLICY = new CustomBlinkerPolicy();
+	private static final LynxModule.BlinkerPolicy HUB_BLINKER_POLICY = new BlinkyBlinky();
 	public final Drivetrain drivetrain;
 	public final Mechanism[] mechanismArray;
 	// Optional non-mechanism helpers
@@ -45,13 +45,13 @@ public class MechanismManager {
 	public final TrajectoryEngine trajectoryEngine;
 	public final HardwareMap hardwareMap;
 	private final List<LynxModule> allHubs;
-
+	
 	public MechanismManager(HardwareMap hw) {
 		hardwareMap = hw;
 		allHubs = hardwareMap.getAll(LynxModule.class);
 		LynxModule.blinkerPolicy = HUB_BLINKER_POLICY;
 		drivetrain = new Drivetrain(hw);
-
+		
 		// Build mechanisms safely
 		FlexVectorIntake intake = createIntake();
 		VerticalWheelTransfer transfer = createTransfer();
@@ -60,21 +60,21 @@ public class MechanismManager {
 		PairedLauncher launcher = createLauncher();
 		DualBallCompartment dbc = createCompartment();
 		mechanismArray = new Mechanism[]{intake, transfer, launcher, dbc};
-
+		
 		// Save helpers
 		limelightManager = ll;
 		trajectoryEngine = traj;
-
+		
 		// Now that we've built all of the systems, begin caching system reads for
 		// efficiency
 		for (LynxModule hub : allHubs) {
 			createHub(hub);
 		}
 	}
-
+	
 	private void createHub(LynxModule hub) {
 		hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-		hub.setPattern(HUB_BLINKER_POLICY.getIdlePattern(hub));
+		LynxModule.blinkerPolicy = HUB_BLINKER_POLICY;
 	}
 	
 	public void setHubColors(PresetColor c) {
@@ -96,6 +96,11 @@ public class MechanismManager {
 					hub.setConstant(Color.BLUE);
 				}
 				break;
+			case DEAD:
+				for (LynxModule hub : allHubs) {
+					hub.setConstant(Color.BLACK);
+				}
+				break;
 			case RAINBOW:
 			default:
 				int targetLength = Math.max(1, maxPatternLength);
@@ -109,7 +114,7 @@ public class MechanismManager {
 					
 					// Convert HSV to Android Color (Full Saturation and Value)
 					int color = Color.HSVToColor(new float[]{hue, 1f, 1f});
-
+					
 					p.add(new Blinker.Step(color, stepDuration, TimeUnit.MILLISECONDS));
 				}
 				for (LynxModule hub : allHubs) {
@@ -200,7 +205,7 @@ public class MechanismManager {
 	 * Initializes all available mechanisms.
 	 */
 	public void start() {
-		setHubColors(PresetColor.RAINBOW);
+		setHubColors(PresetColor.DEAD);
 		for (Mechanism m : mechanismArray) {
 			if (m != null) {
 				m.start();
@@ -257,9 +262,10 @@ public class MechanismManager {
 		PURPLE,
 		RED,
 		BLUE,
+		DEAD,
 	}
 	
-	private static class CustomBlinkerPolicy implements LynxModule.BlinkerPolicy {
+	private static class BlinkyBlinky implements LynxModule.BlinkerPolicy {
 		private static final int DEFAULT_CYCLE_MS = 2500;
 		
 		@Override
