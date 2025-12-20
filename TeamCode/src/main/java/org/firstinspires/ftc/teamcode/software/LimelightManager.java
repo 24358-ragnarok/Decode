@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.software.game.Classifier;
 import org.firstinspires.ftc.teamcode.software.game.Motif;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 /**
@@ -27,6 +26,7 @@ import java.util.Comparator;
  * providing efficient result caching.
  */
 public class LimelightManager extends Mechanism {
+	private static final Comparator<ColoredTarget> TX_COMPARATOR = Comparator.comparingDouble(t -> t.tx);
 	public final Limelight3A limelight;
 	LLResult currentResult;
 	/**
@@ -156,13 +156,7 @@ public class LimelightManager extends Mechanism {
 		}
 		
 		// 3. Sort the combined list by the horizontal offset (tx)
-		Collections.sort(detectedBalls, new Comparator<ColoredTarget>() {
-			@Override
-			public int compare(ColoredTarget t1, ColoredTarget t2) {
-				// Sorts from smallest tx (left) to largest tx (right)
-				return Double.compare(t1.tx, t2.tx);
-			}
-		});
+		detectedBalls.sort(TX_COMPARATOR);
 		
 		// 4. Convert the sorted list into an Artifact[] array, enforcing 9-ball limit
 		// We use the static Artifact instances (GREEN/PURPLE) which have ticks=0,

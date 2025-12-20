@@ -27,10 +27,15 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
 @Photon
 @TeleOp(name = "Run: Jack Berns' Signature TeleOp", group = ".Competition")
 public class MainOp extends OpMode {
+	private final StringBuilder transferSlotsDisplayBuilder = new StringBuilder();
 	private UnifiedLogging logging;
 	private MechanismManager mechanisms;
 	private Controller mainController;
 	private Controller subController;
+	private Drivetrain drivetrain;
+	private VerticalWheelTransfer transfer;
+	private FlexVectorIntake intake;
+	private PairedLauncher launcher;
 	
 	/**
 	 * Runs when "init" is pressed on the Driver Station.
@@ -41,6 +46,11 @@ public class MainOp extends OpMode {
 	public final void init() {
 		// Initialize robot systems
 		mechanisms = new MechanismManager(hardwareMap);
+		// Cache mechanism references once to avoid map lookups in the hot loop
+		drivetrain = mechanisms.drivetrain;
+		transfer = mechanisms.get(VerticalWheelTransfer.class);
+		intake = mechanisms.get(FlexVectorIntake.class);
+		launcher = mechanisms.get(PairedLauncher.class);
 		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower,
 				PanelsGamepad.INSTANCE.getFirstManager());
 		subController = new Controller(gamepad2, mechanisms.drivetrain.follower,
@@ -89,9 +99,11 @@ public class MainOp extends OpMode {
 	 */
 	@Override
 	public final void loop() {
-		logging.clearDynamic();
+		final UnifiedLogging log = logging;
+		final MechanismManager mech = mechanisms;
+		log.clearDynamic();
 		
-		mechanisms.update();
+		mech.update();
 		
 		processControllerInputs();
 		setControllerLEDs();
@@ -99,8 +111,8 @@ public class MainOp extends OpMode {
 		
 		// Draw debug visualization (retained items like Heading, X, Y are auto-updated
 		// via Func)
-		logging.drawDebug(mechanisms.drivetrain.follower);
-		logging.update();
+		log.drawDebug(mech.drivetrain.follower);
+		log.update();
 	}
 	
 	/**
@@ -126,73 +138,83 @@ public class MainOp extends OpMode {
 		mainController.update();
 		subController.update();
 		
+		// Hot-loop locals
+		final Drivetrain drivetrain = this.drivetrain;
+		final VerticalWheelTransfer transfer = this.transfer;
+		final FlexVectorIntake intake = this.intake;
+		final PairedLauncher launcher = this.launcher;
+		
 		// Drivetrain
 		double d = mainController.getProcessedDrive();
 		double s = mainController.getProcessedStrafe();
 		double r = mainController.getProcessedRotation();
 		
-		if (mainController.wasJustPressed(Controller.Action.TOGGLE_CENTRICITY)) {
-			mechanisms.ifValid(mechanisms.drivetrain, Drivetrain::toggleCentricity);
-		}
-		
-		if (mainController.wasJustPressed(Controller.Action.RESET_FOLLOWER)) {
-			mechanisms.ifValid(mechanisms.drivetrain, dt -> dt.follower.setPose(
-					(MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE)
-							? Settings.Positions.Default.RESET
-							: Settings.Field.mirrorPose(Settings.Positions.Default.RESET)));
-		}
-		
-		mechanisms.ifValid(mechanisms.drivetrain, dt -> dt.manual(d, s, r));
-		
-		// Handle GOTO actions
-		for (Controller.Action action : Settings.Controls.gotoActions) {
-			if (mainController.wasJustPressed(action)
-					&& mainController.getProcessedValue(Controller.Control.START) <= 0.0) {
-				mechanisms.ifValid(mechanisms.drivetrain, dt -> {
-					dt.goTo(action);
+		if (drivetrain != null) {
+			if (mainController.wasJustPressed(Controller.Action.TOGGLE_CENTRICITY)) {
+				drivetrain.toggleCentricity();
+			}
+			
+			if (mainController.wasJustPressed(Controller.Action.RESET_FOLLOWER)) {
+				drivetrain.follower.setPose(
+						(MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE)
+								? Settings.Positions.Default.RESET
+								: Settings.Field.mirrorPose(Settings.Positions.Default.RESET));
+			}
+			
+			drivetrain.manual(d, s, r);
+			
+			final double startValue = mainController.getProcessedValue(Controller.Control.START);
+			for (Controller.Action action : Settings.Controls.gotoActions) {
+				if (mainController.wasJustPressed(action) && startValue <= 0.0) {
+					drivetrain.goTo(action);
 					// Stop intake when going to park
-					if (dt.actionToPosition(action) == Drivetrain.Position.PARK) {
-						mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::freeze);
+					if (drivetrain.actionToPosition(action) == Drivetrain.Position.PARK && transfer != null) {
+						transfer.freeze();
 					}
-				});
-			} else if (mainController.wasJustReleased(action)) {
-				mechanisms.drivetrain.switchToManual();
+				} else if (mainController.wasJustReleased(action)) {
+					drivetrain.switchToManual();
+				}
 			}
 		}
 		
 		// Alignment & Launcher
-		if (subController.getProcessedValue(Controller.Action.AIM) > 0.1) {
-			mechanisms.ifValid(mechanisms.get(PairedLauncher.class), PairedLauncher::ready);
-		} else {
-			mechanisms.ifValid(mechanisms.get(PairedLauncher.class), PairedLauncher::stop);
+		if (launcher != null) {
+			if (subController.getProcessedValue(Controller.Action.AIM) > 0.1) {
+				launcher.ready();
+			} else {
+				launcher.stop();
+			}
+			if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
+				launcher.open();
+			} else if (subController.wasJustReleased(Controller.Action.LAUNCH)) {
+				launcher.close();
+			}
 		}
 		
-		if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
-			mechanisms.ifValid(mechanisms.get(PairedLauncher.class), PairedLauncher::open);
-		} else if (subController.wasJustReleased(Controller.Action.LAUNCH)) {
-			mechanisms.ifValid(mechanisms.get(PairedLauncher.class), PairedLauncher::close);
-		}
-		
-		if (subController.wasJustPressed(Controller.Action.TRANSFER_ADVANCE)) {
-			mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::advance);
-		}
-		if (subController.wasJustPressed(Controller.Action.TRANSFER_REVERSE)) {
-			mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::reverse);
+		if (transfer != null) {
+			if (subController.wasJustPressed(Controller.Action.TRANSFER_ADVANCE)) {
+				transfer.advance();
+			}
+			if (subController.wasJustPressed(Controller.Action.TRANSFER_REVERSE)) {
+				transfer.reverse();
+			}
 		}
 		
 		// Intake & Transfer
-		if (subController.wasJustPressed(Controller.Action.INTAKE_IN)) {
-			mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::in);
-		}
-		if (subController.wasJustReleased(Controller.Action.INTAKE_IN)) {
-			mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::stop);
-		}
-		
-		if (subController.wasJustPressed(Controller.Action.INTAKE_OUT)) {
-			mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::out);
-		}
-		if (subController.wasJustReleased(Controller.Action.INTAKE_OUT)) {
-			mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::stop);
+		if (intake != null) {
+			if (subController.wasJustPressed(Controller.Action.INTAKE_IN)) {
+				intake.in();
+			}
+			if (subController.wasJustReleased(Controller.Action.INTAKE_IN)) {
+				intake.stop();
+			}
+			
+			if (subController.wasJustPressed(Controller.Action.INTAKE_OUT)) {
+				intake.out();
+			}
+			if (subController.wasJustReleased(Controller.Action.INTAKE_OUT)) {
+				intake.stop();
+			}
 		}
 	}
 	
@@ -202,9 +224,10 @@ public class MainOp extends OpMode {
 	 * artifact needed.
 	 */
 	private void setControllerLEDs() {
-		if (MatchState.nextArtifactNeeded() == Artifact.Color.GREEN) {
+		final Artifact.Color neededArtifact = MatchState.nextArtifactNeeded();
+		if (neededArtifact == Artifact.Color.GREEN) {
 			subController.setLedColor(0, 255, 0, 100);
-		} else if (MatchState.nextArtifactNeeded() == Artifact.Color.PURPLE) {
+		} else if (neededArtifact == Artifact.Color.PURPLE) {
 			subController.setLedColor(255, 0, 255, 100);
 		} else {
 			subController.setLedColor(0, 0, 0, 0);
@@ -222,14 +245,14 @@ public class MainOp extends OpMode {
 		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), transfer -> {
 			logging.addDataLazy("Transfer Slots", () -> {
 				Artifact[] slots = transfer.getArtifactSnapshot();
-				StringBuilder slotsDisplay = new StringBuilder();
+				transferSlotsDisplayBuilder.setLength(0);
 				for (int i = 0; i < slots.length; i++) {
-					slotsDisplay.append(i)
-							.append(" ")
+					transferSlotsDisplayBuilder.append(i)
+							.append(' ')
 							.append(slots[i])
-							.append(",");
+							.append(',');
 				}
-				return slotsDisplay.toString();
+				return transferSlotsDisplayBuilder.toString();
 			});
 		});
 		
@@ -275,11 +298,13 @@ public class MainOp extends OpMode {
 	}
 	
 	private void setControllerRumble() {
-		if (mechanisms.drivetrain.follower.getPose()
-				.distanceFrom(mechanisms.drivetrain.getPositionPose(Drivetrain.Position.CLOSE_SHOOT)) < 1 ||
-				mechanisms.drivetrain.follower.getPose()
-						.distanceFrom(mechanisms.drivetrain.getPositionPose(Drivetrain.Position.FAR_SHOOT)) < 1) {
-			subController.rumble(100);
+		final Drivetrain drivetrain = this.drivetrain;
+		if (drivetrain != null) {
+			final Pose currentPose = drivetrain.follower.getPose();
+			if (currentPose.distanceFrom(drivetrain.getPositionPose(Drivetrain.Position.CLOSE_SHOOT)) < 1 ||
+					currentPose.distanceFrom(drivetrain.getPositionPose(Drivetrain.Position.FAR_SHOOT)) < 1) {
+				subController.rumble(100);
+			}
 		}
 	}
 }

@@ -116,17 +116,22 @@ public class MainAuto extends OpMode {
 	 */
 	@Override
 	public void loop() {
-		logging.clearDynamic();
+		final UnifiedLogging log = logging;
+		final MechanismManager mech = mechanisms;
+		log.clearDynamic();
 		
 		// Update all mechanisms (sensors, motors, etc.)
-		mechanisms.update();
+		mech.update();
 		// Update the autonomous sequence
 		// This single line replaces the entire state machine logic!
-		autonomousSequence.update(mechanisms);
+		final AutonomousSequence sequence = autonomousSequence;
+		if (sequence != null) {
+			sequence.update(mech);
+		}
 		
 		// Clear dynamic telemetry and log updated data
-		logging.drawDebug(mechanisms.drivetrain.follower);
-		logging.update();
+		log.drawDebug(mech.drivetrain.follower);
+		log.update();
 	}
 	
 	/**

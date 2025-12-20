@@ -47,28 +47,6 @@ public class SequenceBuilder {
 	}
 	
 	/**
-	 * Static factory method to create Far position sequences.
-	 * Delegates to the DEFAULT runtime for backward compatibility.
-	 *
-	 * @deprecated Use {@link AutonomousRuntime#buildFarSequence()} instead
-	 */
-	@Deprecated
-	public static AutonomousSequence buildFarSequence() {
-		return AutonomousRuntime.DEFAULT.buildFarSequence();
-	}
-	
-	/**
-	 * Static factory method to create Close position sequences.
-	 * Delegates to the DEFAULT runtime for backward compatibility.
-	 *
-	 * @deprecated Use {@link AutonomousRuntime#buildCloseSequence()} instead
-	 */
-	@Deprecated
-	public static AutonomousSequence buildCloseSequence() {
-		return AutonomousRuntime.DEFAULT.buildCloseSequence();
-	}
-	
-	/**
 	 * Adds a linear path action to a target pose.
 	 *
 	 * @param targetPose The target pose (in BLUE alliance coordinates)

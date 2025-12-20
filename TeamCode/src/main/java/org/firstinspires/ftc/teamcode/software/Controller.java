@@ -6,8 +6,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 
-import java.util.HashMap;
-
 /**
  * @noinspection CyclicClassDependency, DataFlowIssue
  * <br/>
@@ -18,9 +16,10 @@ import java.util.HashMap;
  * TeleOp.
  */
 public class Controller extends Gamepad {
+	private static final Control[] CONTROL_VALUES = Control.values();
 	private final Gamepad physical;
 	private final GamepadManager panelsManager;
-	private final HashMap<Control, Double> previousControlState;
+	private final double[] previousControlState;
 	private final Follower follower;
 	private Gamepad gamepad;
 	
@@ -29,7 +28,7 @@ public class Controller extends Gamepad {
 		this.panelsManager = panelsManager;
 		this.gamepad = panelsManager.asCombinedFTCGamepad(physical);
 		this.follower = follower;
-		this.previousControlState = new HashMap<>();
+		this.previousControlState = new double[CONTROL_VALUES.length];
 		// Populate the initial state in the constructor
 		update();
 	}
@@ -42,8 +41,8 @@ public class Controller extends Gamepad {
 	 */
 	public final void update() {
 		// First, save current state as "previous" (before refresh!)
-		for (Control control : Control.values()) {
-			previousControlState.put(control, getRawValue(control));
+		for (Control control : CONTROL_VALUES) {
+			previousControlState[control.ordinal()] = getRawValue(control);
 		}
 		// Then, refresh the gamepad with new data
 		this.gamepad = panelsManager.asCombinedFTCGamepad(physical);
@@ -57,7 +56,7 @@ public class Controller extends Gamepad {
 	 * otherwise
 	 */
 	public final boolean wasJustPressed(Control control) {
-		return getRawValue(control) != 0.0 && previousControlState.getOrDefault(control, 0.0) == 0;
+		return getRawValue(control) != 0.0 && previousControlState[control.ordinal()] == 0.0;
 	}
 	
 	/**
@@ -79,7 +78,7 @@ public class Controller extends Gamepad {
 	 * otherwise
 	 */
 	public final boolean wasJustReleased(Control control) {
-		return getRawValue(control) == 0.0 && previousControlState.getOrDefault(control, 0.0) != 0;
+		return getRawValue(control) == 0.0 && previousControlState[control.ordinal()] != 0.0;
 	}
 	
 	/**

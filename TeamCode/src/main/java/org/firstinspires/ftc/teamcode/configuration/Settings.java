@@ -220,7 +220,7 @@ public class Settings {
 		// Pitch servo calibration (physical limits)
 		public static double PITCH_SERVO_AT_MIN = 0.0; // Servo position at minimum pitch angle
 		public static double PITCH_SERVO_AT_MAX = 0.94; // Servo position at maximum pitch angle
-		public static double DEFAULT_PITCH_ANGLE = 5.0; // degrees from horizontal
+		public static double DEFAULT_PITCH_ANGLE = 35.0; // degrees from horizontal; TODO - set back to 5.0 once conner fixes ts
 		public static double PITCH_MIN_ANGLE = 2.0; // Minimum pitch angle in degrees (horizontal)
 		public static double PITCH_MAX_ANGLE = 76.0; // Maximum pitch angle in degrees (straight up, 90° total window)
 		
