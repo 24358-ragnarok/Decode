@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.configuration;
 
-import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
@@ -10,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -27,7 +27,9 @@ import java.util.Map;
  * - Optimized transmission interval to reduce overhead
  */
 public class UnifiedLogging {
-	private final JoinedTelemetry telemetry;
+	public final Telemetry driverStation;
+	public final TelemetryManager panels;
+	
 	// Cache telemetry items for efficient updates
 	private final Map<String, Telemetry.Item> itemCache = new HashMap<>();
 	private final Map<String, Telemetry.Line> lineCache = new HashMap<>();
@@ -35,13 +37,14 @@ public class UnifiedLogging {
 	// Track items that should be cleared each frame (non-retained)
 	private boolean retainedMode = false;
 	
-	public UnifiedLogging(Telemetry t, TelemetryManager.TelemetryWrapper p) {
-		this.telemetry = new JoinedTelemetry(p, t);
+	public UnifiedLogging(Telemetry telemetry, TelemetryManager panels) {
+		this.driverStation = telemetry;
+		this.panels = panels;
 		Drawing.init();
 		
 		// Optimize telemetry settings
-		telemetry.setAutoClear(false); // We'll manage clearing manually
-		telemetry.setMsTransmissionInterval(100); // Update every 100ms (was default 250ms)
+		driverStation.setAutoClear(false); // We'll manage clearing manually
+		driverStation.setMsTransmissionInterval(100); // Update every 100ms (was default 250ms)
 	}
 	
 	/**
@@ -56,7 +59,21 @@ public class UnifiedLogging {
 	 * Adds a line of text that will be recreated each frame.
 	 */
 	public void addLine(String line) {
-		telemetry.addLine(line);
+		driverStation.addLine(line);
+		panels.addLine(line);
+	}
+	
+	/**
+	 * Adds a labeled line of text with a cached reference for efficient updates.
+	 */
+	public Telemetry.Line addLabeledLine(String label) {
+		Telemetry.Line line = lineCache.get(label);
+		if (line == null) {
+			line = driverStation.addLine(label);
+			lineCache.put(label, line);
+		}
+		panels.addLine(label);
+		return line;
 	}
 	
 	/**
@@ -66,7 +83,7 @@ public class UnifiedLogging {
 	public void addData(String key, Object value) {
 		Telemetry.Item item = itemCache.get(key);
 		if (item == null) {
-			item = telemetry.addData(key, value);
+			item = driverStation.addData(key, value);
 			if (retainedMode) {
 				item.setRetained(true);
 				itemCache.put(key, item);
@@ -74,6 +91,7 @@ public class UnifiedLogging {
 		} else {
 			item.setValue(value);
 		}
+		panels.addData(key, value);
 	}
 	
 	/**
@@ -82,7 +100,7 @@ public class UnifiedLogging {
 	public void addNumber(String key, double value) {
 		Telemetry.Item item = itemCache.get(key);
 		if (item == null) {
-			item = telemetry.addData(key, "%.2f", value);
+			item = driverStation.addData(key, "%.2f", value);
 			if (retainedMode) {
 				item.setRetained(true);
 				itemCache.put(key, item);
@@ -90,6 +108,7 @@ public class UnifiedLogging {
 		} else {
 			item.setValue("%.2f", value);
 		}
+		panels.addData(key, String.format(Locale.US, "%.2f", value));
 	}
 	
 	/**
@@ -98,7 +117,7 @@ public class UnifiedLogging {
 	public void addData(String key, String format, Object... args) {
 		Telemetry.Item item = itemCache.get(key);
 		if (item == null) {
-			item = telemetry.addData(key, format, args);
+			item = driverStation.addData(key, format, args);
 			if (retainedMode) {
 				item.setRetained(true);
 				itemCache.put(key, item);
@@ -106,6 +125,7 @@ public class UnifiedLogging {
 		} else {
 			item.setValue(format, args);
 		}
+		panels.addData(key, String.format(Locale.US, format, args));
 	}
 	
 	/**
@@ -117,9 +137,9 @@ public class UnifiedLogging {
 		Telemetry.Item item = itemCache.get(key);
 		if (item != null) {
 			// Update the item with new func (requires recreating)
-			telemetry.removeItem(item);
+			driverStation.removeItem(item);
 		}
-		item = telemetry.addData(key, valueProducer);
+		item = driverStation.addData(key, valueProducer);
 		item.setRetained(true); // Func items are always retained
 		itemCache.put(key, item);
 	}
@@ -131,9 +151,9 @@ public class UnifiedLogging {
 		Telemetry.Item item = itemCache.get(key);
 		if (item != null) {
 			// Update the item with new func (requires recreating)
-			telemetry.removeItem(item);
+			driverStation.removeItem(item);
 		}
-		item = telemetry.addData(key, format, valueProducer);
+		item = driverStation.addData(key, format, valueProducer);
 		item.setRetained(true);
 		itemCache.put(key, item);
 	}
@@ -143,14 +163,14 @@ public class UnifiedLogging {
 	 * if you want to clear dynamic data while keeping retained items.
 	 */
 	public void clearDynamic() {
-		telemetry.clear(); // Only removes non-retained items
+		driverStation.clear(); // Only removes non-retained items
 	}
 	
 	/**
 	 * Clears ALL items including retained ones. Use sparingly.
 	 */
 	public void clearAll() {
-		telemetry.clearAll();
+		driverStation.clearAll();
 		itemCache.clear();
 		lineCache.clear();
 	}
@@ -169,6 +189,7 @@ public class UnifiedLogging {
 	
 	public void update() {
 		Drawing.update();
-		telemetry.update();
+		panels.update();
+		driverStation.update();
 	}
 }

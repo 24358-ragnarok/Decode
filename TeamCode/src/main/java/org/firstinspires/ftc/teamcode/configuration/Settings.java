@@ -156,7 +156,7 @@ public class Settings {
 	public static class Transfer {
 		public static final double FIRING_POSITION_TICKS = 500;
 		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 2;
-		public static double SPEED = 0.8;
+		public static double SPEED = 0.6;
 		public static double CRAWL_SPEED = 0.2;
 		public static double CRAWL_TICKS = 2500;
 		// Motion Profile Position Controller Gains
@@ -478,7 +478,7 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Deploy {
-		public static boolean INTAKE = true;
+		public static boolean INTAKE = false;
 		public static boolean LIMELIGHT = false;
 		public static boolean TRANSFER = true;
 		public static boolean TRAJECTORY_ENGINE = true;
@@ -488,8 +488,8 @@ public class Settings {
 	}
 	
 	public static class Autonomous {
-		public static double BALL_INTAKE_WAIT_S = 0.35;
-		public static double SLOW_SPEED = 0.27;
+		public static double BALL_INTAKE_WAIT_S = 0.3;
+		public static double SLOW_SPEED = 0.4;
 		public static double LAUNCH_STABILITY_WAIT_S = 0.3;
 		public static double MAX_ACTION_TIME_S = 4.5;
 		

@@ -32,14 +32,14 @@ public class Constants {
 			.forwardZeroPowerAcceleration(-44.4)
 			.lateralZeroPowerAcceleration(-66.0)
 			
-			.translationalPIDFCoefficients(new PIDFCoefficients(0.08, 0.00001, 0.015, 0.045))
-			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.08, 0.0001, 0.002, 0.02))
+			.translationalPIDFCoefficients(new PIDFCoefficients(0.6, 0, 0.06, 0.045))
+			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.25, 0.0001, 0.03, 0.02))
 			
-			.headingPIDFCoefficients(new PIDFCoefficients(0.5, 0.0001, 0.02, 0.05))
-			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.0, 0.005, 0.01, 0.03))
+			.headingPIDFCoefficients(new PIDFCoefficients(0.9, 0.0001, 0.08, 0.05))
+			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.5, 0.005, 0.01, 0.03))
 			
-			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.1, 0.0, 0.01, 0.6, 0.0))
-			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.1, 0.0, 0.01, 0.6, 0.01))
+			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.8, 0.0, 0.2, 0.6, 0.0))
+			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.1, 0.0, 0.1, 0.6, 0.01))
 			.automaticHoldEnd(true)
 			.useSecondaryDrivePIDF(true)
 			.useSecondaryHeadingPIDF(true)
@@ -88,9 +88,9 @@ public class Constants {
 			0.01,
 			0.001,
 			50,
-			1.8,
+			1.6,
 			10,
-			1.2);
+			0.5);
 	
 	/**
 	 * Factory method to create a configured Follower instance.
