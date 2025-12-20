@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.testing;
 
+import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoControllerEx;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
+
+import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +49,7 @@ public class ServoDebug extends OpMode {
 	private static final double COARSE_DEBOUNCE = 0.15; // seconds
 	private static final double FINE_DEBOUNCE = 0.05;   // seconds
 	private final double sweepSpeed = 0.005;
+	UnifiedLogging logging;
 	private List<ServoInfo> servos;
 	private int selectedIndex = 0;
 	private double commandedPosition = 0.5;
@@ -58,38 +62,39 @@ public class ServoDebug extends OpMode {
 	
 	@Override
 	public void init() {
+		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
 		servos = discoverServos();
 		
 		if (servos.isEmpty()) {
-			telemetry.addLine("⚠️ NO SERVOS FOUND!");
-			telemetry.addLine("Check your hardware configuration.");
+			logging.addLine("⚠️ NO SERVOS FOUND!");
+			logging.addLine("Check your hardware configuration.");
 		} else {
-			telemetry.addLine("✅ Found " + servos.size() + " servo(s)");
-			telemetry.addLine();
+			logging.addLine("✅ Found " + servos.size() + " servo(s)");
+			logging.addLine("");
 			for (ServoInfo info : servos) {
-				telemetry.addLine("  • " + info.name);
+				logging.addLine("  • " + info.name);
 			}
 			
 			// Initialize to first servo's current position
 			commandedPosition = servos.get(0).servo.getPosition();
 		}
 		
-		telemetry.addLine();
-		telemetry.addLine("Controls:");
-		telemetry.addLine("  DPAD ←→: Select servo");
-		telemetry.addLine("  DPAD ↑↓: Position ±0.05");
-		telemetry.addLine("  BUMPERS: Position ±0.01");
-		telemetry.addLine("  TRIGGERS: Position ±0.001");
-		telemetry.addLine("  A/B/Y: Goto 0.0/0.5/1.0");
-		telemetry.addLine("  X: Toggle PWM | BACK: Sweep");
-		telemetry.update();
+		logging.addLine("");
+		logging.addLine("Controls:");
+		logging.addLine("  DPAD ←→: Select servo");
+		logging.addLine("  DPAD ↑↓: Position ±0.05");
+		logging.addLine("  BUMPERS: Position ±0.01");
+		logging.addLine("  TRIGGERS: Position ±0.001");
+		logging.addLine("  A/B/Y: Goto 0.0/0.5/1.0");
+		logging.addLine("  X: Toggle PWM | BACK: Sweep");
+		logging.update();
 	}
 	
 	@Override
 	public void loop() {
 		if (servos.isEmpty()) {
-			telemetry.addLine("⚠️ NO SERVOS FOUND!");
-			telemetry.update();
+			logging.addLine("⚠️ NO SERVOS FOUND!");
+			logging.update();
 			return;
 		}
 		
@@ -213,11 +218,11 @@ public class ServoDebug extends OpMode {
 	}
 	
 	private void displayTelemetry(ServoInfo current) {
-		telemetry.clear();
+		logging.clearDynamic();
 		
 		// Header with servo selection
-		telemetry.addLine("═══════ SERVO DEBUG ═══════");
-		telemetry.addLine();
+		logging.addLine("═══════ SERVO DEBUG ═══════");
+		logging.addLine("");
 		
 		// Servo selector
 		StringBuilder selector = new StringBuilder();
@@ -228,13 +233,13 @@ public class ServoDebug extends OpMode {
 				selector.append(servos.get(i).name).append(" ");
 			}
 		}
-		telemetry.addLine(selector.toString());
-		telemetry.addLine();
+		logging.addLine(selector.toString());
+		logging.addLine("");
 		
 		// Position info
-		telemetry.addLine("═══════ POSITION ═══════");
-		telemetry.addData("Commanded", "%.4f", commandedPosition);
-		telemetry.addData("Reported", "%.4f", current.servo.getPosition());
+		logging.addLine("═══════ POSITION ═══════");
+		logging.addData("Commanded", "%.4f", commandedPosition);
+		logging.addData("Reported", "%.4f", current.servo.getPosition());
 		
 		// Visual position bar
 		int barLength = 20;
@@ -250,45 +255,45 @@ public class ServoDebug extends OpMode {
 			}
 		}
 		bar.append("]");
-		telemetry.addLine(bar.toString());
-		telemetry.addLine();
+		logging.addLine(bar.toString());
+		logging.addLine("");
 		
 		// Servo details
-		telemetry.addLine("═══════ DETAILS ═══════");
-		telemetry.addData("Direction", current.servo.getDirection());
-		telemetry.addData("PWM Enabled", isPwmEnabled ? "✓ YES" : "✗ NO");
+		logging.addLine("═══════ DETAILS ═══════");
+		logging.addData("Direction", current.servo.getDirection());
+		logging.addData("PWM Enabled", isPwmEnabled ? "✓ YES" : "✗ NO");
 		
 		// Extended info if available
 		if (current.servo instanceof ServoImplEx) {
 			ServoImplEx servoEx = (ServoImplEx) current.servo;
 			PwmControl.PwmRange range = servoEx.getPwmRange();
-			telemetry.addData("PWM Range", "%.0f - %.0f µs", range.usPulseLower, range.usPulseUpper);
+			logging.addData("PWM Range", "%.0f - %.0f µs", range.usPulseLower, range.usPulseUpper);
 			
 			// Calculate approximate PWM for current position
 			double pwmUs = range.usPulseLower + (range.usPulseUpper - range.usPulseLower) * commandedPosition;
-			telemetry.addData("Est. PWM", "%.0f µs", pwmUs);
+			logging.addData("Est. PWM", "%.0f µs", pwmUs);
 		}
 		
 		// Controller info
-		telemetry.addData("Port", current.portNumber);
+		logging.addData("Port", current.portNumber);
 		if (current.controllerName != null) {
-			telemetry.addData("Controller", current.controllerName);
+			logging.addData("Controller", current.controllerName);
 		}
-		telemetry.addLine();
+		logging.addLine("");
 		
 		// Sweep status
 		if (isSweeping) {
-			telemetry.addLine("🔄 SWEEP MODE ACTIVE");
-			telemetry.addLine();
+			logging.addLine("🔄 SWEEP MODE ACTIVE");
+			logging.addLine("");
 		}
 		
 		// Controls reminder
-		telemetry.addLine("═══════ CONTROLS ═══════");
-		telemetry.addLine("←→ Select | ↑↓ ±0.05 | LR Bump ±0.01");
-		telemetry.addLine("Triggers ±0.001 | A/B/Y = 0/0.5/1");
-		telemetry.addLine("X=PWM | L3=Flip | BACK=Sweep");
+		logging.addLine("═══════ CONTROLS ═══════");
+		logging.addLine("←→ Select | ↑↓ ±0.05 | LR Bump ±0.01");
+		logging.addLine("Triggers ±0.001 | A/B/Y = 0/0.5/1");
+		logging.addLine("X=PWM | L3=Flip | BACK=Sweep");
 		
-		telemetry.update();
+		logging.update();
 	}
 	
 	/**

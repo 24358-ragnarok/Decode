@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
-import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
+import org.firstinspires.ftc.teamcode.hardware.BentDrivetrain;
 import org.firstinspires.ftc.teamcode.hardware.FlexVectorIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
@@ -32,7 +32,7 @@ public class MainOp extends OpMode {
 	private MechanismManager mechanisms;
 	private Controller mainController;
 	private Controller subController;
-	private Drivetrain drivetrain;
+	private BentDrivetrain bentDrivetrain;
 	private VerticalWheelTransfer transfer;
 	private FlexVectorIntake intake;
 	private PairedLauncher launcher;
@@ -47,17 +47,17 @@ public class MainOp extends OpMode {
 		// Initialize robot systems
 		mechanisms = new MechanismManager(hardwareMap);
 		// Cache mechanism references once to avoid map lookups in the hot loop
-		drivetrain = mechanisms.drivetrain;
+		bentDrivetrain = mechanisms.bentDrivetrain;
 		transfer = mechanisms.get(VerticalWheelTransfer.class);
 		intake = mechanisms.get(FlexVectorIntake.class);
 		launcher = mechanisms.get(PairedLauncher.class);
-		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower,
+		mainController = new Controller(gamepad1, mechanisms.bentDrivetrain.follower,
 				PanelsGamepad.INSTANCE.getFirstManager());
-		subController = new Controller(gamepad2, mechanisms.drivetrain.follower,
+		subController = new Controller(gamepad2, mechanisms.bentDrivetrain.follower,
 				PanelsGamepad.INSTANCE.getSecondManager());
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
-		mechanisms.drivetrain.follower.setStartingPose(MatchState.getTeleOpStartingPose());
-		mechanisms.drivetrain.switchToManual();
+		mechanisms.bentDrivetrain.follower.setStartingPose(MatchState.getTeleOpStartingPose());
+		mechanisms.bentDrivetrain.switchToManual();
 		setupLogging();
 		// Show whether we're using stored pose or fallback
 		Pose storedPose = MatchState.getStoredPose();
@@ -77,7 +77,7 @@ public class MainOp extends OpMode {
 	 */
 	@Override
 	public final void init_loop() {
-		logging.drawDebug(mechanisms.drivetrain.follower);
+		logging.drawDebug(mechanisms.bentDrivetrain.follower);
 		logging.update();
 	}
 	
@@ -88,7 +88,7 @@ public class MainOp extends OpMode {
 	public final void start() {
 		// Initialize mechanisms and start teleop drive
 		mechanisms.ifValid(mechanisms, MechanismManager::start);
-		mechanisms.drivetrain.follower.startTeleopDrive(); // or pass in true to enable braking
+		mechanisms.bentDrivetrain.follower.startTeleopDrive(); // or pass in true to enable braking
 		MatchState.clearStoredPose();
 		logging.enableRetainedMode();
 	}
@@ -111,7 +111,7 @@ public class MainOp extends OpMode {
 		
 		// Draw debug visualization (retained items like Heading, X, Y are auto-updated
 		// via Func)
-		log.drawDebug(mech.drivetrain.follower);
+		log.drawDebug(mech.bentDrivetrain.follower);
 		log.update();
 	}
 	
@@ -122,15 +122,15 @@ public class MainOp extends OpMode {
 	@Override
 	public final void stop() {
 		// Store the actual robot pose for future reference or debugging
-		if (mechanisms != null && mechanisms.drivetrain.follower != null) {
-			MatchState.setStoredPose(mechanisms.drivetrain.follower.getPose());
+		if (mechanisms != null && mechanisms.bentDrivetrain.follower != null) {
+			MatchState.setStoredPose(mechanisms.bentDrivetrain.follower.getPose());
 			mechanisms.stop();
 		}
 	}
 	
 	/**
 	 * Process controller inputs for both main and sub controllers.
-	 * Handles drivetrain movement, launcher controls, intake operations, and
+	 * Handles bentDrivetrain movement, launcher controls, intake operations, and
 	 * telemetry updates.
 	 */
 	private void processControllerInputs() {
@@ -139,40 +139,40 @@ public class MainOp extends OpMode {
 		subController.update();
 		
 		// Hot-loop locals
-		final Drivetrain drivetrain = this.drivetrain;
+		final BentDrivetrain bentDrivetrain = this.bentDrivetrain;
 		final VerticalWheelTransfer transfer = this.transfer;
 		final FlexVectorIntake intake = this.intake;
 		final PairedLauncher launcher = this.launcher;
 		
-		// Drivetrain
+		// BentDrivetrain
 		double d = mainController.getProcessedDrive();
 		double s = mainController.getProcessedStrafe();
 		double r = mainController.getProcessedRotation();
 		
-		if (drivetrain != null) {
+		if (bentDrivetrain != null) {
 			if (mainController.wasJustPressed(Controller.Action.TOGGLE_CENTRICITY)) {
-				drivetrain.toggleCentricity();
+				bentDrivetrain.toggleCentricity();
 			}
 			
 			if (mainController.wasJustPressed(Controller.Action.RESET_FOLLOWER)) {
-				drivetrain.follower.setPose(
+				bentDrivetrain.follower.setPose(
 						(MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE)
 								? Settings.Positions.Default.RESET
 								: Settings.Field.mirrorPose(Settings.Positions.Default.RESET));
 			}
 			
-			drivetrain.manual(d, s, r);
+			bentDrivetrain.manual(d, s, r);
 			
 			final double startValue = mainController.getProcessedValue(Controller.Control.START);
 			for (Controller.Action action : Settings.Controls.gotoActions) {
 				if (mainController.wasJustPressed(action) && startValue <= 0.0) {
-					drivetrain.goTo(action);
+					bentDrivetrain.goTo(action);
 					// Stop intake when going to park
-					if (drivetrain.actionToPosition(action) == Drivetrain.Position.PARK && transfer != null) {
+					if (bentDrivetrain.actionToPosition(action) == BentDrivetrain.Position.PARK && transfer != null) {
 						transfer.freeze();
 					}
 				} else if (mainController.wasJustReleased(action)) {
-					drivetrain.switchToManual();
+					bentDrivetrain.switchToManual();
 				}
 			}
 		}
@@ -237,9 +237,9 @@ public class MainOp extends OpMode {
 	private void setupLogging() {
 		// Set up lazy evaluation for frequently-accessed but expensive operations
 		// These are only evaluated when telemetry is actually transmitted
-		logging.addDataLazy("Heading°", () -> Math.toDegrees(mechanisms.drivetrain.follower.getHeading()));
-		logging.addDataLazy("X", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getX());
-		logging.addDataLazy("Y", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getY());
+		logging.addDataLazy("Heading°", () -> Math.toDegrees(mechanisms.bentDrivetrain.follower.getHeading()));
+		logging.addDataLazy("X", "%.2f", () -> mechanisms.bentDrivetrain.follower.getPose().getX());
+		logging.addDataLazy("Y", "%.2f", () -> mechanisms.bentDrivetrain.follower.getPose().getY());
 		
 		// Transfer telemetry
 		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), transfer -> {
@@ -278,31 +278,31 @@ public class MainOp extends OpMode {
 		});
 		
 		logging.addDataLazy("pathing", () -> {
-			if (mechanisms.drivetrain.getState() == Drivetrain.State.PATHING) {
-				return mechanisms.drivetrain.follower.getCurrentPath().endPose().toString();
+			if (mechanisms.bentDrivetrain.getState() == BentDrivetrain.State.PATHING) {
+				return mechanisms.bentDrivetrain.follower.getCurrentPath().endPose().toString();
 			} else {
 				return "direct drive";
 			}
 		});
 		
 		logging.addDataLazy("pathing from", () -> {
-			if (mechanisms.drivetrain.getState() == Drivetrain.State.PATHING) {
-				return mechanisms.drivetrain.follower.getPose().toString();
+			if (mechanisms.bentDrivetrain.getState() == BentDrivetrain.State.PATHING) {
+				return mechanisms.bentDrivetrain.follower.getPose().toString();
 			} else {
 				return "direct drive";
 			}
 		});
 		
-		logging.addDataLazy("Following", () -> mechanisms.drivetrain.follower.isBusy());
+		logging.addDataLazy("Following", () -> mechanisms.bentDrivetrain.follower.isBusy());
 		
 	}
 	
 	private void setControllerRumble() {
-		final Drivetrain drivetrain = this.drivetrain;
-		if (drivetrain != null) {
-			final Pose currentPose = drivetrain.follower.getPose();
-			if (currentPose.distanceFrom(drivetrain.getPositionPose(Drivetrain.Position.CLOSE_SHOOT)) < 1 ||
-					currentPose.distanceFrom(drivetrain.getPositionPose(Drivetrain.Position.FAR_SHOOT)) < 1) {
+		final BentDrivetrain bentDrivetrain = this.bentDrivetrain;
+		if (bentDrivetrain != null) {
+			final Pose currentPose = bentDrivetrain.follower.getPose();
+			if (currentPose.distanceFrom(bentDrivetrain.getPositionPose(BentDrivetrain.Position.CLOSE_SHOOT)) < 1 ||
+					currentPose.distanceFrom(bentDrivetrain.getPositionPose(BentDrivetrain.Position.FAR_SHOOT)) < 1) {
 				subController.rumble(100);
 			}
 		}

@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.CRA
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.CRAWL_TICKS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.FIRING_POSITION_TICKS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.INCREMENT_TICKS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.POSITION_TOLERANCE;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.SPEED;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -52,6 +53,7 @@ public class VerticalWheelTransfer extends Mechanism {
 		motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 		motor.setPower(SPEED);
 		motor.setDirection(DcMotorSimple.Direction.REVERSE);
+		motor.setTargetPositionTolerance(POSITION_TOLERANCE);
 		artifacts = new Artifact[]{new Artifact(), new Artifact(), new Artifact()};
 		this.targetTicks = motor.getCurrentPosition();
 	}

@@ -52,6 +52,7 @@ public class LaunchAction implements AutonomousAction {
 			FlexVectorIntake intake = mechanisms.get(FlexVectorIntake.class);
 			intake.crawl();
 		}
+		timer.resetTimer();
 	}
 	
 	@Override
@@ -69,7 +70,7 @@ public class LaunchAction implements AutonomousAction {
 		switch (state) {
 			case WAITING_TO_FIRE:
 				// Only transition to FIRING if we haven't fired all shots yet
-				if (launcher.isAtSpeed() && !transfer.isBusy() && timer.getElapsedTime() > 500) {
+				if (launcher.isAtSpeed() && !transfer.isBusy() && timer.getElapsedTime() > 250) {
 					state = State.FIRING;
 				}
 				break;
@@ -79,7 +80,7 @@ public class LaunchAction implements AutonomousAction {
 				shots += 1;
 				timer.resetTimer();
 				// Check if we're done after incrementing shots
-				if (shots >= 4) {
+				if (shots >= 3) {
 					state = State.COMPLETE;
 				} else {
 					state = State.WAITING_TO_FIRE;
@@ -91,7 +92,7 @@ public class LaunchAction implements AutonomousAction {
 				break;
 		}
 		
-		if (state == State.COMPLETE && !transfer.isBusy()) {
+		if (state == State.COMPLETE && !transfer.isBusy() && timer.getElapsedTime() > 500) {
 			launcher.stop();
 			launcher.close();
 			return true;

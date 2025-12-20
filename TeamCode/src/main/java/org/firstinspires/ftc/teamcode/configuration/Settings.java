@@ -160,8 +160,8 @@ public class Settings {
 	@Configurable
 	public static class Transfer {
 		public static final double FIRING_POSITION_TICKS = 500;
-		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 1.75;
-		public static double SPEED = 0.65;
+		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 2.0;
+		public static double SPEED = 1.0;
 		public static double CRAWL_SPEED = 0.1;
 		public static double CRAWL_TICKS = 2500;
 		// Motion Profile Position Controller Gains
@@ -169,7 +169,7 @@ public class Settings {
 		public static double POSITION_KD = 0.002; // Derivative gain (damping)
 		public static double MAX_VELOCITY = 800; // Max velocity (ticks/sec)
 		public static double MAX_ACCELERATION = 1600; // Max acceleration (ticks/sec²)
-		public static double POSITION_TOLERANCE = 10; // Acceptable position error (ticks)
+		public static int POSITION_TOLERANCE = 20; // Acceptable position error (ticks)
 	}
 	
 	/**
@@ -207,7 +207,7 @@ public class Settings {
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static long BELT_SPINUP_TIME_MS = 400;
-		public static double GATE_FIRE_POSITION = 0.22;
+		public static double GATE_FIRE_POSITION = 0.23;
 		public static double GATE_CLOSED_POSITION = 0.32;
 		public static long MAX_SPEED_ERROR = 20;
 		
@@ -221,11 +221,11 @@ public class Settings {
 		public static double MAX_INTEGRAL = 0.3; // Anti-windup limit
 		
 		// Pitch servo calibration (physical limits)
-		public static double PITCH_SERVO_AT_MIN = 0.0; // Servo position at minimum pitch angle
-		public static double PITCH_SERVO_AT_MAX = 0.94; // Servo position at maximum pitch angle
-		public static double DEFAULT_PITCH_ANGLE = 35.0; // degrees from horizontal; TODO - set back to 5.0 once conner fixes ts
-		public static double PITCH_MIN_ANGLE = 2.0; // Minimum pitch angle in degrees (horizontal)
-		public static double PITCH_MAX_ANGLE = 76.0; // Maximum pitch angle in degrees (straight up, 90° total window)
+		public static double PITCH_SERVO_AT_MIN = 0.7; // Servo position at minimum pitch angle
+		public static double PITCH_SERVO_AT_MAX = 1.0; // Servo position at maximum pitch angle
+		public static double DEFAULT_PITCH_ANGLE = 36.0; // degrees from horizontal; TODO - set back to 5.0 once conner fixes ts
+		public static double PITCH_MIN_ANGLE = 36.0; // Minimum pitch angle in degrees (horizontal)
+		public static double PITCH_MAX_ANGLE = 58.0; // Maximum pitch angle in degrees (straight up, 90° total window)
 		
 		/**
 		 * Converts RPM to motor velocity in ticks per second.
@@ -320,11 +320,11 @@ public class Settings {
 		 * Preset launch angles and RPM for each shooting position.
 		 * These values are used when AIM is called based on which position is closer.
 		 */
-		public static double CLOSE_SHOOT_PITCH_DEGREES = 46.3; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 3530; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_PITCH_DEGREES = 40.0; // Launch angle from horizontal for close position
+		public static double CLOSE_SHOOT_RPM = 3400; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 43.5; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 4360; // Wheel RPM for far position
+		public static double FAR_SHOOT_PITCH_DEGREES = 37.3; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 4115; // Wheel RPM for far position
 		
 	}
 	
@@ -365,7 +365,9 @@ public class Settings {
 		 * Default/reset positions.
 		 */
 		public static class Default {
-			public static final Pose RESET = new Pose(134, Robot.LENGTH / 2, Math.toRadians(90)); // TODO set this to corner instead
+			public static final Pose RESET = new Pose(134, Robot.LENGTH / 2, Math.toRadians(90));
+			public static final Pose FAR_SAFE_PARK_POSE = new Pose(35.86206896551724, 12.505747126436786, Math.toRadians(90));
+			public static final Pose CLOSE_SAFE_PARK_POSE = new Pose(48, 130, Math.toRadians(90));
 		}
 		
 		/**
@@ -407,10 +409,10 @@ public class Settings {
 			 * First preset group (closest to wall).
 			 */
 			public static class Preset1 {
-				public static final Pose PREP = new Pose(44, 35, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(36.0, 35, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(30.0, 35, Math.toRadians(180));
-				public static final Pose END = new Pose(14, 35, Math.toRadians(180));
+				public static final Pose PREP = new Pose(44, 34, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(36.0, 34, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 34, Math.toRadians(180));
+				public static final Pose END = new Pose(14, 34, Math.toRadians(180));
 			}
 			
 			/**
@@ -439,10 +441,9 @@ public class Settings {
 		 */
 		public static class ControlPoints {
 			// From sample areas to shooting positions
-			public static final Pose CLOSE_LAUNCH_APPROACH_FAR = new Pose(67, 45);
-			public static final Pose PRESET_1_APPROACH = new Pose(65, 37);
+			public static final Pose PRESET_1_APPROACH_FAR = new Pose(75, 38);
 			public static final Pose FROM_PRESET2_TO_CLOSE = new Pose(64, 56);
-			public static final Pose PRESET_2_APPROACH = new Pose(65, 59);
+			public static final Pose PRESET_2_APPROACH_FAR = new Pose(65, 59);
 			
 			public static final Pose FROM_PRESET3_TO_CLOSE = new Pose(41, 81);
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
@@ -476,10 +477,10 @@ public class Settings {
 	}
 	
 	public static class Autonomous {
-		public static double BALL_INTAKE_WAIT_S = 0.3;
-		public static double SLOW_SPEED = 0.35;
-		public static double LAUNCH_STABILITY_WAIT_S = 0.2;
-		public static double MAX_ACTION_TIME_S = 4.5;
+		public static double BALL_INTAKE_WAIT_S = 0.1;
+		public static double SLOW_SPEED = 0.4;
+		public static double LAUNCH_STABILITY_WAIT_S = 0.1;
+		public static double MAX_ACTION_TIME_S = 10.0;
 		
 	}
 }

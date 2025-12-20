@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.testing;
 
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.DEFAULT_PITCH_ANGLE;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Aiming.CLOSE_SHOOT_PITCH_DEGREES;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Aiming.CLOSE_SHOOT_RPM;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Aiming.FAR_SHOOT_PITCH_DEGREES;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Aiming.FAR_SHOOT_RPM;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.configuration.Settings;
+import org.firstinspires.ftc.teamcode.hardware.FlexVectorIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
 import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
@@ -22,8 +26,8 @@ import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
 public class OuttakeTest extends LinearOpMode {
 	
 	// State & Control
-	private double commandedRPM = 3000;
-	private double commandedAngle = DEFAULT_PITCH_ANGLE; // Now in degrees, not servo position
+	private double commandedRPM = FAR_SHOOT_RPM;
+	private double commandedAngle = FAR_SHOOT_PITCH_DEGREES;
 	
 	@Override
 	public final void runOpMode() {
@@ -40,6 +44,9 @@ public class OuttakeTest extends LinearOpMode {
 		telemetry.addLine("  BUMPER L/R: Adjust Speed up/down");
 		telemetry.addLine("  A: Spin up launcher + open gate");
 		telemetry.addLine("  B: Advance transfer");
+		telemetry.addLine("  X: Crawl intake");
+		telemetry.addLine("  L-Stick-Btn: Set Close Preset");
+		telemetry.addLine("  R-Stick-Btn: Set Far Preset");
 		telemetry.setMsTransmissionInterval(50);
 		telemetry.update();
 		
@@ -62,6 +69,14 @@ public class OuttakeTest extends LinearOpMode {
 			if (gamepad1.right_bumper) {
 				commandedRPM += 5;
 			}
+			if (gamepad1.leftStickButtonWasPressed()) {
+				commandedRPM = CLOSE_SHOOT_RPM;
+				commandedAngle = CLOSE_SHOOT_PITCH_DEGREES;
+			}
+			if (gamepad1.rightStickButtonWasPressed()) {
+				commandedRPM = FAR_SHOOT_RPM;
+				commandedAngle = FAR_SHOOT_PITCH_DEGREES;
+			}
 			
 			commandedRPM = Math.max(0, Math.min(6000, commandedRPM));
 			
@@ -78,7 +93,11 @@ public class OuttakeTest extends LinearOpMode {
 			if (gamepad1.bWasPressed()) {
 				m.ifValid(m.get(VerticalWheelTransfer.class), VerticalWheelTransfer::advance);
 			}
-			
+			if (gamepad1.xWasPressed()) {
+				m.ifValid(m.get(FlexVectorIntake.class), FlexVectorIntake::crawl);
+			} else if (gamepad1.xWasReleased()) {
+				m.ifValid(m.get(FlexVectorIntake.class), FlexVectorIntake::stop);
+			}
 			// --- Telemetry ---
 			telemetry.addData("Commanded Motor RPM", "%.0f (%.0f wheel RPM)", commandedRPM, commandedRPM * 2.0 / 3.0);
 			telemetry.addData("Commanded Angle", "%.1f", commandedAngle);

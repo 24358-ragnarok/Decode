@@ -4,7 +4,7 @@ import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
-import org.firstinspires.ftc.teamcode.hardware.Drivetrain.Position;
+import org.firstinspires.ftc.teamcode.hardware.BentDrivetrain.Position;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 
 /**
@@ -28,9 +28,9 @@ public class TrajectoryEngine {
 	 * position
 	 */
 	public AimingSolution getAimingOffsets(MatchState.AllianceColor allianceColor, double currentPitchDegrees) {
-		Pose currentPose = mechanisms.drivetrain.getPose();
-		Pose closeShootPose = mechanisms.drivetrain.getPositionPose(Position.CLOSE_SHOOT);
-		Pose farShootPose = mechanisms.drivetrain.getPositionPose(Position.FAR_SHOOT);
+		Pose currentPose = mechanisms.bentDrivetrain.getPose();
+		Pose closeShootPose = mechanisms.bentDrivetrain.getPositionPose(Position.CLOSE_SHOOT);
+		Pose farShootPose = mechanisms.bentDrivetrain.getPositionPose(Position.FAR_SHOOT);
 		
 		// Determine which position is closer
 		double distanceToClose = getDistance(currentPose, closeShootPose);

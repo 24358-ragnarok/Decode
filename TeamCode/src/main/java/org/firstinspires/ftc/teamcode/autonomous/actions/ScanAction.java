@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.software.game.Motif;
 /**
  * Action that scans the obelisk during autonomous.
  * <p>
- * This action coordinates both the drivetrain and limelight to point towards the obelisk, check the obelisk, and then continue.
+ * This action coordinates both the bentDrivetrain and limelight to point towards the obelisk, check the obelisk, and then continue.
  */
 public class ScanAction implements AutonomousAction {
 	private final boolean turn;
@@ -30,7 +30,7 @@ public class ScanAction implements AutonomousAction {
 	@Override
 	public void initialize(MechanismManager mechanisms) {
 		// 1. Get the current robot pose
-		Pose currentPose = mechanisms.drivetrain.follower.getPose();
+		Pose currentPose = mechanisms.bentDrivetrain.follower.getPose();
 		
 		// 2. Get the target pose (Obelisk position)
 		Pose targetPose = Settings.Positions.Towers.OBELISK;
@@ -47,7 +47,7 @@ public class ScanAction implements AutonomousAction {
 		// Check if the action should perform the turn (default is true)
 		if (turn) {
 			// Use the calculated angle to turn the robot
-			mechanisms.drivetrain.follower.turnTo(targetAngle);
+			mechanisms.bentDrivetrain.follower.turnTo(targetAngle);
 		}
 		
 		// begin scanning
@@ -75,7 +75,7 @@ public class ScanAction implements AutonomousAction {
 	@Override
 	public void end(MechanismManager mechanisms, boolean interrupted) {
 		if (interrupted) {
-			mechanisms.drivetrain.follower.breakFollowing();
+			mechanisms.bentDrivetrain.follower.breakFollowing();
 		}
 	}
 	

@@ -31,7 +31,7 @@ public class SlowLinearPathAction extends PathAction {
 	
 	@Override
 	protected PathChain buildPath(MechanismManager mechanisms, Pose startPose, Pose endPose) {
-		return mechanisms.drivetrain.follower.pathBuilder()
+		return mechanisms.bentDrivetrain.follower.pathBuilder()
 				.addPath(new BezierLine(startPose, endPose))
 				.setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading())
 				.build();
@@ -40,6 +40,6 @@ public class SlowLinearPathAction extends PathAction {
 	@Override
 	protected void followPath(MechanismManager mechanisms, PathChain path) {
 		// Use reduced speed for precise movement
-		mechanisms.drivetrain.follower.followPath(path, Settings.Autonomous.SLOW_SPEED, true);
+		mechanisms.bentDrivetrain.follower.followPath(path, Settings.Autonomous.SLOW_SPEED, true);
 	}
 }

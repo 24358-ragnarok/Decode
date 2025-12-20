@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.BALL_INTAKE_WAIT_S;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.LAUNCH_STABILITY_WAIT_S;
-
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 
 /**
@@ -27,46 +24,41 @@ public enum AutonomousRuntime {
 					// Launch preloads
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
-					.wait(LAUNCH_STABILITY_WAIT_S)
 					.launch()
 					
 					// Get ball set I
 					.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
 							"Prep Preset 1",
-							Settings.Positions.ControlPoints.PRESET_1_APPROACH)
+							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR)
 					.startPickup()
 					.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_1, "Grab Preset 1 Ball 1")
-					.wait(BALL_INTAKE_WAIT_S)
 					.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab Preset 1 Ball 2")
-					.wait(BALL_INTAKE_WAIT_S)
 					.moveSlowlyTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
-					.wait(BALL_INTAKE_WAIT_S)
 					// .endPickup()
 					
 					// Launch ball set I
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
 							Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
-					.wait(LAUNCH_STABILITY_WAIT_S)
 					.launch()
 					
 					// Get ball set II
 					.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
 							"Prep Preset2",
-							Settings.Positions.ControlPoints.PRESET_2_APPROACH)
+							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
 					.startPickup()
 					.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
-					.wait(BALL_INTAKE_WAIT_S)
+					
 					.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
-					.wait(BALL_INTAKE_WAIT_S)
+					
 					.moveSlowlyTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
-					.wait(BALL_INTAKE_WAIT_S)
+					
 					// .endPickup()
 					
 					// Launch ball set II
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preset2")
-					.wait(LAUNCH_STABILITY_WAIT_S)
+					
 					.launch()
 					
 					// Park
@@ -84,49 +76,74 @@ public enum AutonomousRuntime {
 					// Launch preload
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
-					.wait(LAUNCH_STABILITY_WAIT_S)
+					
 					.launch()
 					
 					// Get ball set I (Preset3 for close sequence)
 					.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
 					.startPickup()
 					.moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_1, "Grab1 Preset3")
-					.wait(BALL_INTAKE_WAIT_S)
+					
 					.moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_2, "Grab2 Preset3")
-					.wait(BALL_INTAKE_WAIT_S)
+					
 					.moveSlowlyTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
-					.wait(BALL_INTAKE_WAIT_S)
+					
 					// .endPickup()
 					
 					// Launch ball set I
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 							Settings.Positions.ControlPoints.FROM_PRESET3_TO_CLOSE, "Launch Preset3")
-					.wait(LAUNCH_STABILITY_WAIT_S)
+					
 					.launch()
 					
 					// Get ball set II (Preset2 for close sequence)
 					.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
 					.startPickup()
 					.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
-					.wait(BALL_INTAKE_WAIT_S)
+					
 					.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
-					.wait(BALL_INTAKE_WAIT_S)
+					
 					.moveSlowlyTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
-					.wait(BALL_INTAKE_WAIT_S)
+					
 					// .endPickup()
 					
 					// Launch ball set II
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 							Settings.Positions.ControlPoints.FROM_PRESET2_TO_CLOSE, "Launch Preset2")
-					.wait(LAUNCH_STABILITY_WAIT_S)
+					
 					.launch()
 					
 					// Park
 					.endPickup()
 					.moveTo(Settings.Positions.Park.CLOSE, "Park")
 					.endAt(Settings.Positions.Park.CLOSE)
+					.build();
+		}
+	},
+	JUST_LAUNCH("Just Launch & Park") {
+		@Override
+		public AutonomousSequence buildFarSequence() {
+			return new SequenceBuilder()
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
+					.launch()
+					
+					.moveTo(Settings.Positions.Default.FAR_SAFE_PARK_POSE, "Park")
+					.endAt(Settings.Positions.Default.FAR_SAFE_PARK_POSE)
+					.build();
+		}
+		
+		@Override
+		public AutonomousSequence buildCloseSequence() {
+			return new SequenceBuilder()
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
+					.launch()
+					
+					.moveTo(Settings.Positions.Default.FAR_SAFE_PARK_POSE, "Park")
+					.endAt(Settings.Positions.Default.CLOSE_SAFE_PARK_POSE)
 					.build();
 		}
 	},
@@ -149,7 +166,7 @@ public enum AutonomousRuntime {
 					// Get ball set I (Preset1)
 					.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
 							"Prep Preset 1",
-							Settings.Positions.ControlPoints.PRESET_1_APPROACH)
+							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR)
 					.startPickup()
 					.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_1, "Grab Preset 1 Ball 1")
 					.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab Preset 1 Ball 2")
@@ -165,7 +182,7 @@ public enum AutonomousRuntime {
 					// Get ball set II (Preset2)
 					.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
 							"Prep Preset2",
-							Settings.Positions.ControlPoints.PRESET_2_APPROACH)
+							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
 					.startPickup()
 					.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
 					.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
@@ -238,7 +255,7 @@ public enum AutonomousRuntime {
 					// Get ball set III (Preset1) - the extra set!
 					.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
 							"Prep Preset1",
-							Settings.Positions.ControlPoints.PRESET_1_APPROACH)
+							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR)
 					.startPickup()
 					.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_1, "Grab1 Preset1")
 					.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab2 Preset1")

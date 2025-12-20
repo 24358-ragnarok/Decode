@@ -79,7 +79,7 @@ public class SplinedPathAction extends PathAction {
 			curve = new BezierCurve(startPose, midPoint, endPose);
 		}
 		
-		return mechanisms.drivetrain.follower.pathBuilder()
+		return mechanisms.bentDrivetrain.follower.pathBuilder()
 				.addPath(curve)
 				.setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading())
 				.build();

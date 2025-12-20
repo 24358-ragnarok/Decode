@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.configuration.Constants;
 
 /**
- * Simplified drivetrain OpMode for outreach and demonstration purposes.
+ * Simplified bentDrivetrain OpMode for outreach and demonstration purposes.
  * Provides basic mecanum drive functionality with gamepad controls and d-pad precision movement.
  * <p>
  * Controls:
@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.configuration.Constants;
  *
  * @noinspection ClassWithoutConstructor
  */
-@TeleOp(name = "Run: Drivetrain Only", group = "Outreach")
+@TeleOp(name = "Run: BentDrivetrain Only", group = "Outreach")
 public class SimpleDrivetrain extends OpMode {
 	public DcMotor frontLeftMotor;
 	public DcMotor frontRightMotor;
@@ -27,7 +27,7 @@ public class SimpleDrivetrain extends OpMode {
 	
 	
 	/**
-	 * Initializes the drivetrain motors and sets their directions.
+	 * Initializes the bentDrivetrain motors and sets their directions.
 	 */
 	@Override
 	public final void init() {
@@ -52,7 +52,7 @@ public class SimpleDrivetrain extends OpMode {
 	
 	
 	/**
-	 * Main loop that processes gamepad input and controls the drivetrain.
+	 * Main loop that processes gamepad input and controls the bentDrivetrain.
 	 */
 	@Override
 	public final void loop() {

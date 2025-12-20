@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.testing;
 
+import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,10 +60,9 @@ public class MotorDebug extends OpMode {
 	
 	private static final double COARSE_DEBOUNCE = 0.12; // seconds
 	private static final double FINE_DEBOUNCE = 0.04; // seconds
-	
+	UnifiedLogging logging;
 	private List<MotorInfo> motors;
 	private int selectedIndex = 0;
-	
 	// Control state
 	private ControlMode controlMode = ControlMode.POWER;
 	private double commandedPower = 0.0;
@@ -73,16 +75,17 @@ public class MotorDebug extends OpMode {
 	
 	@Override
 	public void init() {
+		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
 		motors = discoverMotors();
 		
 		if (motors.isEmpty()) {
-			telemetry.addLine("⚠️ NO MOTORS FOUND!");
-			telemetry.addLine("Check your hardware configuration.");
+			logging.addLine("⚠️ NO MOTORS FOUND!");
+			logging.addLine("Check your hardware configuration.");
 		} else {
-			telemetry.addLine("✅ Found " + motors.size() + " motor(s)");
-			telemetry.addLine();
+			logging.addLine("✅ Found " + motors.size() + " motor(s)");
+			logging.addLine("");
 			for (MotorInfo info : motors) {
-				telemetry.addLine("  • " + info.name);
+				logging.addLine("  • " + info.name);
 			}
 			
 			// Initialize to first motor's current state
@@ -90,13 +93,13 @@ public class MotorDebug extends OpMode {
 			targetPosition = first.motor.getCurrentPosition();
 		}
 		
-		telemetry.addLine();
-		telemetry.addLine("Controls:");
-		telemetry.addLine("  DPAD ←→: Select motor");
-		telemetry.addLine("  START: Toggle POWER/POSITION mode");
-		telemetry.addLine("  X: Toggle direction");
-		telemetry.addLine("  BACK: Emergency stop");
-		telemetry.update();
+		logging.addLine("");
+		logging.addLine("Controls:");
+		logging.addLine("  DPAD ←→: Select motor");
+		logging.addLine("  START: Toggle POWER/POSITION mode");
+		logging.addLine("  X: Toggle direction");
+		logging.addLine("  BACK: Emergency stop");
+		logging.update();
 	}
 	
 	@Override
@@ -120,8 +123,8 @@ public class MotorDebug extends OpMode {
 	@Override
 	public void loop() {
 		if (motors.isEmpty()) {
-			telemetry.addLine("⚠️ NO MOTORS FOUND!");
-			telemetry.update();
+			logging.addLine("⚠️ NO MOTORS FOUND!");
+			logging.update();
 			return;
 		}
 		
@@ -191,7 +194,7 @@ public class MotorDebug extends OpMode {
 							: DcMotor.ZeroPowerBehavior.BRAKE);
 		}
 		
-		// === TELEMETRY ===
+		// === logging ===
 		displayTelemetry(current);
 	}
 	
@@ -317,11 +320,11 @@ public class MotorDebug extends OpMode {
 	}
 	
 	private void displayTelemetry(MotorInfo current) {
-		telemetry.clear();
+		logging.clearDynamic();
 		
 		// Header
-		telemetry.addLine("═══════ MOTOR DEBUG ═══════");
-		telemetry.addLine();
+		logging.addLine("═══════ MOTOR DEBUG ═══════");
+		logging.addLine("");
 		
 		// Motor selector
 		StringBuilder selector = new StringBuilder();
@@ -332,13 +335,13 @@ public class MotorDebug extends OpMode {
 				selector.append(motors.get(i).name).append(" ");
 			}
 		}
-		telemetry.addLine(selector.toString());
-		telemetry.addLine();
+		logging.addLine(selector.toString());
+		logging.addLine("");
 		
 		// Mode indicator
 		String modeStr = (controlMode == ControlMode.POWER) ? "⚡ POWER MODE" : "📍 POSITION MODE";
-		telemetry.addLine(modeStr);
-		telemetry.addLine();
+		logging.addLine(modeStr);
+		logging.addLine("");
 		
 		// Mode-specific info
 		if (controlMode == ControlMode.POWER) {
@@ -348,43 +351,43 @@ public class MotorDebug extends OpMode {
 		}
 		
 		// Common info
-		telemetry.addLine("═══════ MOTOR STATE ═══════");
-		telemetry.addData("Direction", current.motor.getDirection());
-		telemetry.addData("Zero Power", current.motor.getZeroPowerBehavior());
-		telemetry.addData("Run Mode", current.motor.getMode());
-		telemetry.addData("Busy", current.motor.isBusy() ? "YES" : "no");
+		logging.addLine("═══════ MOTOR STATE ═══════");
+		logging.addData("Direction", current.motor.getDirection());
+		logging.addData("Zero Power", current.motor.getZeroPowerBehavior());
+		logging.addData("Run Mode", current.motor.getMode());
+		logging.addData("Busy", current.motor.isBusy() ? "YES" : "no");
 		
 		// Extended info
 		if (current.motor instanceof DcMotorEx) {
 			DcMotorEx motorEx = current.motor;
-			telemetry.addData("Velocity", "%.1f ticks/s", motorEx.getVelocity());
+			logging.addData("Velocity", "%.1f ticks/s", motorEx.getVelocity());
 			try {
-				telemetry.addData("Current", "%.2f A",
+				logging.addData("Current", "%.2f A",
 						motorEx.getCurrent(org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit.AMPS));
 			} catch (Exception e) {
 				// Current monitoring not supported
 			}
 		}
-		telemetry.addLine();
+		logging.addLine("");
 		
 		// Controls reminder
-		telemetry.addLine("═══════ CONTROLS ═══════");
+		logging.addLine("═══════ CONTROLS ═══════");
 		if (controlMode == ControlMode.POWER) {
-			telemetry.addLine("R-Stick: Power | ↑↓ ±0.05 | Bump ±0.01");
-			telemetry.addLine("A=0 | B=0.5 | Y=1.0");
+			logging.addLine("R-Stick: Power | ↑↓ ±0.05 | Bump ±0.01");
+			logging.addLine("A=0 | B=0.5 | Y=1.0");
 		} else {
-			telemetry.addLine("↑↓ ±100 | Bump ±10 | Trig ±1");
-			telemetry.addLine("A=goto 0 | B=reset enc | Y=hold");
-			telemetry.addLine("R-Stick: Adj power | R3=cycle mode");
+			logging.addLine("↑↓ ±100 | Bump ±10 | Trig ±1");
+			logging.addLine("A=goto 0 | B=reset enc | Y=hold");
+			logging.addLine("R-Stick: Adj power | R3=cycle mode");
 		}
-		telemetry.addLine("START=mode | X=dir | L3=brake | BACK=stop");
+		logging.addLine("START=mode | X=dir | L3=brake | BACK=stop");
 		
-		telemetry.update();
+		logging.update();
 	}
 	
 	private void displayPowerModeTelemetry(MotorInfo current) {
-		telemetry.addLine("═══════ POWER ═══════");
-		telemetry.addData("Commanded", "%.3f", commandedPower);
+		logging.addLine("═══════ POWER ═══════");
+		logging.addData("Commanded", "%.3f", commandedPower);
 		
 		// Visual power bar
 		int barLength = 20;
@@ -403,21 +406,22 @@ public class MotorDebug extends OpMode {
 			}
 		}
 		bar.append("]");
-		telemetry.addLine(bar.toString());
+		logging.addLine(bar.toString());
 		
-		telemetry.addData("Encoder", current.motor.getCurrentPosition());
-		telemetry.addLine();
+		logging.addData("Encoder", current.motor.getCurrentPosition());
+		logging.addLine("");
 	}
 	
 	private void displayPositionModeTelemetry(MotorInfo current) {
-		telemetry.addLine("═══════ POSITION ═══════");
+		logging.addLine("═══════ POSITION ═══════");
 		int currentPos = current.motor.getCurrentPosition();
 		int error = targetPosition - currentPos;
 		
-		telemetry.addData("Target", targetPosition);
-		telemetry.addData("Current", currentPos);
-		telemetry.addData("Error", "%d ticks", error);
-		telemetry.addData("Power", "%.2f", positionPower);
+		logging.addData("Target", targetPosition);
+		logging.addData("Current", currentPos);
+		logging.addData("Error", "%d ticks", error);
+		logging.addData("Power", "%.2f", positionPower);
+		logging.addData("Deadzone", current.motor.getTargetPositionTolerance());
 		
 		// Visual position indicator
 		int range = 500; // Display range
@@ -442,9 +446,9 @@ public class MotorDebug extends OpMode {
 			}
 		}
 		bar.append("]");
-		telemetry.addLine(bar.toString());
-		telemetry.addLine("●=current ○=target |=zero");
-		telemetry.addLine();
+		logging.addLine(bar.toString());
+		logging.addLine("●=current ○=target |=zero");
+		logging.addLine("");
 	}
 	
 	/**

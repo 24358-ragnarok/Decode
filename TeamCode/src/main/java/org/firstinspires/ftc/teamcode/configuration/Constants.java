@@ -19,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * <p>
  * Contains all the tuned parameters for:
  * - Follower control (PIDF coefficients, mass, acceleration)
- * - Mecanum drivetrain configuration (motor names, directions, velocities)
+ * - Mecanum bentDrivetrain configuration (motor names, directions, velocities)
  * - Pinpoint localizer setup (pod positions, encoder configuration)
  * - Path constraints (velocity, acceleration, timing limits)
  * <p>

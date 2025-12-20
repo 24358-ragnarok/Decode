@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.DEFAULT_PITCH_ANGLE;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_CLOSED_POSITION;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_FIRE_POSITION;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.MAX_SPEED_ERROR;
@@ -116,6 +117,7 @@ public class PairedLauncher extends Mechanism {
 	
 	public final void start() {
 		spinDown();
+		setPitch(DEFAULT_PITCH_ANGLE);
 		close();
 	}
 	

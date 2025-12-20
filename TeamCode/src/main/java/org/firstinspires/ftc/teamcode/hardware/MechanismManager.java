@@ -38,7 +38,7 @@ import java.util.function.Consumer;
  */
 public class MechanismManager {
 	private static final LynxModule.BlinkerPolicy HUB_BLINKER_POLICY = new BlinkyBlinky();
-	public final Drivetrain drivetrain;
+	public final BentDrivetrain bentDrivetrain;
 	public final Mechanism[] mechanismArray;
 	// Optional non-mechanism helpers
 	public final LimelightManager limelightManager;
@@ -50,7 +50,7 @@ public class MechanismManager {
 		hardwareMap = hw;
 		allHubs = hardwareMap.getAll(LynxModule.class);
 		LynxModule.blinkerPolicy = HUB_BLINKER_POLICY;
-		drivetrain = new Drivetrain(hw);
+		bentDrivetrain = new BentDrivetrain(hw);
 		
 		// Build mechanisms safely
 		FlexVectorIntake intake = createIntake();
@@ -205,7 +205,7 @@ public class MechanismManager {
 	 * Initializes all available mechanisms.
 	 */
 	public void start() {
-		setHubColors(PresetColor.DEAD);
+		setHubColors(PresetColor.RAINBOW);
 		for (Mechanism m : mechanismArray) {
 			if (m != null) {
 				m.start();
@@ -214,7 +214,7 @@ public class MechanismManager {
 	}
 	
 	/**
-	 * Updates all available mechanisms and the drivetrain.
+	 * Updates all available mechanisms and the bentDrivetrain.
 	 */
 	public void update() {
 		// prepare for new hardware reads
@@ -227,7 +227,7 @@ public class MechanismManager {
 				m.update();
 			}
 		}
-		drivetrain.update();
+		bentDrivetrain.update();
 	}
 	
 	/**
