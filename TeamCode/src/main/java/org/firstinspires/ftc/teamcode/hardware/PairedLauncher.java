@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.DEF
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_CLOSED_POSITION;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_FIRE_POSITION;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.MAX_SPEED_ERROR;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.VELOCITY_ALPHA;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.rpmToTicksPerSec;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.ticksPerSecToRPM;
 
@@ -16,7 +17,6 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
 public class PairedLauncher extends Mechanism {
-	private static final double VELOCITY_ALPHA = 0.15; // EMA smoothing factor (0-1), lower = more smoothing
 	private final ServoImplEx verticalServo;
 	private final DcMotorEx rightMotor;
 	private final DcMotorEx leftMotor;
@@ -132,6 +132,13 @@ public class PairedLauncher extends Mechanism {
 		// build up)
 		averagedRightRPM = VELOCITY_ALPHA * currentRightRPM + (1 - VELOCITY_ALPHA) * averagedRightRPM;
 		averagedLeftRPM = VELOCITY_ALPHA * currentLeftRPM + (1 - VELOCITY_ALPHA) * averagedLeftRPM;
+		
+		if (averagedLeftRPM < 0) {
+			averagedLeftRPM = 0;
+		}
+		if (averagedRightRPM < 0) {
+			averagedRightRPM = 0;
+		}
 	}
 	
 	@Override

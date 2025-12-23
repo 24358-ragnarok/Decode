@@ -4,12 +4,14 @@ import com.bylazar.gamepad.PanelsGamepad;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.outoftheboxrobotics.photoncore.Photon;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
+import org.firstinspires.ftc.teamcode.hardware.BallSwap;
 import org.firstinspires.ftc.teamcode.hardware.BentDrivetrain;
 import org.firstinspires.ftc.teamcode.hardware.FlexVectorIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
@@ -28,6 +30,7 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
 @TeleOp(name = "Run: RAGNAROK", group = ".Competition")
 public class MainOp extends OpMode {
 	private final StringBuilder transferSlotsDisplayBuilder = new StringBuilder();
+	private boolean reset = false;
 	private UnifiedLogging logging;
 	private MechanismManager mechanisms;
 	private Controller mainController;
@@ -36,6 +39,9 @@ public class MainOp extends OpMode {
 	private VerticalWheelTransfer transfer;
 	private FlexVectorIntake intake;
 	private PairedLauncher launcher;
+	private BallSwap swap;
+	private Timer speedTimer;
+	private double speedms = 0;
 	
 	/**
 	 * Runs when "init" is pressed on the Driver Station.
@@ -44,6 +50,7 @@ public class MainOp extends OpMode {
 	 */
 	@Override
 	public final void init() {
+		speedTimer = new Timer();
 		// Initialize robot systems
 		mechanisms = new MechanismManager(hardwareMap);
 		// Cache mechanism references once to avoid map lookups in the hot loop
@@ -51,6 +58,7 @@ public class MainOp extends OpMode {
 		transfer = mechanisms.get(VerticalWheelTransfer.class);
 		intake = mechanisms.get(FlexVectorIntake.class);
 		launcher = mechanisms.get(PairedLauncher.class);
+		swap = mechanisms.get(BallSwap.class);
 		mainController = new Controller(gamepad1, mechanisms.bentDrivetrain.follower,
 				PanelsGamepad.INSTANCE.getFirstManager());
 		subController = new Controller(gamepad2, mechanisms.bentDrivetrain.follower,
@@ -143,6 +151,7 @@ public class MainOp extends OpMode {
 		final VerticalWheelTransfer transfer = this.transfer;
 		final FlexVectorIntake intake = this.intake;
 		final PairedLauncher launcher = this.launcher;
+		final BallSwap swap = this.swap;
 		
 		// BentDrivetrain
 		double d = mainController.getProcessedDrive();
@@ -181,6 +190,16 @@ public class MainOp extends OpMode {
 		if (launcher != null) {
 			if (subController.getProcessedValue(Controller.Action.AIM) > 0.1) {
 				launcher.ready();
+				if (launcher.isAtSpeed() && speedms == 0) {
+					speedms = speedTimer.getElapsedTime();
+					reset = false;
+				}
+				if (!launcher.isAtSpeed() && speedms != 0 && !reset) {
+					speedms = 0;
+					reset = true;
+					speedTimer.resetTimer();
+				}
+				logging.addData(".ms back to speed", speedms);
 			} else {
 				launcher.stop();
 			}
@@ -214,6 +233,15 @@ public class MainOp extends OpMode {
 			}
 			if (subController.wasJustReleased(Controller.Action.INTAKE_OUT)) {
 				intake.stop();
+			}
+		}
+		
+		if (swap != null) {
+			if (subController.wasJustPressed(Controller.Control.RIGHT_BUMPER)) {
+				swap.grab();
+			}
+			if (subController.wasJustPressed(Controller.Control.LEFT_BUMPER)) {
+				swap.hold();
 			}
 		}
 	}

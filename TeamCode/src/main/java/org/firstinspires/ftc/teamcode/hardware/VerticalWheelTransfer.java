@@ -52,7 +52,7 @@ public class VerticalWheelTransfer extends Mechanism {
 		motor.setTargetPosition(motor.getCurrentPosition());
 		motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 		motor.setPower(SPEED);
-		motor.setDirection(DcMotorSimple.Direction.REVERSE);
+		motor.setDirection(DcMotorSimple.Direction.FORWARD);
 		motor.setTargetPositionTolerance(POSITION_TOLERANCE);
 		artifacts = new Artifact[]{new Artifact(), new Artifact(), new Artifact()};
 		this.targetTicks = motor.getCurrentPosition();

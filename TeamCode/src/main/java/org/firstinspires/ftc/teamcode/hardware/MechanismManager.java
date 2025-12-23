@@ -58,8 +58,8 @@ public class MechanismManager {
 		LimelightManager ll = createLimelight();
 		TrajectoryEngine traj = createTrajectory();
 		PairedLauncher launcher = createLauncher();
-		DualBallCompartment dbc = createCompartment();
-		mechanismArray = new Mechanism[]{intake, transfer, launcher, dbc};
+		BallSwap swap = createSwap();
+		mechanismArray = new Mechanism[]{intake, transfer, launcher, swap};
 		
 		// Save helpers
 		limelightManager = ll;
@@ -176,13 +176,12 @@ public class MechanismManager {
 		return new PairedLauncher(this, right, left, vertical, gate);
 	}
 	
-	private DualBallCompartment createCompartment() {
-		if (!Settings.Deploy.COMPARTMENT) {
+	private BallSwap createSwap() {
+		if (!Settings.Deploy.SWAP) {
 			return null;
 		}
-		ServoImplEx right = Settings.Hardware.COMPARTMENT_RIGHT.fromHardwareMap(hardwareMap);
-		ServoImplEx left = Settings.Hardware.COMPARTMENT_LEFT.fromHardwareMap(hardwareMap);
-		return new DualBallCompartment(this, right, left);
+		ServoImplEx swap = Settings.Hardware.SWAP.fromHardwareMap(hardwareMap);
+		return new BallSwap(this, swap);
 	}
 	
 	/**

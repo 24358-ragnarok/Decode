@@ -103,11 +103,9 @@ public class Settings {
 		public static final HardwareConfig TRANSFER_WHEEL_MOTOR = new HardwareConfig(DcMotorEx.class,
 				"transfer");
 		
-		public static final HardwareConfig COMPARTMENT_LEFT = new HardwareConfig(ServoImplEx.class,
-				"compartmentLeft");
 		
-		public static final HardwareConfig COMPARTMENT_RIGHT = new HardwareConfig(ServoImplEx.class,
-				"compartmentRight");
+		public static final HardwareConfig SWAP = new HardwareConfig(ServoImplEx.class,
+				"swap");
 		
 		// Sensors
 		public static final String[] COLOR_RANGEFINDER_1 = {"crf1_0", "crf1_1"};
@@ -137,7 +135,7 @@ public class Settings {
 	@Configurable
 	public static class Intake {
 		public static double IN_SPEED = 1.0;
-		public static double CRAWL_SPEED = 0.3;
+		public static double CRAWL_SPEED = 0.5;
 		public static double OUT_SPEED = -1.0;
 		public static double STOPPED_SPEED = 0.0;
 		public static long COLOR_SENSOR_DEBOUNCE_TIME = 500;
@@ -159,10 +157,10 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Transfer {
-		public static final double FIRING_POSITION_TICKS = 500;
+		public static final double FIRING_POSITION_TICKS = 1000;
 		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 2.0;
 		public static double SPEED = 1.0;
-		public static double CRAWL_SPEED = 0.1;
+		public static double CRAWL_SPEED = 0.3;
 		public static double CRAWL_TICKS = 2500;
 		// Motion Profile Position Controller Gains
 		public static double POSITION_KP = 0.015; // Position proportional gain
@@ -206,20 +204,10 @@ public class Settings {
 	@Configurable
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
-		public static long BELT_SPINUP_TIME_MS = 400;
+		public static final double VELOCITY_ALPHA = 0.15; // EMA smoothing factor (0-1), lower = more smoothing
 		public static double GATE_FIRE_POSITION = 0.23;
 		public static double GATE_CLOSED_POSITION = 0.32;
 		public static long MAX_SPEED_ERROR = 20;
-		
-		// PIDF Velocity Controller Gains
-		// kF is power per unit of target velocity (ticks/sec)
-		// At 3000 RPM = 1400 ticks/sec, we need ~0.8 power, so kF ≈ 0.0006
-		public static double VELOCITY_KP = 0.001420; // Proportional gain
-		public static double VELOCITY_KI = 0.000015; // Integral gain (use sparingly)
-		public static double VELOCITY_KD = 0.000100; // Derivative gain
-		public static double VELOCITY_KF = 0.000360; // Feedforward gain
-		public static double MAX_INTEGRAL = 0.3; // Anti-windup limit
-		
 		// Pitch servo calibration (physical limits)
 		public static double PITCH_SERVO_AT_MIN = 0.7; // Servo position at minimum pitch angle
 		public static double PITCH_SERVO_AT_MAX = 1.0; // Servo position at maximum pitch angle
@@ -320,11 +308,11 @@ public class Settings {
 		 * Preset launch angles and RPM for each shooting position.
 		 * These values are used when AIM is called based on which position is closer.
 		 */
-		public static double CLOSE_SHOOT_PITCH_DEGREES = 40.0; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 3400; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_PITCH_DEGREES = 42.0; // Launch angle from horizontal for close position
+		public static double CLOSE_SHOOT_RPM = 2735; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 37.3; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 4115; // Wheel RPM for far position
+		public static double FAR_SHOOT_PITCH_DEGREES = 39.5; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 3670; // Wheel RPM for far position
 		
 	}
 	
@@ -473,13 +461,19 @@ public class Settings {
 		public static boolean TRAJECTORY_ENGINE = true;
 		public static boolean LAUNCHER = TRAJECTORY_ENGINE && true;
 		
-		public static boolean COMPARTMENT = false;
+		public static boolean SWAP = true;
+	}
+	
+	public static class Swap {
+		public static double GRABBING_POS = 0.594;
+		public static double HOLDING_POS = 0.885;
+		
 	}
 	
 	public static class Autonomous {
 		public static double BALL_INTAKE_WAIT_S = 0.1;
 		public static double SLOW_SPEED = 0.4;
-		public static double LAUNCH_STABILITY_WAIT_S = 0.1;
+		public static double LAUNCH_DEBOUNCE_TIME_MS = 400;
 		public static double MAX_ACTION_TIME_S = 10.0;
 		
 	}
