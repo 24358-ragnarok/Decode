@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.software.ColorRangefinder;
+import org.firstinspires.ftc.teamcode.software.ColorSensor;
 import org.firstinspires.ftc.teamcode.software.ColorUnifier;
 import org.firstinspires.ftc.teamcode.software.LimelightManager;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
@@ -38,7 +39,7 @@ import java.util.function.Consumer;
  */
 public class MechanismManager {
 	private static final LynxModule.BlinkerPolicy HUB_BLINKER_POLICY = new BlinkyBlinky();
-	public final BentDrivetrain bentDrivetrain;
+	public final Drivetrain drivetrain;
 	public final Mechanism[] mechanismArray;
 	// Optional non-mechanism helpers
 	public final LimelightManager limelightManager;
@@ -50,7 +51,7 @@ public class MechanismManager {
 		hardwareMap = hw;
 		allHubs = hardwareMap.getAll(LynxModule.class);
 		LynxModule.blinkerPolicy = HUB_BLINKER_POLICY;
-		bentDrivetrain = new BentDrivetrain(hw);
+		drivetrain = new Drivetrain(hw);
 		
 		// Build mechanisms safely
 		FlexVectorIntake intake = createIntake();
@@ -121,23 +122,54 @@ public class MechanismManager {
 					hub.setPattern(p);
 				}
 				break;
+			case MORSE:
+				
+				String morseString = new String(
+						android.util.Base64.decode("Li0gLi4uIC4tLS4gLS4tLSAtLg==", android.util.Base64.DEFAULT));
+				
+				// Timing (ms)
+				int dot = 150;
+				int dash = dot * 3;
+				int gap = dot;
+				int letterGap = dot * 3;
+				
+				int red = Color.RED;
+				
+				p.clear();
+				for (String letter : morseString.split(" ")) {
+					for (int i = 0; i < letter.length(); i++) {
+						int dur = (letter.charAt(i) == '.') ? dot : dash;
+						p.add(new Blinker.Step(red, dur, TimeUnit.MILLISECONDS));
+						p.add(new Blinker.Step(Color.BLACK, gap, TimeUnit.MILLISECONDS));
+					}
+					// replace last gap with longer letter gap
+					p.set(p.size() - 1, new Blinker.Step(Color.BLACK, letterGap, TimeUnit.MILLISECONDS));
+				}
+				
+				for (LynxModule hub : allHubs)
+					hub.setPattern(p);
+				break;
 		}
 	}
 	
 	private FlexVectorIntake createIntake() {
 		if (!Settings.Deploy.INTAKE)
 			return null;
-		try {
-			DcMotorEx intakeMotor = Settings.Hardware.INTAKE_MOTOR.fromHardwareMap(hardwareMap);
-			// ColorRangefinder color1 = new ColorRangefinder(
-			// hardwareMap, Settings.Hardware.COLOR_RANGEFINDER_1[0],
-			// Settings.Hardware.COLOR_RANGEFINDER_1[1]);
-			ColorRangefinder[] array = {};
-			ColorUnifier color = new ColorUnifier(this, array);
-			return new FlexVectorIntake(this, intakeMotor, color);
-		} catch (Exception e) {
-			return null;
-		}
+		DcMotorEx intakeMotor = Settings.Hardware.INTAKE_MOTOR.fromHardwareMap(hardwareMap);
+		// Color detection: only dual Rev color sensors (left/right).
+		ColorSensor[] rgbSensors = buildColorSensors();
+		ColorUnifier color = new ColorUnifier(this, new ColorRangefinder[0], rgbSensors);
+		return new FlexVectorIntake(this, intakeMotor, color);
+	}
+	
+	private ColorSensor[] buildColorSensors() {
+		List<ColorSensor> list = new ArrayList<>();
+		
+		list.add(new ColorSensor(Settings.Hardware.COLOR_SENSOR_LEFT.fromHardwareMap(hardwareMap)));
+		
+		list.add(new ColorSensor(Settings.Hardware.COLOR_SENSOR_RIGHT.fromHardwareMap(hardwareMap)));
+		
+		return list.toArray(new ColorSensor[0]);
 	}
 	
 	private VerticalWheelTransfer createTransfer() {
@@ -158,11 +190,8 @@ public class MechanismManager {
 	private TrajectoryEngine createTrajectory() {
 		if (!Settings.Deploy.TRAJECTORY_ENGINE)
 			return null;
-		try {
-			return new TrajectoryEngine(this);
-		} catch (Exception e) {
-			return null;
-		}
+		
+		return new TrajectoryEngine(this);
 	}
 	
 	private PairedLauncher createLauncher() {
@@ -172,7 +201,8 @@ public class MechanismManager {
 		DcMotorEx right = Settings.Hardware.LAUNCHER_RIGHT.fromHardwareMap(hardwareMap);
 		DcMotorEx left = Settings.Hardware.LAUNCHER_LEFT.fromHardwareMap(hardwareMap);
 		ServoImplEx vertical = Settings.Hardware.LAUNCHER_PITCH_SERVO.fromHardwareMap(hardwareMap);
-		ServoImplEx gate = Settings.Hardware.LAUNCHER_GATE.fromHardwareMap(hardwareMap);
+		TimelockedServo gate = Settings.Hardware.LAUNCHER_GATE.asTimelockedServo(hardwareMap,
+				Settings.Launcher.GATE_COOLDOWN_MS);
 		return new PairedLauncher(this, right, left, vertical, gate);
 	}
 	
@@ -180,7 +210,7 @@ public class MechanismManager {
 		if (!Settings.Deploy.SWAP) {
 			return null;
 		}
-		ServoImplEx swap = Settings.Hardware.SWAP.fromHardwareMap(hardwareMap);
+		TimelockedServo swap = Settings.Hardware.SWAP.asTimelockedServo(hardwareMap, Settings.Swap.COOLDOWN_MS);
 		return new BallSwap(this, swap);
 	}
 	
@@ -213,7 +243,7 @@ public class MechanismManager {
 	}
 	
 	/**
-	 * Updates all available mechanisms and the bentDrivetrain.
+	 * Updates all available mechanisms and the drivetrain.
 	 */
 	public void update() {
 		// prepare for new hardware reads
@@ -226,7 +256,7 @@ public class MechanismManager {
 				m.update();
 			}
 		}
-		bentDrivetrain.update();
+		drivetrain.update();
 	}
 	
 	/**
@@ -262,6 +292,7 @@ public class MechanismManager {
 		RED,
 		BLUE,
 		DEAD,
+		MORSE
 	}
 	
 	private static class BlinkyBlinky implements LynxModule.BlinkerPolicy {

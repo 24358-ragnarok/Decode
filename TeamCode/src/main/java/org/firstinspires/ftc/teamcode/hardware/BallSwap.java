@@ -3,20 +3,21 @@ package org.firstinspires.ftc.teamcode.hardware;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Swap.GRABBING_POS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Swap.HOLDING_POS;
 
-import com.qualcomm.robotcore.hardware.ServoImplEx;
+import org.firstinspires.ftc.teamcode.software.game.Artifact;
 
 public class BallSwap extends Mechanism {
-	private final ServoImplEx servo;
+	private final TimelockedServo servo;
 	private final MechanismManager mechanisms;
 	private SwapState state;
-	
+	private Artifact heldArtifact = Artifact.NONE;
+
 	public BallSwap(MechanismManager mechanisms,
-	                ServoImplEx swap) {
+	                TimelockedServo swap) {
 		this.mechanisms = mechanisms;
 		this.servo = swap;
 		this.state = SwapState.UNKNOWN;
 	}
-	
+
 	public final void start() {
 		hold();
 	}
@@ -42,6 +43,32 @@ public class BallSwap extends Mechanism {
 		state = SwapState.HOLDING;
 	}
 	
+	public void storeArtifact(Artifact artifact) {
+		if (artifact == null) {
+			return;
+		}
+		artifact.beingSwapped = true;
+		heldArtifact = artifact;
+	}
+	
+	public Artifact takeHeldArtifact() {
+		Artifact out = heldArtifact;
+		heldArtifact = Artifact.NONE;
+		return out;
+	}
+	
+	public Artifact peekHeldArtifact() {
+		return heldArtifact;
+	}
+	
+	public boolean isBusy() {
+		return servo.isBusy();
+	}
+	
+	public boolean hasHeldArtifact() {
+		return heldArtifact != null && heldArtifact.color != Artifact.Color.NONE;
+	}
+
 	@Override
 	public void stop() {
 	}
@@ -50,6 +77,6 @@ public class BallSwap extends Mechanism {
 		GRABBING,
 		HOLDING,
 		UNKNOWN
-	
+		
 	}
 }

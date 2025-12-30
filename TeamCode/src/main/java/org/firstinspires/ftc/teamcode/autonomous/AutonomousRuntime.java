@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
+import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 
 /**
@@ -12,19 +13,21 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
 public enum AutonomousRuntime {
 	
 	/**
-	 * Default runtime: Launch preloads, collect 2 sets of balls, launch them, then
-	 * park.
-	 * This is the "safe" competition runtime.
+	 * 9-ball autonomous that scans, then launches in motif order using swap.
 	 */
-	BEST("BEST (9ball)") {
+	SORTED_NINE_BALL("Sorted 9 Ball") {
 		@Override
 		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
-					.scanObelisk()
-					// Launch preloads
+					.startAt(MatchState.getAutonomousStartingPose(), "Start Pose (Far)")
+					// Scan from far pose
 					.prepLaunch()
+					.moveTo(Settings.Positions.Towers.FAR_SCAN, "Scan (Far)")
+					.scanObelisk()
+					
+					// Launch preloads (sorted)
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
-					.launch()
+					.sortedLaunch()
 					
 					// Get ball set I
 					.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
@@ -34,13 +37,12 @@ public enum AutonomousRuntime {
 					.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_1, "Grab Preset 1 Ball 1")
 					.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab Preset 1 Ball 2")
 					.moveSlowlyTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
-					// .endPickup()
 					
-					// Launch ball set I
+					// Launch ball set I (sorted)
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
 							Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
-					.launch()
+					.sortedLaunch()
 					
 					// Get ball set II
 					.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
@@ -48,17 +50,116 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
 					.startPickup()
 					.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
-					
 					.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
-					
 					.moveSlowlyTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
 					
-					// .endPickup()
+					// Launch ball set II (sorted)
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preset2")
+					.sortedLaunch()
 					
+					// Park
+					.endPickup()
+					.moveTo(Settings.Positions.Park.FAR, "Park")
+					.endAt(Settings.Positions.Park.FAR)
+					.build();
+		}
+		
+		@Override
+		public AutonomousSequence buildCloseSequence() {
+			return new SequenceBuilder()
+					// Scan from close pose
+					.startAt(MatchState.getAutonomousStartingPose())
+					.prepLaunch()
+					.moveTo(Settings.Positions.Towers.CLOSE_SCAN, "Scan (Close)")
+					.scanObelisk()
+					
+					// Launch preload (sorted)
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
+					.sortedLaunch()
+					
+					// Get ball set I (Preset3 for close sequence)
+					.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
+					.startPickup()
+					.moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_1, "Grab1 Preset3")
+					.moveSlowlyTo(Settings.Positions.Samples.Preset3.GRAB_2, "Grab2 Preset3")
+					.moveSlowlyTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
+					
+					// Launch ball set I (sorted)
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+							Settings.Positions.ControlPoints.FROM_PRESET3_TO_CLOSE, "Launch Preset3")
+					.sortedLaunch()
+					
+					// Get ball set II (Preset2 for close sequence)
+					.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
+					.startPickup()
+					.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
+					.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
+					.moveSlowlyTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
+					
+					// Launch ball set II (sorted)
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+							Settings.Positions.ControlPoints.FROM_PRESET2_TO_CLOSE, "Launch Preset2")
+					.sortedLaunch()
+					
+					// Park
+					.endPickup()
+					.moveTo(Settings.Positions.Park.CLOSE, "Park")
+					.endAt(Settings.Positions.Park.CLOSE)
+					.build();
+		}
+	},
+
+	/**
+	 * Default runtime: Launch preloads, collect 2 sets of balls, launch them, then
+	 * park.
+	 * This is the "safe" competition runtime.
+	 */
+	BEST("Classic 9 Ball") {
+		@Override
+		public AutonomousSequence buildFarSequence() {
+			return new SequenceBuilder()
+					.startAt(MatchState.getAutonomousStartingPose(), "Start Pose (Far)")
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
+					.launch()
+
+					// Get ball set I
+					.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
+							"Prep Preset 1",
+							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR)
+					.startPickup()
+					.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_1, "Grab Preset 1 Ball 1")
+					.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab Preset 1 Ball 2")
+					.moveSlowlyTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
+					// .endPickup()
+
+					// Launch ball set I
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
+							Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
+					.launch()
+
+					// Get ball set II
+					.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
+							"Prep Preset2",
+							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
+					.startPickup()
+					.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
+
+					.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
+
+					.moveSlowlyTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
+
+					// .endPickup()
+
 					// Launch ball set II
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preset2")
-					
+
 					.launch()
 					
 					// Park
@@ -71,8 +172,7 @@ public enum AutonomousRuntime {
 		@Override
 		public AutonomousSequence buildCloseSequence() {
 			return new SequenceBuilder()
-					.moveTo(Settings.Positions.Towers.SCAN)
-					.scanObelisk()
+					.startAt(MatchState.getAutonomousStartingPose(), "Start Pose (Close)")
 					// Launch preload
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
@@ -122,10 +222,12 @@ public enum AutonomousRuntime {
 					.build();
 		}
 	},
+	
 	JUST_LAUNCH("Just Launch & Park") {
 		@Override
 		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
+					.startAt(MatchState.getAutonomousStartingPose(), "Start Pose (Far)")
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
 					.launch()
@@ -138,11 +240,12 @@ public enum AutonomousRuntime {
 		@Override
 		public AutonomousSequence buildCloseSequence() {
 			return new SequenceBuilder()
+					.startAt(MatchState.getAutonomousStartingPose(), "Start Pose (Close)")
 					.prepLaunch()
-					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
+					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
 					.launch()
 					
-					.moveTo(Settings.Positions.Default.FAR_SAFE_PARK_POSE, "Park")
+					.moveTo(Settings.Positions.Default.CLOSE_SAFE_PARK_POSE, "Park")
 					.endAt(Settings.Positions.Default.CLOSE_SAFE_PARK_POSE)
 					.build();
 		}
@@ -156,6 +259,7 @@ public enum AutonomousRuntime {
 		@Override
 		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
+					.startAt(MatchState.getAutonomousStartingPose(), "Start Pose (Far)")
 					.moveTo(Settings.Positions.Park.FAR, "Park")
 					.endAt(Settings.Positions.Park.FAR)
 					.build();
@@ -164,12 +268,14 @@ public enum AutonomousRuntime {
 		@Override
 		public AutonomousSequence buildCloseSequence() {
 			return new SequenceBuilder()
+					.startAt(MatchState.getAutonomousStartingPose(), "Start Pose (Close)")
 					.moveTo(Settings.Positions.Park.CLOSE, "Park")
 					.endAt(Settings.Positions.Park.CLOSE)
 					.build();
 		}
-	};
-	
+	},
+	;
+
 	private final String displayName;
 	
 	AutonomousRuntime(String displayName) {

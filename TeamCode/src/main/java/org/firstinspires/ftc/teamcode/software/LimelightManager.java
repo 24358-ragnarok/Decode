@@ -45,8 +45,8 @@ public class LimelightManager extends Mechanism {
 	 */
 	public void start() {
 		setCurrentPipeline(currentPipeline);
-		limelight.start();
 		limelight.setPollRateHz(100);
+		limelight.start();
 	}
 	
 	/**

@@ -73,7 +73,7 @@ public class CurvePathAction extends PathAction {
 		
 		BezierCurve curve = new BezierCurve(allPoints);
 		
-		return mechanisms.bentDrivetrain.follower.pathBuilder()
+		return mechanisms.drivetrain.follower.pathBuilder()
 				.addPath(curve)
 				.setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading())
 				.build();

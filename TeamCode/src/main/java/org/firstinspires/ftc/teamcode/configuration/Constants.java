@@ -19,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * <p>
  * Contains all the tuned parameters for:
  * - Follower control (PIDF coefficients, mass, acceleration)
- * - Mecanum bentDrivetrain configuration (motor names, directions, velocities)
+ * - Mecanum drivetrain configuration (motor names, directions, velocities)
  * - Pinpoint localizer setup (pod positions, encoder configuration)
  * - Path constraints (velocity, acceleration, timing limits)
  * <p>
@@ -29,17 +29,20 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Constants {
 	public static final FollowerConstants followerConstants = new FollowerConstants()
 			.mass(11.0)
-			.forwardZeroPowerAcceleration(-44.4)
-			.lateralZeroPowerAcceleration(-66.0)
+			.forwardZeroPowerAcceleration(-38.31)
+			.lateralZeroPowerAcceleration(-69.5)
 			
-			.translationalPIDFCoefficients(new PIDFCoefficients(0.6, 0, 0.06, 0.045))
-			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.25, 0.0001, 0.03, 0.02))
+			.translationalPIDFCoefficients(new PIDFCoefficients(0.13, 0.00001, 0.02, 0.02))
+			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.1, 0.0001, 0.02, 0.02))
 			
-			.headingPIDFCoefficients(new PIDFCoefficients(0.9, 0.0001, 0.08, 0.05))
-			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.5, 0.005, 0.01, 0.03))
+			.headingPIDFCoefficients(new PIDFCoefficients(0.7, 0.0001, 0.05, 0.03))
+			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.6, 0.001, 0.025, 0.02))
 			
-			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.8, 0.0, 0.2, 0.6, 0.0))
-			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.1, 0.0, 0.1, 0.6, 0.01))
+			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.8, 0.0, 0.01, 0.6, 0.0))
+			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.035, 0.0, 0.001, 0.6, 0.0))
+			
+			.centripetalScaling(0.0003)
+			
 			.automaticHoldEnd(true)
 			.useSecondaryDrivePIDF(true)
 			.useSecondaryHeadingPIDF(true)
@@ -55,7 +58,7 @@ public class Constants {
 			.leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
 			.rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
 			.rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-			.xVelocity(92.1).yVelocity(69.0)
+			.xVelocity(81.82).yVelocity(59.9)
 			.useVoltageCompensation(false)
 			.nominalVoltage(13)
 			.useBrakeModeInTeleOp(false);
@@ -88,9 +91,9 @@ public class Constants {
 			0.01,
 			0.001,
 			50,
-			1.6,
+			1.1,
 			10,
-			0.5);
+			0.9);
 	
 	/**
 	 * Factory method to create a configured Follower instance.

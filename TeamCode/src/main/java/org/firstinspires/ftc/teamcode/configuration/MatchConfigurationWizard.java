@@ -95,5 +95,6 @@ public class MatchConfigurationWizard {
 				(autoStartingPosition == MatchState.AutoStartingPosition.CLOSE) ? "Close" : "Far"));
 		
 		logging.addLine("Runtime: " + MatchState.getAutonomousRuntime().getDisplayName());
+		logging.addLine("Starting Pos: " + MatchState.getAutonomousStartingPose().toString());
 	}
 }

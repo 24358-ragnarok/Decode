@@ -67,13 +67,11 @@ public class MainAuto extends OpMode {
 	public void init_loop() {
 		logging.clearDynamic();
 		// Draw the initial pose of the robot
-		logging.drawRobot(MatchState.getAutonomousStartingPose());
 		
 		// Allow driver to select match settings using the wizard
 		wizard.refresh();
-		mechanisms.setHubColors(
-				MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE ? MechanismManager.PresetColor.BLUE
-						: MechanismManager.PresetColor.RED);
+		mechanisms.drivetrain.follower.setStartingPose(MatchState.getAutonomousStartingPose());
+		logging.drawRobot(mechanisms.drivetrain.follower.poseTracker.getPreviousPose());
 		
 		logging.update();
 	}
@@ -85,13 +83,9 @@ public class MainAuto extends OpMode {
 	@Override
 	public void start() {
 		// Initialize all mechanisms
+		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::setUpForAuto);
 		mechanisms.start();
 		
-		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), transfer -> {
-			transfer.setUpForAuto();
-		});
-		
-		mechanisms.bentDrivetrain.follower.setStartingPose(MatchState.getAutonomousStartingPose());
 		// Build the autonomous sequence based on configuration
 		// The runtime system allows hot-swapping between different strategies
 		// while the PathAction system handles alliance mirroring automatically
@@ -116,22 +110,18 @@ public class MainAuto extends OpMode {
 	 */
 	@Override
 	public void loop() {
-		final UnifiedLogging log = logging;
-		final MechanismManager mech = mechanisms;
-		log.clearDynamic();
-		
+		logging.clearDynamic();
+
 		// Update all mechanisms (sensors, motors, etc.)
-		mech.update();
-		// Update the autonomous sequence
-		// This single line replaces the entire state machine logic!
-		final AutonomousSequence sequence = autonomousSequence;
-		if (sequence != null) {
-			sequence.update(mech);
-		}
+		mechanisms.update();
 		
+		if (autonomousSequence != null) {
+			autonomousSequence.update(mechanisms);
+		}
+
 		// Clear dynamic telemetry and log updated data
-		log.drawDebug(mech.bentDrivetrain.follower);
-		log.update();
+		logging.drawDebug(mechanisms.drivetrain.follower);
+		logging.update();
 	}
 	
 	/**
@@ -141,8 +131,8 @@ public class MainAuto extends OpMode {
 	@Override
 	public void stop() {
 		// Store the actual robot pose for TeleOp to use as starting position
-		if (mechanisms != null && mechanisms.bentDrivetrain.follower != null) {
-			MatchState.setStoredPose(mechanisms.bentDrivetrain.follower.getPose());
+		if (mechanisms != null && mechanisms.drivetrain.follower != null) {
+			MatchState.setStoredPose(mechanisms.drivetrain.follower.getPose());
 			mechanisms.stop();
 		}
 		
@@ -156,7 +146,7 @@ public class MainAuto extends OpMode {
 	 */
 	private void setupLogging() {
 		logging.addDataLazy("Classifier", MatchState::getClassifier);
-		logging.addDataLazy("Current Position", () -> mechanisms.bentDrivetrain.follower.getPose());
+		logging.addDataLazy("Current Position", () -> mechanisms.drivetrain.follower.getPose());
 		logging.addDataLazy("Current Action", () -> autonomousSequence.getCurrentActionName());
 		logging.addDataLazy("Action", () -> {
 			int current = autonomousSequence.getCurrentActionIndex() + 1;
@@ -166,15 +156,15 @@ public class MainAuto extends OpMode {
 		});
 		
 		logging.addDataLazy("Path Beginning Position", () -> {
-			if (mechanisms.bentDrivetrain.follower.isBusy()) {
-				return mechanisms.bentDrivetrain.follower.getCurrentPath().getPoseInformation(0).getPose().toString();
+			if (mechanisms.drivetrain.follower.isBusy()) {
+				return mechanisms.drivetrain.follower.getCurrentPath().getPoseInformation(0).getPose().toString();
 			} else {
 				return "N/A";
 			}
 		});
 		logging.addDataLazy("Path End Position", () -> {
-			if (mechanisms.bentDrivetrain.follower.isBusy()) {
-				return mechanisms.bentDrivetrain.follower.getCurrentPath().endPose().toString();
+			if (mechanisms.drivetrain.follower.isBusy()) {
+				return mechanisms.drivetrain.follower.getCurrentPath().endPose().toString();
 			} else {
 				return "N/A";
 			}

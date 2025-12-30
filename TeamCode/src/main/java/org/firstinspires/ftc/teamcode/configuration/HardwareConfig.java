@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.configuration;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.hardware.TimelockedServo;
+
 /**
  * Represents a hardware device configuration with both its type and string
  * name.
@@ -10,7 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class HardwareConfig {
 	private final Class<?> deviceType;
 	private final String deviceName;
-	
+
 	/**
 	 * Creates a new HardwareConfig with the specified device type and name.
 	 *
@@ -45,6 +47,17 @@ public class HardwareConfig {
 	 */
 	public String getName() {
 		return deviceName;
+	}
+	
+	/**
+	 * Convenience: wrap a ServoImplEx in a TimelockedServo with cooldownMs.
+	 */
+	public TimelockedServo asTimelockedServo(HardwareMap hardwareMap, long cooldownMs) {
+		Object raw = hardwareMap.get(deviceType, deviceName);
+		if (!(raw instanceof com.qualcomm.robotcore.hardware.ServoImplEx)) {
+			throw new IllegalArgumentException("Device " + deviceName + " is not a ServoImplEx");
+		}
+		return new TimelockedServo((com.qualcomm.robotcore.hardware.ServoImplEx) raw, cooldownMs);
 	}
 	
 	/**
