@@ -70,8 +70,7 @@ public class MainAuto extends OpMode {
 		
 		// Allow driver to select match settings using the wizard
 		wizard.refresh();
-		mechanisms.drivetrain.follower.setStartingPose(MatchState.getAutonomousStartingPose());
-		logging.drawRobot(mechanisms.drivetrain.follower.poseTracker.getPreviousPose());
+		logging.drawRobot(MatchState.getAutonomousStartingPose());
 		
 		logging.update();
 	}
@@ -83,12 +82,13 @@ public class MainAuto extends OpMode {
 	@Override
 	public void start() {
 		// Initialize all mechanisms
+		mechanisms.drivetrain.follower.setStartingPose(MatchState.getAutonomousStartingPose());
 		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::setUpForAuto);
 		mechanisms.start();
-		
-		// Build the autonomous sequence based on configuration
-		// The runtime system allows hot-swapping between different strategies
-		// while the PathAction system handles alliance mirroring automatically
+
+//		 Build the autonomous sequence based on configuration
+//		 The runtime system allows hot-swapping between different strategies
+//		 while the PathAction system handles alliance mirroring automatically
 		
 		AutonomousRuntime runtime = MatchState.getAutonomousRuntime();
 		if (MatchState.getAutoStartingPosition() == MatchState.AutoStartingPosition.FAR) {
@@ -96,7 +96,7 @@ public class MainAuto extends OpMode {
 		} else {
 			autonomousSequence = runtime.buildCloseSequence();
 		}
-		
+
 		// Start the sequence
 		autonomousSequence.start(mechanisms);
 		
