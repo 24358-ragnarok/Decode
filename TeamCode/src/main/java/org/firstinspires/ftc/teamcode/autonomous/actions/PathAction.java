@@ -46,7 +46,7 @@ public abstract class PathAction implements AutonomousAction {
 	@Override
 	public void initialize(MechanismManager mechanisms) {
 		// Get current robot position
-		Pose currentPose = mechanisms.bentDrivetrain.follower.getPose();
+		Pose currentPose = mechanisms.drivetrain.follower.getPose();
 		
 		// Mirror target pose if we're on RED alliance
 		Pose actualTarget = (alliance == MatchState.AllianceColor.BLUE)
@@ -63,7 +63,7 @@ public abstract class PathAction implements AutonomousAction {
 	@Override
 	public boolean execute(MechanismManager mechanisms) {
 		// Action is complete when the follower is no longer busy
-		return !mechanisms.bentDrivetrain.follower.isBusy();
+		return !mechanisms.drivetrain.follower.isBusy();
 	}
 	
 	@Override
@@ -71,7 +71,7 @@ public abstract class PathAction implements AutonomousAction {
 		// Path following will naturally stop when complete
 		// If interrupted, break
 		if (interrupted) {
-			mechanisms.bentDrivetrain.follower.breakFollowing();
+			mechanisms.drivetrain.follower.breakFollowing();
 		}
 	}
 	
@@ -100,7 +100,7 @@ public abstract class PathAction implements AutonomousAction {
 	 * @param path       The path to follow
 	 */
 	protected void followPath(MechanismManager mechanisms, PathChain path) {
-		mechanisms.bentDrivetrain.follower.followPath(path, true);
+		mechanisms.drivetrain.follower.followPath(path, true);
 	}
 	
 	/**

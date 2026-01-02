@@ -91,7 +91,7 @@ public class MainAuto extends OpMode {
 			transfer.setUpForAuto();
 		});
 		
-		mechanisms.bentDrivetrain.follower.setStartingPose(MatchState.getAutonomousStartingPose());
+		mechanisms.drivetrain.follower.setStartingPose(MatchState.getAutonomousStartingPose());
 		// Build the autonomous sequence based on configuration
 		// The runtime system allows hot-swapping between different strategies
 		// while the PathAction system handles alliance mirroring automatically
@@ -130,7 +130,7 @@ public class MainAuto extends OpMode {
 		}
 		
 		// Clear dynamic telemetry and log updated data
-		log.drawDebug(mech.bentDrivetrain.follower);
+		log.drawDebug(mech.drivetrain.follower);
 		log.update();
 	}
 	
@@ -141,8 +141,8 @@ public class MainAuto extends OpMode {
 	@Override
 	public void stop() {
 		// Store the actual robot pose for TeleOp to use as starting position
-		if (mechanisms != null && mechanisms.bentDrivetrain.follower != null) {
-			MatchState.setStoredPose(mechanisms.bentDrivetrain.follower.getPose());
+		if (mechanisms != null && mechanisms.drivetrain.follower != null) {
+			MatchState.setStoredPose(mechanisms.drivetrain.follower.getPose());
 			mechanisms.stop();
 		}
 		
@@ -156,7 +156,7 @@ public class MainAuto extends OpMode {
 	 */
 	private void setupLogging() {
 		logging.addDataLazy("Classifier", MatchState::getClassifier);
-		logging.addDataLazy("Current Position", () -> mechanisms.bentDrivetrain.follower.getPose());
+		logging.addDataLazy("Current Position", () -> mechanisms.drivetrain.follower.getPose());
 		logging.addDataLazy("Current Action", () -> autonomousSequence.getCurrentActionName());
 		logging.addDataLazy("Action", () -> {
 			int current = autonomousSequence.getCurrentActionIndex() + 1;
@@ -166,15 +166,15 @@ public class MainAuto extends OpMode {
 		});
 		
 		logging.addDataLazy("Path Beginning Position", () -> {
-			if (mechanisms.bentDrivetrain.follower.isBusy()) {
-				return mechanisms.bentDrivetrain.follower.getCurrentPath().getPoseInformation(0).getPose().toString();
+			if (mechanisms.drivetrain.follower.isBusy()) {
+				return mechanisms.drivetrain.follower.getCurrentPath().getPoseInformation(0).getPose().toString();
 			} else {
 				return "N/A";
 			}
 		});
 		logging.addDataLazy("Path End Position", () -> {
-			if (mechanisms.bentDrivetrain.follower.isBusy()) {
-				return mechanisms.bentDrivetrain.follower.getCurrentPath().endPose().toString();
+			if (mechanisms.drivetrain.follower.isBusy()) {
+				return mechanisms.drivetrain.follower.getCurrentPath().endPose().toString();
 			} else {
 				return "N/A";
 			}

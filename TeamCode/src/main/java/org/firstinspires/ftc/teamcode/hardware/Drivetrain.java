@@ -14,11 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * BentDrivetrain class refactored to use the PedroPathing V2 library.
+ * Drivetrain class refactored to use the PedroPathing V2 library.
  * It abstracts away direct motor control in favor of the Follower API for
  * both manual (tele-op) and autonomous movement.
  */
-public class BentDrivetrain extends Mechanism {
+public class Drivetrain extends Mechanism {
 	public final Follower follower;
 	// Define field-centric poses for autonomous targets.
 	// Automatically mirrored for RED alliance.
@@ -27,14 +27,14 @@ public class BentDrivetrain extends Mechanism {
 	private State state;
 	
 	/**
-	 * Initializes the BentDrivetrain and the PedroPathing Follower.
+	 * Initializes the Drivetrain and the PedroPathing Follower.
 	 * <p>
 	 * Note: Starting pose should be set by the OpMode (MainAuto or MainOp),
 	 * not in this constructor.
 	 *
 	 * @param hardwareMap The robot's hardware map.
 	 */
-	public BentDrivetrain(HardwareMap hardwareMap) {
+	public Drivetrain(HardwareMap hardwareMap) {
 		this.follower = Constants.createFollower(hardwareMap);
 		state = State.MANUAL;
 		// Don't set starting pose here - let each OpMode handle it
@@ -57,7 +57,7 @@ public class BentDrivetrain extends Mechanism {
 	
 	@Override
 	public void start() {
-		// No initialization required - bentDrivetrain is initialized in constructor
+		// No initialization required - drivetrain is initialized in constructor
 	}
 	
 	public void toggleCentricity() {
@@ -158,7 +158,7 @@ public class BentDrivetrain extends Mechanism {
 	}
 	
 	/**
-	 * Switches the bentDrivetrain to manual (tele-op) control mode.
+	 * Switches the drivetrain to manual (tele-op) control mode.
 	 * This will stop any active path following.
 	 */
 	public void switchToManual() {
@@ -170,7 +170,7 @@ public class BentDrivetrain extends Mechanism {
 	}
 	
 	/**
-	 * @return The current state of the bentDrivetrain (MANUAL, GOTO).
+	 * @return The current state of the drivetrain (MANUAL, GOTO).
 	 */
 	public State getState() {
 		return state;
@@ -201,7 +201,7 @@ public class BentDrivetrain extends Mechanism {
 	}
 	
 	/**
-	 * Converts a Controller.Action to a BentDrivetrain.Position.
+	 * Converts a Controller.Action to a Drivetrain.Position.
 	 * Returns null if the action is not a GOTO action.
 	 *
 	 * @param action The controller action to convert

@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 
 /**
- * Action that follows a PathChain using the bentDrivetrain's path follower.
+ * Action that follows a PathChain using the drivetrain's path follower.
  */
 public class EndAtAction implements AutonomousAction {
 	private final Pose pose;
@@ -24,7 +24,7 @@ public class EndAtAction implements AutonomousAction {
 	
 	@Override
 	public void initialize(MechanismManager mechanisms) {
-		mechanisms.bentDrivetrain.follower.holdPoint(pose);
+		mechanisms.drivetrain.follower.holdPoint(pose);
 	}
 	
 	@Override

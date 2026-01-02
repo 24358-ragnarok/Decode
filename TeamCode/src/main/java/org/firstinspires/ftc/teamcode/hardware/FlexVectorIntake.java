@@ -11,7 +11,8 @@ import org.firstinspires.ftc.teamcode.software.ColorUnifier;
 import org.firstinspires.ftc.teamcode.software.game.Artifact;
 
 /**
- * The flex-vector intake controls the robot's intake mechanism using a flywheel motor.
+ * The flex-vector intake controls the robot's intake mechanism using a flywheel
+ * motor.
  * Supports intake, outtake, and stop operations with state tracking.
  */
 public class FlexVectorIntake extends Mechanism {

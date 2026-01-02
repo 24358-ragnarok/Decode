@@ -46,7 +46,7 @@ public class VerticalWheelTransfer extends Mechanism {
 	private final DcMotorEx motor;
 	public Artifact[] artifacts;
 	private double targetTicks;
-	
+
 	public VerticalWheelTransfer(DcMotorEx motor) {
 		this.motor = motor;
 		motor.setTargetPosition(motor.getCurrentPosition());
@@ -62,7 +62,7 @@ public class VerticalWheelTransfer extends Mechanism {
 		artifacts = new Artifact[]{
 				new Artifact(Artifact.Color.PURPLE, motor.getCurrentPosition()),
 				new Artifact(Artifact.Color.PURPLE, motor.getCurrentPosition() + FIRING_POSITION_TICKS / 2),
-				new Artifact(Artifact.Color.PURPLE, motor.getCurrentPosition() + FIRING_POSITION_TICKS)
+				new Artifact(Artifact.Color.NONE, 0)
 		};
 	}
 	
@@ -115,22 +115,6 @@ public class VerticalWheelTransfer extends Mechanism {
 				break; // Stop after placing into first available slot
 			}
 		}
-	}
-	
-	public void moveNextArtifactToLauncher() {
-		// find the artifact who's closest to the end, and then move the motor so that
-		// it gets to the end
-		double greatestTicks = 0;
-		for (int i = 0; i < artifacts.length - 1; i++) {
-			if (artifacts[i].color == Artifact.Color.NONE) {
-				continue;
-			}
-			double ticksTraveled = motor.getCurrentPosition() - artifacts[i].transferTicksWhenAtEntrance;
-			if (Math.abs(ticksTraveled) > greatestTicks) {
-				greatestTicks = Math.abs(ticksTraveled);
-			}
-		}
-		move(FIRING_POSITION_TICKS - greatestTicks);
 	}
 	
 	public boolean artifactInFiringPosition() {

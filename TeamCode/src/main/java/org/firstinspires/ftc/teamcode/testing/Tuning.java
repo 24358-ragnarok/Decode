@@ -408,7 +408,7 @@ class ForwardVelocityTuner extends OpMode {
 		telemetryM.debug("The robot will run at 1 power until it reaches " + DISTANCE + " inches forward.");
 		telemetryM.debug("Make sure you have enough room, since the robot has inertia after cutting power.");
 		telemetryM.debug(
-				"After running the distance, the robot will cut power from the bentDrivetrain and display the forward velocity.");
+				"After running the distance, the robot will cut power from the drivetrain and display the forward velocity.");
 		telemetryM.debug("Press B on game pad 1 to stop.");
 		telemetryM.debug("pose", follower.getPose());
 		telemetryM.update(telemetry);
@@ -529,7 +529,7 @@ class LateralVelocityTuner extends OpMode {
 		telemetryM.debug("The robot will run at 1 power until it reaches " + DISTANCE + " inches to the right.");
 		telemetryM.debug("Make sure you have enough room, since the robot has inertia after cutting power.");
 		telemetryM.debug(
-				"After running the distance, the robot will cut power from the bentDrivetrain and display the strafe velocity.");
+				"After running the distance, the robot will cut power from the drivetrain and display the strafe velocity.");
 		telemetryM.debug("Press B on Gamepad 1 to stop.");
 		telemetryM.update(telemetry);
 		
@@ -623,7 +623,7 @@ class LateralVelocityTuner extends OpMode {
  * @version 1.0, 3/13/2024
  */
 class ForwardZeroPowerAccelerationTuner extends OpMode {
-	private static final double VELOCITY = 60;
+	private static final double VELOCITY = 70;
 	
 	private final ArrayList<Double> accelerations = new ArrayList<>();
 	public double previousVelocity;
@@ -642,7 +642,7 @@ class ForwardZeroPowerAccelerationTuner extends OpMode {
 	@Override
 	public void init_loop() {
 		telemetryM.debug("The robot will run forward until it reaches " + VELOCITY + " inches per second.");
-		telemetryM.debug("Then, it will cut power from the bentDrivetrain and roll to a stop.");
+		telemetryM.debug("Then, it will cut power from the drivetrain and roll to a stop.");
 		telemetryM.debug("Make sure you have enough room.");
 		telemetryM
 				.debug("After stopping, the forward zero power acceleration (natural deceleration) will be displayed.");
@@ -745,7 +745,7 @@ class ForwardZeroPowerAccelerationTuner extends OpMode {
  * @version 1.0, 3/13/2024
  */
 class LateralZeroPowerAccelerationTuner extends OpMode {
-	private static final double VELOCITY = 48;
+	private static final double VELOCITY = 55;
 	private final ArrayList<Double> accelerations = new ArrayList<>();
 	public double previousVelocity;
 	private long previousTimeNano;
@@ -762,7 +762,7 @@ class LateralZeroPowerAccelerationTuner extends OpMode {
 	@Override
 	public void init_loop() {
 		telemetryM.debug("The robot will run to the right until it reaches " + VELOCITY + " inches per second.");
-		telemetryM.debug("Then, it will cut power from the bentDrivetrain and roll to a stop.");
+		telemetryM.debug("Then, it will cut power from the drivetrain and roll to a stop.");
 		telemetryM.debug("Make sure you have enough room.");
 		telemetryM
 				.debug("After stopping, the lateral zero power acceleration (natural deceleration) will be displayed.");

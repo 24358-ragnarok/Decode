@@ -12,7 +12,9 @@ import org.firstinspires.ftc.teamcode.autonomous.actions.PickupBallAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PrepareLaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ScanAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SlowLinearPathAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.SortedLaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SplinedPathAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.StartAtAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.WaitAction;
 import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
@@ -36,14 +38,28 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
  * </pre>
  */
 public class SequenceBuilder {
-	
+
 	private final AutonomousSequence sequence;
-	
+
 	/**
 	 * Creates a new sequence builder.
 	 */
 	public SequenceBuilder() {
 		this.sequence = new AutonomousSequence();
+	}
+	
+	/**
+	 * Adds an action to explicitly set and hold the initial pose.
+	 * Helpful for eliminating race conditions before the first movement.
+	 */
+	public SequenceBuilder startAt(Pose startingPose, String name) {
+		sequence.addAction(new StartAtAction(startingPose, name));
+		return this;
+	}
+	
+	public SequenceBuilder startAt(Pose startingPose) {
+		sequence.addAction(new StartAtAction(startingPose));
+		return this;
 	}
 	
 	/**
@@ -175,6 +191,16 @@ public class SequenceBuilder {
 	 */
 	public SequenceBuilder launch() {
 		sequence.addAction(new LaunchAction());
+		return this;
+	}
+	
+	/**
+	 * Adds a sorted launch action that respects motif order with swap.
+	 *
+	 * @return this (for method chaining)
+	 */
+	public SequenceBuilder sortedLaunch() {
+		sequence.addAction(new SortedLaunchAction());
 		return this;
 	}
 	

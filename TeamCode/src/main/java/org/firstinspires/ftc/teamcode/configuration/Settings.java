@@ -23,8 +23,9 @@ public class Settings {
 	public static class Robot {
 		public static final double WIDTH = 16.25;
 		public static final double LENGTH = 15.6;
-		
+
 	}
+
 	/**
 	 * Maps controller inputs to robot actions for TeleOp.
 	 */
@@ -38,7 +39,7 @@ public class Settings {
 				Controller.Action.GOTO_PARK,
 				Controller.Action.GOTO_GATE
 		};
-		
+
 		static {
 			// Main Controller (Driver)
 			actionControlMap.put(Controller.Action.MOVE_Y, Controller.Control.LEFT_STICK_Y);
@@ -57,7 +58,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.CANCEL_ASSISTED_DRIVING, Controller.Control.RIGHT_STICK_BUTTON);
 			actionControlMap.put(Controller.Action.RESET_FOLLOWER, Controller.Control.BACK);
 			actionControlMap.put(Controller.Action.TOGGLE_CENTRICITY, Controller.Control.LEFT_STICK_BUTTON);
-			
+
 			// Secondary Controller (Operator)
 			actionControlMap.put(Controller.Action.AIM, Controller.Control.LEFT_TRIGGER);
 			actionControlMap.put(Controller.Action.LAUNCH, Controller.Control.RIGHT_TRIGGER);
@@ -74,7 +75,7 @@ public class Settings {
 			}
 		}
 	}
-	
+
 	/**
 	 * Hardware device name mapping.
 	 * Each HardwareConfig stores both the device type and string name,
@@ -88,12 +89,12 @@ public class Settings {
 		public static final HardwareConfig REAR_LEFT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearLeft");
 		public static final HardwareConfig REAR_RIGHT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearRight");
 		public static final HardwareConfig PINPOINT = new HardwareConfig(GoBildaPinpointDriver.class, "pinpoint");
-		
+
 		// Subsystem motors and servos
 		public static final HardwareConfig INTAKE_MOTOR = new HardwareConfig(DcMotorEx.class, "intake");
 		public static final HardwareConfig LAUNCHER_RIGHT = new HardwareConfig(DcMotorEx.class, "launcherRight");
 		public static final HardwareConfig LAUNCHER_LEFT = new HardwareConfig(DcMotorEx.class, "launcherLeft");
-		
+
 		public static final HardwareConfig LAUNCHER_PITCH_SERVO = new HardwareConfig(ServoImplEx.class,
 				"pitch");
 		public static final HardwareConfig LAUNCHER_GATE = new HardwareConfig(ServoImplEx.class,
@@ -103,13 +104,16 @@ public class Settings {
 		public static final HardwareConfig TRANSFER_WHEEL_MOTOR = new HardwareConfig(DcMotorEx.class,
 				"transfer");
 		
-		
 		public static final HardwareConfig SWAP = new HardwareConfig(ServoImplEx.class,
 				"swap");
 		
 		// Sensors
 		public static final String[] COLOR_RANGEFINDER_1 = {"crf1_0", "crf1_1"};
 		public static final String[] COLOR_RANGEFINDER_2 = {"crf2_0", "crf2_1"};
+		public static final HardwareConfig COLOR_SENSOR_LEFT = new HardwareConfig(RevColorSensorV3.class,
+				"colorLeft");
+		public static final HardwareConfig COLOR_SENSOR_RIGHT = new HardwareConfig(RevColorSensorV3.class,
+				"colorRight");
 		public static final HardwareConfig CONFIGURE_COLOR_SENSOR = new HardwareConfig(
 				RevColorSensorV3.class, "colorSensorConfigure");
 		
@@ -205,13 +209,15 @@ public class Settings {
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static final double VELOCITY_ALPHA = 0.15; // EMA smoothing factor (0-1), lower = more smoothing
-		public static double GATE_FIRE_POSITION = 0.23;
-		public static double GATE_CLOSED_POSITION = 0.32;
+		public static double GATE_FIRE_POSITION = 0.378;
+		public static double GATE_CLOSED_POSITION = 0.444;
+		public static long GATE_COOLDOWN_MS = 300;
 		public static long MAX_SPEED_ERROR = 20;
 		// Pitch servo calibration (physical limits)
 		public static double PITCH_SERVO_AT_MIN = 0.7; // Servo position at minimum pitch angle
 		public static double PITCH_SERVO_AT_MAX = 1.0; // Servo position at maximum pitch angle
-		public static double DEFAULT_PITCH_ANGLE = 36.0; // degrees from horizontal; TODO - set back to 5.0 once conner fixes ts
+		public static double DEFAULT_PITCH_ANGLE = 36.0; // degrees from horizontal; TODO - set back to 5.0 once conner
+		// fixes ts
 		public static double PITCH_MIN_ANGLE = 36.0; // Minimum pitch angle in degrees (horizontal)
 		public static double PITCH_MAX_ANGLE = 58.0; // Maximum pitch angle in degrees (straight up, 90° total window)
 		
@@ -354,7 +360,8 @@ public class Settings {
 		 */
 		public static class Default {
 			public static final Pose RESET = new Pose(134, Robot.LENGTH / 2, Math.toRadians(90));
-			public static final Pose FAR_SAFE_PARK_POSE = new Pose(35.86206896551724, 12.505747126436786, Math.toRadians(90));
+			public static final Pose FAR_SAFE_PARK_POSE = new Pose(35.86206896551724, 12.505747126436786,
+					Math.toRadians(90));
 			public static final Pose CLOSE_SAFE_PARK_POSE = new Pose(48, 130, Math.toRadians(90));
 		}
 		
@@ -365,7 +372,12 @@ public class Settings {
 			public static final Pose RED_GOAL = new Pose(130.0, 130.0, Math.toRadians(225));
 			public static final Pose BLUE_GOAL = new Pose(14.0, 130.0, Math.toRadians(315));
 			public static final Pose OBELISK = new Pose(72.0, 150.0, Math.toRadians(0));
-			public static final Pose SCAN = new Pose(60, 100.0, Math.toRadians(80));
+			// Close scan matches the previous single SCAN pose for backward compatibility.
+			public static final Pose CLOSE_SCAN = new Pose(60, 100.0, Math.toRadians(80));
+			// Far scan can be tuned separately; initialized to the same pose for now.
+			public static final Pose FAR_SCAN = new Pose(60, 12, Math.toRadians(80));
+			// Legacy alias retained for any existing callers.
+			public static final Pose SCAN = CLOSE_SCAN;
 		}
 		
 		/**
@@ -456,7 +468,7 @@ public class Settings {
 	@Configurable
 	public static class Deploy {
 		public static boolean INTAKE = true;
-		public static boolean LIMELIGHT = false;
+		public static boolean LIMELIGHT = true;
 		public static boolean TRANSFER = true;
 		public static boolean TRAJECTORY_ENGINE = true;
 		public static boolean LAUNCHER = TRAJECTORY_ENGINE && true;
@@ -465,9 +477,10 @@ public class Settings {
 	}
 	
 	public static class Swap {
-		public static double GRABBING_POS = 0.594;
-		public static double HOLDING_POS = 0.885;
-		
+		public static double GRABBING_POS = 0.547;
+		public static double HOLDING_POS = 0.834;
+		public static long COOLDOWN_MS = 500;
+
 	}
 	
 	public static class Autonomous {

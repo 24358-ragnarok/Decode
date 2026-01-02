@@ -89,7 +89,7 @@ public class AutonomousSequence {
 		
 		// Execute the current action
 		boolean actionComplete = currentAction.execute(mechanisms);
-		boolean robotIsStuck = mechanisms.bentDrivetrain.follower.isRobotStuck()
+		boolean robotIsStuck = mechanisms.drivetrain.follower.isRobotStuck()
 				|| sequenceTimer.getElapsedTimeSeconds() > Settings.Autonomous.MAX_ACTION_TIME_S;
 		
 		if (actionComplete || robotIsStuck) {

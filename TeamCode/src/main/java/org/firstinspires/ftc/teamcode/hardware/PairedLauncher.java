@@ -20,19 +20,19 @@ public class PairedLauncher extends Mechanism {
 	private final ServoImplEx verticalServo;
 	private final DcMotorEx rightMotor;
 	private final DcMotorEx leftMotor;
-	private final ServoImplEx gateServo;
+	private final TimelockedServo gateServo;
 	private final MechanismManager mechanisms;
 	public double targetTPS = 0;
 	private LauncherState state = LauncherState.IDLE;
 	// Time-averaged velocity readings (exponential moving average)
 	private double averagedRightRPM = 0;
 	private double averagedLeftRPM = 0;
-	
+
 	public PairedLauncher(
 			MechanismManager mechanisms,
 			DcMotorEx launcherRight,
 			DcMotorEx launcherLeft,
-			ServoImplEx verticalServo, ServoImplEx gate) {
+			ServoImplEx verticalServo, TimelockedServo gate) {
 		this.mechanisms = mechanisms;
 		this.verticalServo = verticalServo;
 		
@@ -79,6 +79,10 @@ public class PairedLauncher extends Mechanism {
 		gateServo.setPosition(GATE_CLOSED_POSITION);
 	}
 	
+	public boolean isBusy() {
+		return gateServo != null && gateServo.isBusy();
+	}
+
 	/**
 	 * Readies the launcher to fire.
 	 * This spins up the belt and aims at the target.

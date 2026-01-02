@@ -31,7 +31,7 @@ public class LinearPathAction extends PathAction {
 	
 	@Override
 	protected PathChain buildPath(MechanismManager mechanisms, Pose startPose, Pose endPose) {
-		return mechanisms.bentDrivetrain.follower.pathBuilder()
+		return mechanisms.drivetrain.follower.pathBuilder()
 				.addPath(new BezierLine(startPose, endPose))
 				.setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading())
 				.build();
