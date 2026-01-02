@@ -2,11 +2,14 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.CRAWL_SPEED;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.CRAWL_TICKS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.DECREMENT_TICKS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.FIRING_POSITION_TICKS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.INCREMENT_TICKS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.POSITION_TOLERANCE;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.SPEED;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.TRANSFER_MOTOR_DEBOUNCE_MS;
 
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -45,6 +48,7 @@ import java.util.Arrays;
 public class VerticalWheelTransfer extends Mechanism {
 	private final DcMotorEx motor;
 	public Artifact[] artifacts;
+	public Timer debounce = new Timer();
 	private double targetTicks;
 
 	public VerticalWheelTransfer(DcMotorEx motor) {
@@ -90,12 +94,13 @@ public class VerticalWheelTransfer extends Mechanism {
 	}
 	
 	public void reverse() {
-		move(-INCREMENT_TICKS);
+		move(DECREMENT_TICKS);
 	}
 	
 	public void move(double ticks) {
 		motor.setPower(SPEED);
 		targetTicks += ticks;
+		debounce.resetTimer();
 	}
 	
 	public void freeze() {
@@ -105,30 +110,17 @@ public class VerticalWheelTransfer extends Mechanism {
 	public void crawl() {
 		motor.setPower(CRAWL_SPEED);
 		targetTicks += CRAWL_TICKS;
+		debounce.resetTimer();
 	}
 	
 	public void artifactIncoming(Artifact artifact) {
-		for (int i = 0; i < artifacts.length - 1; i++) {
+		for (int i = 0; i < artifacts.length; i++) {
 			if (artifacts[i].color == Artifact.Color.NONE) {
 				artifacts[i] = artifact;
 				advance();
 				break; // Stop after placing into first available slot
 			}
 		}
-	}
-	
-	public boolean artifactInFiringPosition() {
-		// find any artifact at or past firing position
-		for (int i = 0; i < artifacts.length - 1; i++) {
-			if (artifacts[i].color == Artifact.Color.NONE) {
-				continue;
-			}
-			double ticksTraveled = motor.getCurrentPosition() - artifacts[i].transferTicksWhenAtEntrance;
-			if (ticksTraveled > FIRING_POSITION_TICKS) {
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	/**
@@ -148,7 +140,7 @@ public class VerticalWheelTransfer extends Mechanism {
 	}
 	
 	public boolean isBusy() {
-		return motor.isBusy();
+		return motor.isBusy() && debounce.getElapsedTime() > TRANSFER_MOTOR_DEBOUNCE_MS;
 	}
 	
 	public int getTicks() {

@@ -142,7 +142,7 @@ public class Settings {
 		public static double CRAWL_SPEED = 0.5;
 		public static double OUT_SPEED = -1.0;
 		public static double STOPPED_SPEED = 0.0;
-		public static long COLOR_SENSOR_DEBOUNCE_TIME = 500;
+		public static long COLOR_SENSOR_DEBOUNCE_TIME_MS = 500;
 	}
 	
 	/**
@@ -163,10 +163,12 @@ public class Settings {
 	public static class Transfer {
 		public static final double FIRING_POSITION_TICKS = 900;
 		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 2.5;
+		public static final double DECREMENT_TICKS = -FIRING_POSITION_TICKS / 1.5;
 		public static double SPEED = 1.0;
 		public static double CRAWL_SPEED = 0.3;
 		public static double CRAWL_TICKS = FIRING_POSITION_TICKS * 3;
 		// Motion Profile Position Controller Gains
+		public static double TRANSFER_MOTOR_DEBOUNCE_MS = 100;
 		public static int POSITION_TOLERANCE = 20; // Acceptable position error (ticks)
 	}
 	
@@ -207,7 +209,7 @@ public class Settings {
 		public static final double VELOCITY_ALPHA = 0.15; // EMA smoothing factor (0-1), lower = more smoothing
 		public static double GATE_FIRE_POSITION = 0.378;
 		public static double GATE_CLOSED_POSITION = 0.444;
-		public static long GATE_COOLDOWN_MS = 300;
+		public static long GATE_COOLDOWN_MS = 500;
 		public static long MAX_SPEED_ERROR = 20;
 		// Pitch servo calibration (physical limits)
 		public static double PITCH_SERVO_AT_MIN = 0.7; // Servo position at minimum pitch angle

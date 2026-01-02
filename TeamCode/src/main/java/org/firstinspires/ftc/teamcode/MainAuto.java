@@ -34,6 +34,7 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
 @Autonomous(name = "Run: The Boonstra Special", group = ".Competition", preselectTeleOp = "Run: RAGNAROK")
 public class MainAuto extends OpMode {
 	
+	private final StringBuilder transferSlotsDisplayBuilder = new StringBuilder();
 	private Timer opmodeTimer;
 	private MatchConfigurationWizard wizard;
 	private MechanismManager mechanisms;
@@ -162,6 +163,19 @@ public class MainAuto extends OpMode {
 	private void setupLogging() {
 		logging.addDataLazy("Classifier", MatchState::getClassifier);
 		logging.addDataLazy("Current Position", () -> mechanisms.drivetrain.follower.getPose());
+		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), transfer -> {
+			logging.addDataLazy("Transfer Slots", () -> {
+				Artifact[] slots = transfer.getArtifactSnapshot();
+				transferSlotsDisplayBuilder.setLength(0);
+				for (int i = 0; i < slots.length; i++) {
+					transferSlotsDisplayBuilder.append(i)
+							.append(' ')
+							.append(slots[i])
+							.append(',');
+				}
+				return transferSlotsDisplayBuilder.toString();
+			});
+		});
 		logging.addDataLazy("Current Action", () -> autonomousSequence.getCurrentActionName());
 		logging.addDataLazy("Action", () -> {
 			int current = autonomousSequence.getCurrentActionIndex() + 1;

@@ -73,7 +73,7 @@ public class SortedLaunchAction implements AutonomousAction {
 					state = State.COMPLETE;
 					return true;
 				}
-				// await previous actions
+				// Wait for all mechanisms to be idle before starting alignment
 				if (!transfer.isBusy() && !launcher.isBusy() && !swap.isBusy()) {
 					launcher.close();
 					transfer.advance();
@@ -103,7 +103,8 @@ public class SortedLaunchAction implements AutonomousAction {
 				}
 				
 				if (desired == Artifact.Color.NONE || top.color == desired) {
-					beginFire(top);
+					startFire(top);
+					state = State.OPEN_GATE;
 					break;
 				}
 				
@@ -123,7 +124,16 @@ public class SortedLaunchAction implements AutonomousAction {
 				}
 				
 				// Impossible or unknown scenario; launch anyway.
-				beginFire(top);
+				startFire(top);
+				state = State.OPEN_GATE;
+				break;
+			
+			case OPEN_GATE:
+				if (!launcher.isBusy()) {
+					transfer.advance();
+					timer.resetTimer();
+					state = State.WAIT_FIRE;
+				}
 				break;
 			
 			case WAIT_FIRE:
@@ -162,12 +172,9 @@ public class SortedLaunchAction implements AutonomousAction {
 		return "Sorted Launch (" + state.name().toLowerCase() + ")";
 	}
 	
-	private void beginFire(Artifact top) {
+	private void startFire(Artifact top) {
 		firingArtifact = top;
 		launcher.open();
-		transfer.advance();
-		timer.resetTimer();
-		state = State.WAIT_FIRE;
 	}
 	
 	private void bufferTop(Artifact top) {
@@ -182,8 +189,6 @@ public class SortedLaunchAction implements AutonomousAction {
 	private void startInsertSwap() {
 		if (!hasSwap)
 			return;
-		// Move swap into grabbing position to place the held ball back.
-		swap.grab();
 		// Start reverse - wait for it to complete before swapping
 		transfer.reverse();
 	}
@@ -191,6 +196,7 @@ public class SortedLaunchAction implements AutonomousAction {
 	private void completeInsertSwap() {
 		if (!hasSwap)
 			return;
+		swap.grab();
 		Artifact held = swap.takeHeldArtifact();
 		if (held == null || held.color == Artifact.Color.NONE) {
 			return;
@@ -305,11 +311,12 @@ public class SortedLaunchAction implements AutonomousAction {
 	}
 	
 	private enum State {
-		ALIGNING,
-		WAIT_ALIGN,
-		DECIDE,
-		WAIT_FIRE,
-		WAIT_REVERSE,
-		COMPLETE
+		ALIGNING, // Preparing to align next ball
+		WAIT_ALIGN, // Waiting for alignment to complete
+		DECIDE, // Deciding what action to take
+		OPEN_GATE, // Opening launcher gate before firing
+		WAIT_FIRE, // Waiting for transfer to advance and debounce
+		WAIT_REVERSE, // Waiting for transfer reverse before swap insertion
+		COMPLETE // All balls launched
 	}
 }

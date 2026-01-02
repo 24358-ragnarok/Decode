@@ -113,7 +113,7 @@ public class Classifier {
 		sb.append("Stored Balls (").append(ballCount).append("/").append(MAX_CAPACITY).append("): [");
 		
 		for (int i = 0; i < ballCount; i++) {
-			sb.append(state[i].color.name());
+			sb.append(state[i].color.name().charAt(0));
 			if (i < ballCount - 1) {
 				sb.append(", ");
 			}

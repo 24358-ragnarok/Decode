@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.software;
 
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.COLOR_SENSOR_DEBOUNCE_TIME;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.COLOR_SENSOR_DEBOUNCE_TIME_MS;
 
 import com.pedropathing.util.Timer;
 
@@ -28,7 +28,7 @@ public class ColorUnifier {
 	 * Priority: rangefinders (fast digital) first, then RGB color sensors.
 	 */
 	public Artifact find() {
-		if (debounce.getElapsedTime() < COLOR_SENSOR_DEBOUNCE_TIME) {
+		if (debounce.getElapsedTime() < COLOR_SENSOR_DEBOUNCE_TIME_MS) {
 			return Artifact.NONE;
 		}
 		
