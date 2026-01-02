@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
 import org.firstinspires.ftc.teamcode.hardware.BallSwap;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
-import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
 import org.firstinspires.ftc.teamcode.software.game.Artifact;
 
 /**
@@ -33,7 +32,7 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
 @Photon
 @Autonomous(name = "Run: The Boonstra Special", group = ".Competition", preselectTeleOp = "Run: RAGNAROK")
 public class MainAuto extends OpMode {
-	
+
 	private final StringBuilder transferSlotsDisplayBuilder = new StringBuilder();
 	private Timer opmodeTimer;
 	private MatchConfigurationWizard wizard;
@@ -90,9 +89,7 @@ public class MainAuto extends OpMode {
 		// Initialize all mechanisms
 		mechanisms.start();
 		
-		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), transfer -> {
-			transfer.setUpForAuto();
-		});
+		// Pre-load swap with a green ball for autonomous start
 		mechanisms.ifValid(mechanisms.get(BallSwap.class), ballSwap -> {
 			ballSwap.storeArtifact(new Artifact(Artifact.Color.GREEN, 0, true));
 		});
@@ -163,19 +160,6 @@ public class MainAuto extends OpMode {
 	private void setupLogging() {
 		logging.addDataLazy("Classifier", MatchState::getClassifier);
 		logging.addDataLazy("Current Position", () -> mechanisms.drivetrain.follower.getPose());
-		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), transfer -> {
-			logging.addDataLazy("Transfer Slots", () -> {
-				Artifact[] slots = transfer.getArtifactSnapshot();
-				transferSlotsDisplayBuilder.setLength(0);
-				for (int i = 0; i < slots.length; i++) {
-					transferSlotsDisplayBuilder.append(i)
-							.append(' ')
-							.append(slots[i])
-							.append(',');
-				}
-				return transferSlotsDisplayBuilder.toString();
-			});
-		});
 		logging.addDataLazy("Current Action", () -> autonomousSequence.getCurrentActionName());
 		logging.addDataLazy("Action", () -> {
 			int current = autonomousSequence.getCurrentActionIndex() + 1;

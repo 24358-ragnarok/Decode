@@ -8,7 +8,6 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Intake.STOPP
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.software.ColorUnifier;
-import org.firstinspires.ftc.teamcode.software.game.Artifact;
 
 /**
  * The flex-vector intake controls the robot's intake mechanism using a flywheel
@@ -16,11 +15,11 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
  * Supports intake, outtake, and stop operations with state tracking.
  */
 public class FlexVectorIntake extends Mechanism {
+	public final ColorUnifier colorUnifier;
 	private final DcMotorEx motor;
-	private final ColorUnifier unifier;
 	private final MechanismManager mechanisms;
 	public IntakeState state;
-	
+
 	/**
 	 * Creates a new FlexVectorIntake instance.
 	 *
@@ -29,10 +28,10 @@ public class FlexVectorIntake extends Mechanism {
 	public FlexVectorIntake(MechanismManager mechanisms, DcMotorEx intakeMotor, ColorUnifier color) {
 		this.mechanisms = mechanisms;
 		this.motor = intakeMotor;
-		this.unifier = color;
+		this.colorUnifier = color;
 		this.state = IntakeState.STOPPED;
 	}
-	
+
 	/**
 	 * Starts the intake motor to pull artifacts in.
 	 */
@@ -71,16 +70,11 @@ public class FlexVectorIntake extends Mechanism {
 	}
 	
 	/**
-	 * Updates the intake mechanism to sense new balls.
+	 * Updates the intake mechanism.
 	 */
 	@Override
 	public void update() {
-		Artifact detection = unifier.find();
-		if (!detection.equals(Artifact.NONE)) {
-			mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), vwt -> {
-				vwt.artifactIncoming(detection);
-			});
-		}
+		// Color detection is now handled externally by SortedLaunchAction
 	}
 	
 	/**

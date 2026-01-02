@@ -269,20 +269,6 @@ public class MainOp extends OpMode {
 		logging.addDataLazy("x", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getX());
 		logging.addDataLazy("y", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getY());
 		
-		// Transfer telemetry
-		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), transfer -> {
-			logging.addDataLazy("Transfer Slots", () -> {
-				Artifact[] slots = transfer.getArtifactSnapshot();
-				transferSlotsDisplayBuilder.setLength(0);
-				for (int i = 0; i < slots.length; i++) {
-					transferSlotsDisplayBuilder.append(i)
-							.append(' ')
-							.append(slots[i])
-							.append(',');
-				}
-				return transferSlotsDisplayBuilder.toString();
-			});
-		});
 		
 		mechanisms.ifValid(mechanisms.get(PairedLauncher.class), launcher -> {
 			logging.addDataLazy("Launch Solution Absolute Pitch°", () -> {

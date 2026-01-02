@@ -132,7 +132,7 @@ public class Settings {
 			return config.fromHardwareMap(hardwareMap);
 		}
 	}
-	
+
 	/**
 	 * Settings for the Intake mechanism.
 	 */
@@ -144,7 +144,7 @@ public class Settings {
 		public static double STOPPED_SPEED = 0.0;
 		public static long COLOR_SENSOR_DEBOUNCE_TIME_MS = 500;
 	}
-	
+
 	/**
 	 * Settings for the main transfer wheel.
 	 * <p>
@@ -486,7 +486,8 @@ public class Settings {
 		public static double SLOW_SPEED = 0.4;
 		public static double LAUNCH_DEBOUNCE_TIME_MS = 400;
 		public static double MAX_ACTION_TIME_S = 10.0;
-		
+		public static double SEARCH_TIMEOUT_MS = 1000; // Time to search before assuming empty
+
 		/**
 		 * Per-action timeout configuration.
 		 * Each action type can have its own timeout (in seconds).
