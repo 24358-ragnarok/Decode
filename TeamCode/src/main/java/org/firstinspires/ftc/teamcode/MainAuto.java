@@ -67,10 +67,13 @@ public class MainAuto extends OpMode {
 	public void init_loop() {
 		logging.clearDynamic();
 		// Draw the initial pose of the robot
+		logging.drawRobot(MatchState.getAutonomousStartingPose());
 		
 		// Allow driver to select match settings using the wizard
 		wizard.refresh();
-		logging.drawRobot(MatchState.getAutonomousStartingPose());
+		mechanisms.setHubColors(
+				MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE ? MechanismManager.PresetColor.BLUE
+						: MechanismManager.PresetColor.RED);
 		
 		logging.update();
 	}
@@ -82,13 +85,16 @@ public class MainAuto extends OpMode {
 	@Override
 	public void start() {
 		// Initialize all mechanisms
-		mechanisms.drivetrain.follower.setStartingPose(MatchState.getAutonomousStartingPose());
-		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), VerticalWheelTransfer::setUpForAuto);
 		mechanisms.start();
-
-//		 Build the autonomous sequence based on configuration
-//		 The runtime system allows hot-swapping between different strategies
-//		 while the PathAction system handles alliance mirroring automatically
+		
+		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), transfer -> {
+			transfer.setUpForAuto();
+		});
+		
+		mechanisms.drivetrain.follower.setStartingPose(MatchState.getAutonomousStartingPose());
+		// Build the autonomous sequence based on configuration
+		// The runtime system allows hot-swapping between different strategies
+		// while the PathAction system handles alliance mirroring automatically
 		
 		AutonomousRuntime runtime = MatchState.getAutonomousRuntime();
 		if (MatchState.getAutoStartingPosition() == MatchState.AutoStartingPosition.FAR) {
@@ -96,7 +102,7 @@ public class MainAuto extends OpMode {
 		} else {
 			autonomousSequence = runtime.buildCloseSequence();
 		}
-
+		
 		// Start the sequence
 		autonomousSequence.start(mechanisms);
 		
@@ -110,18 +116,22 @@ public class MainAuto extends OpMode {
 	 */
 	@Override
 	public void loop() {
-		logging.clearDynamic();
-
-		// Update all mechanisms (sensors, motors, etc.)
-		mechanisms.update();
+		final UnifiedLogging log = logging;
+		final MechanismManager mech = mechanisms;
+		log.clearDynamic();
 		
-		if (autonomousSequence != null) {
-			autonomousSequence.update(mechanisms);
+		// Update all mechanisms (sensors, motors, etc.)
+		mech.update();
+		// Update the autonomous sequence
+		// This single line replaces the entire state machine logic!
+		final AutonomousSequence sequence = autonomousSequence;
+		if (sequence != null) {
+			sequence.update(mech);
 		}
-
+		
 		// Clear dynamic telemetry and log updated data
-		logging.drawDebug(mechanisms.drivetrain.follower);
-		logging.update();
+		log.drawDebug(mech.drivetrain.follower);
+		log.update();
 	}
 	
 	/**
