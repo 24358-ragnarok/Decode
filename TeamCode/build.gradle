@@ -14,23 +14,23 @@ buildscript {
     repositories {
         mavenCentral()
         maven {
-            url = uri("https://repo.dairy.foundation/snapshots")
+            url "https://repo.dairy.foundation/releases"
         }
         maven {
             url = 'https://www.matthewo.tech/maven/'
         }
     }
     dependencies {
-        classpath "dev.frozenmilk.sinister.sloth:Load:0.0.2"
+        classpath "dev.frozenmilk:Load:0.2.4"
         classpath 'org.team11260:fast-load-plugin:0.1.4-beta1'
-
     }
 }
+
 
 // Include common definitions from above.
 apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
-apply plugin: "dev.frozenmilk.sinister.sloth.Load"
+apply plugin: "dev.frozenmilk.sinister.sloth.load"
 apply plugin: 'org.team11260.fast-load-plugin'
 
 android {
@@ -48,6 +48,16 @@ android {
     }
 }
 
+repositories {
+    // Dairy releases repository
+    maven {
+        url = "https://repo.dairy.foundation/releases"
+    }
+    // Dairy snapshots repository
+    maven {
+        url = "https://repo.dairy.foundation/snapshots"
+    }
+}
 dependencies {
     //noinspection DependencyNotationArgument
     implementation project(':FtcRobotController')
@@ -55,4 +65,5 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.20.1'
     implementation "com.bylazar:fullpanels:1.0.12"
     implementation "com.github.Eeshwar-Krishnan:PhotonFTC:-SNAPSHOT"
+    implementation("dev.frozenmilk.sinister:Sloth:0.2.4")
 }

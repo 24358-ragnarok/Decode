@@ -38,7 +38,7 @@ public class Constants {
 			.headingPIDFCoefficients(new PIDFCoefficients(0.7, 0.0001, 0.05, 0.03))
 			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.6, 0.001, 0.025, 0.02))
 			
-			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.8, 0.0, 0.01, 0.6, 0.0))
+			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.6, 0.0, 0.1, 0.6, 0.0))
 			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.035, 0.0, 0.001, 0.6, 0.0))
 			
 			.centripetalScaling(0.0003)
@@ -91,9 +91,9 @@ public class Constants {
 			0.01,
 			0.001,
 			50,
-			1.1,
+			2.2,
 			10,
-			0.9);
+			0.75);
 	
 	/**
 	 * Factory method to create a configured Follower instance.

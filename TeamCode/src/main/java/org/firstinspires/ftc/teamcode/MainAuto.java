@@ -11,8 +11,10 @@ import org.firstinspires.ftc.teamcode.autonomous.AutonomousSequence;
 import org.firstinspires.ftc.teamcode.configuration.MatchConfigurationWizard;
 import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
+import org.firstinspires.ftc.teamcode.hardware.BallSwap;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
+import org.firstinspires.ftc.teamcode.software.game.Artifact;
 
 /**
  * The main Autonomous script that makes the robot move by itself during the
@@ -89,6 +91,9 @@ public class MainAuto extends OpMode {
 		
 		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), transfer -> {
 			transfer.setUpForAuto();
+		});
+		mechanisms.ifValid(mechanisms.get(BallSwap.class), ballSwap -> {
+			ballSwap.storeArtifact(new Artifact(Artifact.Color.GREEN, 0, true));
 		});
 		
 		mechanisms.drivetrain.follower.setStartingPose(MatchState.getAutonomousStartingPose());

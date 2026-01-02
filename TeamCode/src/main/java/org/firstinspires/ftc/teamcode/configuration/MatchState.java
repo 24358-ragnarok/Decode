@@ -44,7 +44,7 @@ public class MatchState {
 	/**
 	 * Stores the selected autonomous runtime strategy. Defaults to DEFAULT.
 	 */
-	private static AutonomousRuntime autonomousRuntime = AutonomousRuntime.BEST;
+	private static AutonomousRuntime autonomousRuntime = AutonomousRuntime.SORTED_NINE_BALL;
 	
 	/**
 	 * Stores the robot's last known pose, set at the end of Autonomous for
@@ -61,7 +61,7 @@ public class MatchState {
 		classifier = Classifier.empty();
 		allianceColor = AllianceColor.BLUE;
 		autoStartingPosition = AutoStartingPosition.FAR;
-		autonomousRuntime = AutonomousRuntime.BEST;
+		autonomousRuntime = AutonomousRuntime.SORTED_NINE_BALL;
 		storedPose = null;
 	}
 	

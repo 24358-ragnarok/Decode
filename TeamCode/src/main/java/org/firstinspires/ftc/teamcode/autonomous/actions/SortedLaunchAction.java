@@ -47,23 +47,12 @@ public class SortedLaunchAction implements AutonomousAction {
 		state = State.ALIGNING;
 		firingArtifact = null;
 		
-		// Preload: assume green held in swapper at start of auto if none stored
-		// already.
-		if (hasSwap && transfer != null && !swap.hasHeldArtifact()) {
-			Artifact preload = new Artifact(Artifact.Color.GREEN, transfer.getTicks());
-			preload.beingSwapped = true;
-			swap.storeArtifact(preload);
-		}
-		
 		if (hasLauncher) {
 			launcher.ready();
 			launcher.close();
 		}
 		if (hasTransfer) {
 			transfer.freeze();
-		}
-		if (hasSwap) {
-			swap.hold();
 		}
 		mechanisms.ifValid(mechanisms.get(FlexVectorIntake.class), FlexVectorIntake::crawl);
 	}
@@ -104,8 +93,8 @@ public class SortedLaunchAction implements AutonomousAction {
 				
 				if (top == null) {
 					if (getSwapArtifact() != null) {
-						insertSwapAsTop();
-						state = State.ALIGNING;
+						startInsertSwap();
+						state = State.WAIT_REVERSE;
 						break;
 					}
 					finishLaunch();
@@ -121,8 +110,8 @@ public class SortedLaunchAction implements AutonomousAction {
 				// If swap holds the desired color, reinsert it and retry.
 				Artifact swapped = getSwapArtifact();
 				if (swapped != null && swapped.color == desired) {
-					insertSwapAsTop();
-					state = State.ALIGNING;
+					startInsertSwap();
+					state = State.WAIT_REVERSE;
 					break;
 				}
 				
@@ -141,6 +130,13 @@ public class SortedLaunchAction implements AutonomousAction {
 				if (!transfer.isBusy() && timer.getElapsedTime() > LAUNCH_DEBOUNCE_TIME_MS) {
 					removeFiredArtifact();
 					launcher.close();
+					state = State.ALIGNING;
+				}
+				break;
+			
+			case WAIT_REVERSE:
+				if (!transfer.isBusy()) {
+					completeInsertSwap();
 					state = State.ALIGNING;
 				}
 				break;
@@ -183,11 +179,18 @@ public class SortedLaunchAction implements AutonomousAction {
 		removeArtifact(top);
 	}
 	
-	private void insertSwapAsTop() {
+	private void startInsertSwap() {
 		if (!hasSwap)
 			return;
 		// Move swap into grabbing position to place the held ball back.
 		swap.grab();
+		// Start reverse - wait for it to complete before swapping
+		transfer.reverse();
+	}
+	
+	private void completeInsertSwap() {
+		if (!hasSwap)
+			return;
 		Artifact held = swap.takeHeldArtifact();
 		if (held == null || held.color == Artifact.Color.NONE) {
 			return;
@@ -306,6 +309,7 @@ public class SortedLaunchAction implements AutonomousAction {
 		WAIT_ALIGN,
 		DECIDE,
 		WAIT_FIRE,
+		WAIT_REVERSE,
 		COMPLETE
 	}
 }

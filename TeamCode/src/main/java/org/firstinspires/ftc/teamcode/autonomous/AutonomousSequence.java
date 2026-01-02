@@ -20,22 +20,24 @@ import java.util.List;
  * - Graceful handling of action interruption
  */
 public class AutonomousSequence {
-	
+
 	public final Timer sequenceTimer;
 	private final List<AutonomousAction> actions;
 	private int currentActionIndex;
 	private boolean initialized;
-	
+	private final Timer actionTimer;
+
 	/**
 	 * Creates a new autonomous sequence.
 	 */
 	public AutonomousSequence() {
 		this.actions = new ArrayList<>();
 		this.sequenceTimer = new Timer();
+		this.actionTimer = new Timer();
 		this.currentActionIndex = 0;
 		this.initialized = false;
 	}
-	
+
 	/**
 	 * Adds an action to the sequence.
 	 *
@@ -46,7 +48,7 @@ public class AutonomousSequence {
 		actions.add(action);
 		return this;
 	}
-	
+
 	/**
 	 * Adds multiple actions to the sequence.
 	 *
@@ -57,7 +59,7 @@ public class AutonomousSequence {
 		actions.addAll(Arrays.asList(actionsToAdd));
 		return this;
 	}
-	
+
 	/**
 	 * Starts the sequence. Must be called before update().
 	 *
@@ -69,6 +71,7 @@ public class AutonomousSequence {
 		
 		if (!actions.isEmpty()) {
 			sequenceTimer.resetTimer();
+			actionTimer.resetTimer();
 			actions.get(0).initialize(mechanisms);
 			initialized = true;
 		}
@@ -89,17 +92,29 @@ public class AutonomousSequence {
 		
 		// Execute the current action
 		boolean actionComplete = currentAction.execute(mechanisms);
-		boolean robotIsStuck = mechanisms.drivetrain.follower.isRobotStuck()
-				|| sequenceTimer.getElapsedTimeSeconds() > Settings.Autonomous.MAX_ACTION_TIME_S;
 		
-		if (actionComplete || robotIsStuck) {
+		// Check for timeout (per-action or global fallback)
+		double actionTimeout = currentAction.getTimeoutSeconds();
+		boolean actionTimedOut = actionTimeout > 0.0
+				&& actionTimer.getElapsedTimeSeconds() > actionTimeout;
+		
+		// Fallback to global timeout if action doesn't have its own timeout
+		boolean globalTimeout = actionTimeout == 0.0
+				&& sequenceTimer.getElapsedTimeSeconds() > Settings.Autonomous.MAX_ACTION_TIME_S;
+		
+		boolean robotIsStuck = mechanisms.drivetrain.follower.isRobotStuck();
+		boolean shouldEnd = actionComplete || actionTimedOut || globalTimeout || robotIsStuck;
+		
+		if (shouldEnd) {
 			// End the current action
-			currentAction.end(mechanisms, robotIsStuck);
-			
+			boolean interrupted = actionTimedOut || globalTimeout || robotIsStuck;
+			currentAction.end(mechanisms, interrupted);
+
 			// Move to the next action
 			currentActionIndex++;
 			sequenceTimer.resetTimer();
-			
+			actionTimer.resetTimer();
+
 			// Initialize the next action if it exists
 			if (currentActionIndex < actions.size()) {
 				actions.get(currentActionIndex).initialize(mechanisms);

@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration name="Save/Reinstall (Slow)" activateToolWindowBeforeRun="false" default="false"
+    <configuration name="Comp-legal reinstall" activateToolWindowBeforeRun="false" default="false"
         factoryName="Android App" type="AndroidRunConfigurationType">
         <module name="Decode.TeamCode" />
         <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
@@ -71,6 +71,8 @@
         <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
         <method v="2">
             <option name="Android.Gradle.BeforeRunTask" enabled="true" goal="" />
+            <option name="Gradle.BeforeRunTask" enabled="true" externalProjectPath="$PROJECT_DIR$/TeamCode"
+                scriptParameters="" tasks="removeSlothRemote" vmOptions="" />
         </method>
     </configuration>
 </component>

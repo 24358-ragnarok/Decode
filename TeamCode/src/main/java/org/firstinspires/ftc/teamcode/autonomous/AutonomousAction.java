@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
  * - Reusability across different autonomous modes
  */
 public interface AutonomousAction {
-	
+
 	/**
 	 * Called once when the action starts.
 	 * Use this to initialize motors, set initial states, start timers, etc.
@@ -45,5 +45,21 @@ public interface AutonomousAction {
 	 */
 	default String getName() {
 		return this.getClass().getSimpleName();
+	}
+	
+	/**
+	 * Returns the timeout for this action in seconds.
+	 * If 0, no timeout is applied (action runs until it completes naturally).
+	 * If > 0, the action will be interrupted after this duration.
+	 * <p>
+	 * The timeout is looked up from Settings.Autonomous.ActionTimeouts based on
+	 * the action's class name. Override this method to provide a custom timeout
+	 * or to use a different lookup key.
+	 *
+	 * @return Timeout in seconds (0 = no timeout)
+	 */
+	default double getTimeoutSeconds() {
+		return org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.ActionTimeouts
+				.getTimeout(this.getClass().getSimpleName());
 	}
 }

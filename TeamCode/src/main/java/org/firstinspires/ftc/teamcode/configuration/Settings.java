@@ -103,10 +103,10 @@ public class Settings {
 		// Transfer mechanism
 		public static final HardwareConfig TRANSFER_WHEEL_MOTOR = new HardwareConfig(DcMotorEx.class,
 				"transfer");
-		
+
 		public static final HardwareConfig SWAP = new HardwareConfig(ServoImplEx.class,
 				"swap");
-		
+
 		// Sensors
 		public static final String[] COLOR_RANGEFINDER_1 = {"crf1_0", "crf1_1"};
 		public static final String[] COLOR_RANGEFINDER_2 = {"crf2_0", "crf2_1"};
@@ -116,9 +116,9 @@ public class Settings {
 				"colorRight");
 		public static final HardwareConfig CONFIGURE_COLOR_SENSOR = new HardwareConfig(
 				RevColorSensorV3.class, "colorSensorConfigure");
-		
+
 		public static final HardwareConfig LIMELIGHT = new HardwareConfig(Limelight3A.class, "limelight");
-		
+
 		/**
 		 * Static method to retrieve hardware from a HardwareMap.
 		 * Allows usage like: Settings.Hardware.get(FRONT_LEFT_MOTOR, hw)
@@ -161,16 +161,12 @@ public class Settings {
 	 */
 	@Configurable
 	public static class Transfer {
-		public static final double FIRING_POSITION_TICKS = 1000;
-		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 2.0;
+		public static final double FIRING_POSITION_TICKS = 900;
+		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 2.5;
 		public static double SPEED = 1.0;
 		public static double CRAWL_SPEED = 0.3;
-		public static double CRAWL_TICKS = 2500;
+		public static double CRAWL_TICKS = FIRING_POSITION_TICKS * 3;
 		// Motion Profile Position Controller Gains
-		public static double POSITION_KP = 0.015; // Position proportional gain
-		public static double POSITION_KD = 0.002; // Derivative gain (damping)
-		public static double MAX_VELOCITY = 800; // Max velocity (ticks/sec)
-		public static double MAX_ACCELERATION = 1600; // Max acceleration (ticks/sec²)
 		public static int POSITION_TOLERANCE = 20; // Acceptable position error (ticks)
 	}
 	
@@ -489,5 +485,58 @@ public class Settings {
 		public static double LAUNCH_DEBOUNCE_TIME_MS = 400;
 		public static double MAX_ACTION_TIME_S = 10.0;
 		
+		/**
+		 * Per-action timeout configuration.
+		 * Each action type can have its own timeout (in seconds).
+		 * Set to 0 to disable timeout for that action type.
+		 * <p>
+		 * Timeouts are keyed by action class simple name (e.g., "LaunchAction",
+		 * "LinearPathAction").
+		 * <p>
+		 * When an action's timeout is exceeded, it will be immediately ended with
+		 * interrupted=true.
+		 */
+		@Configurable
+		public static class ActionTimeouts {
+			// Path actions
+			public static double LinearPathAction = 0.0; // No timeout (default)
+			public static double SlowLinearPathAction = 0.0;
+			public static double SplinedPathAction = 0.0;
+			public static double CurvePathAction = 0.0;
+			
+			// Launch actions
+			public static double LaunchAction = 0.0;
+			public static double SortedLaunchAction = 0.0;
+			public static double PrepareLaunchAction = 0.0;
+			
+			// Pickup actions
+			public static double PickupBallAction = 0.0;
+			public static double EndPickupAction = 0.0;
+			
+			// Utility actions
+			public static double WaitAction = 0.0;
+			public static double ScanAction = 0.0;
+			public static double StartAtAction = 0.0;
+			public static double EndAtAction = 0.0;
+			public static double ParallelAction = 0.0;
+			
+			/**
+			 * Gets the timeout for an action by its class name.
+			 * Returns 0 if the action type is not configured (no timeout).
+			 *
+			 * @param actionClassName The simple class name of the action (e.g.,
+			 *                        "LaunchAction")
+			 * @return Timeout in seconds (0 = no timeout)
+			 */
+			public static double getTimeout(String actionClassName) {
+				try {
+					java.lang.reflect.Field field = ActionTimeouts.class.getField(actionClassName);
+					return field.getDouble(null);
+				} catch (NoSuchFieldException | IllegalAccessException e) {
+					// Action type not configured, return 0 (no timeout)
+					return 0.0;
+				}
+			}
+		}
 	}
 }

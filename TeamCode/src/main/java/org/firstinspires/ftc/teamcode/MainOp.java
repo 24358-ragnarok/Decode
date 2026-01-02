@@ -265,9 +265,9 @@ public class MainOp extends OpMode {
 	private void setupLogging() {
 		// Set up lazy evaluation for frequently-accessed but expensive operations
 		// These are only evaluated when telemetry is actually transmitted
-		logging.addDataLazy("Heading°", () -> Math.toDegrees(mechanisms.drivetrain.follower.getHeading()));
-		logging.addDataLazy("X", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getX());
-		logging.addDataLazy("Y", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getY());
+		logging.addDataLazy("heading°", () -> Math.toDegrees(mechanisms.drivetrain.follower.getHeading()));
+		logging.addDataLazy("x", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getX());
+		logging.addDataLazy("y", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getY());
 		
 		// Transfer telemetry
 		mechanisms.ifValid(mechanisms.get(VerticalWheelTransfer.class), transfer -> {

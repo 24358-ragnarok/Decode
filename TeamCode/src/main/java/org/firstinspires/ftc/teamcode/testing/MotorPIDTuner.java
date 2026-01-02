@@ -304,10 +304,10 @@ public class MotorPIDTuner extends OpMode {
 		
 		// Increment buttons (only on press, not hold)
 		if (gamepad1.aWasPressed()) {
-			targetPosition += 1000;
+			targetPosition += 100;
 		}
 		if (gamepad1.bWasPressed()) {
-			targetPosition += 500;
+			targetPosition += 10;
 		}
 		
 		// Apply position
@@ -432,7 +432,7 @@ public class MotorPIDTuner extends OpMode {
 			logging.addLine("A=+1000 | B=+500");
 		} else {
 			logging.addLine("X=+1000 ticks | Y=+500 ticks");
-			logging.addLine("A=+1000 | B=+500");
+			logging.addLine("A=+100 | B=+10");
 		}
 		logging.addLine("BACK: Stop & reset");
 		

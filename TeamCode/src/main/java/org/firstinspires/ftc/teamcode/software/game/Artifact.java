@@ -31,6 +31,12 @@ public class Artifact {
 		this.transferTicksWhenAtEntrance = ticks;
 		this.beingSwapped = false;
 	}
+	
+	public Artifact(Color color, double ticks, boolean swap) {
+		this.color = color;
+		this.transferTicksWhenAtEntrance = ticks;
+		this.beingSwapped = swap;
+	}
 
 	public double calculatedTicks(VerticalWheelTransfer transfer) {
 		return transfer.getTicks() - transferTicksWhenAtEntrance;
