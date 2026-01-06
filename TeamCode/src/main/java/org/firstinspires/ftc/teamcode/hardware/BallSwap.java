@@ -19,7 +19,7 @@ public class BallSwap extends Mechanism {
 	}
 
 	public final void start() {
-		hold();
+		moveToHold();
 	}
 	
 	public final void update() {
@@ -27,18 +27,18 @@ public class BallSwap extends Mechanism {
 	
 	public final void swap() {
 		if (state == SwapState.GRABBING) {
-			hold();
+			moveToHold();
 		} else if (state == SwapState.HOLDING) {
-			grab();
+			moveToTransfer();
 		}
 	}
 	
-	public final void grab() {
+	public final void moveToTransfer() {
 		servo.setPosition(GRABBING_POS);
 		state = SwapState.GRABBING;
 	}
 	
-	public final void hold() {
+	public final void moveToHold() {
 		servo.setPosition(HOLDING_POS);
 		state = SwapState.HOLDING;
 	}

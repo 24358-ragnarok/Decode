@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.actions;
 
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.LAUNCH_DEBOUNCE_TIME_MS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.LAUNCH_EXIT_TIME_MS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.SEARCH_TIMEOUT_MS;
 
 import com.pedropathing.util.Timer;
@@ -12,10 +12,8 @@ import org.firstinspires.ftc.teamcode.hardware.FlexVectorIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
 import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
-import org.firstinspires.ftc.teamcode.software.ColorUnifier;
 import org.firstinspires.ftc.teamcode.software.game.Artifact;
 import org.firstinspires.ftc.teamcode.software.game.Classifier;
-import org.firstinspires.ftc.teamcode.software.game.Motif;
 
 /**
  * Launches all balls in motif order using real-time color detection at the swap
@@ -43,13 +41,11 @@ public class SortedLaunchAction implements AutonomousAction {
 	private PairedLauncher launcher;
 	private BallSwap swap;
 	private FlexVectorIntake intake;
-	private ColorUnifier colorUnifier;
-
+	
 	private Timer timer;
 	private State state;
 	private Artifact.Color currentBallColor;
-	private Artifact.Color swappedBallColor;
-
+	
 	@Override
 	public void initialize(MechanismManager mechanisms) {
 		transfer = mechanisms.get(VerticalWheelTransfer.class);
@@ -57,14 +53,9 @@ public class SortedLaunchAction implements AutonomousAction {
 		swap = mechanisms.get(BallSwap.class);
 		intake = mechanisms.get(FlexVectorIntake.class);
 		
-		if (intake != null) {
-			colorUnifier = intake.colorUnifier;
-		}
-
 		timer = new Timer();
 		state = State.SEARCHING;
 		currentBallColor = Artifact.Color.NONE;
-		swappedBallColor = Artifact.Color.NONE;
 		
 		if (launcher != null) {
 			launcher.ready();
@@ -77,30 +68,24 @@ public class SortedLaunchAction implements AutonomousAction {
 			intake.crawl();
 		}
 		if (swap != null) {
-			swap.hold();
-		}
-		
-		// Start searching
-		timer.resetTimer();
-		if (transfer != null) {
-			transfer.advance();
+			swap.moveToHold();
 		}
 	}
-
+	
 	@Override
 	public boolean execute(MechanismManager mechanisms) {
-		if (transfer == null || launcher == null || colorUnifier == null) {
+		if (transfer == null || launcher == null || intake == null) {
 			return true;
 		}
 		
 		// Keep launcher spun/aimed during the sequence
 		launcher.ready();
-
+		
 		switch (state) {
 			case SEARCHING:
 				handleSearching();
 				break;
-
+			
 			case DECIDE:
 				handleDecide();
 				break;
@@ -114,28 +99,25 @@ public class SortedLaunchAction implements AutonomousAction {
 				break;
 			
 			case STORING:
-				handleStoring();
-				break;
-			
-			case REVERSING:
-				handleReversing();
+				continueStoring();
 				break;
 			
 			case RETRIEVING:
-				handleRetrieving();
+				continueRetrieve();
 				break;
-
+			
 			case COMPLETE:
 			default:
 				return true;
 		}
-
+		
 		return state == State.COMPLETE;
 	}
 	
 	private void handleSearching() {
 		// Check for ball detection
-		Artifact detected = colorUnifier.find();
+		Artifact detected = transfer.detect();
+		
 		if (detected.color != Artifact.Color.NONE) {
 			currentBallColor = detected.color;
 			transfer.freeze();
@@ -151,9 +133,9 @@ public class SortedLaunchAction implements AutonomousAction {
 		// Timeout: no ball found after SEARCH_TIMEOUT_MS
 		if (timer.getElapsedTime() > SEARCH_TIMEOUT_MS) {
 			// Check if swap has a ball we should retrieve
-			if (swappedBallColor != Artifact.Color.NONE) {
-				startReverse();
-				state = State.REVERSING;
+			if (swap.hasHeldArtifact()) {
+				swap.moveToTransfer();
+				state = State.RETRIEVING;
 				return;
 			}
 			// Otherwise we're done
@@ -165,32 +147,29 @@ public class SortedLaunchAction implements AutonomousAction {
 	private void handleDecide() {
 		Artifact.Color desired = desiredColor();
 		
-		// If no preference or color matches, fire it
-		if (desired == Artifact.Color.NONE || currentBallColor == desired) {
-			startFire();
-			return;
+		if (swap.hasHeldArtifact()) {
+			Artifact.Color swappedColor = swap.peekHeldArtifact().color;
+			
+			// If swapping is the only way to match, do so
+			if (swappedColor == desired && currentBallColor != desired) {
+				// Start swapping in
+				startRetrieve();
+				return;
+			}
+		} else {
+			// if we can store and look for color, do so
+			if (desired != Artifact.Color.NONE && currentBallColor != desired) {
+				// Store current ball then retrieve
+				startStore();
+				return;
+			}
 		}
 		
-		// If swap has the desired color, retrieve it (store current first if swap
-		// empty)
-		if (swappedBallColor == desired) {
-			// Store current ball then retrieve
-			startStore();
-			return;
-		}
-		
-		// If swap is empty, store current ball and search for next
-		if (swappedBallColor == Artifact.Color.NONE) {
-			startStore();
-			return;
-		}
-		
-		// Both current and swap have wrong colors - fire current anyway
+		// Swap has not triggered any action; we are good to fire
 		startFire();
 	}
 	
 	private void handleOpenGate() {
-		launcher.open();
 		if (!launcher.isBusy()) {
 			transfer.advance();
 			timer.resetTimer();
@@ -199,7 +178,7 @@ public class SortedLaunchAction implements AutonomousAction {
 	}
 	
 	private void handleFiring() {
-		if (!transfer.isBusy() && timer.getElapsedTime() > LAUNCH_DEBOUNCE_TIME_MS) {
+		if (!transfer.isBusy() && timer.getElapsedTime() > LAUNCH_EXIT_TIME_MS) {
 			// Record the shot
 			addShotToClassifier(currentBallColor);
 			currentBallColor = Artifact.Color.NONE;
@@ -212,13 +191,12 @@ public class SortedLaunchAction implements AutonomousAction {
 		}
 	}
 	
-	private void handleStoring() {
+	private void continueStoring() {
 		// Wait for swap mechanism to finish
-		if (swap != null && !swap.isBusy()) {
+		if (!swap.isBusy()) {
 			// Ball is now stored in swap
-			swappedBallColor = currentBallColor;
+			swap.storeArtifact(new Artifact(currentBallColor, 0, true));
 			currentBallColor = Artifact.Color.NONE;
-			swap.hold();
 			
 			// Search for next ball
 			timer.resetTimer();
@@ -227,39 +205,29 @@ public class SortedLaunchAction implements AutonomousAction {
 		}
 	}
 	
-	private void handleReversing() {
-		// Wait for transfer to finish reversing
-		if (!transfer.isBusy()) {
-			if (swap != null) {
-				swap.grab();
-			}
-			state = State.RETRIEVING;
-		}
+	private void startRetrieve() {
+		transfer.reverse();
+		state = State.RETRIEVING;
 	}
 	
-	private void handleRetrieving() {
-		// Wait for swap to finish grabbing
-		if (swap != null && !swap.isBusy()) {
-			// Ball is now at the launch position
-			currentBallColor = swappedBallColor;
-			swappedBallColor = Artifact.Color.NONE;
+	private void continueRetrieve() {
+		if (!transfer.isBusy()) {
+			currentBallColor = swap.takeHeldArtifact().color;
+			swap.moveToTransfer();
+		}
+		if (currentBallColor != Artifact.Color.NONE && !swap.isBusy()) {
 			state = State.DECIDE;
 		}
 	}
 	
 	private void startFire() {
+		launcher.open();
 		state = State.OPEN_GATE;
 	}
 	
 	private void startStore() {
-		if (swap != null) {
-			swap.grab();
-		}
+		swap.moveToHold();
 		state = State.STORING;
-	}
-	
-	private void startReverse() {
-		transfer.reverse();
 	}
 	
 	private void addShotToClassifier(Artifact.Color color) {
@@ -274,12 +242,7 @@ public class SortedLaunchAction implements AutonomousAction {
 		if (classifier == null) {
 			return Artifact.Color.NONE;
 		}
-		Motif motif = classifier.getMotif();
-		if (motif == null || motif == Motif.UNKNOWN || motif.state.length == 0) {
-			return Artifact.Color.NONE;
-		}
-		int idx = classifier.getBallCount() % motif.state.length;
-		return motif.state[idx].color;
+		return classifier.getNextDesiredColor();
 	}
 	
 	private void finishLaunch() {
@@ -308,7 +271,6 @@ public class SortedLaunchAction implements AutonomousAction {
 		OPEN_GATE, // Opening launcher gate
 		FIRING, // Firing current ball
 		STORING, // Storing current ball in swap
-		REVERSING, // Reversing transfer to retrieve from swap
 		RETRIEVING, // Grabbing ball from swap
 		COMPLETE // All balls launched
 	}

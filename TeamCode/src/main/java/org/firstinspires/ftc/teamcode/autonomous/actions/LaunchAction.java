@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.actions;
 
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.LAUNCH_DEBOUNCE_TIME_MS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.LAUNCH_EXIT_TIME_MS;
 
 import com.pedropathing.util.Timer;
 
@@ -72,7 +72,7 @@ public class LaunchAction implements AutonomousAction {
 		switch (state) {
 			case WAITING_TO_FIRE:
 				// Only transition to FIRING if we haven't fired all shots yet
-				if (launcher.isAtSpeed() && !transfer.isBusy() && timer.getElapsedTime() > LAUNCH_DEBOUNCE_TIME_MS) {
+				if (launcher.isAtSpeed() && !transfer.isBusy() && timer.getElapsedTime() > LAUNCH_EXIT_TIME_MS) {
 					state = State.FIRING;
 				}
 				break;
@@ -94,7 +94,7 @@ public class LaunchAction implements AutonomousAction {
 				break;
 		}
 		
-		if (state == State.COMPLETE && !transfer.isBusy() && timer.getElapsedTime() > LAUNCH_DEBOUNCE_TIME_MS) {
+		if (state == State.COMPLETE && !transfer.isBusy() && timer.getElapsedTime() > LAUNCH_EXIT_TIME_MS) {
 			launcher.stop();
 			launcher.close();
 			return true;

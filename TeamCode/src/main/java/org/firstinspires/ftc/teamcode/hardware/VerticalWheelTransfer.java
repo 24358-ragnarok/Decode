@@ -6,12 +6,15 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.DEC
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.INCREMENT_TICKS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.POSITION_TOLERANCE;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.SPEED;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.TRANSFER_MOTOR_DEBOUNCE_MS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.TRANSFER_MOTOR_SPINUP_MS;
 
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+import org.firstinspires.ftc.teamcode.software.ColorUnifier;
+import org.firstinspires.ftc.teamcode.software.game.Artifact;
 
 /**
  * Transfer subsystem controlling the vertical wheel that moves balls.
@@ -22,12 +25,14 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * using the ColorUnifier at the swap position.
  */
 public class VerticalWheelTransfer extends Mechanism {
+	public final ColorUnifier colorUnifier;
 	private final DcMotorEx motor;
 	public Timer debounce = new Timer();
 	private double targetTicks;
-
-	public VerticalWheelTransfer(DcMotorEx motor) {
+	
+	public VerticalWheelTransfer(DcMotorEx motor, ColorUnifier unifier) {
 		this.motor = motor;
+		this.colorUnifier = unifier;
 		motor.setTargetPosition(motor.getCurrentPosition());
 		motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 		motor.setPower(SPEED);
@@ -80,10 +85,14 @@ public class VerticalWheelTransfer extends Mechanism {
 	}
 	
 	public boolean isBusy() {
-		return motor.isBusy() && debounce.getElapsedTime() > TRANSFER_MOTOR_DEBOUNCE_MS;
+		return motor.isBusy() && debounce.getElapsedTime() > TRANSFER_MOTOR_SPINUP_MS;
 	}
 	
 	public int getTicks() {
 		return motor.getCurrentPosition();
+	}
+	
+	public Artifact detect() {
+		return colorUnifier.find();
 	}
 }

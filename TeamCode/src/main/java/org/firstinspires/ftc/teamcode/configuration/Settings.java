@@ -142,7 +142,7 @@ public class Settings {
 		public static double CRAWL_SPEED = 0.5;
 		public static double OUT_SPEED = -1.0;
 		public static double STOPPED_SPEED = 0.0;
-		public static long COLOR_SENSOR_DEBOUNCE_TIME_MS = 500;
+		public static long COLOR_SENSOR_DEBOUNCE_TIME_MS = 200;
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class Settings {
 		public static double CRAWL_SPEED = 0.3;
 		public static double CRAWL_TICKS = FIRING_POSITION_TICKS * 3;
 		// Motion Profile Position Controller Gains
-		public static double TRANSFER_MOTOR_DEBOUNCE_MS = 100;
+		public static double TRANSFER_MOTOR_SPINUP_MS = 100;
 		public static int POSITION_TOLERANCE = 20; // Acceptable position error (ticks)
 	}
 	
@@ -484,7 +484,7 @@ public class Settings {
 	public static class Autonomous {
 		public static double BALL_INTAKE_WAIT_S = 0.1;
 		public static double SLOW_SPEED = 0.4;
-		public static double LAUNCH_DEBOUNCE_TIME_MS = 400;
+		public static double LAUNCH_EXIT_TIME_MS = 400;
 		public static double MAX_ACTION_TIME_S = 10.0;
 		public static double SEARCH_TIMEOUT_MS = 1000; // Time to search before assuming empty
 

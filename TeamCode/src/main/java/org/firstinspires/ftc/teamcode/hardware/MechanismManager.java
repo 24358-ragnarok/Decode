@@ -156,10 +156,7 @@ public class MechanismManager {
 		if (!Settings.Deploy.INTAKE)
 			return null;
 		DcMotorEx intakeMotor = Settings.Hardware.INTAKE_MOTOR.fromHardwareMap(hardwareMap);
-		// Color detection: only dual Rev color sensors (left/right).
-		ColorSensor[] rgbSensors = buildColorSensors();
-		ColorUnifier color = new ColorUnifier(this, new ColorRangefinder[0], rgbSensors);
-		return new FlexVectorIntake(this, intakeMotor, color);
+		return new FlexVectorIntake(this, intakeMotor);
 	}
 	
 	private ColorSensor[] buildColorSensors() {
@@ -177,7 +174,11 @@ public class MechanismManager {
 			return null;
 		
 		DcMotorEx transferWheel = Settings.Hardware.TRANSFER_WHEEL_MOTOR.fromHardwareMap(hardwareMap);
-		return new VerticalWheelTransfer(transferWheel);
+		
+		ColorSensor[] rgbSensors = buildColorSensors();
+		ColorUnifier color = new ColorUnifier(this, new ColorRangefinder[0], rgbSensors);
+		
+		return new VerticalWheelTransfer(transferWheel, color);
 	}
 	
 	private LimelightManager createLimelight() {

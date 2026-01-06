@@ -238,10 +238,10 @@ public class MainOp extends OpMode {
 		
 		if (swap != null) {
 			if (subController.wasJustPressed(Controller.Control.RIGHT_BUMPER)) {
-				swap.grab();
+				swap.moveToTransfer();
 			}
 			if (subController.wasJustPressed(Controller.Control.LEFT_BUMPER)) {
-				swap.hold();
+				swap.moveToHold();
 			}
 		}
 	}
