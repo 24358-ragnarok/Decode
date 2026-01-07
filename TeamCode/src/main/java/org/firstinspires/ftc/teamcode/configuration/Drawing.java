@@ -11,7 +11,7 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.PoseHistory;
 
 public class Drawing {
-	public static final double ROBOT_RADIUS = 8.25;
+	public static final double ROBOT_RADIUS = (Settings.Robot.WIDTH + Settings.Robot.LENGTH) / 4;
 	private static final FieldManager panelsField = PanelsField.INSTANCE.getField();
 	
 	private static final Style followerLook = new Style(

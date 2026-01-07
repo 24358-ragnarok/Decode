@@ -22,7 +22,7 @@ import java.util.EnumMap;
 public class Settings {
 	public static class Robot {
 		public static final double WIDTH = 16.25;
-		public static final double LENGTH = 15.6;
+		public static final double LENGTH = 17.00;
 		
 	}
 	
@@ -162,7 +162,7 @@ public class Settings {
 	@Configurable
 	public static class Transfer {
 		public static final double FIRING_POSITION_TICKS = 900;
-		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 2.5;
+		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 2.3;
 		public static final double DECREMENT_TICKS = -FIRING_POSITION_TICKS / 1.5;
 		public static double SPEED = 1.0;
 		public static double CRAWL_SPEED = 0.3;
@@ -207,7 +207,7 @@ public class Settings {
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static final double VELOCITY_ALPHA = 0.15; // EMA smoothing factor (0-1), lower = more smoothing
-		public static double GATE_FIRE_POSITION = 0.378;
+		public static double GATE_FIRE_POSITION = 0.388;
 		public static double GATE_CLOSED_POSITION = 0.444;
 		public static long GATE_COOLDOWN_MS = 500;
 		public static long MAX_SPEED_ERROR = 20;
@@ -312,7 +312,7 @@ public class Settings {
 		 * These values are used when AIM is called based on which position is closer.
 		 */
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 42.0; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2735; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_RPM = 2925; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 39.5; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 3670; // Wheel RPM for far position
@@ -356,7 +356,7 @@ public class Settings {
 		 * Default/reset positions.
 		 */
 		public static class Default {
-			public static final Pose RESET = new Pose(134, Robot.LENGTH / 2, Math.toRadians(90));
+			public static final Pose RESET = new Pose(144 - (Robot.WIDTH / 2), Robot.LENGTH / 2, Math.toRadians(90));
 			public static final Pose FAR_SAFE_PARK_POSE = new Pose(35.86206896551724, 12.505747126436786,
 					Math.toRadians(90));
 			public static final Pose CLOSE_SAFE_PARK_POSE = new Pose(48, 130, Math.toRadians(90));
@@ -382,8 +382,8 @@ public class Settings {
 		 * These are used for goto commands during driver control.
 		 */
 		public static class TeleOp {
-			public static final Pose CLOSE_SHOOT = new Pose(58, 93, Math.toRadians(140.59));
-			public static final Pose FAR_SHOOT = new Pose(60, 15, Math.toRadians(114));
+			public static final Pose CLOSE_SHOOT = new Pose(58, 99, Math.toRadians(140.59));
+			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(114));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(25, 68, Math.toRadians(0));
 			public static final Pose PARK = new Pose(106, 32, Math.toRadians(0));
@@ -394,7 +394,7 @@ public class Settings {
 		 */
 		public static class AutoStart {
 			public static final Pose FAR = new Pose(59.00, Robot.LENGTH / 2, Math.toRadians(90));
-			public static final Pose CLOSE = new Pose(20.61, 122.47, Math.toRadians(145));
+			public static final Pose CLOSE = new Pose(38.00, 144 - (Robot.LENGTH / 2), Math.toRadians(90));
 		}
 		
 		/**
@@ -416,20 +416,20 @@ public class Settings {
 			 * Second preset group (middle).
 			 */
 			public static class Preset2 {
-				public static final Pose PREP = new Pose(44, 56.5, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(36.0, 56.5, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(30.0, 56.5, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 56.5, Math.toRadians(180));
+				public static final Pose PREP = new Pose(44, 58, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(36.0, 58, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 58, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 58, Math.toRadians(180));
 			}
 			
 			/**
 			 * Third preset group (farthest from wall).
 			 */
 			public static class Preset3 {
-				public static final Pose PREP = new Pose(44, 81, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(35.0, 81, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(30.0, 81, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 81, Math.toRadians(180));
+				public static final Pose PREP = new Pose(44, 84, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(36.0, 84, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 84, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 84, Math.toRadians(180));
 			}
 		}
 		
@@ -481,11 +481,10 @@ public class Settings {
 	}
 	
 	public static class Autonomous {
-		public static double BALL_INTAKE_WAIT_S = 0.1;
 		public static double SLOW_SPEED = 0.4;
-		public static double LAUNCH_EXIT_TIME_MS = 400;
+		public static double LAUNCH_EXIT_TIME_MS = 200;
 		public static double MAX_ACTION_TIME_S = 10.0;
-		public static double SEARCH_TIMEOUT_MS = 1000; // Time to search before assuming empty
+		public static double SEARCH_TIMEOUT_MS = 500; // Time to search before assuming empty
 		
 		/**
 		 * Per-action timeout configuration.

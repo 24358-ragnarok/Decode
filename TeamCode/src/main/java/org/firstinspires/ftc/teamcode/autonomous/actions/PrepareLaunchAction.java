@@ -28,6 +28,10 @@ public class PrepareLaunchAction implements AutonomousAction {
 			PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
 			launcher.ready();
 		}
+		if (hasTransfer) {
+			VerticalWheelTransfer transfer = mechanisms.get(VerticalWheelTransfer.class);
+			transfer.crawl();
+		}
 		
 		return true;
 	}
