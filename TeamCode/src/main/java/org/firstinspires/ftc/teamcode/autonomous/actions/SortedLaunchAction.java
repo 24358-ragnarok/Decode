@@ -45,6 +45,7 @@ public class SortedLaunchAction implements AutonomousAction {
 	private Timer timer;
 	private State state;
 	private Artifact.Color currentBallColor;
+	private boolean mayStore = false;
 	
 	@Override
 	public void initialize(MechanismManager mechanisms) {
@@ -56,6 +57,7 @@ public class SortedLaunchAction implements AutonomousAction {
 		timer = new Timer();
 		state = State.SEARCHING;
 		currentBallColor = Artifact.Color.NONE;
+		mayStore = false;
 		
 		if (launcher != null) {
 			launcher.ready();
@@ -158,7 +160,7 @@ public class SortedLaunchAction implements AutonomousAction {
 			}
 		} else {
 			// if we can store and look for color, do so
-			if (desired != Artifact.Color.NONE && currentBallColor != desired) {
+			if (desired != Artifact.Color.NONE && currentBallColor != desired && mayStore) {
 				// Store current ball then retrieve
 				startStore();
 				return;
@@ -187,6 +189,7 @@ public class SortedLaunchAction implements AutonomousAction {
 			// Search for next ball
 			timer.resetTimer();
 			transfer.advance();
+			mayStore = true;
 			state = State.SEARCHING;
 		}
 	}
@@ -207,15 +210,17 @@ public class SortedLaunchAction implements AutonomousAction {
 	
 	private void startRetrieve() {
 		transfer.reverse();
+		currentBallColor = Artifact.Color.NONE;
 		state = State.RETRIEVING;
 	}
 	
 	private void continueRetrieve() {
-		if (!transfer.isBusy()) {
+		if (!transfer.isBusy() && currentBallColor == Artifact.Color.NONE) {
 			currentBallColor = swap.takeHeldArtifact().color;
 			swap.moveToTransfer();
 		}
 		if (currentBallColor != Artifact.Color.NONE && !swap.isBusy()) {
+			mayStore = false;
 			state = State.DECIDE;
 		}
 	}
@@ -262,7 +267,7 @@ public class SortedLaunchAction implements AutonomousAction {
 	
 	@Override
 	public String getName() {
-		return "Sorted Launch (" + state.name().toLowerCase() + ")";
+		return state.toString() + ", " + currentBallColor + " seen and " + swap.peekHeldArtifact().color + " stored";
 	}
 	
 	private enum State {

@@ -27,7 +27,7 @@ public class PairedLauncher extends Mechanism {
 	// Time-averaged velocity readings (exponential moving average)
 	private double averagedRightRPM = 0;
 	private double averagedLeftRPM = 0;
-
+	
 	public PairedLauncher(
 			MechanismManager mechanisms,
 			DcMotorEx launcherRight,
@@ -82,7 +82,7 @@ public class PairedLauncher extends Mechanism {
 	public boolean isBusy() {
 		return gateServo != null && gateServo.isBusy();
 	}
-
+	
 	/**
 	 * Readies the launcher to fire.
 	 * This spins up the belt and aims at the target.

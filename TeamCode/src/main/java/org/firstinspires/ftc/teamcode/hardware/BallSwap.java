@@ -10,14 +10,14 @@ public class BallSwap extends Mechanism {
 	private final MechanismManager mechanisms;
 	private SwapState state;
 	private Artifact heldArtifact = Artifact.NONE;
-
+	
 	public BallSwap(MechanismManager mechanisms,
 	                TimelockedServo swap) {
 		this.mechanisms = mechanisms;
 		this.servo = swap;
 		this.state = SwapState.UNKNOWN;
 	}
-
+	
 	public final void start() {
 		moveToHold();
 	}
@@ -68,7 +68,7 @@ public class BallSwap extends Mechanism {
 	public boolean hasHeldArtifact() {
 		return heldArtifact != null && heldArtifact.color != Artifact.Color.NONE;
 	}
-
+	
 	@Override
 	public void stop() {
 	}

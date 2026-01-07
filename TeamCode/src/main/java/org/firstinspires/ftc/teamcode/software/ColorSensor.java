@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode.software;
 
-import static org.firstinspires.ftc.teamcode.configuration.Settings.ColorSensor.CONFIDENCE_THRESHOLD;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.ColorSensor.GREEN_TARGET;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.ColorSensor.PURPLE_TARGET;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.ColorSensor.BLUE_THRESHOLD;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.ColorSensor.GREEN_THRESHOLD;
 
 import com.qualcomm.hardware.lynx.LynxI2cDeviceSynch;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
@@ -13,18 +12,15 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
  * A Decode-specific Color Sensor wrapper to accurately determine what artifact
  * type is in front of the sensor.
  * <p>
- * Uses RGB color distance calculations to classify artifacts as GREEN, PURPLE,
- * or UNKNOWN.
- * Color thresholds and confidence values can be tuned in Settings.ColorSensor.
+ * Uses normalized RGB values (each channel divided by average) to classify
+ * artifacts as GREEN, PURPLE, or NONE.
  * <p>
- * The sensor uses Euclidean distance in RGB space to determine the closest
- * match
- * to predefined color targets, with a confidence threshold to reject uncertain
- * readings.
+ * Normalization gives each channel a value around 1.0 for neutral colors,
+ * with dominant channels exceeding 1.0 proportionally.
  */
 public class ColorSensor {
 	private static final int RGB_COMPONENTS = 3;
-	private final double[] rgbValues = new double[RGB_COMPONENTS];
+	private final double[] normalizedRgb = new double[RGB_COMPONENTS];
 	private final RevColorSensorV3 colorSensor;
 	
 	public ColorSensor(RevColorSensorV3 colorSensorV3) {
@@ -41,21 +37,21 @@ public class ColorSensor {
 	}
 	
 	/**
-	 * Updates the data and checks if there is a desired object detected
+	 * Updates sensor readings and returns the detected artifact color.
+	 * <p>
+	 * Detection logic:
+	 * - If normalized green >= GREEN_THRESHOLD → GREEN
+	 * - Else if normalized blue >= BLUE_THRESHOLD → PURPLE
+	 * - Else → NONE
 	 *
 	 * @return detected artifact color
 	 */
 	public Artifact getArtifactColor() {
-		rgbValues[0] = colorSensor.red();
-		rgbValues[1] = colorSensor.green();
-		rgbValues[2] = colorSensor.blue();
+		updateNormalizedRgb();
 		
-		double greenConfidence = computeDistance(rgbValues, GREEN_TARGET);
-		double purpleConfidence = computeDistance(rgbValues, PURPLE_TARGET);
-		
-		if (greenConfidence < purpleConfidence && greenConfidence < CONFIDENCE_THRESHOLD) {
+		if (normalizedRgb[1] >= GREEN_THRESHOLD) {
 			return Artifact.GREEN;
-		} else if (purpleConfidence < greenConfidence && purpleConfidence < CONFIDENCE_THRESHOLD) {
+		} else if (normalizedRgb[2] >= BLUE_THRESHOLD) {
 			return Artifact.PURPLE;
 		} else {
 			return Artifact.NONE;
@@ -63,18 +59,36 @@ public class ColorSensor {
 	}
 	
 	/**
-	 * Calculates the Euclidean distance between measured RGB values and target RGB
-	 * values.
-	 * Lower distances indicate better color matches.
-	 *
-	 * @param measured The measured RGB values from the sensor
-	 * @param target   The target RGB values to compare against
-	 * @return The Euclidean distance between the two color points
+	 * Updates the normalized RGB values from the sensor.
+	 * Each channel is divided by the average of all channels (sum / 3),
+	 * resulting in values centered around 1.0.
 	 */
-	public double computeDistance(double[] measured, double[] target) {
-		double dr = measured[0] - target[0];
-		double dg = measured[1] - target[1];
-		double db = measured[2] - target[2];
-		return Math.sqrt(dr * dr + dg * dg + db * db);
+	private void updateNormalizedRgb() {
+		double r = colorSensor.red();
+		double g = colorSensor.green();
+		double b = colorSensor.blue();
+		double sum = r + g + b;
+		
+		if (sum > 0) {
+			normalizedRgb[0] = r / sum * 3;
+			normalizedRgb[1] = g / sum * 3;
+			normalizedRgb[2] = b / sum * 3;
+		} else {
+			normalizedRgb[0] = 0;
+			normalizedRgb[1] = 0;
+			normalizedRgb[2] = 0;
+		}
+	}
+	
+	/**
+	 * Returns the normalized RGB values from the last sensor reading.
+	 * Values are centered around 1.0, with dominant channels exceeding 1.0.
+	 * <p>
+	 * Index 0 = Red, Index 1 = Green, Index 2 = Blue
+	 *
+	 * @return array of normalized RGB values [R, G, B]
+	 */
+	public double[] getNormalizedRgb() {
+		return normalizedRgb;
 	}
 }

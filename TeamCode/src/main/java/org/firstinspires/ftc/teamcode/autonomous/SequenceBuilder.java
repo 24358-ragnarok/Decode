@@ -38,9 +38,9 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
  * </pre>
  */
 public class SequenceBuilder {
-
+	
 	private final AutonomousSequence sequence;
-
+	
 	/**
 	 * Creates a new sequence builder.
 	 */

@@ -20,13 +20,13 @@ import java.util.List;
  * - Graceful handling of action interruption
  */
 public class AutonomousSequence {
-
+	
 	public final Timer sequenceTimer;
 	private final List<AutonomousAction> actions;
+	private final Timer actionTimer;
 	private int currentActionIndex;
 	private boolean initialized;
-	private final Timer actionTimer;
-
+	
 	/**
 	 * Creates a new autonomous sequence.
 	 */
@@ -37,7 +37,7 @@ public class AutonomousSequence {
 		this.currentActionIndex = 0;
 		this.initialized = false;
 	}
-
+	
 	/**
 	 * Adds an action to the sequence.
 	 *
@@ -48,7 +48,7 @@ public class AutonomousSequence {
 		actions.add(action);
 		return this;
 	}
-
+	
 	/**
 	 * Adds multiple actions to the sequence.
 	 *
@@ -59,7 +59,7 @@ public class AutonomousSequence {
 		actions.addAll(Arrays.asList(actionsToAdd));
 		return this;
 	}
-
+	
 	/**
 	 * Starts the sequence. Must be called before update().
 	 *
@@ -109,12 +109,12 @@ public class AutonomousSequence {
 			// End the current action
 			boolean interrupted = actionTimedOut || globalTimeout || robotIsStuck;
 			currentAction.end(mechanisms, interrupted);
-
+			
 			// Move to the next action
 			currentActionIndex++;
 			sequenceTimer.resetTimer();
 			actionTimer.resetTimer();
-
+			
 			// Initialize the next action if it exists
 			if (currentActionIndex < actions.size()) {
 				actions.get(currentActionIndex).initialize(mechanisms);

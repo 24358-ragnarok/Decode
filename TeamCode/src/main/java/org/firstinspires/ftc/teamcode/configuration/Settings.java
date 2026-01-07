@@ -23,9 +23,9 @@ public class Settings {
 	public static class Robot {
 		public static final double WIDTH = 16.25;
 		public static final double LENGTH = 15.6;
-
+		
 	}
-
+	
 	/**
 	 * Maps controller inputs to robot actions for TeleOp.
 	 */
@@ -39,7 +39,7 @@ public class Settings {
 				Controller.Action.GOTO_PARK,
 				Controller.Action.GOTO_GATE
 		};
-
+		
 		static {
 			// Main Controller (Driver)
 			actionControlMap.put(Controller.Action.MOVE_Y, Controller.Control.LEFT_STICK_Y);
@@ -58,7 +58,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.CANCEL_ASSISTED_DRIVING, Controller.Control.RIGHT_STICK_BUTTON);
 			actionControlMap.put(Controller.Action.RESET_FOLLOWER, Controller.Control.BACK);
 			actionControlMap.put(Controller.Action.TOGGLE_CENTRICITY, Controller.Control.LEFT_STICK_BUTTON);
-
+			
 			// Secondary Controller (Operator)
 			actionControlMap.put(Controller.Action.AIM, Controller.Control.LEFT_TRIGGER);
 			actionControlMap.put(Controller.Action.LAUNCH, Controller.Control.RIGHT_TRIGGER);
@@ -75,7 +75,7 @@ public class Settings {
 			}
 		}
 	}
-
+	
 	/**
 	 * Hardware device name mapping.
 	 * Each HardwareConfig stores both the device type and string name,
@@ -89,24 +89,24 @@ public class Settings {
 		public static final HardwareConfig REAR_LEFT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearLeft");
 		public static final HardwareConfig REAR_RIGHT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearRight");
 		public static final HardwareConfig PINPOINT = new HardwareConfig(GoBildaPinpointDriver.class, "pinpoint");
-
+		
 		// Subsystem motors and servos
 		public static final HardwareConfig INTAKE_MOTOR = new HardwareConfig(DcMotorEx.class, "intake");
 		public static final HardwareConfig LAUNCHER_RIGHT = new HardwareConfig(DcMotorEx.class, "launcherRight");
 		public static final HardwareConfig LAUNCHER_LEFT = new HardwareConfig(DcMotorEx.class, "launcherLeft");
-
+		
 		public static final HardwareConfig LAUNCHER_PITCH_SERVO = new HardwareConfig(ServoImplEx.class,
 				"pitch");
 		public static final HardwareConfig LAUNCHER_GATE = new HardwareConfig(ServoImplEx.class,
 				"gate");
-
+		
 		// Transfer mechanism
 		public static final HardwareConfig TRANSFER_WHEEL_MOTOR = new HardwareConfig(DcMotorEx.class,
 				"transfer");
-
+		
 		public static final HardwareConfig SWAP = new HardwareConfig(ServoImplEx.class,
 				"swap");
-
+		
 		// Sensors
 		public static final String[] COLOR_RANGEFINDER_1 = {"crf1_0", "crf1_1"};
 		public static final String[] COLOR_RANGEFINDER_2 = {"crf2_0", "crf2_1"};
@@ -116,9 +116,9 @@ public class Settings {
 				"colorRight");
 		public static final HardwareConfig CONFIGURE_COLOR_SENSOR = new HardwareConfig(
 				RevColorSensorV3.class, "colorSensorConfigure");
-
+		
 		public static final HardwareConfig LIMELIGHT = new HardwareConfig(Limelight3A.class, "limelight");
-
+		
 		/**
 		 * Static method to retrieve hardware from a HardwareMap.
 		 * Allows usage like: Settings.Hardware.get(FRONT_LEFT_MOTOR, hw)
@@ -132,7 +132,7 @@ public class Settings {
 			return config.fromHardwareMap(hardwareMap);
 		}
 	}
-
+	
 	/**
 	 * Settings for the Intake mechanism.
 	 */
@@ -144,7 +144,7 @@ public class Settings {
 		public static double STOPPED_SPEED = 0.0;
 		public static long COLOR_SENSOR_DEBOUNCE_TIME_MS = 200;
 	}
-
+	
 	/**
 	 * Settings for the main transfer wheel.
 	 * <p>
@@ -300,10 +300,9 @@ public class Settings {
 		// Maximum detection distance (objects must be within this range)
 		public static double MAX_DETECTION_DISTANCE_MM = 20.0; // millimeters
 		
-		// LEGACY
-		public static double[] GREEN_TARGET = {70, 200, 150};
-		public static double[] PURPLE_TARGET = {120, 150, 220};
-		public static double CONFIDENCE_THRESHOLD = 60.0; // Acceptable distance threshold
+		// Normalized RGB thresholds (values centered around 1.0)
+		public static double GREEN_THRESHOLD = 1.4; // Normalized green channel threshold for GREEN detection
+		public static double BLUE_THRESHOLD = 1.2; // Normalized blue channel threshold for PURPLE detection
 	}
 	
 	@Configurable
@@ -478,7 +477,7 @@ public class Settings {
 		public static double GRABBING_POS = 0.547;
 		public static double HOLDING_POS = 0.834;
 		public static long COOLDOWN_MS = 500;
-
+		
 	}
 	
 	public static class Autonomous {
@@ -487,7 +486,7 @@ public class Settings {
 		public static double LAUNCH_EXIT_TIME_MS = 400;
 		public static double MAX_ACTION_TIME_S = 10.0;
 		public static double SEARCH_TIMEOUT_MS = 1000; // Time to search before assuming empty
-
+		
 		/**
 		 * Per-action timeout configuration.
 		 * Each action type can have its own timeout (in seconds).

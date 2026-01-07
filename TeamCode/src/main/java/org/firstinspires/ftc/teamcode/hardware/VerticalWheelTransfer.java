@@ -40,7 +40,7 @@ public class VerticalWheelTransfer extends Mechanism {
 		motor.setTargetPositionTolerance(POSITION_TOLERANCE);
 		this.targetTicks = motor.getCurrentPosition();
 	}
-
+	
 	@Override
 	public void start() {
 	}

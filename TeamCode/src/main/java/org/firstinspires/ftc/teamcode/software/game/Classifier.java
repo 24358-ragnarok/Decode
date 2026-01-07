@@ -14,7 +14,7 @@ public class Classifier {
 	private final Motif motif;
 	private final Artifact[] state; // Fixed size of 9 balls max
 	private int ballCount; // Tracks the number of balls currently stored (and the next available index)
-
+	
 	/**
 	 * Initializes the Classifier with a determined Motif and an initial set of
 	 * Artifacts.
@@ -27,7 +27,7 @@ public class Classifier {
 		this.motif = classifierMotif;
 		this.state = new Artifact[MAX_CAPACITY];
 		this.ballCount = 0;
-
+		
 		// 1. Copy initial artifacts, respecting the MAX_CAPACITY limit
 		if (initial != null) {
 			int toCopy = Math.min(initial.length, MAX_CAPACITY);
@@ -43,14 +43,14 @@ public class Classifier {
 			this.state[i] = Artifact.NONE;
 		}
 	}
-
+	
 	/**
 	 * build a classifier with an known motif and default empty state
 	 **/
 	public Classifier(Motif classifierMotif) {
 		this(classifierMotif, new Artifact[0]);
 	}
-
+	
 	/**
 	 * Factory method to create an empty Classifier for initial use.
 	 * Initializes with an UNKNOWN motif and zero balls stored.
@@ -76,7 +76,7 @@ public class Classifier {
 	 *
 	 * @param ball The Artifact to add (e.g., Artifact.GREEN or Artifact.PURPLE).
 	 * @return true if the ball was successfully added, false if the capacity is
-	 *         full.
+	 * full.
 	 */
 	public boolean addBall(Artifact ball) {
 		if (ballCount < MAX_CAPACITY) {
@@ -99,7 +99,7 @@ public class Classifier {
 	 * Gets the current array of stored artifacts (balls).
 	 *
 	 * @return The full 9-element array. Check getBallCount() to know how many are
-	 *         active.
+	 * active.
 	 */
 	public Artifact[] getState() {
 		// Returning a defensive copy is usually best practice, but for FTC
@@ -133,7 +133,7 @@ public class Classifier {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Classifier Motif: ").append(motif.toString()).append("\n");
 		sb.append("Stored Balls (").append(ballCount).append("/").append(MAX_CAPACITY).append("): [");
-
+		
 		for (int i = 0; i < ballCount; i++) {
 			sb.append(state[i].color.name().charAt(0));
 			if (i < ballCount - 1) {

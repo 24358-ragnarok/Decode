@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.hardware.TimelockedServo;
 public class HardwareConfig {
 	private final Class<?> deviceType;
 	private final String deviceName;
-
+	
 	/**
 	 * Creates a new HardwareConfig with the specified device type and name.
 	 *

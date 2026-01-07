@@ -32,7 +32,7 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
 @Photon
 @Autonomous(name = "Run: The Boonstra Special", group = ".Competition", preselectTeleOp = "Run: RAGNAROK")
 public class MainAuto extends OpMode {
-
+	
 	private final StringBuilder transferSlotsDisplayBuilder = new StringBuilder();
 	private Timer opmodeTimer;
 	private MatchConfigurationWizard wizard;

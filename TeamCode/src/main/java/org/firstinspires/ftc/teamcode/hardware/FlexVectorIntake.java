@@ -16,7 +16,7 @@ public class FlexVectorIntake extends Mechanism {
 	private final DcMotorEx motor;
 	private final MechanismManager mechanisms;
 	public IntakeState state;
-
+	
 	/**
 	 * Creates a new FlexVectorIntake instance.
 	 *
@@ -27,7 +27,7 @@ public class FlexVectorIntake extends Mechanism {
 		this.motor = intakeMotor;
 		this.state = IntakeState.STOPPED;
 	}
-
+	
 	/**
 	 * Starts the intake motor to pull artifacts in.
 	 */

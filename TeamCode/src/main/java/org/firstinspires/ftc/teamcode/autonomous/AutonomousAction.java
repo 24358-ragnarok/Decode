@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
  * - Reusability across different autonomous modes
  */
 public interface AutonomousAction {
-
+	
 	/**
 	 * Called once when the action starts.
 	 * Use this to initialize motors, set initial states, start timers, etc.
