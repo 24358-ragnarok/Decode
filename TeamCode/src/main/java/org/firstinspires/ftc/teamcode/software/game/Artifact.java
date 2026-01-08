@@ -17,7 +17,7 @@ public class Artifact {
 	// Tracks if this artifact is currently being held by the swap mechanism.
 	public boolean beingSwapped;
 	
-	// Default constructor for an empty artifact
+	// Reset constructor for an empty artifact
 	public Artifact() {
 		this.color = Color.NONE;
 		this.transferTicksWhenAtEntrance = 0;

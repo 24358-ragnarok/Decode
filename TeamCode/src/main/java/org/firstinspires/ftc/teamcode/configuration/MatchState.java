@@ -238,7 +238,7 @@ public class MatchState {
 		
 		// Fall back to predefined poses if actual pose is unavailable
 		// Get BLUE pose (our reference)
-		Pose bluePose = Settings.Positions.Default.RESET;
+		Pose bluePose = Settings.Positions.Reset.HUMAN_PLAYER_ZONE;
 		
 		// Mirror for RED alliance
 		if (allianceColor == AllianceColor.RED) {

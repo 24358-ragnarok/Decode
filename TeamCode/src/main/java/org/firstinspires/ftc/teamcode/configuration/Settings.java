@@ -56,7 +56,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.GOTO_PARK, Controller.Control.SQUARE);
 			actionControlMap.put(Controller.Action.GOTO_GATE, Controller.Control.CIRCLE);
 			actionControlMap.put(Controller.Action.CANCEL_ASSISTED_DRIVING, Controller.Control.RIGHT_STICK_BUTTON);
-			actionControlMap.put(Controller.Action.RESET_FOLLOWER, Controller.Control.BACK);
+			actionControlMap.put(Controller.Action.SET_FOLLOWER, Controller.Control.PS);
 			actionControlMap.put(Controller.Action.TOGGLE_CENTRICITY, Controller.Control.LEFT_STICK_BUTTON);
 			
 			// Secondary Controller (Operator)
@@ -353,13 +353,12 @@ public class Settings {
 	public static class Positions {
 		
 		/**
-		 * Default/reset positions.
+		 * Reset/reset positions.
 		 */
-		public static class Default {
-			public static final Pose RESET = new Pose(144 - (Robot.WIDTH / 2), Robot.LENGTH / 2, Math.toRadians(90));
-			public static final Pose FAR_SAFE_PARK_POSE = new Pose(35.86206896551724, 12.505747126436786,
-					Math.toRadians(90));
-			public static final Pose CLOSE_SAFE_PARK_POSE = new Pose(48, 130, Math.toRadians(90));
+		public static class Reset {
+			public static final Pose HUMAN_PLAYER_ZONE = new Pose(144 - (Robot.WIDTH / 2), Robot.LENGTH / 2, Math.toRadians(90));
+			public static final Pose FAR_ZONE = new Pose(59.00, Robot.LENGTH / 2, Math.toRadians(90));
+			public static final Pose CLOSE_ZONE = new Pose(34, 144 - (Robot.LENGTH / 2), Math.toRadians(90));
 		}
 		
 		/**
@@ -452,6 +451,9 @@ public class Settings {
 		public static class Park {
 			public static final Pose FAR = Samples.Preset1.GRAB_1; // Reuse a safe position
 			public static final Pose CLOSE = Samples.Preset3.GRAB_1;
+			public static final Pose FAR_SAFE_PARK_POSE = new Pose(35.86206896551724, 12.505747126436786,
+					Math.toRadians(90));
+			public static final Pose CLOSE_SAFE_PARK_POSE = new Pose(48, 130, Math.toRadians(90));
 		}
 		
 	}

@@ -243,6 +243,8 @@ public class Controller extends Gamepad {
 				return gamepad.touchpad_finger_1_x;
 			case TOUCHPAD_Y:
 				return gamepad.touchpad_finger_1_y;
+			case PS:
+				return gamepad.ps ? 1 : 0;
 			default:
 				return 0;
 		}
@@ -267,7 +269,7 @@ public class Controller extends Gamepad {
 		SLOW_RIGHT,
 		SLOW_BACKWARD,
 		TOGGLE_CENTRICITY,
-		RESET_FOLLOWER,
+		SET_FOLLOWER,
 		GOTO_CLOSE_SHOOT,
 		GOTO_FAR_SHOOT,
 		GOTO_PARK,
@@ -307,6 +309,7 @@ public class Controller extends Gamepad {
 		LEFT_TRIGGER, RIGHT_TRIGGER,
 		LEFT_STICK_X, LEFT_STICK_Y,
 		RIGHT_STICK_X, RIGHT_STICK_Y,
+		PS,
 		
 		UNKNOWN
 	}

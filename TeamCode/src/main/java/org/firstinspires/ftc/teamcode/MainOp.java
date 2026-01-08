@@ -163,25 +163,40 @@ public class MainOp extends OpMode {
 				drivetrain.toggleCentricity();
 			}
 			
-			if (mainController.wasJustPressed(Controller.Action.RESET_FOLLOWER)) {
-				drivetrain.follower.setPose(
-						(MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE)
-								? Settings.Positions.Default.RESET
-								: Settings.Field.mirrorPose(Settings.Positions.Default.RESET));
-			}
-			
 			drivetrain.manual(d, s, r);
 			
-			final double startValue = mainController.getProcessedValue(Controller.Control.START);
-			for (Controller.Action action : Settings.Controls.gotoActions) {
-				if (mainController.wasJustPressed(action) && startValue <= 0.0) {
-					drivetrain.goTo(action);
-					// Stop intake when going to park
-					if (drivetrain.actionToPosition(action) == Drivetrain.Position.PARK && transfer != null) {
-						transfer.freeze();
+			if (mainController.getProcessedValue(Controller.Action.SET_FOLLOWER) > 0.5) {
+				if (mainController.wasJustPressed(Controller.Action.GOTO_GATE)) {
+					drivetrain.follower.setPose(
+							(MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE)
+									? Settings.Positions.Reset.HUMAN_PLAYER_ZONE
+									: Settings.Field.mirrorPose(Settings.Positions.Reset.HUMAN_PLAYER_ZONE));
+				}
+				if (mainController.wasJustPressed(Controller.Action.GOTO_CLOSE_SHOOT)) {
+					drivetrain.follower.setPose(
+							(MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE)
+									? Settings.Positions.Reset.CLOSE_ZONE
+									: Settings.Field.mirrorPose(Settings.Positions.Reset.CLOSE_ZONE));
+				}
+				if (mainController.wasJustPressed(Controller.Action.GOTO_FAR_SHOOT)) {
+					drivetrain.follower.setPose(
+							(MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE)
+									? Settings.Positions.Reset.FAR_ZONE
+									: Settings.Field.mirrorPose(Settings.Positions.Reset.FAR_ZONE));
+				}
+			} else {
+				
+				final double startValue = mainController.getProcessedValue(Controller.Control.START);
+				for (Controller.Action action : Settings.Controls.gotoActions) {
+					if (mainController.wasJustPressed(action) && startValue <= 0.0) {
+						drivetrain.goTo(action);
+						// Stop intake when going to park
+						if (drivetrain.actionToPosition(action) == Drivetrain.Position.PARK && transfer != null) {
+							transfer.freeze();
+						}
+					} else if (mainController.wasJustReleased(action)) {
+						drivetrain.switchToManual();
 					}
-				} else if (mainController.wasJustReleased(action)) {
-					drivetrain.switchToManual();
 				}
 			}
 		}

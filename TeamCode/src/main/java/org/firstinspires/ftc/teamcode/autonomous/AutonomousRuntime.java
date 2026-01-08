@@ -112,7 +112,7 @@ public enum AutonomousRuntime {
 	},
 	
 	/**
-	 * Default runtime: Launch preloads, collect 2 sets of balls, launch them, then
+	 * Reset runtime: Launch preloads, collect 2 sets of balls, launch them, then
 	 * park.
 	 * This is the "safe" competition runtime.
 	 */
@@ -230,8 +230,8 @@ public enum AutonomousRuntime {
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
 					.launch()
 					
-					.moveTo(Settings.Positions.Default.FAR_SAFE_PARK_POSE, "Park")
-					.endAt(Settings.Positions.Default.FAR_SAFE_PARK_POSE)
+					.moveTo(Settings.Positions.Park.FAR_SAFE_PARK_POSE, "Park")
+					.endAt(Settings.Positions.Park.FAR_SAFE_PARK_POSE)
 					.build();
 		}
 		
@@ -243,8 +243,8 @@ public enum AutonomousRuntime {
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
 					.launch()
 					
-					.moveTo(Settings.Positions.Default.CLOSE_SAFE_PARK_POSE, "Park")
-					.endAt(Settings.Positions.Default.CLOSE_SAFE_PARK_POSE)
+					.moveTo(Settings.Positions.Park.CLOSE_SAFE_PARK_POSE, "Park")
+					.endAt(Settings.Positions.Park.CLOSE_SAFE_PARK_POSE)
 					.build();
 		}
 	},

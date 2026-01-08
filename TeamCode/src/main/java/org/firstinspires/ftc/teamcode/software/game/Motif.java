@@ -12,7 +12,7 @@ public class Motif {
 	public static final Motif GPP = new Motif(new Artifact[]{Artifact.GREEN, Artifact.PURPLE, Artifact.PURPLE});
 	public static final Motif PGP = new Motif(new Artifact[]{Artifact.PURPLE, Artifact.GREEN, Artifact.PURPLE});
 	public static final Motif PPG = new Motif(new Artifact[]{Artifact.PURPLE, Artifact.PURPLE, Artifact.GREEN});
-	// An Unknown/Default motif for cases where detection fails or is irrelevant
+	// An Unknown/Reset motif for cases where detection fails or is irrelevant
 	public static final Motif UNKNOWN = new Motif(new Artifact[]{Artifact.NONE, Artifact.NONE, Artifact.NONE});
 	public final Artifact[] state;
 	

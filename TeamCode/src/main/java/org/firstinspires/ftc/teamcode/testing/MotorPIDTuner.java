@@ -288,7 +288,7 @@ public class MotorPIDTuner extends OpMode {
 		// Ensure motor is in position mode
 		if (current.motor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
 			current.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-			current.motor.setPower(0.5); // Default power for position mode
+			current.motor.setPower(0.5); // Reset power for position mode
 		}
 		
 		// Hold buttons for continuous movement (increment on each loop iteration)
