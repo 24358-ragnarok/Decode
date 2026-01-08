@@ -384,7 +384,7 @@ public class Settings {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 99, Math.toRadians(140.59));
 			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(114));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
-			public static final Pose GATE = new Pose(25, 68, Math.toRadians(0));
+			public static final Pose GATE = new Pose(25, 68, Math.toRadians(270));
 			public static final Pose PARK = new Pose(106, 32, Math.toRadians(0));
 		}
 		
