@@ -253,6 +253,7 @@ public class SortedLaunchAction implements AutonomousAction {
 	private void finishLaunch() {
 		if (launcher != null) {
 			launcher.stop();
+			swap.moveToHold();
 			launcher.close();
 		}
 	}
