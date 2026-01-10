@@ -382,10 +382,11 @@ public class Settings {
 		 */
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 99, Math.toRadians(140.59));
+			public static final Pose SORTED_SHOOT= new Pose(58, 99, Math.toRadians(150.59));
 			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(114));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
-			public static final Pose GATE = new Pose(25, 68, Math.toRadians(270));
-			public static final Pose PARK = new Pose(106, 32, Math.toRadians(0));
+			public static final Pose GATE = new Pose(25, 73, Math.toRadians(270));
+			public static final Pose PARK = new Pose(106, 32, Math.toRadians(180));
 		}
 		
 		/**
@@ -393,7 +394,7 @@ public class Settings {
 		 */
 		public static class AutoStart {
 			public static final Pose FAR = new Pose(59.00, Robot.LENGTH / 2, Math.toRadians(90));
-			public static final Pose CLOSE = new Pose(38.00, 144 - (Robot.LENGTH / 2), Math.toRadians(90));
+			public static final Pose CLOSE = new Pose(21.84, 124.58, Math.toRadians(145));
 		}
 		
 		/**
@@ -428,7 +429,7 @@ public class Settings {
 				public static final Pose PREP = new Pose(44, 84, Math.toRadians(180));
 				public static final Pose GRAB_1 = new Pose(36.0, 84, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 84, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 84, Math.toRadians(180));
+				public static final Pose END = new Pose(15, 84, Math.toRadians(180));
 			}
 		}
 		
@@ -442,6 +443,8 @@ public class Settings {
 			public static final Pose PRESET_2_APPROACH_FAR = new Pose(65, 59);
 			
 			public static final Pose FROM_PRESET3_TO_CLOSE = new Pose(41, 81);
+			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2 = new Pose(41, 59);
+			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3 = new Pose(96, 81);
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
 		}
 		
@@ -450,7 +453,7 @@ public class Settings {
 		 */
 		public static class Park {
 			public static final Pose FAR = Samples.Preset1.GRAB_1; // Reuse a safe position
-			public static final Pose CLOSE = Samples.Preset3.GRAB_1;
+			public static final Pose CLOSE = new Pose(30, 73, Math.toRadians(270));
 			public static final Pose FAR_SAFE_PARK_POSE = new Pose(35.86206896551724, 12.505747126436786,
 					Math.toRadians(90));
 			public static final Pose CLOSE_SAFE_PARK_POSE = new Pose(48, 130, Math.toRadians(90));

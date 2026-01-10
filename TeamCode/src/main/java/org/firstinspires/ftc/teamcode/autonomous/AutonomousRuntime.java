@@ -74,7 +74,7 @@ public enum AutonomousRuntime {
 					
 					// Launch preload (sorted)
 					.prepLaunch()
-					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
+					.moveTo(Settings.Positions.TeleOp.SORTED_SHOOT, "Launch Preload")
 					.sortedLaunch()
 					
 					// Get ball set I (Preset3 for close sequence)
@@ -272,6 +272,106 @@ public enum AutonomousRuntime {
 					.build();
 		}
 	},
+	DeepakVersion("Classic 9 Ball sort 1st set") {
+		@Override
+		public AutonomousSequence buildFarSequence() {
+			return new SequenceBuilder()
+					
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
+					.launch()
+					
+					// Get ball set I
+					.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
+							"Prep Preset 1",
+							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR)
+					.startPickup()
+					.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_1, "Grab Preset 1 Ball 1")
+					.moveSlowlyTo(Settings.Positions.Samples.Preset1.GRAB_2, "Grab Preset 1 Ball 2")
+					.moveSlowlyTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
+					// .endPickup()
+					
+					// Launch ball set I
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
+							Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
+					.launch()
+					
+					// Get ball set II
+					.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
+							"Prep Preset2",
+							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
+					.startPickup()
+					.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_1, "Grab1 Preset2")
+					
+					.moveSlowlyTo(Settings.Positions.Samples.Preset2.GRAB_2, "Grab2 Preset2")
+					
+					.moveSlowlyTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
+					
+					// .endPickup()
+					
+					// Launch ball set II
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preset2")
+					
+					.launch()
+					
+					// Park
+					.endPickup()
+					.moveTo(Settings.Positions.Park.FAR, "Park")
+					.endAt(Settings.Positions.Park.FAR)
+					.build();
+		}
+		
+		@Override
+		public AutonomousSequence buildCloseSequence() {
+			return new SequenceBuilder()
+					// Scan from close pose
+					
+					.prepLaunch()
+					.moveTo(Settings.Positions.Towers.CLOSE_SCAN, "Scan (Close)")
+					.scanObelisk()
+					
+					// Launch preload (sorted)
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.SORTED_SHOOT, "Launch Preload")
+					.sortedLaunch()
+					
+					// Get ball set I (Preset3 for close sequence)
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.Preset3.END,
+							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3, "pick up Preset3")
+					
+					// .endPickup()
+					
+					// Launch ball set I
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+							Settings.Positions.ControlPoints.FROM_PRESET3_TO_CLOSE, "Launch Preset3")
+					
+					.launch()
+					
+					// Get ball set II (Preset2 for close sequence)
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.Preset2.END,
+							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2, "pick up Preset2")
+					
+					// .endPickup()
+					
+					// Launch ball set II
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+							Settings.Positions.ControlPoints.FROM_PRESET2_TO_CLOSE, "Launch Preset2")
+					
+					.launch()
+					
+					// Park
+					.endPickup()
+					.moveTo(Settings.Positions.Park.CLOSE, "Park")
+					.endAt(Settings.Positions.Park.CLOSE)
+					.build();
+		}
+	}
 	;
 	
 	private final String displayName;
