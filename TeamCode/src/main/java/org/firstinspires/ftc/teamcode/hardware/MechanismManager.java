@@ -60,7 +60,8 @@ public class MechanismManager {
 		TrajectoryEngine traj = createTrajectory();
 		PairedLauncher launcher = createLauncher();
 		BallSwap swap = createSwap();
-		mechanismArray = new Mechanism[]{intake, transfer, launcher, swap};
+		Lever lever = createLever();
+		mechanismArray = new Mechanism[]{intake, transfer, launcher, swap, lever};
 		
 		// Save helpers
 		limelightManager = ll;
@@ -213,6 +214,15 @@ public class MechanismManager {
 		}
 		TimelockedServo swap = Settings.Hardware.SWAP.asTimelockedServo(hardwareMap, Settings.Swap.COOLDOWN_MS);
 		return new BallSwap(this, swap);
+	}
+	
+	private Lever createLever() {
+		if (!Settings.Deploy.LEVER) {
+			return null;
+		}
+		ServoImplEx l = Settings.Hardware.EXTENDER_LEFT.fromHardwareMap(hardwareMap);
+		ServoImplEx r = Settings.Hardware.EXTENDER_RIGHT.fromHardwareMap(hardwareMap);
+		return new Lever(l, r);
 	}
 	
 	/**

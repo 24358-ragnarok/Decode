@@ -70,6 +70,8 @@ public class Settings {
 			actionControlMap.put(Controller.Action.OVERRIDE_BALL_DETECTION, Controller.Control.DPAD_LEFT);
 			actionControlMap.put(Controller.Action.OVERRIDE_CLEAR, Controller.Control.DPAD_RIGHT);
 			actionControlMap.put(Controller.Action.TRANSFER_REVERSE, Controller.Control.DPAD_DOWN);
+			actionControlMap.put(Controller.Action.PARK_EXTEND_1, Controller.Control.START);
+			actionControlMap.put(Controller.Action.PARK_EXTEND_2, Controller.Control.BACK);
 			for (Controller.Action action : Controller.Action.values()) {
 				actionControlMap.putIfAbsent(action, Controller.Control.UNKNOWN);
 			}
@@ -106,6 +108,11 @@ public class Settings {
 		
 		public static final HardwareConfig SWAP = new HardwareConfig(ServoImplEx.class,
 				"swap");
+		
+		public static final HardwareConfig EXTENDER_LEFT = new HardwareConfig(ServoImplEx.class,
+				"extenderLeft");
+		public static final HardwareConfig EXTENDER_RIGHT = new HardwareConfig(ServoImplEx.class,
+				"extenderRight");
 		
 		// Sensors
 		public static final String[] COLOR_RANGEFINDER_1 = {"crf1_0", "crf1_1"};
@@ -170,6 +177,14 @@ public class Settings {
 		// Motion Profile Position Controller Gains
 		public static double TRANSFER_MOTOR_SPINUP_MS = 100;
 		public static int POSITION_TOLERANCE = 20; // Acceptable position error (ticks)
+	}
+	
+	@Configurable
+	public static class Lever {
+		public static double RIGHT_SERVO_DEPLOY_POS = 0.5;
+		public static double RIGHT_SERVO_RETRACTED_POS = 0.0;
+		public static double LEFT_SERVO_DEPLOY_POS = 0.5;
+		public static double LEFT_SERVO_RETRACTED_POS = 0.0;
 	}
 	
 	/**
@@ -476,6 +491,7 @@ public class Settings {
 		public static boolean LAUNCHER = TRAJECTORY_ENGINE && true;
 		
 		public static boolean SWAP = true;
+		public static boolean LEVER = true;
 	}
 	
 	public static class Swap {

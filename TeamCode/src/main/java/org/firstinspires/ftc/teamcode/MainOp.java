@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.configuration.UnifiedLogging;
 import org.firstinspires.ftc.teamcode.hardware.BallSwap;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.FlexVectorIntake;
+import org.firstinspires.ftc.teamcode.hardware.Lever;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
 import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
@@ -40,6 +41,7 @@ public class MainOp extends OpMode {
 	private FlexVectorIntake intake;
 	private PairedLauncher launcher;
 	private BallSwap swap;
+	private Lever lever;
 	private Timer speedTimer;
 	private double speedms = 0;
 	
@@ -59,6 +61,8 @@ public class MainOp extends OpMode {
 		intake = mechanisms.get(FlexVectorIntake.class);
 		launcher = mechanisms.get(PairedLauncher.class);
 		swap = mechanisms.get(BallSwap.class);
+		lever = mechanisms.get(Lever.class);
+		
 		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower,
 				PanelsGamepad.INSTANCE.getFirstManager());
 		subController = new Controller(gamepad2, mechanisms.drivetrain.follower,
@@ -152,6 +156,7 @@ public class MainOp extends OpMode {
 		final FlexVectorIntake intake = this.intake;
 		final PairedLauncher launcher = this.launcher;
 		final BallSwap swap = this.swap;
+		final Lever lever = this.lever;
 		
 		// Drivetrain
 		double d = mainController.getProcessedDrive();
@@ -259,6 +264,16 @@ public class MainOp extends OpMode {
 				swap.moveToHold();
 			}
 		}
+		
+		if (lever != null) {
+			if (mainController.getProcessedValue(Controller.Action.PARK_EXTEND_1) > 0.5 &&
+					mainController.getProcessedValue(Controller.Action.PARK_EXTEND_2) > 0.5) {
+				lever.extend();
+			} else if (lever.isExtended() && mainController.wasJustPressed(Controller.Action.PARK_EXTEND_1)) {
+				lever.retract();
+			}
+		}
+		
 	}
 	
 	/**
