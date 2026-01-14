@@ -45,6 +45,5 @@ public class Lever extends Mechanism {
 	enum ParkState {
 		RETRACTED,
 		EXTENDED
-		
 	}
 }

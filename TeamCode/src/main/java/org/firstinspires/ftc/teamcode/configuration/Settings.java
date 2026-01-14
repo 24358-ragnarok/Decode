@@ -70,7 +70,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.OVERRIDE_BALL_DETECTION, Controller.Control.DPAD_LEFT);
 			actionControlMap.put(Controller.Action.OVERRIDE_CLEAR, Controller.Control.DPAD_RIGHT);
 			actionControlMap.put(Controller.Action.TRANSFER_REVERSE, Controller.Control.DPAD_DOWN);
-			actionControlMap.put(Controller.Action.PARK_EXTEND_1, Controller.Control.START);
+			actionControlMap.put(Controller.Action.PARK_EXTEND_1, Controller.Control.OPTIONS);
 			actionControlMap.put(Controller.Action.PARK_EXTEND_2, Controller.Control.BACK);
 			for (Controller.Action action : Controller.Action.values()) {
 				actionControlMap.putIfAbsent(action, Controller.Control.UNKNOWN);
@@ -146,7 +146,7 @@ public class Settings {
 	@Configurable
 	public static class Intake {
 		public static double IN_SPEED = 1.0;
-		public static double CRAWL_SPEED = 0.5;
+		public static double CRAWL_SPEED = 0.8;
 		public static double OUT_SPEED = -1.0;
 		public static double STOPPED_SPEED = 0.0;
 		public static long COLOR_SENSOR_DEBOUNCE_TIME_MS = 200;
@@ -181,9 +181,9 @@ public class Settings {
 	
 	@Configurable
 	public static class Lever {
-		public static double RIGHT_SERVO_DEPLOY_POS = 0.5;
+		public static double RIGHT_SERVO_DEPLOY_POS = 0.279;
 		public static double RIGHT_SERVO_RETRACTED_POS = 0.0;
-		public static double LEFT_SERVO_DEPLOY_POS = 0.5;
+		public static double LEFT_SERVO_DEPLOY_POS = 0.176;
 		public static double LEFT_SERVO_RETRACTED_POS = 0.0;
 	}
 	
@@ -326,8 +326,8 @@ public class Settings {
 		 * Preset launch angles and RPM for each shooting position.
 		 * These values are used when AIM is called based on which position is closer.
 		 */
-		public static double CLOSE_SHOOT_PITCH_DEGREES = 42.0; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2925; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_PITCH_DEGREES = 39.5; // Launch angle from horizontal for close position
+		public static double CLOSE_SHOOT_RPM = 2595; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 39.5; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 3670; // Wheel RPM for far position

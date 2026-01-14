@@ -191,7 +191,7 @@ public class MainOp extends OpMode {
 				}
 			} else {
 				
-				final double startValue = mainController.getProcessedValue(Controller.Control.START);
+				final double startValue = mainController.getProcessedValue(Controller.Control.OPTIONS);
 				for (Controller.Action action : Settings.Controls.gotoActions) {
 					if (mainController.wasJustPressed(action) && startValue <= 0.0) {
 						drivetrain.goTo(action);
@@ -265,6 +265,8 @@ public class MainOp extends OpMode {
 			}
 		}
 		
+		logging.addData("1", mainController.getProcessedValue(Controller.Action.PARK_EXTEND_1));
+		logging.addData("2", mainController.getProcessedValue(Controller.Action.PARK_EXTEND_2));
 		if (lever != null) {
 			if (mainController.getProcessedValue(Controller.Action.PARK_EXTEND_1) > 0.5 &&
 					mainController.getProcessedValue(Controller.Action.PARK_EXTEND_2) > 0.5) {

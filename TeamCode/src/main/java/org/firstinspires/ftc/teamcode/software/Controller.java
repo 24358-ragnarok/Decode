@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
  */
 public class Controller extends Gamepad {
 	private static final Control[] CONTROL_VALUES = Control.values();
-	private final Gamepad physical;
+	public final Gamepad physical;
 	private final GamepadManager panelsManager;
 	private final double[] previousControlState;
 	private final Follower follower;
@@ -207,8 +207,6 @@ public class Controller extends Gamepad {
 				return gamepad.right_stick_y;
 			case BACK:
 				return gamepad.back ? 1 : 0;
-			case START:
-				return gamepad.start ? 1 : 0;
 			case CIRCLE:
 				return gamepad.circle ? 1 : 0;
 			case CROSS:
@@ -301,7 +299,7 @@ public class Controller extends Gamepad {
 		TRIANGLE, CIRCLE, CROSS, SQUARE,
 		DPAD_UP, DPAD_DOWN, DPAD_LEFT, DPAD_RIGHT,
 		LEFT_BUMPER, RIGHT_BUMPER,
-		START, BACK, GUIDE, OPTIONS,
+		OPTIONS, BACK, GUIDE,
 		LEFT_STICK_BUTTON, RIGHT_STICK_BUTTON,
 		TOUCHPAD, TOUCHPAD_X, TOUCHPAD_Y,
 		
