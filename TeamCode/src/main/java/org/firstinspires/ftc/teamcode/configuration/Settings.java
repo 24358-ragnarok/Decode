@@ -410,14 +410,15 @@ public class Settings {
 		 */
 		public static class AutoStart {
 			public static final Pose FAR = new Pose(59.00, Robot.LENGTH / 2, Math.toRadians(90));
-			public static final Pose CLOSE = new Pose(21.84, 124.58, Math.toRadians(145));
+			public static final Pose CLOSE = new Pose(26, 124, Math.toRadians(145));
 		}
 		
 		/**
 		 * Sample pickup locations organized by preset groups.
 		 */
 		public static class Samples {
-			
+			public static Pose EAT = new Pose(16, 30, Math.toRadians(115));
+			public static Pose EAT_END = new Pose(16, 55, Math.toRadians(115));
 			/**
 			 * First preset group (closest to wall).
 			 */
@@ -467,6 +468,7 @@ public class Settings {
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2 = new Pose(41, 59);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3 = new Pose(96, 81);
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
+			public static Pose EAT = new Pose(17, 20);
 		}
 		
 		/**
@@ -513,7 +515,7 @@ public class Settings {
 		 */
 		public static double AUTO_PERIOD_SECONDS = 30.0;
 		
-		public static double SLOW_SPEED = 0.6;
+		public static double SLOW_SPEED = 0.4;
 		public static double LAUNCH_EXIT_TIME_MS = 200;
 		public static double KRAKATOA_TIME_MS = 1500;
 		public static double MAX_ACTION_TIME_S = 10.0;

@@ -31,7 +31,7 @@ public enum AutonomousRuntime {
 							"Prep Preset 1",
 							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR)
 					.startPickup()
-					
+
 					.moveTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
 
 					// Launch ball set I (sorted)
@@ -231,15 +231,23 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
 					.KRAKATOA()
 					
+					.moveTo(Settings.Positions.Samples.HumanPlayerPreset.PREP,
+							"Prep Human Player")
+					.startPickup()
+					.moveSlowlyTo(Settings.Positions.Samples.HumanPlayerPreset.END,
+							"End Human Player")
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch HP Balls")
+					.KRAKATOA()
+					
 					// Loop: Get balls from HP and launch until 5 seconds left
 					.loopUntilSecondsLeft(5, loop -> loop
-							.moveSlowlyTo(Settings.Positions.Samples.HumanPlayerPreset.PREP,
-									"Prep Human Player")
 							.startPickup()
-							.moveSlowlyTo(Settings.Positions.Samples.HumanPlayerPreset.END,
-									"End Human Player")
+							.moveCurveToVia(Settings.Positions.Samples.EAT,
+									Settings.Positions.ControlPoints.EAT, "EAT")
+							.moveSlowlyTo(Settings.Positions.Samples.EAT_END)
 							.prepLaunch()
-							.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch HP Balls")
+							.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Eat")
 							.KRAKATOA())
 					
 					// Park

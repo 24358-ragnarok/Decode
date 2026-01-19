@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
  * expired.
  * To guarantee exit time, ensure individual loop actions are short enough.
  */
-public class LoopUntilSecondsLeftAction implements AutonomousAction {
+public class LoopAction implements AutonomousAction {
 	
 	private final double secondsToLeave;
 	private final AutonomousSequence loopSequence;
@@ -32,7 +32,7 @@ public class LoopUntilSecondsLeftAction implements AutonomousAction {
 	 *                       loop
 	 * @param loopSequence   The sequence of actions to loop
 	 */
-	public LoopUntilSecondsLeftAction(double secondsToLeave, AutonomousSequence loopSequence) {
+	public LoopAction(double secondsToLeave, AutonomousSequence loopSequence) {
 		this.secondsToLeave = secondsToLeave;
 		this.loopSequence = loopSequence;
 		this.loopCount = 0;
@@ -73,7 +73,7 @@ public class LoopUntilSecondsLeftAction implements AutonomousAction {
 	
 	@Override
 	public String getName() {
-		return "Loop(until " + secondsToLeave + "s left, iteration " + (loopCount + 1) + ")";
+		return "Loop until " + secondsToLeave + "s: \n-> " + loopSequence.getCurrentActionName();
 	}
 	
 	@Override

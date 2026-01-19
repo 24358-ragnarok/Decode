@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.outoftheboxrobotics.photoncore.Photon;
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
@@ -31,14 +32,15 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
 @Photon
 @Autonomous(name = "Run: The Boonstra Special", group = ".Competition", preselectTeleOp = "Run: RAGNAROK")
 public class MainAuto extends OpMode {
-
+	
 	private final StringBuilder transferSlotsDisplayBuilder = new StringBuilder();
 	private MatchConfigurationWizard wizard;
 	private MechanismManager mechanisms;
 	private UnifiedLogging logging;
 	// The new optimal structure
+	private Timer realtime;
 	private AutonomousSequence autonomousSequence;
-
+	
 	/**
 	 * Runs when INIT is pressed on the driver station.
 	 */
@@ -57,6 +59,7 @@ public class MainAuto extends OpMode {
 		
 		// Enable retained mode for efficient telemetry during autonomous
 		logging.enableRetainedMode();
+		realtime = new Timer();
 	}
 	
 	/**
@@ -108,6 +111,8 @@ public class MainAuto extends OpMode {
 		
 		// Start the opmode timer
 		setupLogging();
+		
+		realtime.resetTimer();
 	}
 	
 	/**
@@ -125,7 +130,7 @@ public class MainAuto extends OpMode {
 		// This single line replaces the entire state machine logic!
 		final AutonomousSequence sequence = autonomousSequence;
 		if (sequence != null) {
-			sequence.update(mech, this.time);
+			sequence.update(mech, realtime.getElapsedTimeSeconds());
 		}
 		
 		// Clear dynamic telemetry and log updated data
@@ -180,6 +185,6 @@ public class MainAuto extends OpMode {
 		});
 		
 		logging.addDataLazy("Elapsed Time", "%.2f",
-				() -> time);
+				() -> realtime.getElapsedTimeSeconds());
 	}
 }

@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.autonomous.actions.EndPickupAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.Krakatoa;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LinearPathAction;
-import org.firstinspires.ftc.teamcode.autonomous.actions.LoopUntilSecondsLeftAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.LoopAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ParallelAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PickupBallAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PrepareLaunchAction;
@@ -256,7 +256,7 @@ public class SequenceBuilder {
 	public SequenceBuilder loopUntilSecondsLeft(double secondsToLeave, Consumer<SequenceBuilder> loopBuilder) {
 		SequenceBuilder subBuilder = new SequenceBuilder();
 		loopBuilder.accept(subBuilder);
-		sequence.addAction(new LoopUntilSecondsLeftAction(secondsToLeave, subBuilder.build()));
+		sequence.addAction(new LoopAction(secondsToLeave, subBuilder.build()));
 		return this;
 	}
 	
