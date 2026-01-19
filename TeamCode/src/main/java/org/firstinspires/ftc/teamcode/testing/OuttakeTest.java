@@ -42,7 +42,8 @@ public class OuttakeTest extends LinearOpMode {
 		telemetry.addLine("Controls:");
 		telemetry.addLine("  DPAD Up&Down: Adjust Pitch (degrees)");
 		telemetry.addLine("  BUMPER L/R: Adjust Speed up/down");
-		telemetry.addLine("  A: Spin up launcher + open gate");
+		telemetry.addLine("  TRIGGER L/R: Set gate close/far");
+		telemetry.addLine("  A: Spin up launcher");
 		telemetry.addLine("  B: Advance transfer");
 		telemetry.addLine("  X: Crawl intake");
 		telemetry.addLine("  L-Stick-Btn: Set Close Preset");
@@ -80,12 +81,19 @@ public class OuttakeTest extends LinearOpMode {
 			
 			commandedRPM = Math.max(0, Math.min(6000, commandedRPM));
 			
+			if (gamepad1.left_trigger > 0.2) {
+				m.ifValid(m.get(PairedLauncher.class), PairedLauncher::openFar);
+			}
+			
+			if (gamepad1.right_trigger > 0.2) {
+				m.ifValid(m.get(PairedLauncher.class), PairedLauncher::openClose);
+			}
+			
 			if (gamepad1.aWasPressed()) {
 				m.ifValid(m.get(PairedLauncher.class), pairedLauncher -> {
 					pairedLauncher.setRPM(commandedRPM);
 					pairedLauncher.setPitch(commandedAngle);
 					pairedLauncher.spinUp();
-					pairedLauncher.open();
 				});
 			} else if (gamepad1.aWasReleased()) {
 				m.ifValid(m.get(PairedLauncher.class), PairedLauncher::spinDown);

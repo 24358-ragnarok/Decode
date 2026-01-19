@@ -28,21 +28,11 @@ public class TrajectoryEngine {
 	 * position
 	 */
 	public AimingSolution getAimingOffsets(MatchState.AllianceColor allianceColor, double currentPitchDegrees) {
-		Pose currentPose = mechanisms.drivetrain.getPose();
-		Pose closeShootPose = mechanisms.drivetrain.getPositionPose(Position.CLOSE_SHOOT);
-		Pose farShootPose = mechanisms.drivetrain.getPositionPose(Position.FAR_SHOOT);
-		
-		// Determine which position is closer
-		double distanceToClose = getDistance(currentPose, closeShootPose);
-		double distanceToFar = getDistance(currentPose, farShootPose);
-		
-		Position closestPosition = (distanceToClose < distanceToFar) ? Position.CLOSE_SHOOT : Position.FAR_SHOOT;
-		
 		// Get preset values for the closest position
 		double presetPitch;
 		double presetRPM;
 		
-		if (closestPosition == Position.CLOSE_SHOOT) {
+		if (isCloseOrFar() == Position.CLOSE_SHOOT) {
 			presetPitch = Settings.Aiming.CLOSE_SHOOT_PITCH_DEGREES;
 			presetRPM = Settings.Aiming.CLOSE_SHOOT_RPM;
 		} else {
@@ -56,6 +46,18 @@ public class TrajectoryEngine {
 				presetPitch,
 				presetRPM,
 				true);
+	}
+	
+	public Position isCloseOrFar() {
+		Pose currentPose = mechanisms.drivetrain.getPose();
+		Pose closeShootPose = mechanisms.drivetrain.getPositionPose(Position.CLOSE_SHOOT);
+		Pose farShootPose = mechanisms.drivetrain.getPositionPose(Position.FAR_SHOOT);
+		
+		// Determine which position is closer
+		double distanceToClose = getDistance(currentPose, closeShootPose);
+		double distanceToFar = getDistance(currentPose, farShootPose);
+		
+		return (distanceToClose < distanceToFar) ? Position.CLOSE_SHOOT : Position.FAR_SHOOT;
 	}
 	
 	/**

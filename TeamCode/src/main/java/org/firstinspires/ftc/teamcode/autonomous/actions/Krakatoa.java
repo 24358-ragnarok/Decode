@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous.actions;
 
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.LAUNCH_EXIT_TIME_MS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.KRAKATOA_TIME_MS;
 
 import com.pedropathing.util.Timer;
 
@@ -24,13 +24,12 @@ import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
  * The action maintains the launcher in a ready state (spinning and aimed)
  * throughout the launch sequence.
  */
-public class LaunchAction implements AutonomousAction {
-	private int shots = 0;
+public class Krakatoa implements AutonomousAction {
 	private boolean hasTransfer;
 	private boolean hasLauncher;
 	private boolean hasIntake;
 	private State state;
-	private Timer timer;
+	private Timer krakaTimer;
 	
 	@Override
 	public void initialize(MechanismManager mechanisms) {
@@ -38,7 +37,7 @@ public class LaunchAction implements AutonomousAction {
 		hasTransfer = mechanisms.get(VerticalWheelTransfer.class) != null;
 		hasIntake = mechanisms.get(FlexVectorIntake.class) != null;
 		state = State.WAITING_TO_FIRE;
-		timer = new Timer();
+		krakaTimer = new Timer();
 		
 		// Start the launcher ready sequence (spin up, aim)
 		if (hasLauncher) {
@@ -54,7 +53,7 @@ public class LaunchAction implements AutonomousAction {
 			FlexVectorIntake intake = mechanisms.get(FlexVectorIntake.class);
 			intake.crawl();
 		}
-		timer.resetTimer();
+		krakaTimer.resetTimer();
 	}
 	
 	@Override
@@ -71,22 +70,21 @@ public class LaunchAction implements AutonomousAction {
 		// State machine for sequential ball firing
 		switch (state) {
 			case WAITING_TO_FIRE:
-				// Only transition to FIRING if we haven't fired all shots yet
-				if (launcher.isAtSpeed() && !transfer.isBusy() && timer.getElapsedTime() > LAUNCH_EXIT_TIME_MS) {
+				// Only transition to FIRING if we are ready
+				if (launcher.isAtSpeed()) {
 					state = State.FIRING;
+					krakaTimer.resetTimer();
 				}
 				break;
 			
 			case FIRING:
-				transfer.advance();
-				shots += 1;
-				timer.resetTimer();
-				// Check if we're done after incrementing shots
-				if (shots >= 4) {
+				if (krakaTimer.getElapsedTime() > KRAKATOA_TIME_MS) {
+					transfer.freeze();
 					state = State.COMPLETE;
 				} else {
-					state = State.WAITING_TO_FIRE;
+					transfer.advance();
 				}
+				
 				break;
 			
 			case COMPLETE:
@@ -94,7 +92,7 @@ public class LaunchAction implements AutonomousAction {
 				break;
 		}
 		
-		if (state == State.COMPLETE && !transfer.isBusy() && timer.getElapsedTime() > LAUNCH_EXIT_TIME_MS) {
+		if (state == State.COMPLETE) {
 			launcher.stop();
 			launcher.close();
 			return true;
@@ -118,7 +116,7 @@ public class LaunchAction implements AutonomousAction {
 	
 	@Override
 	public String getName() {
-		return "Launch, " + state.toString().toLowerCase() + " (shots: " + shots + ")";
+		return "KRAKATOA";
 	}
 	
 	private enum State {

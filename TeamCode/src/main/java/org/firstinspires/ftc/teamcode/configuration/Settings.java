@@ -23,9 +23,9 @@ public class Settings {
 	public static class Robot {
 		public static final double WIDTH = 16.25;
 		public static final double LENGTH = 17.00;
-		
+
 	}
-	
+
 	/**
 	 * Maps controller inputs to robot actions for TeleOp.
 	 */
@@ -39,7 +39,7 @@ public class Settings {
 				Controller.Action.GOTO_PARK,
 				Controller.Action.GOTO_GATE
 		};
-		
+
 		static {
 			// Main Controller (Driver)
 			actionControlMap.put(Controller.Action.MOVE_Y, Controller.Control.LEFT_STICK_Y);
@@ -58,7 +58,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.CANCEL_ASSISTED_DRIVING, Controller.Control.RIGHT_STICK_BUTTON);
 			actionControlMap.put(Controller.Action.SET_FOLLOWER, Controller.Control.PS);
 			actionControlMap.put(Controller.Action.TOGGLE_CENTRICITY, Controller.Control.LEFT_STICK_BUTTON);
-			
+
 			// Secondary Controller (Operator)
 			actionControlMap.put(Controller.Action.AIM, Controller.Control.LEFT_TRIGGER);
 			actionControlMap.put(Controller.Action.LAUNCH, Controller.Control.RIGHT_TRIGGER);
@@ -77,7 +77,7 @@ public class Settings {
 			}
 		}
 	}
-	
+
 	/**
 	 * Hardware device name mapping.
 	 * Each HardwareConfig stores both the device type and string name,
@@ -91,29 +91,29 @@ public class Settings {
 		public static final HardwareConfig REAR_LEFT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearLeft");
 		public static final HardwareConfig REAR_RIGHT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearRight");
 		public static final HardwareConfig PINPOINT = new HardwareConfig(GoBildaPinpointDriver.class, "pinpoint");
-		
+
 		// Subsystem motors and servos
 		public static final HardwareConfig INTAKE_MOTOR = new HardwareConfig(DcMotorEx.class, "intake");
 		public static final HardwareConfig LAUNCHER_RIGHT = new HardwareConfig(DcMotorEx.class, "launcherRight");
 		public static final HardwareConfig LAUNCHER_LEFT = new HardwareConfig(DcMotorEx.class, "launcherLeft");
-		
+
 		public static final HardwareConfig LAUNCHER_PITCH_SERVO = new HardwareConfig(ServoImplEx.class,
 				"pitch");
 		public static final HardwareConfig LAUNCHER_GATE = new HardwareConfig(ServoImplEx.class,
 				"gate");
-		
+
 		// Transfer mechanism
 		public static final HardwareConfig TRANSFER_WHEEL_MOTOR = new HardwareConfig(DcMotorEx.class,
 				"transfer");
-		
+
 		public static final HardwareConfig SWAP = new HardwareConfig(ServoImplEx.class,
 				"swap");
-		
+
 		public static final HardwareConfig EXTENDER_LEFT = new HardwareConfig(ServoImplEx.class,
 				"extenderLeft");
 		public static final HardwareConfig EXTENDER_RIGHT = new HardwareConfig(ServoImplEx.class,
 				"extenderRight");
-		
+
 		// Sensors
 		public static final String[] COLOR_RANGEFINDER_1 = {"crf1_0", "crf1_1"};
 		public static final String[] COLOR_RANGEFINDER_2 = {"crf2_0", "crf2_1"};
@@ -123,9 +123,9 @@ public class Settings {
 				"colorRight");
 		public static final HardwareConfig CONFIGURE_COLOR_SENSOR = new HardwareConfig(
 				RevColorSensorV3.class, "colorSensorConfigure");
-		
+
 		public static final HardwareConfig LIMELIGHT = new HardwareConfig(Limelight3A.class, "limelight");
-		
+
 		/**
 		 * Static method to retrieve hardware from a HardwareMap.
 		 * Allows usage like: Settings.Hardware.get(FRONT_LEFT_MOTOR, hw)
@@ -169,7 +169,7 @@ public class Settings {
 	@Configurable
 	public static class Transfer {
 		public static final double FIRING_POSITION_TICKS = 900;
-		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 2.3;
+		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 1.5;
 		public static final double DECREMENT_TICKS = -FIRING_POSITION_TICKS / 1.5;
 		public static double SPEED = 1.0;
 		public static double CRAWL_SPEED = 0.3;
@@ -221,19 +221,20 @@ public class Settings {
 	@Configurable
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
-		public static final double VELOCITY_ALPHA = 0.15; // EMA smoothing factor (0-1), lower = more smoothing
-		public static double GATE_FIRE_POSITION = 0.388;
+		public static final double VELOCITY_ALPHA = 0.2; // EMA smoothing factor (0-1), lower = more smoothing
+		public static double GATE_FIRE_POSITION_CLOSE = 0.388;
+		public static double GATE_FIRE_POSITION_FAR = 0.404;
 		public static double GATE_CLOSED_POSITION = 0.444;
 		public static long GATE_COOLDOWN_MS = 500;
-		public static long MAX_SPEED_ERROR = 20;
+		public static long MAX_SPEED_ERROR = 30;
 		// Pitch servo calibration (physical limits)
-		public static double PITCH_SERVO_AT_MIN = 0.7; // Servo position at minimum pitch angle
-		public static double PITCH_SERVO_AT_MAX = 1.0; // Servo position at maximum pitch angle
-		public static double DEFAULT_PITCH_ANGLE = 36.0; // degrees from horizontal; TODO - set back to 5.0 once conner
+		public static double PITCH_SERVO_AT_MIN = 0.400; // Servo position at minimum pitch angle
+		public static double PITCH_SERVO_AT_MAX = 0.800; // Servo position at maximum pitch angle
+		public static double DEFAULT_PITCH_ANGLE = 40.0; // degrees from horizontal;
 		// fixes ts
-		public static double PITCH_MIN_ANGLE = 36.0; // Minimum pitch angle in degrees (horizontal)
-		public static double PITCH_MAX_ANGLE = 58.0; // Maximum pitch angle in degrees (straight up, 90° total window)
-		
+		public static double PITCH_MIN_ANGLE = 24.0; // Minimum pitch angle in degrees (horizontal)
+		public static double PITCH_MAX_ANGLE = 53.0; // Maximum pitch angle in degrees (straight up, 90° total window)
+
 		/**
 		 * Converts RPM to motor velocity in ticks per second.
 		 * Use this when setting motor velocity from an RPM value.
@@ -326,12 +327,12 @@ public class Settings {
 		 * Preset launch angles and RPM for each shooting position.
 		 * These values are used when AIM is called based on which position is closer.
 		 */
-		public static double CLOSE_SHOOT_PITCH_DEGREES = 39.5; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2595; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_PITCH_DEGREES = 45.2; // Launch angle from horizontal for close position
+		public static double CLOSE_SHOOT_RPM = 2665; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 39.5; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3670; // Wheel RPM for far position
-		
+		public static double FAR_SHOOT_PITCH_DEGREES = 32.5; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 3605; // Wheel RPM for far position
+
 	}
 	
 	/**
@@ -371,7 +372,8 @@ public class Settings {
 		 * Reset/reset positions.
 		 */
 		public static class Reset {
-			public static final Pose HUMAN_PLAYER_ZONE = new Pose(144 - (Robot.WIDTH / 2), Robot.LENGTH / 2, Math.toRadians(90));
+			public static final Pose HUMAN_PLAYER_ZONE = new Pose(144 - (Robot.WIDTH / 2), Robot.LENGTH / 2,
+					Math.toRadians(90));
 			public static final Pose FAR_ZONE = new Pose(59.00, Robot.LENGTH / 2, Math.toRadians(90));
 			public static final Pose CLOSE_ZONE = new Pose(34, 144 - (Robot.LENGTH / 2), Math.toRadians(90));
 		}
@@ -397,7 +399,6 @@ public class Settings {
 		 */
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 99, Math.toRadians(140.59));
-			public static final Pose SORTED_SHOOT= new Pose(58, 99, Math.toRadians(150.59));
 			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(114));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(25, 73, Math.toRadians(270));
@@ -424,7 +425,7 @@ public class Settings {
 				public static final Pose PREP = new Pose(44, 34, Math.toRadians(180));
 				public static final Pose GRAB_1 = new Pose(36.0, 34, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 34, Math.toRadians(180));
-				public static final Pose END = new Pose(14, 34, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 34, Math.toRadians(180));
 			}
 			
 			/**
@@ -434,7 +435,7 @@ public class Settings {
 				public static final Pose PREP = new Pose(44, 58, Math.toRadians(180));
 				public static final Pose GRAB_1 = new Pose(36.0, 58, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 58, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 58, Math.toRadians(180));
+				public static final Pose END = new Pose(25, 58, Math.toRadians(180));
 			}
 			
 			/**
@@ -444,7 +445,12 @@ public class Settings {
 				public static final Pose PREP = new Pose(44, 84, Math.toRadians(180));
 				public static final Pose GRAB_1 = new Pose(36.0, 84, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 84, Math.toRadians(180));
-				public static final Pose END = new Pose(15, 84, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 84, Math.toRadians(180));
+			}
+			
+			public static class HumanPlayerPreset {
+				public static final Pose PREP = new Pose(16.0, 35.16, Math.toRadians(-90));
+				public static final Pose END = new Pose(13.0, 13.0, Math.toRadians(-90));
 			}
 		}
 		
@@ -491,7 +497,7 @@ public class Settings {
 		public static boolean LAUNCHER = TRAJECTORY_ENGINE && true;
 		
 		public static boolean SWAP = true;
-		public static boolean LEVER = true;
+		public static boolean LEVER = false;
 	}
 	
 	public static class Swap {
@@ -502,8 +508,14 @@ public class Settings {
 	}
 	
 	public static class Autonomous {
-		public static double SLOW_SPEED = 0.4;
+		/**
+		 * Total autonomous period duration in seconds (FTC standard is 30 seconds).
+		 */
+		public static double AUTO_PERIOD_SECONDS = 30.0;
+		
+		public static double SLOW_SPEED = 0.6;
 		public static double LAUNCH_EXIT_TIME_MS = 200;
+		public static double KRAKATOA_TIME_MS = 1500;
 		public static double MAX_ACTION_TIME_S = 10.0;
 		public static double SEARCH_TIMEOUT_MS = 500; // Time to search before assuming empty
 		

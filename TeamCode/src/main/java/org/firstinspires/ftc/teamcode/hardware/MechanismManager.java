@@ -47,12 +47,18 @@ public class MechanismManager {
 	public final HardwareMap hardwareMap;
 	private final List<LynxModule> allHubs;
 	
+	/**
+	 * Elapsed time since OpMode start (in seconds).
+	 * Updated by autonomous sequence before each action update.
+	 */
+	private double elapsedTimeSeconds = 0.0;
+
 	public MechanismManager(HardwareMap hw) {
 		hardwareMap = hw;
 		allHubs = hardwareMap.getAll(LynxModule.class);
 		LynxModule.blinkerPolicy = HUB_BLINKER_POLICY;
 		drivetrain = new Drivetrain(hw);
-		
+
 		// Build mechanisms safely
 		FlexVectorIntake intake = createIntake();
 		VerticalWheelTransfer transfer = createTransfer();
@@ -61,19 +67,19 @@ public class MechanismManager {
 		PairedLauncher launcher = createLauncher();
 		BallSwap swap = createSwap();
 		Lever lever = createLever();
-		mechanismArray = new Mechanism[]{intake, transfer, launcher, swap, lever};
-		
+		mechanismArray = new Mechanism[]{intake, transfer, launcher, swap, lever };
+
 		// Save helpers
 		limelightManager = ll;
 		trajectoryEngine = traj;
-		
+
 		// Now that we've built all of the systems, begin caching system reads for
 		// efficiency
 		for (LynxModule hub : allHubs) {
 			createHub(hub);
 		}
 	}
-	
+
 	private void createHub(LynxModule hub) {
 		hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
 		LynxModule.blinkerPolicy = HUB_BLINKER_POLICY;
@@ -116,7 +122,7 @@ public class MechanismManager {
 					
 					// Convert HSV to Android Color (Full Saturation and Value)
 					int color = Color.HSVToColor(new float[]{hue, 1f, 1f});
-					
+
 					p.add(new Blinker.Step(color, stepDuration, TimeUnit.MILLISECONDS));
 				}
 				for (LynxModule hub : allHubs) {
@@ -295,6 +301,24 @@ public class MechanismManager {
 		if (obj != null) {
 			action.accept(obj);
 		}
+	}
+	
+	/**
+	 * Gets the elapsed time since OpMode start.
+	 *
+	 * @return Elapsed time in seconds
+	 */
+	public double getElapsedTimeSeconds() {
+		return elapsedTimeSeconds;
+	}
+	
+	/**
+	 * Sets the elapsed time. Called by AutonomousSequence before each update.
+	 *
+	 * @param elapsedTimeSeconds Elapsed time in seconds
+	 */
+	public void setElapsedTimeSeconds(double elapsedTimeSeconds) {
+		this.elapsedTimeSeconds = elapsedTimeSeconds;
 	}
 	
 	public enum PresetColor {

@@ -2,7 +2,8 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.DEFAULT_PITCH_ANGLE;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_CLOSED_POSITION;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_FIRE_POSITION;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_FIRE_POSITION_CLOSE;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_FIRE_POSITION_FAR;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.MAX_SPEED_ERROR;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.VELOCITY_ALPHA;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.rpmToTicksPerSec;
@@ -71,8 +72,20 @@ public class PairedLauncher extends Mechanism {
 		setPitch(solution.verticalOffsetDegrees);
 	}
 	
-	public void open() {
-		gateServo.setPosition(GATE_FIRE_POSITION);
+	public void openClose() {
+		gateServo.setPosition(GATE_FIRE_POSITION_CLOSE);
+	}
+	
+	public void openFar() {
+		gateServo.setPosition(GATE_FIRE_POSITION_FAR);
+	}
+	
+	public void openDynamic() {
+		if (mechanisms.trajectoryEngine.isCloseOrFar() == Drivetrain.Position.CLOSE_SHOOT) {
+			openClose();
+		} else {
+			openFar();
+		}
 	}
 	
 	public void close() {

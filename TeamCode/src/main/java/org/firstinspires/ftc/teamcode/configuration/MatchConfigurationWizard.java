@@ -10,7 +10,7 @@ public class MatchConfigurationWizard {
 	private final Gamepad gamepad1;
 	private final UnifiedLogging logging;
 	private boolean confirmed = false;
-	
+
 	/**
 	 * Creates a new MatchConfigurationWizard
 	 *
@@ -21,7 +21,7 @@ public class MatchConfigurationWizard {
 		this.gamepad1 = gamepad1;
 		this.logging = logging;
 	}
-	
+
 	/**
 	 * Call this method repeatedly in init_loop to process input and update display
 	 */
@@ -34,40 +34,53 @@ public class MatchConfigurationWizard {
 			updateTelemetry();
 			return;
 		}
-		
+
 		// Detect rising edge of dpad_up (just pressed)
 		if (gamepad1.bWasPressed()) {
 			MatchState.setAllianceColor(MatchState.AllianceColor.RED);
 		}
-		
+
 		// Detect rising edge of dpad_down (just pressed)
 		if (gamepad1.xWasPressed()) {
 			MatchState.setAllianceColor(MatchState.AllianceColor.BLUE);
 		}
-		
+
 		if (gamepad1.aWasPressed()) {
-			MatchState.setAutoStartingPosition(MatchState.AutoStartingPosition.CLOSE);
+			setStartingPositionWithRuntimeCheck(MatchState.AutoStartingPosition.CLOSE);
 		}
 		
 		if (gamepad1.yWasPressed()) {
-			MatchState.setAutoStartingPosition(MatchState.AutoStartingPosition.FAR);
+			setStartingPositionWithRuntimeCheck(MatchState.AutoStartingPosition.FAR);
 		}
 		
 		if (gamepad1.startWasPressed()) {
 			confirmed = !confirmed;
 		}
 		
-		// Cycle through runtimes with left/right d-pad
+		// Cycle through runtimes with left/right d-pad (only to compatible ones)
 		if (gamepad1.dpadRightWasPressed()) {
-			MatchState.nextAutonomousRuntime();
+			MatchState.nextAutonomousRuntimeFor(MatchState.getAutoStartingPosition());
 		}
 		
 		if (gamepad1.dpadLeftWasPressed()) {
-			MatchState.previousAutonomousRuntime();
+			MatchState.previousAutonomousRuntimeFor(MatchState.getAutoStartingPosition());
 		}
 		
 		// Update telemetry display
 		updateTelemetry();
+	}
+	
+	/**
+	 * Sets the starting position, switching runtime if the current one doesn't
+	 * support it.
+	 */
+	private void setStartingPositionWithRuntimeCheck(MatchState.AutoStartingPosition newPosition) {
+		MatchState.setAutoStartingPosition(newPosition);
+		
+		// If current runtime doesn't support the new position, switch to one that does
+		if (!MatchState.getAutonomousRuntime().supportsPosition(newPosition)) {
+			MatchState.nextAutonomousRuntimeFor(newPosition);
+		}
 	}
 	
 	/**

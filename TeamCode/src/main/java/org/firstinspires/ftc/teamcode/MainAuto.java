@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.outoftheboxrobotics.photoncore.Photon;
-import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
@@ -32,22 +31,20 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
 @Photon
 @Autonomous(name = "Run: The Boonstra Special", group = ".Competition", preselectTeleOp = "Run: RAGNAROK")
 public class MainAuto extends OpMode {
-	
+
 	private final StringBuilder transferSlotsDisplayBuilder = new StringBuilder();
-	private Timer opmodeTimer;
 	private MatchConfigurationWizard wizard;
 	private MechanismManager mechanisms;
 	private UnifiedLogging logging;
 	// The new optimal structure
 	private AutonomousSequence autonomousSequence;
-	
+
 	/**
 	 * Runs when INIT is pressed on the driver station.
 	 */
 	@Override
 	public void init() {
 		// Create fresh timer and logging
-		opmodeTimer = new Timer();
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
 		
 		// Match settings will be configured by the driver during init_loop
@@ -110,7 +107,6 @@ public class MainAuto extends OpMode {
 		autonomousSequence.start(mechanisms);
 		
 		// Start the opmode timer
-		opmodeTimer.resetTimer();
 		setupLogging();
 	}
 	
@@ -129,7 +125,7 @@ public class MainAuto extends OpMode {
 		// This single line replaces the entire state machine logic!
 		final AutonomousSequence sequence = autonomousSequence;
 		if (sequence != null) {
-			sequence.update(mech);
+			sequence.update(mech, this.time);
 		}
 		
 		// Clear dynamic telemetry and log updated data
@@ -184,7 +180,6 @@ public class MainAuto extends OpMode {
 		});
 		
 		logging.addDataLazy("Elapsed Time", "%.2f",
-				() -> opmodeTimer.getElapsedTimeSeconds());
-		
+				() -> time);
 	}
 }

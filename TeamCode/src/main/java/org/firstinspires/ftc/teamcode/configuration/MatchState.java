@@ -20,7 +20,7 @@ import java.util.List;
  * needing to pass a HashMap.
  */
 public class MatchState {
-	
+
 	// --- Private Static Storage ---
 	// All match data is stored here. It persists between OpMode runs.
 	
@@ -197,6 +197,24 @@ public class MatchState {
 	 */
 	public static void previousAutonomousRuntime() {
 		autonomousRuntime = autonomousRuntime.previous();
+	}
+	
+	/**
+	 * Cycles to the next autonomous runtime that supports the given position.
+	 *
+	 * @param position The starting position that must be supported
+	 */
+	public static void nextAutonomousRuntimeFor(AutoStartingPosition position) {
+		autonomousRuntime = autonomousRuntime.nextFor(position);
+	}
+	
+	/**
+	 * Cycles to the previous autonomous runtime that supports the given position.
+	 *
+	 * @param position The starting position that must be supported
+	 */
+	public static void previousAutonomousRuntimeFor(AutoStartingPosition position) {
+		autonomousRuntime = autonomousRuntime.previousFor(position);
 	}
 	
 	/**

@@ -5,8 +5,10 @@ import com.pedropathing.geometry.Pose;
 import org.firstinspires.ftc.teamcode.autonomous.actions.CurvePathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.EndAtAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.EndPickupAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.Krakatoa;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LinearPathAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.LoopUntilSecondsLeftAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ParallelAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PickupBallAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PrepareLaunchAction;
@@ -14,10 +16,11 @@ import org.firstinspires.ftc.teamcode.autonomous.actions.ScanAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SlowLinearPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SortedLaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SplinedPathAction;
-import org.firstinspires.ftc.teamcode.autonomous.actions.StartAtAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.WaitAction;
 import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
+
+import java.util.function.Consumer;
 
 /**
  * Fluent builder for creating autonomous sequences.
@@ -38,28 +41,14 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
  * </pre>
  */
 public class SequenceBuilder {
-	
+
 	private final AutonomousSequence sequence;
-	
+
 	/**
 	 * Creates a new sequence builder.
 	 */
 	public SequenceBuilder() {
 		this.sequence = new AutonomousSequence();
-	}
-	
-	/**
-	 * Adds an action to explicitly set and hold the initial pose.
-	 * Helpful for eliminating race conditions before the first movement.
-	 */
-	public SequenceBuilder startAt(Pose startingPose, String name) {
-		sequence.addAction(new StartAtAction(startingPose, name));
-		return this;
-	}
-	
-	public SequenceBuilder startAt(Pose startingPose) {
-		sequence.addAction(new StartAtAction(startingPose));
-		return this;
 	}
 	
 	/**
@@ -194,6 +183,11 @@ public class SequenceBuilder {
 		return this;
 	}
 	
+	public SequenceBuilder KRAKATOA() {
+		sequence.addAction(new Krakatoa());
+		return this;
+	}
+
 	/**
 	 * Adds a sorted launch action that respects motif order with swap.
 	 *
@@ -234,6 +228,35 @@ public class SequenceBuilder {
 	 */
 	public SequenceBuilder parallel(AutonomousAction... actions) {
 		sequence.addAction(new ParallelAction(actions));
+		return this;
+	}
+	
+	/**
+	 * Loops a sub-sequence of actions until a specified number of seconds
+	 * are left in the autonomous period.
+	 * <p>
+	 * Example usage:
+	 *
+	 * <pre>
+	 * .loopUntilSecondsLeft(5, loop -> loop
+	 *     .moveTo(Settings.Positions.Samples.HumanPlayerPreset.PREP)
+	 *     .startPickup()
+	 *     .moveTo(Settings.Positions.Samples.HumanPlayerPreset.END)
+	 *     .prepLaunch()
+	 *     .moveTo(Settings.Positions.TeleOp.FAR_SHOOT)
+	 *     .launch()
+	 * )
+	 * </pre>
+	 *
+	 * @param secondsToLeave Number of seconds to leave remaining before exiting the
+	 *                       loop
+	 * @param loopBuilder    A consumer that builds the loop sequence
+	 * @return this (for method chaining)
+	 */
+	public SequenceBuilder loopUntilSecondsLeft(double secondsToLeave, Consumer<SequenceBuilder> loopBuilder) {
+		SequenceBuilder subBuilder = new SequenceBuilder();
+		loopBuilder.accept(subBuilder);
+		sequence.addAction(new LoopUntilSecondsLeftAction(secondsToLeave, subBuilder.build()));
 		return this;
 	}
 	

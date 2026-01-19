@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.hardware.FlexVectorIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
 import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
+import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 import org.firstinspires.ftc.teamcode.software.game.Artifact;
 import org.firstinspires.ftc.teamcode.software.game.Classifier;
 
@@ -41,6 +42,7 @@ public class SortedLaunchAction implements AutonomousAction {
 	private PairedLauncher launcher;
 	private BallSwap swap;
 	private FlexVectorIntake intake;
+	private TrajectoryEngine te;
 	
 	private Timer timer;
 	private State state;
@@ -53,6 +55,7 @@ public class SortedLaunchAction implements AutonomousAction {
 		launcher = mechanisms.get(PairedLauncher.class);
 		swap = mechanisms.get(BallSwap.class);
 		intake = mechanisms.get(FlexVectorIntake.class);
+		te = mechanisms.trajectoryEngine;
 		
 		timer = new Timer();
 		state = State.SEARCHING;
@@ -226,7 +229,7 @@ public class SortedLaunchAction implements AutonomousAction {
 	}
 	
 	private void startFire() {
-		launcher.open();
+		launcher.openDynamic();
 		state = State.OPEN_GATE;
 	}
 	

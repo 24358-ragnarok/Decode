@@ -20,13 +20,13 @@ import java.util.List;
  * - Graceful handling of action interruption
  */
 public class AutonomousSequence {
-	
+
 	public final Timer sequenceTimer;
 	private final List<AutonomousAction> actions;
 	private final Timer actionTimer;
 	private int currentActionIndex;
 	private boolean initialized;
-	
+
 	/**
 	 * Creates a new autonomous sequence.
 	 */
@@ -81,9 +81,12 @@ public class AutonomousSequence {
 	 * Updates the current action in the sequence.
 	 * Call this repeatedly in your autonomous loop.
 	 *
-	 * @param mechanisms The mechanism manager
+	 * @param mechanisms         The mechanism manager
+	 * @param elapsedTimeSeconds Elapsed time since OpMode start (in seconds)
 	 */
-	public void update(MechanismManager mechanisms) {
+	public void update(MechanismManager mechanisms, double elapsedTimeSeconds) {
+		// Store elapsed time so actions can access it
+		mechanisms.setElapsedTimeSeconds(elapsedTimeSeconds);
 		if (isComplete()) {
 			return; // No more actions to run
 		}
