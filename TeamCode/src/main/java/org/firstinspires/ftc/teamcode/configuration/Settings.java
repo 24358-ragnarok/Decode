@@ -23,9 +23,9 @@ public class Settings {
 	public static class Robot {
 		public static final double WIDTH = 16.25;
 		public static final double LENGTH = 17.00;
-
+		
 	}
-
+	
 	/**
 	 * Maps controller inputs to robot actions for TeleOp.
 	 */
@@ -39,7 +39,7 @@ public class Settings {
 				Controller.Action.GOTO_PARK,
 				Controller.Action.GOTO_GATE
 		};
-
+		
 		static {
 			// Main Controller (Driver)
 			actionControlMap.put(Controller.Action.MOVE_Y, Controller.Control.LEFT_STICK_Y);
@@ -58,7 +58,7 @@ public class Settings {
 			actionControlMap.put(Controller.Action.CANCEL_ASSISTED_DRIVING, Controller.Control.RIGHT_STICK_BUTTON);
 			actionControlMap.put(Controller.Action.SET_FOLLOWER, Controller.Control.PS);
 			actionControlMap.put(Controller.Action.TOGGLE_CENTRICITY, Controller.Control.LEFT_STICK_BUTTON);
-
+			
 			// Secondary Controller (Operator)
 			actionControlMap.put(Controller.Action.AIM, Controller.Control.LEFT_TRIGGER);
 			actionControlMap.put(Controller.Action.LAUNCH, Controller.Control.RIGHT_TRIGGER);
@@ -77,7 +77,7 @@ public class Settings {
 			}
 		}
 	}
-
+	
 	/**
 	 * Hardware device name mapping.
 	 * Each HardwareConfig stores both the device type and string name,
@@ -91,29 +91,29 @@ public class Settings {
 		public static final HardwareConfig REAR_LEFT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearLeft");
 		public static final HardwareConfig REAR_RIGHT_MOTOR = new HardwareConfig(DcMotorEx.class, "rearRight");
 		public static final HardwareConfig PINPOINT = new HardwareConfig(GoBildaPinpointDriver.class, "pinpoint");
-
+		
 		// Subsystem motors and servos
 		public static final HardwareConfig INTAKE_MOTOR = new HardwareConfig(DcMotorEx.class, "intake");
 		public static final HardwareConfig LAUNCHER_RIGHT = new HardwareConfig(DcMotorEx.class, "launcherRight");
 		public static final HardwareConfig LAUNCHER_LEFT = new HardwareConfig(DcMotorEx.class, "launcherLeft");
-
+		
 		public static final HardwareConfig LAUNCHER_PITCH_SERVO = new HardwareConfig(ServoImplEx.class,
 				"pitch");
 		public static final HardwareConfig LAUNCHER_GATE = new HardwareConfig(ServoImplEx.class,
 				"gate");
-
+		
 		// Transfer mechanism
 		public static final HardwareConfig TRANSFER_WHEEL_MOTOR = new HardwareConfig(DcMotorEx.class,
 				"transfer");
-
+		
 		public static final HardwareConfig SWAP = new HardwareConfig(ServoImplEx.class,
 				"swap");
-
+		
 		public static final HardwareConfig EXTENDER_LEFT = new HardwareConfig(ServoImplEx.class,
 				"extenderLeft");
 		public static final HardwareConfig EXTENDER_RIGHT = new HardwareConfig(ServoImplEx.class,
 				"extenderRight");
-
+		
 		// Sensors
 		public static final String[] COLOR_RANGEFINDER_1 = {"crf1_0", "crf1_1"};
 		public static final String[] COLOR_RANGEFINDER_2 = {"crf2_0", "crf2_1"};
@@ -123,9 +123,9 @@ public class Settings {
 				"colorRight");
 		public static final HardwareConfig CONFIGURE_COLOR_SENSOR = new HardwareConfig(
 				RevColorSensorV3.class, "colorSensorConfigure");
-
+		
 		public static final HardwareConfig LIMELIGHT = new HardwareConfig(Limelight3A.class, "limelight");
-
+		
 		/**
 		 * Static method to retrieve hardware from a HardwareMap.
 		 * Allows usage like: Settings.Hardware.get(FRONT_LEFT_MOTOR, hw)
@@ -221,12 +221,12 @@ public class Settings {
 	@Configurable
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
-		public static final double VELOCITY_ALPHA = 0.2; // EMA smoothing factor (0-1), lower = more smoothing
+		public static final double VELOCITY_ALPHA = 0.4; // EMA smoothing factor (0-1), lower = more smoothing
 		public static double GATE_FIRE_POSITION_CLOSE = 0.388;
 		public static double GATE_FIRE_POSITION_FAR = 0.404;
 		public static double GATE_CLOSED_POSITION = 0.444;
 		public static long GATE_COOLDOWN_MS = 500;
-		public static long MAX_SPEED_ERROR = 30;
+		public static long MAX_SPEED_ERROR = 50;
 		// Pitch servo calibration (physical limits)
 		public static double PITCH_SERVO_AT_MIN = 0.400; // Servo position at minimum pitch angle
 		public static double PITCH_SERVO_AT_MAX = 0.800; // Servo position at maximum pitch angle
@@ -234,7 +234,7 @@ public class Settings {
 		// fixes ts
 		public static double PITCH_MIN_ANGLE = 24.0; // Minimum pitch angle in degrees (horizontal)
 		public static double PITCH_MAX_ANGLE = 53.0; // Maximum pitch angle in degrees (straight up, 90° total window)
-
+		
 		/**
 		 * Converts RPM to motor velocity in ticks per second.
 		 * Use this when setting motor velocity from an RPM value.
@@ -332,7 +332,7 @@ public class Settings {
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 32.5; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 3605; // Wheel RPM for far position
-
+		
 	}
 	
 	/**
@@ -417,8 +417,9 @@ public class Settings {
 		 * Sample pickup locations organized by preset groups.
 		 */
 		public static class Samples {
-			public static Pose EAT = new Pose(16, 30, Math.toRadians(115));
-			public static Pose EAT_END = new Pose(16, 55, Math.toRadians(115));
+			public static Pose EAT = new Pose(14, 30, Math.toRadians(100));
+			public static Pose EAT_END = new Pose(14, 55, Math.toRadians(100));
+			
 			/**
 			 * First preset group (closest to wall).
 			 */
@@ -450,8 +451,8 @@ public class Settings {
 			}
 			
 			public static class HumanPlayerPreset {
-				public static final Pose PREP = new Pose(16.0, 35.16, Math.toRadians(-90));
-				public static final Pose END = new Pose(13.0, 13.0, Math.toRadians(-90));
+				public static final Pose PREP = new Pose(16.0, 40, Math.toRadians(-110));
+				public static final Pose END = new Pose(13.0, 13.0, Math.toRadians(-110));
 			}
 		}
 		
@@ -468,6 +469,8 @@ public class Settings {
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2 = new Pose(41, 59);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3 = new Pose(96, 81);
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
+			public static Pose HUMAN_PLAYER = new Pose(55, 27);
+			
 			public static Pose EAT = new Pose(17, 20);
 		}
 		
@@ -518,7 +521,6 @@ public class Settings {
 		public static double SLOW_SPEED = 0.4;
 		public static double LAUNCH_EXIT_TIME_MS = 200;
 		public static double KRAKATOA_TIME_MS = 1500;
-		public static double MAX_ACTION_TIME_S = 10.0;
 		public static double SEARCH_TIMEOUT_MS = 500; // Time to search before assuming empty
 		
 		/**
@@ -535,19 +537,19 @@ public class Settings {
 		@Configurable
 		public static class ActionTimeouts {
 			// Path actions
-			public static double LinearPathAction = 0.0; // No timeout (default)
-			public static double SlowLinearPathAction = 0.0;
-			public static double SplinedPathAction = 0.0;
-			public static double CurvePathAction = 0.0;
+			public static double LinearPathAction = 5.0;
+			public static double SlowLinearPathAction = 5.0;
+			public static double SplinedPathAction = 5.0;
+			public static double CurvePathAction = 5.0;
 			
 			// Launch actions
-			public static double LaunchAction = 0.0;
-			public static double SortedLaunchAction = 0.0;
-			public static double PrepareLaunchAction = 0.0;
+			public static double LaunchAction = 10.0;
+			public static double SortedLaunchAction = 20.0;
+			public static double PrepareLaunchAction = 2.0;
 			
 			// Pickup actions
-			public static double PickupBallAction = 0.0;
-			public static double EndPickupAction = 0.0;
+			public static double PickupBallAction = 2.0;
+			public static double EndPickupAction = 2.0;
 			
 			// Utility actions
 			public static double WaitAction = 0.0;

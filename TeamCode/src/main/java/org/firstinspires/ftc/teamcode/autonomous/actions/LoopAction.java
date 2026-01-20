@@ -23,6 +23,7 @@ public class LoopAction implements AutonomousAction {
 	
 	private final double secondsToLeave;
 	private final AutonomousSequence loopSequence;
+	private double elapsedTime = 0;
 	private int loopCount;
 	
 	/**
@@ -46,7 +47,7 @@ public class LoopAction implements AutonomousAction {
 	
 	@Override
 	public boolean execute(MechanismManager mechanisms) {
-		double elapsedTime = mechanisms.getElapsedTimeSeconds();
+		elapsedTime = mechanisms.getElapsedTimeSeconds();
 		double timeLeft = Settings.Autonomous.AUTO_PERIOD_SECONDS - elapsedTime;
 		
 		// Check if we should stop looping (not enough time left)
@@ -73,7 +74,7 @@ public class LoopAction implements AutonomousAction {
 	
 	@Override
 	public String getName() {
-		return "Loop until " + secondsToLeave + "s: \n-> " + loopSequence.getCurrentActionName();
+		return "Loop until " + secondsToLeave + "s " + elapsedTime + "\n-> " + loopSequence.getCurrentActionName();
 	}
 	
 	@Override

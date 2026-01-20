@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.pedropathing.util.Timer;
 
-import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
 
 import java.util.ArrayList;
@@ -101,16 +100,13 @@ public class AutonomousSequence {
 		boolean actionTimedOut = actionTimeout > 0.0
 				&& actionTimer.getElapsedTimeSeconds() > actionTimeout;
 		
-		// Fallback to global timeout if action doesn't have its own timeout
-		boolean globalTimeout = actionTimeout == 0.0
-				&& sequenceTimer.getElapsedTimeSeconds() > Settings.Autonomous.MAX_ACTION_TIME_S;
 		
 		boolean robotIsStuck = mechanisms.drivetrain.follower.isRobotStuck();
-		boolean shouldEnd = actionComplete || actionTimedOut || globalTimeout || robotIsStuck;
+		boolean shouldEnd = actionComplete || actionTimedOut || robotIsStuck;
 		
 		if (shouldEnd) {
 			// End the current action
-			boolean interrupted = actionTimedOut || globalTimeout || robotIsStuck;
+			boolean interrupted = actionTimedOut || robotIsStuck;
 			currentAction.end(mechanisms, interrupted);
 			
 			// Move to the next action

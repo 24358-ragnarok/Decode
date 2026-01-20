@@ -35,11 +35,11 @@ public class Constants {
 			.translationalPIDFCoefficients(new PIDFCoefficients(0.13, 0.00001, 0.02, 0.02))
 			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.1, 0.0001, 0.02, 0.02))
 			
-			.headingPIDFCoefficients(new PIDFCoefficients(0.7, 0.0001, 0.05, 0.03))
-			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.6, 0.001, 0.025, 0.02))
+			.headingPIDFCoefficients(new PIDFCoefficients(0.7, 0.001, 0.05, 0.03))
+			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.65, 0.001, 0.015, 0.02))
 			
-			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.6, 0.0, 0.15, 0.6, 0.0))
-			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.1, 0.0, 0.003, 0.6, 0.0))
+			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.65, 0.0, 0.15, 0.6, 0.0))
+			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.15, 0.0, 0.003, 0.6, 0.0))
 			
 			.centripetalScaling(0.0003)
 			
@@ -90,7 +90,7 @@ public class Constants {
 			0.01,
 			0.01,
 			0.001,
-			50,
+			100,
 			2.2,
 			10,
 			0.75);

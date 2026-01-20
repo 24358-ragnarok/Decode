@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous.actions;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.LAUNCH_EXIT_TIME_MS;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.SEARCH_TIMEOUT_MS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Transfer.DECREMENT_TICKS;
 
 import com.pedropathing.util.Timer;
 
@@ -139,8 +140,7 @@ public class SortedLaunchAction implements AutonomousAction {
 		if (timer.getElapsedTime() > SEARCH_TIMEOUT_MS) {
 			// Check if swap has a ball we should retrieve
 			if (swap.hasHeldArtifact()) {
-				swap.moveToTransfer();
-				state = State.RETRIEVING;
+				startRetrieve();
 				return;
 			}
 			// Otherwise we're done
@@ -212,7 +212,7 @@ public class SortedLaunchAction implements AutonomousAction {
 	}
 	
 	private void startRetrieve() {
-		transfer.reverse();
+		transfer.move(DECREMENT_TICKS * 3);
 		currentBallColor = Artifact.Color.NONE;
 		state = State.RETRIEVING;
 	}
