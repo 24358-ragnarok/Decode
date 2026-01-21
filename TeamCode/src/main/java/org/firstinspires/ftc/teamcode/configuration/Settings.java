@@ -385,6 +385,7 @@ public class Settings {
 			public static final Pose RED_GOAL = new Pose(130.0, 130.0, Math.toRadians(225));
 			public static final Pose BLUE_GOAL = new Pose(14.0, 130.0, Math.toRadians(315));
 			public static final Pose OBELISK = new Pose(72.0, 150.0, Math.toRadians(0));
+			public static final Pose CLASSIFIER_EXIT = new Pose(9.4, 50, Math.toRadians(97));
 			// Close scan matches the previous single SCAN pose for backward compatibility.
 			public static final Pose CLOSE_SCAN = new Pose(60, 100.0, Math.toRadians(80));
 			// Far scan can be tuned separately; initialized to the same pose for now.
@@ -410,15 +411,14 @@ public class Settings {
 		 */
 		public static class AutoStart {
 			public static final Pose FAR = new Pose(59.00, Robot.LENGTH / 2, Math.toRadians(90));
-			public static final Pose CLOSE = new Pose(26, 124, Math.toRadians(145));
+			public static final Pose CLOSE = new Pose(24, 127, Math.toRadians(145));
 		}
 		
 		/**
 		 * Sample pickup locations organized by preset groups.
 		 */
 		public static class Samples {
-			public static Pose EAT = new Pose(14, 30, Math.toRadians(100));
-			public static Pose EAT_END = new Pose(14, 55, Math.toRadians(100));
+			public static Pose EMPTY_GATE = new Pose(8.58, 64, Math.toRadians(122));
 			
 			/**
 			 * First preset group (closest to wall).
@@ -438,7 +438,7 @@ public class Settings {
 				public static final Pose GRAB_1 = new Pose(36.0, 58, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 58, Math.toRadians(180));
 				public static final Pose END = new Pose(25, 58, Math.toRadians(180));
-				public static final Pose END_ULT = new Pose(16, 62, Math.toRadians(180));
+				public static final Pose END_AND_EMPTY_GATE = new Pose(16, 64, Math.toRadians(180));
 			}
 			
 			/**
@@ -472,9 +472,11 @@ public class Settings {
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END = new Pose(89.5, 56);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3_END = new Pose(81, 81);
+			public static final Pose EAT_FROM_EMPTY_DIRECTLY = new Pose(32, 16);
+			public static final Pose EMPTY_GATE_APPROACH = new Pose(38, 64);
 			public static Pose HUMAN_PLAYER = new Pose(55, 27);
 			
-			public static Pose EAT = new Pose(17, 20);
+			public static Pose CLOSE_CLASSIFIER_EXIT = new Pose(32, 16);
 		}
 		
 		/**

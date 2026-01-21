@@ -52,10 +52,10 @@ public class MainAuto extends OpMode {
 		// Match settings will be configured by the driver during init_loop
 		MatchState.reset();
 		
-		wizard = new MatchConfigurationWizard(gamepad1, logging);
-		
 		// Initialize robot mechanisms
 		mechanisms = new MechanismManager(hardwareMap);
+		
+		wizard = new MatchConfigurationWizard(gamepad1, logging);
 		
 		// Enable retained mode for efficient telemetry during autonomous
 		logging.enableRetainedMode();

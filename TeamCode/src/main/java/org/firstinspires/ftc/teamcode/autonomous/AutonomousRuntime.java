@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.ControlPoints.EMPTY_GATE_APPROACH;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.Samples.EMPTY_GATE;
+
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 
 /**
@@ -156,7 +160,7 @@ public enum AutonomousRuntime {
 					.endAt(Settings.Positions.Park.FAR)
 					.build();
 		}
-
+		
 		@Override
 		public AutonomousSequence buildCloseSequence() {
 			return new SequenceBuilder()
@@ -204,12 +208,7 @@ public enum AutonomousRuntime {
 					.build();
 		}
 	},
-	CIRCUIT("[CIRCUIT] preload/set1/HP loop") {
-		@Override
-		public boolean supportsClose() {
-			return false; // Only FAR sequence is implemented
-		}
-		
+	EAT("[CB] Closest two presets and loop eat") {
 		@Override
 		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
@@ -232,7 +231,7 @@ public enum AutonomousRuntime {
 					
 					
 					// Loop: Get balls from HP and launch until 5 seconds left
-					.loopUntilSecondsLeft(5, loop -> loop
+					.loopUntilSecondsLeft(3, loop -> loop
 							.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.PREP,
 									Settings.Positions.ControlPoints.HUMAN_PLAYER,
 									"Prep Human Player")
@@ -252,65 +251,7 @@ public enum AutonomousRuntime {
 		
 		@Override
 		public AutonomousSequence buildCloseSequence() {
-			throw new UnsupportedOperationException("CIRCUIT runtime does not support CLOSE position");
-		}
-	},
-	/**
-	 * Reset runtime: Launch preloads, collect 3 sets of balls maybe 4, launch them, then park.
-	 * If we don't get the sorted 9 ball working in time, we can fall back to this.
-	 */
-	ULTIMATE("Maybe 12 Ball") {
-		@Override
-		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
-					
-					.prepLaunch()
-					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
-					.launch()
-					
-					// Get ball set I
-					.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
-							"Prep Preset 1",
-							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR)
-					.startPickup()
-					
-					.moveTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
-					// .endPickup()
-					
-					// Launch ball set I
-					.prepLaunch()
-					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
-							Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
-					.launch()
-					
-					// Get ball set II
-					.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
-							"Prep Preset2",
-							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
-					.startPickup()
-					
-					.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
-					
-					// .endPickup()
-					
-					// Launch ball set II
-					.prepLaunch()
-					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preset2")
-					
-					.launch()
-					
-					// Park
-					.endPickup()
-					.moveTo(Settings.Positions.Park.FAR, "Park")
-					.endAt(Settings.Positions.Park.FAR)
-					.build();
-		}
-		
-		@Override
-		public AutonomousSequence buildCloseSequence() {
-			return new SequenceBuilder()
-					
-					// Launch preload
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
 					
@@ -318,39 +259,50 @@ public enum AutonomousRuntime {
 					
 					// Get ball set I (Preset2 for close sequence)
 					.startPickup()
-					.moveCurveToVia(Settings.Positions.Samples.Preset2.END_ULT,
-							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END, "Prep Preset2")
+					.moveCurveToVia(Settings.Positions.Samples.Preset2.END,
+							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Prep Preset2")
 					
 					// .endPickup()
 					
 					// Launch ball set I
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END, "Launch Preset3")
+							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Launch Preset3")
 					
+					.KRAKATOA()
+					
+					
+					.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
+							"Curve to empty gate")
+					.moveTo(Settings.Positions.Towers.CLASSIFIER_EXIT, "Eat from empty")
+					.startPickup()
+					.wait(1.0)
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END,
+							"Launch Direct Eat")
 					.KRAKATOA()
 					
 					// Get ball set II (Preset3 for close sequence)
 					.startPickup()
-					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+					.moveCurveToVia(Settings.Positions.Samples.Preset3.END,
 							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset3")
 					
-					// .endPickup()
 					
 					// Launch ball set II
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset2")
-					
 					.KRAKATOA()
 					
-					// Park
 					.endPickup()
+					
 					.moveTo(Settings.Positions.Park.CLOSE, "Park")
 					.endAt(Settings.Positions.Park.CLOSE)
 					.build();
 		}
 	},
+	
 	
 	JUST_LAUNCH("Just Launch & Park") {
 		@Override
