@@ -438,6 +438,7 @@ public class Settings {
 				public static final Pose GRAB_1 = new Pose(36.0, 58, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 58, Math.toRadians(180));
 				public static final Pose END = new Pose(25, 58, Math.toRadians(180));
+				public static final Pose END_ULT = new Pose(16, 62, Math.toRadians(180));
 			}
 			
 			/**
@@ -469,6 +470,8 @@ public class Settings {
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2 = new Pose(41, 59);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3 = new Pose(96, 81);
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
+			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END = new Pose(89.5, 56);
+			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3_END = new Pose(81, 81);
 			public static Pose HUMAN_PLAYER = new Pose(55, 27);
 			
 			public static Pose EAT = new Pose(17, 20);
