@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.ControlPoints.EMPTY_GATE_APPROACH;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END;
-import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.Samples.EMPTY_GATE;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.Samples.GateAndEating.EMPTY_GATE;
 
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 
@@ -259,7 +259,7 @@ public enum AutonomousRuntime {
 					
 					// Get ball set I (Preset2 for close sequence)
 					.startPickup()
-					.moveCurveToVia(Settings.Positions.Samples.Preset2.END,
+					.moveCurveToVia(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
 							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Prep Preset2")
 					
 					// .endPickup()

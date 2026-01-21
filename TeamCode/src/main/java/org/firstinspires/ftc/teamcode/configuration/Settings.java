@@ -418,7 +418,10 @@ public class Settings {
 		 * Sample pickup locations organized by preset groups.
 		 */
 		public static class Samples {
-			public static Pose EMPTY_GATE = new Pose(8.58, 64, Math.toRadians(122));
+			public static class GateAndEating{
+				public static Pose EMPTY_GATE = new Pose(8.58, 64, Math.toRadians(122));
+				public static final Pose EAT_FROM_EMPTY_DIRECTLY = new Pose(32, 16);
+			}
 			
 			/**
 			 * First preset group (closest to wall).
@@ -472,7 +475,6 @@ public class Settings {
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END = new Pose(89.5, 56);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3_END = new Pose(81, 81);
-			public static final Pose EAT_FROM_EMPTY_DIRECTLY = new Pose(32, 16);
 			public static final Pose EMPTY_GATE_APPROACH = new Pose(38, 64);
 			public static Pose HUMAN_PLAYER = new Pose(55, 27);
 			
