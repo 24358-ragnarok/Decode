@@ -24,4 +24,4 @@ six==1.17.0
 tinydb==4.8.2
 tzdata==2025.2
 websockets==15.0.1
-wheel==0.45.1
+wheel==0.46.2
