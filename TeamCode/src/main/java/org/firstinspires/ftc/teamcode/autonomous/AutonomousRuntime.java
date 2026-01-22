@@ -271,15 +271,14 @@ public enum AutonomousRuntime {
 					
 					.KRAKATOA()
 					
-					
+					// Get balls from eat and shoot
+					.startPickup()
 					.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
 							"Curve to empty gate")
-					.moveTo(Settings.Positions.Towers.CLASSIFIER_EXIT, "Eat from empty")
-					.startPickup()
-					.wait(1.0)
+					.wait(1.2)
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END,
+							EMPTY_GATE_APPROACH,
 							"Launch Direct Eat")
 					.KRAKATOA()
 					
@@ -294,6 +293,19 @@ public enum AutonomousRuntime {
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset2")
 					.KRAKATOA()
+					
+					
+					// Loop: Get balls from HP and launch until 5 seconds left
+					.loopUntilSecondsLeft(3, loop -> loop
+							.startPickup()
+							.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
+									"Curve to empty gate")
+							.wait(1.2)
+							.prepLaunch()
+							.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+									EMPTY_GATE_APPROACH,
+									"Launch Direct Eat")
+							.KRAKATOA())
 					
 					.endPickup()
 					
