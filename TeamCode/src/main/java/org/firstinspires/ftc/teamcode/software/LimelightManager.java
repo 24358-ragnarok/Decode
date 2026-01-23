@@ -1,9 +1,17 @@
 package org.firstinspires.ftc.teamcode.software;
 
+import com.pedropathing.ftc.InvertedFTCCoordinates;
+import com.pedropathing.ftc.PoseConverter;
+import com.pedropathing.geometry.PedroCoordinates;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.Mechanism;
 import org.firstinspires.ftc.teamcode.software.game.Artifact;
@@ -14,8 +22,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
- * Interface between the Limelight camera and the robot, providing vision processing
- * capabilities for artifact detection, AprilTag recognition, and goal targeting.
+ * Interface between the Limelight camera and the robot, providing vision
+ * processing
+ * capabilities for artifact detection, AprilTag recognition, and goal
+ * targeting.
  * <p>
  * Manages pipeline switching between different vision modes:
  * - AprilTag detection for motif recognition and goal targeting
@@ -30,7 +40,8 @@ public class LimelightManager extends Mechanism {
 	public final Limelight3A limelight;
 	LLResult currentResult;
 	/**
-	 * Current active pipeline - starts with AprilTag to detect obelisk during auto start
+	 * Current active pipeline - starts with AprilTag to detect obelisk during auto
+	 * start
 	 */
 	Pipeline currentPipeline = Pipeline.APRILTAG;
 	
@@ -93,7 +104,8 @@ public class LimelightManager extends Mechanism {
 	}
 	
 	/**
-	 * Switches the current pipeline to a new pipeline, optimized to avoid redundant switches.
+	 * Switches the current pipeline to a new pipeline, optimized to avoid redundant
+	 * switches.
 	 *
 	 * @param newPipeline The new pipeline to switch to:
 	 *                    APRILTAG (1), GREEN (2), PURPLE (3)
@@ -110,7 +122,8 @@ public class LimelightManager extends Mechanism {
 	/**
 	 * Attempts to detect the unique three-artifact motif using AprilTag detection.
 	 *
-	 * @return The detected Motif object (GPP, PGP, or PPG), or Motif.UNKNOWN if no valid tag is found.
+	 * @return The detected Motif object (GPP, PGP, or PPG), or Motif.UNKNOWN if no
+	 * valid tag is found.
 	 */
 	public Motif detectMotif() {
 		setCurrentPipeline(Pipeline.APRILTAG);
@@ -128,11 +141,15 @@ public class LimelightManager extends Mechanism {
 	}
 	
 	/**
-	 * Detects all visible Green and Purple balls, sorts them by their horizontal position (tx),
-	 * and combines them with the pre-detected Motif to create the robot's Classifier state.
+	 * Detects all visible Green and Purple balls, sorts them by their horizontal
+	 * position (tx),
+	 * and combines them with the pre-detected Motif to create the robot's
+	 * Classifier state.
 	 *
-	 * @param classifierMotif The Motif (GPP, PGP, PPG) that was *already detected* in a previous step.
-	 * @return A new Classifier object containing the Motif and the spatially-sorted Artifacts.
+	 * @param classifierMotif The Motif (GPP, PGP, PPG) that was *already detected*
+	 *                        in a previous step.
+	 * @return A new Classifier object containing the Motif and the spatially-sorted
+	 * Artifacts.
 	 */
 	public Classifier coerceClassifierState(Motif classifierMotif) {
 		ArrayList<ColoredTarget> detectedBalls = new ArrayList<>();
@@ -186,15 +203,53 @@ public class LimelightManager extends Mechanism {
 		return limelight.getLatestResult();
 	}
 	
+	/**
+	 * Estimates the robot's pose using MegaTag2 localization with AprilTags.
+	 * MegaTag2 requires the robot's current heading to provide accurate,
+	 * ambiguity-free pose estimates.
+	 * <p>
+	 * The method performs the following conversions:
+	 * 1. Gets MegaTag2 pose estimate from Limelight (in WPILib format, meters)
+	 * 2. Converts from meters to inches
+	 * 3. Converts from Decode/AprilTag coordinates to FTC standard coordinates
+	 * 4. Converts from FTC standard coordinates to Pedro Pathing coordinates
+	 *
+	 * @param currentRobotHeading The robot's current heading in radians (from the
+	 *                            drivetrain's pose estimator).
+	 *                            This is required for MegaTag2 to work properly.
+	 *                            Convention: 0 radians = facing red alliance wall
+	 *                            in FRC, or 0 degrees per Pedro coordinates.
+	 * @return The robot's estimated pose in Pedro Pathing coordinates, or null if
+	 * no AprilTags are visible.
+	 */
+	public Pose estimateRobotPose(double currentRobotHeading) {
+		// Ensure we're on the AprilTag pipeline
+		setCurrentPipeline(Pipeline.APRILTAG);
+		
+		// Convert heading from radians to degrees for Limelight
+		// MegaTag2 expects heading in degrees: 0° = facing red alliance wall
+		double headingDegrees = Math.toDegrees(currentRobotHeading);
+		
+		limelight.updateRobotOrientation(headingDegrees);
+		currentResult = limelight.getLatestResult();
+		
+		Pose3D apriltag = currentResult.getBotpose_MT2();
+		Pose2D converted = new Pose2D(DistanceUnit.METER, apriltag.getPosition().x, apriltag.getPosition().y, AngleUnit.DEGREES, apriltag.getOrientation().getYaw());
+		Pose ftcStandard = PoseConverter.pose2DToPose(converted, InvertedFTCCoordinates.INSTANCE);
+		
+		return ftcStandard.getAsCoordinateSystem(PedroCoordinates.INSTANCE);
+	}
+	
 	public enum Pipeline {
 		APRILTAG, // pipe 1
-		PURPLE,    // pipe 2
-		GREEN,   // pipe 3
+		PURPLE, // pipe 2
+		GREEN, // pipe 3
 		UNKNOWN
 	}
 	
 	/**
-	 * A helper class to temporarily store detected balls with their color and x-position
+	 * A helper class to temporarily store detected balls with their color and
+	 * x-position
 	 * for sorting before creating the final Artifact array.
 	 */
 	private static class ColoredTarget {

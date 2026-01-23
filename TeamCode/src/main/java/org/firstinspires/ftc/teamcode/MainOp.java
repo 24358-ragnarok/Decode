@@ -44,7 +44,7 @@ public class MainOp extends OpMode {
 	private Lever lever;
 	private Timer speedTimer;
 	private double speedms = 0;
-	
+
 	/**
 	 * Runs when "init" is pressed on the Driver Station.
 	 * Initializes all robot systems, controllers, and telemetry for TeleOp
@@ -189,6 +189,15 @@ public class MainOp extends OpMode {
 									? Settings.Positions.Reset.FAR_ZONE
 									: Settings.Field.mirrorPose(Settings.Positions.Reset.FAR_ZONE));
 				}
+				if (mainController.wasJustPressed(Controller.Action.GOTO_PARK)) {
+					if (mechanisms.limelightManager != null) {
+						double currentHeading = drivetrain.follower.getHeading();
+						Pose estimatedPose = mechanisms.limelightManager.estimateRobotPose(currentHeading);
+						if (estimatedPose != null) {
+							drivetrain.follower.setPose(estimatedPose);
+						}
+					}
+				}
 			} else {
 				
 				final double startValue = mainController.getProcessedValue(Controller.Control.OPTIONS);
@@ -300,7 +309,6 @@ public class MainOp extends OpMode {
 		logging.addDataLazy("heading°", () -> Math.toDegrees(mechanisms.drivetrain.follower.getHeading()));
 		logging.addDataLazy("x", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getX());
 		logging.addDataLazy("y", "%.2f", () -> mechanisms.drivetrain.follower.getPose().getY());
-		
 		
 		mechanisms.ifValid(mechanisms.get(PairedLauncher.class), launcher -> {
 			logging.addDataLazy("Launch Solution Absolute Pitch°", () -> {
