@@ -331,7 +331,7 @@ public class Settings {
 		public static double CLOSE_SHOOT_RPM = 2665; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 32.5; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3605; // Wheel RPM for far position
+		public static double FAR_SHOOT_RPM = 3545; // Wheel RPM for far position
 		
 	}
 	
@@ -400,9 +400,9 @@ public class Settings {
 		 */
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 99, Math.toRadians(140.59));
-			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(114));
+			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(118));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
-			public static final Pose GATE = new Pose(25, 73, Math.toRadians(270));
+			public static final Pose GATE = new Pose(12.44, 62, Math.toRadians(150));
 			public static final Pose PARK = new Pose(106, 32, Math.toRadians(180));
 		}
 		
@@ -418,7 +418,10 @@ public class Settings {
 		 * Sample pickup locations organized by preset groups.
 		 */
 		public static class Samples {
-			public static Pose EMPTY_GATE = new Pose(8.58, 64, Math.toRadians(122));
+			public static class GateAndEating{
+				public static Pose EMPTY_GATE = new Pose(12.44, 62, Math.toRadians(150));
+				public static final Pose EAT_FROM_EMPTY_DIRECTLY = new Pose(32, 16);
+			}
 			
 			/**
 			 * First preset group (closest to wall).
@@ -438,7 +441,7 @@ public class Settings {
 				public static final Pose GRAB_1 = new Pose(36.0, 58, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 58, Math.toRadians(180));
 				public static final Pose END = new Pose(25, 58, Math.toRadians(180));
-				public static final Pose END_AND_EMPTY_GATE = new Pose(16, 64, Math.toRadians(180));
+				public static final Pose END_AND_EMPTY_GATE = new Pose(16, 62, Math.toRadians(180));
 			}
 			
 			/**
@@ -472,9 +475,10 @@ public class Settings {
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END = new Pose(89.5, 56);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3_END = new Pose(81, 81);
-			public static final Pose EAT_FROM_EMPTY_DIRECTLY = new Pose(32, 16);
 			public static final Pose EMPTY_GATE_APPROACH = new Pose(38, 64);
 			public static Pose HUMAN_PLAYER = new Pose(55, 27);
+			
+			public static Pose HUMAN_PLAYER_TO_FAR_SHOOT = new Pose(51, 7.5);
 			
 			public static Pose CLOSE_CLASSIFIER_EXIT = new Pose(32, 16);
 		}
@@ -484,7 +488,7 @@ public class Settings {
 		 */
 		public static class Park {
 			public static final Pose FAR = Samples.Preset1.GRAB_1; // Reuse a safe position
-			public static final Pose CLOSE = new Pose(30, 73, Math.toRadians(270));
+			public static final Pose CLOSE = new Pose(60, 100, Math.toRadians(150));
 			public static final Pose FAR_SAFE_PARK_POSE = new Pose(35.86206896551724, 12.505747126436786,
 					Math.toRadians(90));
 			public static final Pose CLOSE_SAFE_PARK_POSE = new Pose(48, 130, Math.toRadians(90));
@@ -525,7 +529,7 @@ public class Settings {
 		
 		public static double SLOW_SPEED = 0.4;
 		public static double LAUNCH_EXIT_TIME_MS = 200;
-		public static double KRAKATOA_TIME_MS = 1500;
+		public static double KRAKATOA_TIME_MS = 750;
 		public static double SEARCH_TIMEOUT_MS = 500; // Time to search before assuming empty
 		
 		/**
