@@ -4,6 +4,8 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.Co
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.Samples.GateAndEating.EMPTY_GATE;
 
+import org.firstinspires.ftc.teamcode.autonomous.actions.Krakatoa;
+import org.firstinspires.ftc.teamcode.autonomous.actions.LinearPathAction;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 
 /**
@@ -208,7 +210,106 @@ public enum AutonomousRuntime {
 					.build();
 		}
 	},
-	EAT("[CB] Closest two presets and loop eat") {
+	EAT("[CB] Closest two presets and loop eat combined combined auto") {
+		@Override
+		public AutonomousSequence buildFarSequence() {
+			return new SequenceBuilder()
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
+					.KRAKATOA()
+					
+					// Get ball set I
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.Preset1.END,
+							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR, "Prep Preset 1")
+					
+					// Launch ball set I
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
+							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR, "Launch Preset1")
+					.KRAKATOA()
+					
+					
+					// Loop: Get balls from HP and launch until 5 seconds left
+					.loopUntilSecondsLeft(3, loop -> loop
+							.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.PREP,
+									Settings.Positions.ControlPoints.HUMAN_PLAYER,
+									"Prep Human Player")
+							.startPickup()
+							.moveTo(Settings.Positions.Samples.HumanPlayerPreset.END,
+									"End Human Player")
+							.prepLaunch()
+							.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
+									Settings.Positions.ControlPoints.HUMAN_PLAYER_TO_FAR_SHOOT, "Human player to far shoot")
+							.KRAKATOA())
+					
+					// Park
+					.endPickup()
+					.moveTo(Settings.Positions.Park.FAR, "Park")
+					.endAt(Settings.Positions.Park.FAR)
+					.build();
+		}
+		
+		@Override
+		public AutonomousSequence buildCloseSequence() {
+			return new SequenceBuilder()
+					.prepLaunch()
+					.parallel(
+							new LinearPathAction(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload"),
+							new Krakatoa()
+					)
+//					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
+//
+//					.KRAKATOA()
+					
+					// Get ball set I (Preset2 for close sequence)
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
+							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Prep Preset2")
+					
+					// .endPickup()
+					
+					// Launch ball set I
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Launch Preset3")
+					
+					.KRAKATOA()
+					
+					
+					// Loop: Get balls from eat and launch until 6 seconds left
+					.loopUntilSecondsLeft(6, loop -> loop
+							.startPickup()
+							.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
+									"Curve to empty gate")
+							.wait(1.2)
+							.prepLaunch()
+							.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+									EMPTY_GATE_APPROACH,
+									"Launch Direct Eat")
+							.KRAKATOA())
+					
+					// Get ball set II (Preset3 for close sequence)
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.Preset3.END,
+							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset3")
+					
+					
+					// Launch ball set II
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset2")
+					.KRAKATOA()
+					
+					.endPickup()
+					
+					.moveTo(Settings.Positions.Park.CLOSE, "Park")
+					.endAt(Settings.Positions.Park.CLOSE)
+					.build();
+		}
+	},
+	
+	SOLO("Hypercarry ") {
 		@Override
 		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
@@ -296,7 +397,7 @@ public enum AutonomousRuntime {
 					
 					
 					// Loop: Get balls from HP and launch until 5 seconds left
-					.loopUntilSecondsLeft(3, loop -> loop
+					.loopUntilSecondsLeft(1.5, loop -> loop
 							.startPickup()
 							.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
 									"Curve to empty gate")
