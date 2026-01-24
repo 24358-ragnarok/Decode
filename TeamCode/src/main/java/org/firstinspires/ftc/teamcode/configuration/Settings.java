@@ -45,8 +45,8 @@ public class Settings {
 			actionControlMap.put(Controller.Action.MOVE_Y, Controller.Control.LEFT_STICK_Y);
 			actionControlMap.put(Controller.Action.MOVE_X, Controller.Control.LEFT_STICK_X);
 			actionControlMap.put(Controller.Action.ROTATE_AXIS, Controller.Control.RIGHT_STICK_X);
-			actionControlMap.put(Controller.Action.ROTATE_LEFT, Controller.Control.LEFT_BUMPER);
-			actionControlMap.put(Controller.Action.ROTATE_RIGHT, Controller.Control.RIGHT_BUMPER);
+			actionControlMap.put(Controller.Action.ROTATE_LEFT, Controller.Control.LEFT_TRIGGER);
+			actionControlMap.put(Controller.Action.ROTATE_RIGHT, Controller.Control.RIGHT_TRIGGER);
 			actionControlMap.put(Controller.Action.SLOW_FORWARD, Controller.Control.DPAD_UP);
 			actionControlMap.put(Controller.Action.SLOW_LEFT, Controller.Control.DPAD_RIGHT);
 			actionControlMap.put(Controller.Action.SLOW_RIGHT, Controller.Control.DPAD_LEFT);
@@ -328,10 +328,10 @@ public class Settings {
 		 * These values are used when AIM is called based on which position is closer.
 		 */
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 45.2; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2665; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_RPM = 2310; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 32.5; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3545; // Wheel RPM for far position
+		public static double FAR_SHOOT_RPM = 3200; // Wheel RPM for far position
 		
 		public static double MAINTAIN_RPM = (CLOSE_SHOOT_RPM + FAR_SHOOT_RPM) / 2; // avg speed
 		
@@ -346,7 +346,7 @@ public class Settings {
 	public static class TrajectoryEngine {
 		// If robot is within this distance (inches) of a preset position, use the
 		// preset directly
-		public static double PRESET_SNAP_THRESHOLD = 3.0;
+		public static double PRESET_SNAP_THRESHOLD = 8.0;
 		
 		// Inverse Distance Weighting power parameter
 		// Higher = more local influence, lower = smoother interpolation
@@ -438,7 +438,7 @@ public class Settings {
 		 */
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 99, Math.toRadians(140.59));
-			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(118));
+			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(112.5));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(12.44, 62, Math.toRadians(150));
 			public static final Pose PARK = new Pose(106, 32, Math.toRadians(180));

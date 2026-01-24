@@ -152,7 +152,6 @@ public class MainOp extends OpMode {
 		mainController.update();
 		subController.update();
 		
-		// Hot-loop locals
 		final Drivetrain drivetrain = this.drivetrain;
 		final VerticalWheelTransfer transfer = this.transfer;
 		final FlexVectorIntake intake = this.intake;
@@ -201,7 +200,6 @@ public class MainOp extends OpMode {
 					}
 				}
 			} else {
-				
 				final double startValue = mainController.getProcessedValue(Controller.Control.OPTIONS);
 				for (Controller.Action action : Settings.Controls.gotoActions) {
 					if (mainController.wasJustPressed(action) && startValue <= 0.0) {
@@ -214,9 +212,9 @@ public class MainOp extends OpMode {
 						drivetrain.switchToManual();
 					}
 				}
-				if (mainController.wasJustPressed(Controller.Control.LEFT_TRIGGER)) {
+				if (mainController.wasJustPressed(Controller.Control.LEFT_BUMPER)) {
 					drivetrain.goTo(drivetrain.follower.getPose().withHeading(drivetrain.follower.getHeading() + mechanisms.limelightManager.estimateHeadingToGoal()));
-				} else if (mainController.wasJustReleased(Controller.Control.LEFT_TRIGGER)) {
+				} else if (mainController.wasJustReleased(Controller.Control.LEFT_BUMPER)) {
 					drivetrain.switchToManual();
 				}
 			}
@@ -229,6 +227,7 @@ public class MainOp extends OpMode {
 			} else {
 				launcher.setRPM(MAINTAIN_RPM);
 				launcher.spinUp();
+				// 				launcher.stop();
 			}
 			if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
 				launcher.openDynamic();
@@ -272,8 +271,6 @@ public class MainOp extends OpMode {
 			}
 		}
 		
-		logging.addData("1", mainController.getProcessedValue(Controller.Action.PARK_EXTEND_1));
-		logging.addData("2", mainController.getProcessedValue(Controller.Action.PARK_EXTEND_2));
 		if (lever != null) {
 			if (mainController.getProcessedValue(Controller.Action.PARK_EXTEND_1) > 0.5 &&
 					mainController.getProcessedValue(Controller.Action.PARK_EXTEND_2) > 0.5) {
