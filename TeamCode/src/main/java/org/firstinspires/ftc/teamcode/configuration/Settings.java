@@ -336,12 +336,45 @@ public class Settings {
 	}
 	
 	/**
+	 * Settings for the advanced Trajectory Engine.
+	 * Controls zone-based interpolation and calibration data loading.
+	 */
+	@Configurable
+	public static class TrajectoryEngine {
+		// If robot is within this distance (inches) of a preset position, use the
+		// preset directly
+		public static double PRESET_SNAP_THRESHOLD = 8.0;
+		
+		// Inverse Distance Weighting power parameter
+		// Higher = more local influence, lower = smoother interpolation
+		// 2.5 provides good balance for FTC field scales
+		public static double IDW_POWER = 2.5;
+		
+		// Minimum distance to avoid division by zero in interpolation
+		public static double MIN_INTERPOLATION_DISTANCE = 0.1;
+		
+		// RPM bounds for safety
+		public static double MIN_RPM = 2000;
+		public static double MAX_RPM = 4500;
+		
+		// Calibration data file paths (relative to TeamCode/src/main/java/)
+		public static String CLOSE_ZONE_DATA_FILE = "org/firstinspires/ftc/teamcode/software/datasets/close_zone.csv";
+		public static String FAR_ZONE_DATA_FILE = "org/firstinspires/ftc/teamcode/software/datasets/far_zone.csv";
+	}
+	
+	/**
 	 * Field dimensions and physical constants.
 	 */
 	@Configurable
 	public static class Field {
 		public static double WIDTH = 144.0; // inches
 		public static double BALL_MASS_KG = .076; // kg
+		public static Pose FAR_LAUNCH_ZONE_FRONT_CORNER = new Pose(72, 24);
+		public static Pose FAR_LAUNCH_ZONE_LEFT_CORNER = new Pose(50, 0);
+		public static Pose FAR_LAUNCH_ZONE_RIGHT_CORNER = new Pose(95, 0);
+		public static Pose CLOSE_LAUNCH_ZONE_FRONT_CORNER = new Pose(72, 72);
+		public static Pose CLOSE_LAUNCH_ZONE_LEFT_CORNER = new Pose(15, 128);
+		public static Pose CLOSE_LAUNCH_ZONE_RIGHT_CORNER = new Pose(129, 128);
 		
 		/**
 		 * Mirrors a pose across the field centerline for red alliance.
@@ -358,6 +391,7 @@ public class Settings {
 					Math.PI - bluePose.getHeading() // Mirror heading across x axis
 			);
 		}
+		
 	}
 	
 	/**
@@ -418,9 +452,9 @@ public class Settings {
 		 * Sample pickup locations organized by preset groups.
 		 */
 		public static class Samples {
-			public static class GateAndEating{
-				public static Pose EMPTY_GATE = new Pose(12.44, 62, Math.toRadians(150));
+			public static class GateAndEating {
 				public static final Pose EAT_FROM_EMPTY_DIRECTLY = new Pose(32, 16);
+				public static Pose EMPTY_GATE = new Pose(12.44, 62, Math.toRadians(150));
 			}
 			
 			/**

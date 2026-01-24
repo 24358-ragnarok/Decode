@@ -314,7 +314,7 @@ public class MainOp extends OpMode {
 			logging.addDataLazy("Launch Solution Absolute Pitch°", () -> {
 				TrajectoryEngine.AimingSolution solution = mechanisms.trajectoryEngine
 						.getAimingOffsets(MatchState.getAllianceColor(), launcher.getPitch());
-				return solution.hasTarget ? String.format("%.2f", solution.verticalOffsetDegrees) : "N/A";
+				return solution.hasTarget ? String.format("%.2f", solution.pitch) : "N/A";
 			});
 			
 			logging.addDataLazy("Launch Solution Required RPM", () -> {

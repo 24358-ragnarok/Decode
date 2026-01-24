@@ -16,10 +16,7 @@ import org.firstinspires.ftc.teamcode.configuration.Settings;
  * match.
  */
 public enum AutonomousRuntime {
-	/**
-	 * 9-ball autonomous that scans, then launches in motif order using swap.
-	 */
-	SORTED_NINE_BALL("Sorted 9 Ball") {
+	SORTED("Sorted 9 Ball") {
 		@Override
 		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
@@ -110,13 +107,7 @@ public enum AutonomousRuntime {
 					.build();
 		}
 	},
-	
-	/**
-	 * Reset runtime: Launch preloads, collect 2 sets of balls, launch them, then
-	 * park.
-	 * This is the "safe" competition runtime.
-	 */
-	BEST("Classic 9 Ball") {
+	CLASSIC("Classic 9 Ball") {
 		@Override
 		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
@@ -210,7 +201,7 @@ public enum AutonomousRuntime {
 					.build();
 		}
 	},
-	EAT("[CB] Closest two presets and loop eat combined combined auto") {
+	BEST("[CB] Closest two presets and loop eat combined combined auto") {
 		@Override
 		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
@@ -308,8 +299,7 @@ public enum AutonomousRuntime {
 					.build();
 		}
 	},
-	
-	SOLO("Hypercarry ") {
+	SOLO("Hypercarry") {
 		@Override
 		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
@@ -415,8 +405,6 @@ public enum AutonomousRuntime {
 					.build();
 		}
 	},
-	
-	
 	JUST_LAUNCH("Just Launch & Park") {
 		@Override
 		public AutonomousSequence buildFarSequence() {
@@ -444,11 +432,6 @@ public enum AutonomousRuntime {
 					.build();
 		}
 	},
-	
-	/**
-	 * Just Park runtime: Minimal autonomous that only parks.
-	 * Use this when mechanisms are unreliable or time is extremely limited.
-	 */
 	JUST_PARK("Just Park") {
 		@Override
 		public AutonomousSequence buildFarSequence() {

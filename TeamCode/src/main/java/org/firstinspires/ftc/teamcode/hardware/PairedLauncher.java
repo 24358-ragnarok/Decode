@@ -69,7 +69,7 @@ public class PairedLauncher extends Mechanism {
 		}
 		
 		setRPM(solution.rpm);
-		setPitch(solution.verticalOffsetDegrees);
+		setPitch(solution.pitch);
 	}
 	
 	public void openClose() {
