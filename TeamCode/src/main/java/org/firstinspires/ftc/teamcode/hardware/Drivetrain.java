@@ -146,7 +146,7 @@ public class Drivetrain extends Mechanism {
 		}
 		
 		this.state = State.PATHING;
-		follower.holdPoint(targetPose);
+		follower.holdPoint(targetPose, false);
 	}
 	
 	public void rotateTo(double angle) {
