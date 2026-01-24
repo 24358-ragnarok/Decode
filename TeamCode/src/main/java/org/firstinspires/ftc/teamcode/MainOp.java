@@ -44,7 +44,7 @@ public class MainOp extends OpMode {
 	private Lever lever;
 	private Timer speedTimer;
 	private double speedms = 0;
-
+	
 	/**
 	 * Runs when "init" is pressed on the Driver Station.
 	 * Initializes all robot systems, controllers, and telemetry for TeleOp
@@ -211,6 +211,11 @@ public class MainOp extends OpMode {
 					} else if (mainController.wasJustReleased(action)) {
 						drivetrain.switchToManual();
 					}
+				}
+				if (mainController.wasJustPressed(Controller.Control.LEFT_TRIGGER)) {
+					drivetrain.goTo(drivetrain.follower.getPose().withHeading(drivetrain.follower.getHeading() + mechanisms.limelightManager.estimateHeadingToGoal()));
+				} else if (mainController.wasJustReleased(Controller.Control.LEFT_TRIGGER)) {
+					drivetrain.switchToManual();
 				}
 			}
 		}

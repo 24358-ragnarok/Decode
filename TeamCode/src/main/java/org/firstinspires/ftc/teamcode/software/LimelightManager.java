@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.hardware.Mechanism;
 import org.firstinspires.ftc.teamcode.software.game.Artifact;
@@ -238,6 +239,22 @@ public class LimelightManager extends Mechanism {
 		Pose ftcStandard = PoseConverter.pose2DToPose(converted, InvertedFTCCoordinates.INSTANCE);
 		
 		return ftcStandard.getAsCoordinateSystem(PedroCoordinates.INSTANCE);
+	}
+	
+	public double estimateHeadingToGoal() {
+		setCurrentPipeline(Pipeline.APRILTAG);
+		
+		currentResult = limelight.getLatestResult();
+		
+		if (currentResult.getFiducialResults() != null && !currentResult.getFiducialResults().isEmpty()) {
+			for (LLResultTypes.FiducialResult fid : currentResult.getFiducialResults()) {
+				if (fid.getFiducialId() ==
+						(MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE ? 20 : 24)) {
+					return fid.getTargetXDegrees();
+				}
+			}
+		}
+		return 0.0;
 	}
 	
 	public enum Pipeline {
