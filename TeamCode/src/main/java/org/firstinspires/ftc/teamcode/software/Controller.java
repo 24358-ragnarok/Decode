@@ -138,11 +138,11 @@ public class Controller extends Gamepad {
 	public final double getProcessedValue(Action action) {
 		double val = getProcessedValue(getControlForAction(action));
 		if (action == Action.ROTATE_LEFT || action == Action.ROTATE_RIGHT) {
-			val /= 3;
+			val /= 5;
 		}
 		if (action == Action.SLOW_FORWARD || action == Action.SLOW_BACKWARD || action == Action.SLOW_LEFT
 				|| action == Action.SLOW_RIGHT) {
-			val /= 7;
+			val /= 5;
 		}
 		return val;
 	}

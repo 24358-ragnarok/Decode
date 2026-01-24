@@ -366,7 +366,7 @@ public enum AutonomousRuntime {
 					.startPickup()
 					.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
 							"Curve to empty gate")
-					.wait(1.2)
+					.wait(.5)
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 							EMPTY_GATE_APPROACH,
@@ -387,11 +387,11 @@ public enum AutonomousRuntime {
 					
 					
 					// Loop: Get balls from HP and launch until 5 seconds left
-					.loopUntilSecondsLeft(1.5, loop -> loop
+					.loopUntilSecondsLeft(.3, loop -> loop
 							.startPickup()
 							.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
 									"Curve to empty gate")
-							.wait(1.2)
+							.wait(.5)
 							.prepLaunch()
 							.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 									EMPTY_GATE_APPROACH,
