@@ -333,6 +333,8 @@ public class Settings {
 		public static double FAR_SHOOT_PITCH_DEGREES = 32.5; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 3545; // Wheel RPM for far position
 		
+		public static double MAINTAIN_RPM = (CLOSE_SHOOT_RPM + FAR_SHOOT_RPM) / 2; // avg speed
+		
 	}
 	
 	/**
@@ -419,8 +421,8 @@ public class Settings {
 		 */
 		public static class Samples {
 			public static class GateAndEating{
-				public static Pose EMPTY_GATE = new Pose(12.44, 62, Math.toRadians(150));
 				public static final Pose EAT_FROM_EMPTY_DIRECTLY = new Pose(32, 16);
+				public static Pose EMPTY_GATE = new Pose(12.44, 62, Math.toRadians(150));
 			}
 			
 			/**

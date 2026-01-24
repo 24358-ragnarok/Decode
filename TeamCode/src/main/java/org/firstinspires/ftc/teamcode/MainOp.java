@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Aiming.MAINTAIN_RPM;
+
 import com.bylazar.gamepad.PanelsGamepad;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.outoftheboxrobotics.photoncore.Photon;
@@ -31,7 +33,8 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
 @TeleOp(name = "Run: RAGNAROK", group = ".Competition")
 public class MainOp extends OpMode {
 	private final StringBuilder transferSlotsDisplayBuilder = new StringBuilder();
-	private boolean reset = false;
+	private final boolean reset = false;
+	private final double speedms = 0;
 	private UnifiedLogging logging;
 	private MechanismManager mechanisms;
 	private Controller mainController;
@@ -43,7 +46,6 @@ public class MainOp extends OpMode {
 	private BallSwap swap;
 	private Lever lever;
 	private Timer speedTimer;
-	private double speedms = 0;
 	
 	/**
 	 * Runs when "init" is pressed on the Driver Station.
@@ -224,18 +226,9 @@ public class MainOp extends OpMode {
 		if (launcher != null) {
 			if (subController.getProcessedValue(Controller.Action.AIM) > 0.1) {
 				launcher.ready();
-				if (launcher.isAtSpeed() && speedms == 0) {
-					speedms = speedTimer.getElapsedTime();
-					reset = false;
-				}
-				if (!launcher.isAtSpeed() && speedms != 0 && !reset) {
-					speedms = 0;
-					reset = true;
-					speedTimer.resetTimer();
-				}
-				logging.addData(".ms back to speed", speedms);
 			} else {
-				launcher.stop();
+				launcher.setRPM(MAINTAIN_RPM);
+				launcher.spinUp();
 			}
 			if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
 				launcher.openDynamic();
