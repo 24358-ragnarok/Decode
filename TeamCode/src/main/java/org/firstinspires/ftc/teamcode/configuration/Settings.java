@@ -438,7 +438,7 @@ public class Settings {
 		 */
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 99, Math.toRadians(140.59));
-			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(112.5));
+			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(110.5));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(12.44, 62, Math.toRadians(150));
 			public static final Pose PARK = new Pose(106, 32, Math.toRadians(180));
