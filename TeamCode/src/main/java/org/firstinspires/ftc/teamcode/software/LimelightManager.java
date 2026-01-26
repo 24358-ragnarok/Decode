@@ -250,7 +250,7 @@ public class LimelightManager extends Mechanism {
 			for (LLResultTypes.FiducialResult fid : currentResult.getFiducialResults()) {
 				if (fid.getFiducialId() ==
 						(MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE ? 20 : 24)) {
-					return fid.getTargetXDegrees();
+					return Math.toRadians(fid.getTargetXDegrees());
 				}
 			}
 		}
