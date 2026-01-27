@@ -235,6 +235,19 @@ public class Settings {
 		public static double PITCH_MIN_ANGLE = 24.0; // Minimum pitch angle in degrees (horizontal)
 		public static double PITCH_MAX_ANGLE = 53.0; // Maximum pitch angle in degrees (straight up, 90° total window)
 		
+		// PIDF coefficients for launcher wheel velocity control
+		// - Tune kF first to provide the base feedforward power for target RPM
+		// - Increase kP to improve response, add kD to dampen overshoot, kI to remove steady-state error
+		public static double LAUNCHER_RIGHT_KP = 30;
+		public static double LAUNCHER_RIGHT_KI = 0.0222;
+		public static double LAUNCHER_RIGHT_KD = 0.0;
+		public static double LAUNCHER_RIGHT_KF = 10.7;
+		public static double LAUNCHER_LEFT_KP = 30;
+		public static double LAUNCHER_LEFT_KI = 0.0254;
+		public static double LAUNCHER_LEFT_KD = 0.0;
+		public static double LAUNCHER_LEFT_KF = 13.2;
+		
+		
 		/**
 		 * Converts RPM to motor velocity in ticks per second.
 		 * Use this when setting motor velocity from an RPM value.
@@ -327,11 +340,11 @@ public class Settings {
 		 * Preset launch angles and RPM for each shooting position.
 		 * These values are used when AIM is called based on which position is closer.
 		 */
-		public static double CLOSE_SHOOT_PITCH_DEGREES = 45.2; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2310; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_PITCH_DEGREES = 43.6; // Launch angle from horizontal for close position
+		public static double CLOSE_SHOOT_RPM = 2750; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 32.5; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3200; // Wheel RPM for far position
+		public static double FAR_SHOOT_PITCH_DEGREES = 33.5; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 3500; // Wheel RPM for far position
 		
 		public static double MAINTAIN_RPM = (CLOSE_SHOOT_RPM + FAR_SHOOT_RPM) / 2; // avg speed
 		
