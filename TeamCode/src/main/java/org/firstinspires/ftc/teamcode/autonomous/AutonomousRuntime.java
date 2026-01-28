@@ -4,8 +4,6 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.Co
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.Samples.GateAndEating.EMPTY_GATE;
 
-import org.firstinspires.ftc.teamcode.autonomous.actions.Krakatoa;
-import org.firstinspires.ftc.teamcode.autonomous.actions.LinearPathAction;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 
 /**
@@ -245,13 +243,8 @@ public enum AutonomousRuntime {
 		public AutonomousSequence buildCloseSequence() {
 			return new SequenceBuilder()
 					.prepLaunch()
-					.parallel(
-							new LinearPathAction(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload"),
-							new Krakatoa()
-					)
-//					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
-//
-//					.KRAKATOA()
+					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
+					.KRAKATOA()
 					
 					// Get ball set I (Preset2 for close sequence)
 					.startPickup()

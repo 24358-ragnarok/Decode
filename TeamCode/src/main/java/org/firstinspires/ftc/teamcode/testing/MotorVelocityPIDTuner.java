@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.configuration.Settings;
@@ -30,7 +29,7 @@ import java.util.List;
 public class MotorVelocityPIDTuner extends OpMode {
 	
 	private static final double DEBOUNCE_TIME = 0.15;
-	private static final double[] STEP_MAGNITUDES = {0.0001, 0.001, 0.01, 0.1};
+	private static final double[] STEP_MAGNITUDES = {0.0001, 0.001, 0.01, 0.1, 1};
 	
 	private UnifiedLogging logging;
 	private List<MotorInfo> motors;
@@ -108,17 +107,19 @@ public class MotorVelocityPIDTuner extends OpMode {
 		if (gamepad1.dpadRightWasPressed())
 			stepMagnitudeIndex = (stepMagnitudeIndex + 1) % STEP_MAGNITUDES.length;
 		
+		if (gamepad1.psWasPressed()) {
+			applyPIDF(current);
+		}
+		
 		// Coefficient Adjustment
 		if ((now - lastCoeffAdjustTime) > DEBOUNCE_TIME) {
 			double step = STEP_MAGNITUDES[stepMagnitudeIndex];
 			if (gamepad1.dpad_up) {
 				adjustCoeff(selectedCoefficient, step);
-				applyPIDF(current);
 				lastCoeffAdjustTime = now;
 			}
 			if (gamepad1.dpad_down) {
 				adjustCoeff(selectedCoefficient, -step);
-				applyPIDF(current);
 				lastCoeffAdjustTime = now;
 			}
 		}
@@ -135,8 +136,6 @@ public class MotorVelocityPIDTuner extends OpMode {
 			gamepad1.rumble(200);
 		}
 		
-		targetRPM = Math.max(0, Math.min(10000, targetRPM));
-		current.motor.setVelocity(Settings.Launcher.rpmToTicksPerSec(targetRPM));
 		currentRPM = Settings.Launcher.ticksPerSecToRPM(current.motor.getVelocity());
 		
 		displayTelemetry(current);
@@ -161,6 +160,7 @@ public class MotorVelocityPIDTuner extends OpMode {
 	
 	private void applyPIDF(MotorInfo current) {
 		current.motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidf);
+		current.motor.setVelocity(Settings.Launcher.rpmToTicksPerSec(targetRPM));
 	}
 	
 	private void displayTelemetry(MotorInfo current) {
@@ -185,7 +185,7 @@ public class MotorVelocityPIDTuner extends OpMode {
 		// Live Data
 		logging.addData("Target RPM", "%.1f", targetRPM);
 		logging.addData("Actual RPM", "%.1f", currentRPM);
-		logging.addData("Error", targetRPM - currentRPM);
+		logging.addData("Error", Math.abs(targetRPM - currentRPM));
 		logging.addLine("");
 		
 		// Control Map
@@ -196,6 +196,7 @@ public class MotorVelocityPIDTuner extends OpMode {
 		logging.addLine("X / Y  : Set 3000 / 4500 RPM");
 		logging.addLine("A / B  : ± 100 RPM");
 		logging.addLine("BACK   : Set 0 RPM");
+		logging.addLine("PS   : Apply Changes");
 		
 		logging.update();
 	}

@@ -238,14 +238,14 @@ public class Settings {
 		// PIDF coefficients for launcher wheel velocity control
 		// - Tune kF first to provide the base feedforward power for target RPM
 		// - Increase kP to improve response, add kD to dampen overshoot, kI to remove steady-state error
-		public static double LAUNCHER_RIGHT_KP = 30;
-		public static double LAUNCHER_RIGHT_KI = 0.0222;
+		public static double LAUNCHER_RIGHT_KP = 28.9;
+		public static double LAUNCHER_RIGHT_KI = 3.0;
 		public static double LAUNCHER_RIGHT_KD = 0.0;
-		public static double LAUNCHER_RIGHT_KF = 10.7;
+		public static double LAUNCHER_RIGHT_KF = 0.0;
 		public static double LAUNCHER_LEFT_KP = 30;
-		public static double LAUNCHER_LEFT_KI = 0.0254;
+		public static double LAUNCHER_LEFT_KI = 3.0;
 		public static double LAUNCHER_LEFT_KD = 0.0;
-		public static double LAUNCHER_LEFT_KF = 13.2;
+		public static double LAUNCHER_LEFT_KF = 0.0;
 		
 		
 		/**
@@ -341,10 +341,10 @@ public class Settings {
 		 * These values are used when AIM is called based on which position is closer.
 		 */
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 43.6; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2750; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_RPM = 2570; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 33.5; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3500; // Wheel RPM for far position
+		public static double FAR_SHOOT_RPM = 3300; // Wheel RPM for far position
 		
 		public static double MAINTAIN_RPM = (CLOSE_SHOOT_RPM + FAR_SHOOT_RPM) / 2; // avg speed
 		
