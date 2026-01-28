@@ -451,6 +451,7 @@ public class Settings {
 		 */
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 99, Math.toRadians(140.59));
+			public static final Pose CLOSE_SHOOT_AUTO = new Pose(50.6, 83.7, Math.toRadians(130.0));
 			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(110.5));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(12.44, 62, Math.toRadians(150));
@@ -524,9 +525,9 @@ public class Settings {
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2 = new Pose(41, 59);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3 = new Pose(96, 81);
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
-			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END = new Pose(89.5, 56);
+			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END = new Pose(65.4, 59);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3_END = new Pose(81, 81);
-			public static final Pose EMPTY_GATE_APPROACH = new Pose(38, 64);
+			public static final Pose EMPTY_GATE_APPROACH = new Pose(42.5, 64.3);
 			public static Pose HUMAN_PLAYER = new Pose(55, 27);
 			
 			public static Pose HUMAN_PLAYER_TO_FAR_SHOOT = new Pose(51, 7.5);
