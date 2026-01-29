@@ -242,6 +242,7 @@ public class LimelightManager extends Mechanism {
 	}
 	
 	public double estimateHeadingToGoal() {
+		
 		setCurrentPipeline(Pipeline.APRILTAG);
 		
 		currentResult = limelight.getLatestResult();
