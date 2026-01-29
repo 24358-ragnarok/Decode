@@ -367,70 +367,7 @@ public enum AutonomousRuntime {
 					.build();
 		}
 	},
-	LEGENDARY("21 Ball Solo Auto Close only") {
-		@Override
-		public boolean supportsFar() {
-			return false; // Only Close sequence is implemented
-		}
-		@Override
-		public AutonomousSequence buildFarSequence() {
-			throw new UnsupportedOperationException("Far sequence not supported for 18 ball close runtime");
-		}
-		
-		@Override
-		public AutonomousSequence buildCloseSequence() {
-			return new SequenceBuilder()
-					.prepLaunch()
-					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO, "Launch Preload")
-					
-					.KRAKATOA()
-					
-					// Get ball set I (Preset2 for close sequence)
-					.startPickup()
-					.moveCurveToVia(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
-							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Prep Preset2")
-					
-					// .endPickup()
-					
-					// Launch ball set I
-					.prepLaunch()
-					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
-							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Launch Preset3")
-					
-					.KRAKATOA()
-					
-					// Loop: Get balls from HP and launch until 5 seconds left
-					.loopUntilSecondsLeft(.3, loop -> loop
-							.startPickup()
-							.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
-									"Curve to empty gate")
-							.wait(.5)
-							.prepLaunch()
-							.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
-									EMPTY_GATE_APPROACH,
-									"Launch Direct Eat")
-							.KRAKATOA())
-					
-					// Get ball set II (Preset3 for close sequence)
-					.startPickup()
-					.moveTo(Settings.Positions.Samples.Preset3.END, "Launch Preset3")
-					
-					
-					// Launch ball set II
-					.prepLaunch()
-					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO, "Launch Preset2")
-					.KRAKATOA()
-					
-					
-					.endPickup()
-					
-					.moveTo(Settings.Positions.Park.CLOSE, "Park")
-					.endAt(Settings.Positions.Park.CLOSE)
-					.build();
-		}
-	},
-	
-	CONNER("conner's 15 ball secured close auto") {
+	CONNER("Conner's 15 ball secured close auto") {
 		
 		@Override
 		public boolean supportsFar() {
