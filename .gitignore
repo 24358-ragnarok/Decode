@@ -41,7 +41,16 @@ captures/
 
 # IntelliJ
 *.iml
-.idea/
+# Ignore all of .idea
+.idea/**
+
+# But keep what we need
+!.idea/codeStyles/
+!.idea/codeStyles/**
+!.idea/scopes/
+!.idea/scopes/**
+!.idea/inspectionProfiles/
+!.idea/inspectionProfiles/**
 
 # For Mac users
 .DS_Store
@@ -79,3 +88,8 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+
+# data collection venv
+/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/testing/data/.venv/
+flourish**.csv

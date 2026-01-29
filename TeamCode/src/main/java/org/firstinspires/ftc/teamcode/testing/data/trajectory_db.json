@@ -1,0 +1,3010 @@
+{
+  "_default": {
+    "1": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:14:06.846227+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "2": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:14:19.308306+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "3": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:16:19.080473+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "4": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:17:11.743156+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "5": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:17:16.086671+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "6": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:17:18.956761+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "7": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:17:22.578821+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "8": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:17:26.966082+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "9": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:17:33.710293+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "10": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:17:36.986048+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "11": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:17:39.503514+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "12": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:17:43.380098+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "13": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:17:47.535538+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "14": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:17:49.941244+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "15": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:18:01.706688+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "16": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:18:04.862229+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "17": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:18:08.882805+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "18": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:18:13.101888+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "19": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:18:15.710858+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "20": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:18:17.919432+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "21": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:18:46.617861+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "22": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:18:52.818552+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "23": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:18:57.238365+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "24": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:18:59.260237+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "25": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:19:01.955155+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "26": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:19:04.184593+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "27": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:19:06.514393+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "28": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:19:09.294926+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "29": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:19:11.865199+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "30": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:19:15.132318+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "31": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:19:18.625664+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "32": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:19:20.944934+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "33": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:19:41.290272+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "34": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:19:43.564945+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "35": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:19:46.044576+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "36": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:19:48.155614+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "37": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:19:50.460419+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "38": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:19:51.875221+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "39": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:19:53.347944+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "40": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:20:12.941687+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "41": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:20:14.958074+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "42": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:20:16.923042+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "43": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:20:19.187470+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "44": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:20:21.326167+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "45": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:20:24.186663+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "46": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:20:26.727428+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "47": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": true,
+      "timestamp": "2025-09-27 03:20:29.668658+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "48": {
+      "distance": 2.1494182375703432,
+      "tangential_speed": 18.095573684677206,
+      "angle_deg": 21.48955973817734,
+      "hit": false,
+      "timestamp": "2025-09-27 03:20:31.946088+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "49": {
+      "distance": 3.074344482975192,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.839939161912914,
+      "hit": true,
+      "timestamp": "2025-09-27 03:23:32.446376+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "50": {
+      "distance": 3.074344482975192,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.839939161912914,
+      "hit": true,
+      "timestamp": "2025-09-27 03:23:36.307723+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "51": {
+      "distance": 3.074344482975192,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.839939161912914,
+      "hit": true,
+      "timestamp": "2025-09-27 03:23:40.364877+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "52": {
+      "distance": 3.074344482975192,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.839939161912914,
+      "hit": false,
+      "timestamp": "2025-09-27 03:23:44.133670+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "53": {
+      "distance": 3.074344482975192,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.839939161912914,
+      "hit": true,
+      "timestamp": "2025-09-27 03:23:49.524468+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "54": {
+      "distance": 3.074344482975192,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.839939161912914,
+      "hit": true,
+      "timestamp": "2025-09-27 03:23:52.995309+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "55": {
+      "distance": 3.074344482975192,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.839939161912914,
+      "hit": true,
+      "timestamp": "2025-09-27 03:23:56.501667+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "56": {
+      "distance": 3.074344482975192,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.839939161912914,
+      "hit": true,
+      "timestamp": "2025-09-27 03:23:59.586381+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "57": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.484733560322967,
+      "hit": false,
+      "timestamp": "2025-09-27 03:25:31.547576+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "58": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.484733560322967,
+      "hit": false,
+      "timestamp": "2025-09-27 03:25:39.154754+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "59": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.484733560322967,
+      "hit": false,
+      "timestamp": "2025-09-27 03:25:48.038384+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "60": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 16.96460032938488,
+      "angle_deg": 14.484733560322967,
+      "hit": true,
+      "timestamp": "2025-09-27 03:26:24.099943+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "61": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 16.96460032938488,
+      "angle_deg": 14.484733560322967,
+      "hit": false,
+      "timestamp": "2025-09-27 03:26:27.579639+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "62": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 16.96460032938488,
+      "angle_deg": 14.484733560322967,
+      "hit": false,
+      "timestamp": "2025-09-27 03:26:29.559141+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "63": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.484733560322967,
+      "hit": true,
+      "timestamp": "2025-09-27 03:27:05.247471+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "64": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.484733560322967,
+      "hit": false,
+      "timestamp": "2025-09-27 03:27:06.800649+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "65": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.484733560322967,
+      "hit": false,
+      "timestamp": "2025-09-27 03:27:08.461259+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "66": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.484733560322967,
+      "hit": false,
+      "timestamp": "2025-09-27 03:27:15.988465+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "67": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.484733560322967,
+      "hit": true,
+      "timestamp": "2025-09-27 03:27:19.182473+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "68": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.484733560322967,
+      "hit": true,
+      "timestamp": "2025-09-27 03:27:21.036345+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "69": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.484733560322967,
+      "hit": false,
+      "timestamp": "2025-09-27 03:27:32.343696+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "70": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.484733560322967,
+      "hit": false,
+      "timestamp": "2025-09-27 03:27:34.258772+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "71": {
+      "distance": 3.1480633348139615,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 14.484733560322967,
+      "hit": true,
+      "timestamp": "2025-09-27 03:27:36.813587+00:00",
+      "prototype_name": "Horizontal Outtake",
+      "iteration": 1
+    },
+    "72": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 13.571680263507906,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 00:57:13.401126+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "73": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 13.571680263507906,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 00:57:17.087382+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "74": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 13.571680263507906,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 00:57:22.053554+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "75": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 13.571680263507906,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 00:57:26.900528+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "76": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 13.571680263507906,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 00:57:32.419288+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "77": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 13.571680263507906,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 00:57:38.073340+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "78": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 13.571680263507906,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 00:57:44.293347+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "79": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 13.571680263507906,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 00:57:49.985517+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "80": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 13.571680263507906,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 00:57:56.136975+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "81": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 13.571680263507906,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 00:58:04.984976+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "82": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 13.571680263507906,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 00:58:10.729713+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "83": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 13.571680263507906,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 00:58:22.785369+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "84": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 13.571680263507906,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 00:58:27.227464+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "85": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 00:58:48.214844+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "86": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 00:58:53.874744+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "87": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 00:58:59.018618+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "88": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 00:59:03.593872+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "89": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 00:59:09.649657+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "90": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 00:59:20.724275+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "91": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 00:59:33.096539+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "92": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 00:59:48.862198+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "93": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 00:59:50.455002+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "94": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 00:59:54.640621+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "95": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:00:01.221613+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "96": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:00:09.248258+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "97": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 01:00:15.002587+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "98": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:00:21.452382+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "99": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:00:25.371153+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "100": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:00:31.635719+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "101": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 01:00:37.607487+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "102": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:00:49.796446+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "103": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 01:00:57.242629+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "104": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 14.70265361880023,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 01:01:02.904221+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "105": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:02:54.073294+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "106": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:02:57.159708+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "107": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:02:58.912250+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "108": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:03:09.066501+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "109": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:03:16.908892+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "110": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 01:03:27.314197+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "111": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 01:03:28.414881+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "112": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:03:32.414063+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "113": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:03:38.391240+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "114": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.833626974092557,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:03:45.828881+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "115": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:05:19.384634+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "116": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:05:38.224500+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "117": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:05:44.516245+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "118": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:05:54.693977+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "119": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:05:56.462301+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "120": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 01:06:07.914764+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "121": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:06:12.200448+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "122": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:06:19.809222+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "123": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:06:22.110909+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "124": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:06:28.825087+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "125": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:06:32.090225+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "126": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:06:40.622239+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "127": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:06:45.637281+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "128": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 01:06:51.156506+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "129": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:06:57.846759+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "130": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:07:02.547832+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "131": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:07:07.249563+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "132": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:07:11.655175+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "133": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": false,
+      "timestamp": "2025-10-02 01:07:16.995826+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "134": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:07:22.018075+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "135": {
+      "distance": 3.2784700090133505,
+      "tangential_speed": 15.381237631975628,
+      "angle_deg": 12.528807709151511,
+      "hit": true,
+      "timestamp": "2025-10-02 01:07:28.693778+00:00",
+      "prototype_name": "Vertical Outtake",
+      "iteration": 1
+    },
+    "139": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.0004270762676435,
+      "tangential_speed": 180.95573684677208,
+      "angle_deg": 13.212746878335242,
+      "hit": true,
+      "timestamp": "2025-10-03T00:21:58.196832+00:00"
+    },
+    "146": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.0004270762676435,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.212746878335242,
+      "hit": false,
+      "timestamp": "2025-10-03T00:27:05.076799+00:00"
+    },
+    "147": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.0004270762676435,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.212746878335242,
+      "hit": true,
+      "timestamp": "2025-10-03T00:27:08.932282+00:00"
+    },
+    "148": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.0004270762676435,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.212746878335242,
+      "hit": true,
+      "timestamp": "2025-10-03T00:27:13.325467+00:00"
+    },
+    "150": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.0004270762676435,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.212746878335242,
+      "hit": true,
+      "timestamp": "2025-10-03T00:27:26.722465+00:00"
+    },
+    "151": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.0004270762676435,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.212746878335242,
+      "hit": false,
+      "timestamp": "2025-10-03T00:27:31.545475+00:00"
+    },
+    "152": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.0004270762676435,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.212746878335242,
+      "hit": true,
+      "timestamp": "2025-10-03T00:27:35.876431+00:00"
+    },
+    "153": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.0004270762676435,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.212746878335242,
+      "hit": true,
+      "timestamp": "2025-10-03T00:27:40.071617+00:00"
+    },
+    "154": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.0004270762676435,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.212746878335242,
+      "hit": true,
+      "timestamp": "2025-10-03T00:27:44.323071+00:00"
+    },
+    "155": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.0004270762676435,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.212746878335242,
+      "hit": false,
+      "timestamp": "2025-10-03T00:27:49.196801+00:00"
+    },
+    "156": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.0004270762676435,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.212746878335242,
+      "hit": true,
+      "timestamp": "2025-10-03T00:27:53.216120+00:00"
+    },
+    "157": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.0004270762676435,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.212746878335242,
+      "hit": false,
+      "timestamp": "2025-10-03T00:27:57.729181+00:00"
+    },
+    "158": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:34:55.437123+00:00"
+    },
+    "159": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:34:57.943490+00:00"
+    },
+    "160": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:35:02.152029+00:00"
+    },
+    "161": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:35:06.250022+00:00"
+    },
+    "162": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:35:09.675757+00:00"
+    },
+    "163": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:35:15.354185+00:00"
+    },
+    "164": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:35:18.955645+00:00"
+    },
+    "165": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:35:23.375403+00:00"
+    },
+    "166": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": false,
+      "timestamp": "2025-10-03T00:35:25.542110+00:00"
+    },
+    "167": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:35:40.778831+00:00"
+    },
+    "168": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": false,
+      "timestamp": "2025-10-03T00:35:43.907489+00:00"
+    },
+    "169": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": false,
+      "timestamp": "2025-10-03T00:35:47.577593+00:00"
+    },
+    "170": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:35:57.668104+00:00"
+    },
+    "171": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:36:26.539715+00:00"
+    },
+    "172": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:36:34.235619+00:00"
+    },
+    "173": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:36:38.350604+00:00"
+    },
+    "174": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:36:42.107614+00:00"
+    },
+    "175": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:36:45.724313+00:00"
+    },
+    "176": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:36:48.659084+00:00"
+    },
+    "177": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:36:51.732363+00:00"
+    },
+    "178": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:36:54.394448+00:00"
+    },
+    "179": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:36:57.163654+00:00"
+    },
+    "180": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:37:01.194756+00:00"
+    },
+    "181": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:54:43.075269+00:00"
+    },
+    "182": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:54:46.827712+00:00"
+    },
+    "183": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 135.71680263507906,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:54:51.328520+00:00"
+    },
+    "184": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:56:59.760186+00:00"
+    },
+    "185": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:57:01.681725+00:00"
+    },
+    "186": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:57:06.737408+00:00"
+    },
+    "187": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:57:09.288958+00:00"
+    },
+    "188": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:57:15.607750+00:00"
+    },
+    "189": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:57:19.562506+00:00"
+    },
+    "190": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T00:58:23.320895+00:00"
+    },
+    "191": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": false,
+      "timestamp": "2025-10-03T00:58:25.966531+00:00"
+    },
+    "192": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:02:06.996223+00:00"
+    },
+    "193": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:02:16.218718+00:00"
+    },
+    "194": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:02:33.392960+00:00"
+    },
+    "195": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:02:38.186327+00:00"
+    },
+    "196": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:02:41.863364+00:00"
+    },
+    "197": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:02:49.956657+00:00"
+    },
+    "198": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:02:53.921442+00:00"
+    },
+    "199": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:02:55.300351+00:00"
+    },
+    "200": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:02:57.731280+00:00"
+    },
+    "201": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:03:00.630679+00:00"
+    },
+    "202": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:03:12.289370+00:00"
+    },
+    "203": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:03:16.379033+00:00"
+    },
+    "204": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:03:18.864369+00:00"
+    },
+    "205": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:03:21.433371+00:00"
+    },
+    "206": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:03:28.193827+00:00"
+    },
+    "207": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:03:41.672242+00:00"
+    },
+    "208": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:03:44.381492+00:00"
+    },
+    "209": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:03:48.528836+00:00"
+    },
+    "210": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:03:54.585473+00:00"
+    },
+    "211": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:03:59.274434+00:00"
+    },
+    "212": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:04:06.590065+00:00"
+    },
+    "213": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:04:08.999344+00:00"
+    },
+    "214": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:04:25.430830+00:00"
+    },
+    "215": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": false,
+      "timestamp": "2025-10-03T01:04:28.243846+00:00"
+    },
+    "216": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": false,
+      "timestamp": "2025-10-03T01:04:45.959263+00:00"
+    },
+    "217": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:04:49.035245+00:00"
+    },
+    "218": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:05:02.209656+00:00"
+    },
+    "219": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:05:05.664511+00:00"
+    },
+    "220": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:05:10.213952+00:00"
+    },
+    "221": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:05:17.690196+00:00"
+    },
+    "222": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:05:20.036711+00:00"
+    },
+    "223": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:05:23.559042+00:00"
+    },
+    "224": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:05:30.023224+00:00"
+    },
+    "225": {
+      "prototype_name": "Horizontal Launcher",
+      "iteration": 2,
+      "distance": 3.000137050352867,
+      "tangential_speed": 158.3362697409256,
+      "angle_deg": 13.189134825173324,
+      "hit": true,
+      "timestamp": "2025-10-03T01:05:33.909379+00:00"
+    },
+    "226": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:26:43.867181+00:00"
+    },
+    "227": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T01:27:28.629784+00:00"
+    },
+    "228": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:27:30.629429+00:00"
+    },
+    "229": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:27:32.959199+00:00"
+    },
+    "230": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:27:40.104495+00:00"
+    },
+    "231": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:27:45.603183+00:00"
+    },
+    "232": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:28:08.972347+00:00"
+    },
+    "233": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:28:10.005103+00:00"
+    },
+    "234": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:28:11.737038+00:00"
+    },
+    "235": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:28:13.764099+00:00"
+    },
+    "236": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T01:28:26.073450+00:00"
+    },
+    "237": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T01:28:27.708085+00:00"
+    },
+    "238": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:28:39.397368+00:00"
+    },
+    "239": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:28:41.229656+00:00"
+    },
+    "240": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:29:16.831034+00:00"
+    },
+    "241": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:29:19.242618+00:00"
+    },
+    "242": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:29:33.953416+00:00"
+    },
+    "243": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 12.440706908215581,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T01:29:35.716069+00:00"
+    },
+    "244": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:30:57.915055+00:00"
+    },
+    "245": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T01:31:02.433891+00:00"
+    },
+    "246": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T01:31:41.935183+00:00"
+    },
+    "247": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:31:43.415211+00:00"
+    },
+    "248": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:31:44.874333+00:00"
+    },
+    "249": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:31:52.246171+00:00"
+    },
+    "250": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:32:11.041037+00:00"
+    },
+    "251": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:32:12.610341+00:00"
+    },
+    "252": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:32:14.224486+00:00"
+    },
+    "253": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:32:33.190254+00:00"
+    },
+    "254": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:32:34.717458+00:00"
+    },
+    "255": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:32:47.495563+00:00"
+    },
+    "256": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:32:49.211003+00:00"
+    },
+    "257": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:33:08.408842+00:00"
+    },
+    "258": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:33:09.952007+00:00"
+    },
+    "259": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:33:11.415902+00:00"
+    },
+    "260": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:33:24.779049+00:00"
+    },
+    "261": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:33:26.562450+00:00"
+    },
+    "262": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:33:54.019493+00:00"
+    },
+    "263": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:33:55.439045+00:00"
+    },
+    "264": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:34:05.147143+00:00"
+    },
+    "265": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T01:34:20.104150+00:00"
+    },
+    "266": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:34:26.699755+00:00"
+    },
+    "267": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T01:34:42.859091+00:00"
+    },
+    "268": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:34:59.281818+00:00"
+    },
+    "269": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:35:20.577193+00:00"
+    },
+    "270": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:35:21.994968+00:00"
+    },
+    "271": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T01:35:56.191450+00:00"
+    },
+    "272": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:35:57.754600+00:00"
+    },
+    "273": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:35:59.167632+00:00"
+    },
+    "274": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.119290921390974,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T01:36:00.668349+00:00"
+    },
+    "275": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:13:38.986603+00:00"
+    },
+    "276": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:13:40.366197+00:00"
+    },
+    "277": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:13:41.821618+00:00"
+    },
+    "278": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T02:13:54.212305+00:00"
+    },
+    "279": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:13:55.634116+00:00"
+    },
+    "280": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:13:57.051319+00:00"
+    },
+    "281": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:14:19.285613+00:00"
+    },
+    "282": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:14:20.821776+00:00"
+    },
+    "283": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:14:22.338587+00:00"
+    },
+    "284": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:15:05.810068+00:00"
+    },
+    "285": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:15:07.251508+00:00"
+    },
+    "286": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T02:15:19.339688+00:00"
+    },
+    "287": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:15:20.901289+00:00"
+    },
+    "288": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:15:29.594539+00:00"
+    },
+    "289": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T02:15:43.459196+00:00"
+    },
+    "290": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:15:52.607601+00:00"
+    },
+    "291": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T02:15:54.395995+00:00"
+    },
+    "292": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T02:16:02.917395+00:00"
+    },
+    "293": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:22:36.049410+00:00"
+    },
+    "294": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:22:37.467374+00:00"
+    },
+    "295": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:22:38.532501+00:00"
+    },
+    "296": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:22:39.575130+00:00"
+    },
+    "297": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:22:40.631947+00:00"
+    },
+    "298": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:22:41.689538+00:00"
+    },
+    "299": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:30:25.955170+00:00"
+    },
+    "300": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:36:26.613897+00:00"
+    },
+    "301": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:36:34.377239+00:00"
+    },
+    "302": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:36:52.485202+00:00"
+    },
+    "303": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:36:53.935005+00:00"
+    },
+    "304": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:36:55.420532+00:00"
+    },
+    "305": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:37:02.766623+00:00"
+    },
+    "306": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:37:31.217694+00:00"
+    },
+    "307": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:37:32.808843+00:00"
+    },
+    "308": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:37:34.396854+00:00"
+    },
+    "309": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:37:35.896929+00:00"
+    },
+    "310": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:37:37.335514+00:00"
+    },
+    "311": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:37:38.862774+00:00"
+    },
+    "312": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:37:46.646770+00:00"
+    },
+    "313": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:38:02.592393+00:00"
+    },
+    "314": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:38:04.081214+00:00"
+    },
+    "315": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:38:05.455018+00:00"
+    },
+    "316": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T02:38:20.616227+00:00"
+    },
+    "317": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:38:22.086404+00:00"
+    },
+    "318": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:38:23.470388+00:00"
+    },
+    "319": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:38:29.651206+00:00"
+    },
+    "320": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:38:38.527091+00:00"
+    },
+    "321": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 13.34548559244944,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:39:01.965158+00:00"
+    },
+    "322": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:39:32.026357+00:00"
+    },
+    "323": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:39:50.726846+00:00"
+    },
+    "324": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:39:52.055647+00:00"
+    },
+    "325": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:39:53.505662+00:00"
+    },
+    "326": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:40:20.629506+00:00"
+    },
+    "327": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:40:22.195414+00:00"
+    },
+    "328": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:40:29.302164+00:00"
+    },
+    "329": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:41:10.358965+00:00"
+    },
+    "330": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:41:11.699345+00:00"
+    },
+    "331": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:41:13.592188+00:00"
+    },
+    "332": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:41:15.237184+00:00"
+    },
+    "333": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:41:16.622174+00:00"
+    },
+    "334": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:41:18.137294+00:00"
+    },
+    "335": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:41:19.586644+00:00"
+    },
+    "336": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:41:26.381713+00:00"
+    },
+    "337": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:41:39.789127+00:00"
+    },
+    "338": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:41:59.610603+00:00"
+    },
+    "339": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:42:01.017088+00:00"
+    },
+    "340": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": false,
+      "timestamp": "2025-10-04T02:42:29.492235+00:00"
+    },
+    "341": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:42:31.111656+00:00"
+    },
+    "342": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:42:32.599051+00:00"
+    },
+    "343": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:42:39.724452+00:00"
+    },
+    "344": {
+      "prototype_name": "Vertical Orientation",
+      "iteration": 1,
+      "distance": 2.958554885412809,
+      "tangential_speed": 14.024069605624836,
+      "angle_deg": 9.13884911969268,
+      "hit": true,
+      "timestamp": "2025-10-04T02:42:45.258373+00:00"
+    }
+  }
+}

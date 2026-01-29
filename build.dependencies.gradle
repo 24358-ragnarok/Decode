@@ -1,9 +1,14 @@
 repositories {
     mavenCentral()
     google() // Needed for androidx
+    maven { url = "https://mymaven.bylazar.com/releases" }
+    maven {
+        url = 'https://www.matthewo.tech/maven/'
+    }
 }
 
 dependencies {
+    implementation 'com.bylazar:fullpanels:1.0.12'
     implementation 'org.firstinspires.ftc:Inspection:11.1.0'
     implementation 'org.firstinspires.ftc:Blocks:11.1.0'
     implementation 'org.firstinspires.ftc:RobotCore:11.1.0'
@@ -12,6 +17,8 @@ dependencies {
     implementation 'org.firstinspires.ftc:Hardware:11.1.0'
     implementation 'org.firstinspires.ftc:FtcCommon:11.1.0'
     implementation 'org.firstinspires.ftc:Vision:11.1.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.pedropathing:ftc:2.0.5'
+    implementation 'com.pedropathing:telemetry:1.0.0'
+    implementation 'org.team11260:fast-load:0.1.4-beta1'
 }
-

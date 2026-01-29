@@ -22,10 +22,9 @@
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
 import com.qualcomm.hardware.digitalchickenlabs.OctoQuad;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -63,13 +62,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * See the sensor's product page: https://www.tindie.com/products/35114/
  */
 @Disabled
-@TeleOp(name = "OctoQuad Basic", group="OctoQuad")
+@TeleOp(name = "OctoQuad Basic", group = "OctoQuad")
 public class SensorOctoQuad extends LinearOpMode {
 
     // Identify which encoder OctoQuad inputs are connected to each odometry pod.
-    private final int ODO_LEFT  = 0; // Facing forward direction on left side of robot
+    private final int ODO_LEFT = 0; // Facing forward direction on left side of robot
     private final int ODO_RIGHT = 1; // Facing forward direction on right side or robot
-    private final int ODO_PERP  = 2; // Facing perpendicular direction at the center of the robot
+    private final int ODO_PERP = 2; // Facing perpendicular direction at the center of the robot
 
     // Declare the OctoQuad object;
     private OctoQuad    octoquad;
@@ -77,9 +76,9 @@ public class SensorOctoQuad extends LinearOpMode {
     private int         posLeft;
     private int         posRight;
     private int         posPerp;
-    private int         velLeft;
-    private int         velRight;
-    private int         velPerp;
+    private int velLeft;
+    private int velRight;
+    private int velPerp;
 
     /**
      * This function is executed when this OpMode is selected from the Driver Station.
@@ -146,11 +145,11 @@ public class SensorOctoQuad extends LinearOpMode {
         //   2) by doing individual caching reads, but only reading each encoder value ONCE per cycle.
         //
         // Since method 2 is simplest, we will use it here.
-        posLeft  = octoquad.readSinglePosition_Caching(ODO_LEFT);
+        posLeft = octoquad.readSinglePosition_Caching(ODO_LEFT);
         posRight = octoquad.readSinglePosition_Caching(ODO_RIGHT);
-        posPerp  = octoquad.readSinglePosition_Caching(ODO_PERP);
-        velLeft  = octoquad.readSingleVelocity_Caching(ODO_LEFT)  * 20;  // scale up to cps
+        posPerp = octoquad.readSinglePosition_Caching(ODO_PERP);
+        velLeft = octoquad.readSingleVelocity_Caching(ODO_LEFT) * 20;  // scale up to cps
         velRight = octoquad.readSingleVelocity_Caching(ODO_RIGHT) * 20;  // scale up to cps
-        velPerp  = octoquad.readSingleVelocity_Caching(ODO_PERP)  * 20;  // scale up to cps
+        velPerp = octoquad.readSingleVelocity_Caching(ODO_PERP) * 20;  // scale up to cps
     }
 }

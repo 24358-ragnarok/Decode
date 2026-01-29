@@ -213,12 +213,12 @@ public class ConceptVisionColorLocator_Circle extends LinearOpMode {
             ColorBlobLocatorProcessor.Util.filterByCriteria(
                     ColorBlobLocatorProcessor.BlobCriteria.BY_CIRCULARITY,
                     0.6, 1, blobs);     /* filter out non-circular blobs.
-                    * NOTE: You may want to adjust the minimum value depending on your use case.
-                    * Circularity values will be affected by shadows, and will therefore vary based
-                    * on the location of the camera on your robot and venue lighting. It is strongly
-                    * encouraged to test your vision on the competition field if your event allows
-                    * sensor calibration time.
-                    */
+             * NOTE: You may want to adjust the minimum value depending on your use case.
+             * Circularity values will be affected by shadows, and will therefore vary based
+             * on the location of the camera on your robot and venue lighting. It is strongly
+             * encouraged to test your vision on the competition field if your event allows
+             * sensor calibration time.
+             */
 
             /*
              * The list of Blobs can be sorted using the same Blob attributes as listed above.
@@ -235,7 +235,7 @@ public class ConceptVisionColorLocator_Circle extends LinearOpMode {
 
                 Circle circleFit = b.getCircle();
                 telemetry.addLine(String.format("%5.3f      %3d     (%3d,%3d)",
-                           b.getCircularity(), (int) circleFit.getRadius(), (int) circleFit.getX(), (int) circleFit.getY()));
+                        b.getCircularity(), (int) circleFit.getRadius(), (int) circleFit.getX(), (int) circleFit.getY()));
             }
 
             telemetry.update();

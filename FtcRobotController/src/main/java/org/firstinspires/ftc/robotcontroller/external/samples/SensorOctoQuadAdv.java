@@ -22,12 +22,11 @@
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
 import com.qualcomm.hardware.digitalchickenlabs.OctoQuad;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.MovingStatistics;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -82,7 +81,7 @@ import java.util.List;
  * See the sensor's product page: https://www.tindie.com/products/35114/
  */
 @Disabled
-@TeleOp(name="OctoQuad Advanced", group="OctoQuad")
+@TeleOp(name = "OctoQuad Advanced", group = "OctoQuad")
 public class SensorOctoQuadAdv extends LinearOpMode {
 
     @Override
@@ -178,10 +177,10 @@ class OctoSwerveDrive {
         //  the wheels are facing forward.  Also verify that the correct module values change
         //  appropriately when you manually spin (drive) and rotate (steer) a wheel.
 
-        allModules.add(LeftFront  = new OctoSwerveModule(octoquad, "LF ",0,0));// Drive=0, Steer=4
-        allModules.add(RightFront = new OctoSwerveModule(octoquad, "RF ",1,0));// Drive=1, Steer=5
-        allModules.add(LeftBack   = new OctoSwerveModule(octoquad, "LB ",2,0));// Drive=2, Steer=6
-        allModules.add(RightBack  = new OctoSwerveModule(octoquad, "RB ",3,0));// Drive=3, Steer=7
+        allModules.add(LeftFront = new OctoSwerveModule(octoquad, "LF ", 0, 0));// Drive=0, Steer=4
+        allModules.add(RightFront = new OctoSwerveModule(octoquad, "RF ", 1, 0));// Drive=1, Steer=5
+        allModules.add(LeftBack = new OctoSwerveModule(octoquad, "LB ", 2, 0));// Drive=2, Steer=6
+        allModules.add(RightBack = new OctoSwerveModule(octoquad, "RB ", 3, 0));// Drive=3, Steer=7
 
         // now make sure the settings persist through any power glitches.
         octoquad.saveParametersToFlash();
@@ -225,7 +224,7 @@ class OctoSwerveModule {
     private final int      channel;
     private final double   angleOffset;
 
-    private static final int    VELOCITY_SAMPLE_INTERVAL_MS = 25;   // To provide 40 updates/Sec.
+    private static final int VELOCITY_SAMPLE_INTERVAL_MS = 25;   // To provide 40 updates/Sec.
     private static final double DEGREES_PER_US = (360.0 / 1024.0);  // REV Through Bore Encoder
     private static final double VELOCITY_SAMPLES_PER_S = (1000.0 / VELOCITY_SAMPLE_INTERVAL_MS);
 
@@ -248,17 +247,17 @@ class OctoSwerveModule {
 
         // Set both encoder directions.
         octoquad.setSingleEncoderDirection(channel,
-             INVERT_DRIVE_ENCODER ? OctoQuad.EncoderDirection.REVERSE : OctoQuad.EncoderDirection.FORWARD);
+                INVERT_DRIVE_ENCODER ? OctoQuad.EncoderDirection.REVERSE : OctoQuad.EncoderDirection.FORWARD);
         octoquad.setSingleEncoderDirection(channel + 4,
-             INVERT_STEER_ENCODER ? OctoQuad.EncoderDirection.REVERSE : OctoQuad.EncoderDirection.FORWARD);
+                INVERT_STEER_ENCODER ? OctoQuad.EncoderDirection.REVERSE : OctoQuad.EncoderDirection.FORWARD);
 
         // Set the velocity sample interval on both encoders
         octoquad.setSingleVelocitySampleInterval(channel, VELOCITY_SAMPLE_INTERVAL_MS);
         octoquad.setSingleVelocitySampleInterval(channel + 4, VELOCITY_SAMPLE_INTERVAL_MS);
 
         // Setup Absolute encoder pulse range to match REV Through Bore encoder.
-        octoquad.setSingleChannelPulseWidthParams (channel + 4,
-                                                    new OctoQuad.ChannelPulseWidthParams(1,1024));
+        octoquad.setSingleChannelPulseWidthParams(channel + 4,
+                new OctoQuad.ChannelPulseWidthParams(1, 1024));
     }
 
     /***
@@ -271,10 +270,10 @@ class OctoSwerveModule {
 
         // convert uS to degrees.  Add in any possible direction flip.
         steerDegrees = AngleUnit.normalizeDegrees(
-                        (encoderDataBlock.positions[channel+ 4] * DEGREES_PER_US) - angleOffset);
+                (encoderDataBlock.positions[channel + 4] * DEGREES_PER_US) - angleOffset);
         // convert uS/interval to deg per sec.  Add in any possible direction flip.
         steerDegreesPerSec = encoderDataBlock.velocities[channel + 4] *
-                        DEGREES_PER_US * VELOCITY_SAMPLES_PER_S;
+                DEGREES_PER_US * VELOCITY_SAMPLES_PER_S;
     }
 
     /**
@@ -283,6 +282,6 @@ class OctoSwerveModule {
      */
     public void show(Telemetry telemetry) {
         telemetry.addData(name, "%8.0f %7.0f %7.0f %6.0f",
-                                driveCounts, driveCountsPerSec, steerDegrees, steerDegreesPerSec);
+                driveCounts, driveCountsPerSec, steerDegrees, steerDegreesPerSec);
     }
 }
