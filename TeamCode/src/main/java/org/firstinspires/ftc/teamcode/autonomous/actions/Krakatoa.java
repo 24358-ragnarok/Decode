@@ -93,7 +93,6 @@ public class Krakatoa implements AutonomousAction {
 		}
 		
 		if (state == State.COMPLETE) {
-			launcher.stop();
 			launcher.close();
 			return true;
 		} else {
@@ -107,7 +106,6 @@ public class Krakatoa implements AutonomousAction {
 		if (interrupted && hasLauncher) {
 			PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
 			if (launcher != null) {
-				launcher.stop();
 				launcher.close();
 			}
 		}

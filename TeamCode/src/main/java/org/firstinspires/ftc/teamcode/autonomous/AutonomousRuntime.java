@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.ControlPoints.EMPTY_GATE_APPROACH;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.Samples.GateAndEating.EMPTY_GATE;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.Samples.GateAndEating.EMPTY_GATE_MOVE_BACK;
 
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 
@@ -294,19 +295,54 @@ public enum AutonomousRuntime {
 	},
 	SOLO("18 Ball Solo Auto Close only") {
 		@Override
-		public boolean supportsFar() {
-			return false; // Only Close sequence is implemented
-		}
-		@Override
 		public AutonomousSequence buildFarSequence() {
-			throw new UnsupportedOperationException("Far sequence not supported for 18 ball close runtime");
+			return new SequenceBuilder()
+					
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
+					.launch()
+					
+					// Get ball set I
+					.startPickup()
+					.moveSplineTo(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
+							"Prep Preset 1",
+							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
+					// .endPickup()
+					
+					// Launch ball set I
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
+							Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
+					.launch()
+					
+					// Get ball set II
+					.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
+							"Prep Preset2",
+							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
+					.startPickup()
+					
+					.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
+					
+					// .endPickup()
+					
+					// Launch ball set II
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preset2")
+					
+					.launch()
+					
+					// Park
+					.endPickup()
+					.moveTo(Settings.Positions.Park.FAR, "Park")
+					.endAt(Settings.Positions.Park.FAR)
+					.build();
 		}
 		
 		@Override
 		public AutonomousSequence buildCloseSequence() {
 			return new SequenceBuilder()
 					.prepLaunch()
-					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
+					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO, "Launch Preload")
 					
 					.KRAKATOA()
 					
@@ -318,47 +354,39 @@ public enum AutonomousRuntime {
 					// .endPickup()
 					
 					// Launch ball set I
-					.prepLaunch()
-					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
 							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Launch Preset3")
 					
 					.KRAKATOA()
 					
-					// Get balls from eat and shoot
 					.startPickup()
 					.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
 							"Curve to empty gate")
-					.wait(.5)
-					.prepLaunch()
-					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+					.moveTo(EMPTY_GATE_MOVE_BACK, "Move back from the gate empty")
+					.wait(.7)
+					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
+							EMPTY_GATE_APPROACH,
+							"Launch Direct Eat")
+					.KRAKATOA()
+					
+					.startPickup()
+					.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
+							"Curve to empty gate")
+					.moveTo(EMPTY_GATE_MOVE_BACK, "Move back from the gate empty")
+					.wait(.7)
+					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
 							EMPTY_GATE_APPROACH,
 							"Launch Direct Eat")
 					.KRAKATOA()
 					
 					// Get ball set II (Preset3 for close sequence)
 					.startPickup()
-					.moveCurveToVia(Settings.Positions.Samples.Preset3.END,
-							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset3")
+					.moveTo(Settings.Positions.Samples.Preset3.END, "Launch Preset3")
 					
 					
 					// Launch ball set II
-					.prepLaunch()
-					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset2")
+					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO, "Launch Preset2")
 					.KRAKATOA()
-					
-					
-					// Loop: Get balls from HP and launch until 5 seconds left
-					.loopUntilSecondsLeft(.3, loop -> loop
-							.startPickup()
-							.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
-									"Curve to empty gate")
-							.wait(.5)
-							.prepLaunch()
-							.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-									EMPTY_GATE_APPROACH,
-									"Launch Direct Eat")
-							.KRAKATOA())
 					
 					.endPickup()
 					
