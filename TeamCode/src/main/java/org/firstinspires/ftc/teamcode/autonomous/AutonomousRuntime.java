@@ -220,17 +220,19 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR, "Launch Preset1")
 					.KRAKATOA()
 					
+					//first HP pick and shoot
 					.startPickup()
-					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.END_First,
-							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
+					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.PREP,
+							Settings.Positions.ControlPoints.HUMAN_PLAYER,
 							"Prep Human Player")
+					.startPickup()
+					.moveTo(Settings.Positions.Samples.HumanPlayerPreset.END,
+							"End Human Player")
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
-							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP_UP,
-							"Prep Human Player")
+							Settings.Positions.ControlPoints.HUMAN_PLAYER_TO_FAR_SHOOT, "Human player to far shoot")
 					.KRAKATOA()
-					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the damm bot")
-					.wait(.5)
+					
 					
 					
 					

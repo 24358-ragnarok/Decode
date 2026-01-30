@@ -510,7 +510,7 @@ public class Settings {
 			public static class HumanPlayerPreset {
 				public static final Pose PREP = new Pose(16.0, 40, Math.toRadians(-110));
 				public static final Pose END = new Pose(7.0, 21, Math.toRadians(180));
-				public static final Pose END_First = new Pose(5,5,Math.toRadians(180));
+				public static final Pose END_First = new Pose(5,6,Math.toRadians(180));
 			}
 		}
 		
@@ -519,7 +519,6 @@ public class Settings {
 		 */
 		public static class ControlPoints {
 			// From sample areas to shooting positions
-			public static final Pose TURN_BOT = new Pose(53.4, 16.9, Math.toRadians(180));
 			public static final Pose FROM_FAR_SHOOT_TO_HP = new Pose(70.4, 5);
 			public static final Pose FROM_FAR_SHOOT_TO_HP_UP = new Pose(70.4, 20);
 			public static final Pose PRESET_1_APPROACH_FAR = new Pose(75, 38);
