@@ -42,7 +42,6 @@ public class Krakatoa implements AutonomousAction {
 		// Start the launcher ready sequence (spin up, aim)
 		if (hasLauncher) {
 			PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
-			launcher.ready();
 			launcher.openDynamic();
 		}
 		if (hasTransfer) {
@@ -65,16 +64,15 @@ public class Krakatoa implements AutonomousAction {
 		
 		PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
 		VerticalWheelTransfer transfer = mechanisms.get(VerticalWheelTransfer.class);
-		FlexVectorIntake intake = mechanisms.get(FlexVectorIntake.class);
 		
 		// State machine for sequential ball firing
 		switch (state) {
 			case WAITING_TO_FIRE:
 				// Only transition to FIRING if we are ready
-				if (launcher.isAtSpeed()) {
+				//if (launcher.isAtSpeed()) {
 					state = State.FIRING;
 					krakaTimer.resetTimer();
-				}
+				//}
 				break;
 			
 			case FIRING:

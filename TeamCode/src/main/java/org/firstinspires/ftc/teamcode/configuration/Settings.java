@@ -344,7 +344,7 @@ public class Settings {
 		public static double CLOSE_SHOOT_RPM = 2600; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 33.5; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3400; // Wheel RPM for far position
+		public static double FAR_SHOOT_RPM = 3500; // Wheel RPM for far position
 		
 		public static double MAINTAIN_RPM = (CLOSE_SHOOT_RPM + FAR_SHOOT_RPM) / 2; // avg speed
 		
@@ -452,7 +452,7 @@ public class Settings {
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 99, Math.toRadians(140.59));
 			public static final Pose CLOSE_SHOOT_AUTO = new Pose(55.6, 83.7, Math.toRadians(130.0));
-			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(112.5));
+			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(111.5));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(12.44, 62, Math.toRadians(150));
 			public static final Pose PARK = new Pose(106, 32, Math.toRadians(180));
@@ -582,7 +582,7 @@ public class Settings {
 		
 		public static double SLOW_SPEED = 0.4;
 		public static double LAUNCH_EXIT_TIME_MS = 200;
-		public static double KRAKATOA_TIME_MS = 750;
+		public static double KRAKATOA_TIME_MS = 800;
 		public static double SEARCH_TIMEOUT_MS = 500; // Time to search before assuming empty
 		
 		/**

@@ -229,8 +229,7 @@ public enum AutonomousRuntime {
 							.moveTo(Settings.Positions.Samples.HumanPlayerPreset.END,
 									"End Human Player")
 							.prepLaunch()
-							.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
-									Settings.Positions.ControlPoints.HUMAN_PLAYER_TO_FAR_SHOOT, "Human player to far shoot")
+							.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Human player to far shoot")
 							.KRAKATOA())
 					
 					// Park

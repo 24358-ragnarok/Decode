@@ -48,14 +48,14 @@ public class PairedLauncher extends Mechanism {
 		// Apply PIDF coefficients for velocity control from Settings
 		// Rev SDK expects kF such that velocityControlFeedforward = kF * targetVelocityTicksPerSec
 		// Use the KF value from Settings; tune as needed.
-//		leftMotor.setVelocityPIDFCoefficients(Settings.Launcher.LAUNCHER_LEFT_KP,
-//				Settings.Launcher.LAUNCHER_LEFT_KI,
-//				Settings.Launcher.LAUNCHER_LEFT_KD,
-//				Settings.Launcher.LAUNCHER_LEFT_KF);
-//		rightMotor.setVelocityPIDFCoefficients(Settings.Launcher.LAUNCHER_RIGHT_KP,
-//				Settings.Launcher.LAUNCHER_RIGHT_KI,
-//				Settings.Launcher.LAUNCHER_RIGHT_KD,
-//				Settings.Launcher.LAUNCHER_RIGHT_KF);
+		leftMotor.setVelocityPIDFCoefficients(Settings.Launcher.LAUNCHER_LEFT_KP,
+				Settings.Launcher.LAUNCHER_LEFT_KI,
+				Settings.Launcher.LAUNCHER_LEFT_KD,
+				Settings.Launcher.LAUNCHER_LEFT_KF);
+		rightMotor.setVelocityPIDFCoefficients(Settings.Launcher.LAUNCHER_RIGHT_KP,
+				Settings.Launcher.LAUNCHER_RIGHT_KI,
+				Settings.Launcher.LAUNCHER_RIGHT_KD,
+				Settings.Launcher.LAUNCHER_RIGHT_KF);
 	}
 
 	/**
