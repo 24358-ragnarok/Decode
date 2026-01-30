@@ -602,10 +602,10 @@ public class Settings {
 		@Configurable
 		public static class ActionTimeouts {
 			// Path actions
-			public static double LinearPathAction = 5.0;
-			public static double SlowLinearPathAction = 5.0;
-			public static double SplinedPathAction = 5.0;
-			public static double CurvePathAction = 5.0;
+			public static double LinearPathAction = 10.0;
+			public static double SlowLinearPathAction = 10.0;
+			public static double SplinedPathAction = 10.0;
+			public static double CurvePathAction = 10.0;
 			
 			// Launch actions
 			public static double LaunchAction = 10.0;
