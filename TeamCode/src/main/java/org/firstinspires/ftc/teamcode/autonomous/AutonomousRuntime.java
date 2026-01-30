@@ -206,6 +206,7 @@ public enum AutonomousRuntime {
 			return new SequenceBuilder()
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
+					.wait(.5)
 					.KRAKATOA()
 					
 					// Get ball set I
@@ -219,18 +220,40 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR, "Launch Preset1")
 					.KRAKATOA()
 					
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.END_First,
+							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
+							"Prep Human Player")
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
+							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP_UP,
+							"Prep Human Player")
+					.KRAKATOA()
+					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the damm bot")
+					.wait(.5)
 					
-					// Loop: Get balls from HP and launch until 5 seconds left
-					.loopUntilSecondsLeft(3, loop -> loop
-							.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.PREP,
-									Settings.Positions.ControlPoints.HUMAN_PLAYER,
-									"Prep Human Player")
-							.startPickup()
-							.moveTo(Settings.Positions.Samples.HumanPlayerPreset.END,
-									"End Human Player")
-							.prepLaunch()
-							.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Human player to far shoot")
-							.KRAKATOA())
+					
+					
+					// pick from HP and shoot
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.END_First,
+							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
+							"Prep Human Player")
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
+							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP_UP,
+							"Prep Human Player")
+					.KRAKATOA()
+					
+					
+					// again
+					.startPickup()
+					.moveTo(Settings.Positions.Samples.HumanPlayerPreset.END,
+							"Prep Human Player")
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Human player to far shoot")
+					.KRAKATOA()
+					
 					
 					// Park
 					.endPickup()

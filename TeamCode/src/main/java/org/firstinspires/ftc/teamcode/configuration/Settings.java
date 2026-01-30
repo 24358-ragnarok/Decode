@@ -343,8 +343,8 @@ public class Settings {
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 43.6; // Launch angle from horizontal for close position
 		public static double CLOSE_SHOOT_RPM = 2600; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 33.5; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3500; // Wheel RPM for far position
+		public static double FAR_SHOOT_PITCH_DEGREES = 32.75; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 3600; // Wheel RPM for far position
 		
 		public static double MAINTAIN_RPM = (CLOSE_SHOOT_RPM + FAR_SHOOT_RPM) / 2; // avg speed
 		
@@ -452,7 +452,7 @@ public class Settings {
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 99, Math.toRadians(140.59));
 			public static final Pose CLOSE_SHOOT_AUTO = new Pose(55.6, 83.7, Math.toRadians(130.0));
-			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(111.5));
+			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(111.75));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(12.44, 62, Math.toRadians(150));
 			public static final Pose PARK = new Pose(106, 32, Math.toRadians(180));
@@ -483,7 +483,7 @@ public class Settings {
 				public static final Pose PREP = new Pose(44, 34, Math.toRadians(180));
 				public static final Pose GRAB_1 = new Pose(36.0, 34, Math.toRadians(180));
 				public static final Pose GRAB_2 = new Pose(30.0, 34, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 34, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 32, Math.toRadians(180));
 			}
 			
 			/**
@@ -509,7 +509,8 @@ public class Settings {
 			
 			public static class HumanPlayerPreset {
 				public static final Pose PREP = new Pose(16.0, 40, Math.toRadians(-110));
-				public static final Pose END = new Pose(13.0, 13.0, Math.toRadians(-110));
+				public static final Pose END = new Pose(7.0, 21, Math.toRadians(180));
+				public static final Pose END_First = new Pose(5,5,Math.toRadians(180));
 			}
 		}
 		
@@ -518,6 +519,9 @@ public class Settings {
 		 */
 		public static class ControlPoints {
 			// From sample areas to shooting positions
+			public static final Pose TURN_BOT = new Pose(53.4, 16.9, Math.toRadians(180));
+			public static final Pose FROM_FAR_SHOOT_TO_HP = new Pose(70.4, 5);
+			public static final Pose FROM_FAR_SHOOT_TO_HP_UP = new Pose(70.4, 20);
 			public static final Pose PRESET_1_APPROACH_FAR = new Pose(75, 38);
 			public static final Pose FROM_PRESET2_TO_CLOSE = new Pose(64, 56);
 			public static final Pose PRESET_2_APPROACH_FAR = new Pose(65, 59);
@@ -540,7 +544,7 @@ public class Settings {
 		 * Parking positions for end of autonomous.
 		 */
 		public static class Park {
-			public static final Pose FAR = Samples.Preset1.GRAB_1; // Reuse a safe position
+			public static final Pose FAR = Samples.Preset1.PREP; // Reuse a safe position
 			public static final Pose CLOSE = new Pose(60, 100, Math.toRadians(150));
 			public static final Pose FAR_SAFE_PARK_POSE = new Pose(35.86206896551724, 12.505747126436786,
 					Math.toRadians(90));
@@ -582,7 +586,7 @@ public class Settings {
 		
 		public static double SLOW_SPEED = 0.4;
 		public static double LAUNCH_EXIT_TIME_MS = 200;
-		public static double KRAKATOA_TIME_MS = 800;
+		public static double KRAKATOA_TIME_MS = 900;
 		public static double SEARCH_TIMEOUT_MS = 500; // Time to search before assuming empty
 		
 		/**
