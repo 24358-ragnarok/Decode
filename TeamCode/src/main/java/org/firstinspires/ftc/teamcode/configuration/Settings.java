@@ -344,7 +344,7 @@ public class Settings {
 		public static double CLOSE_SHOOT_RPM = 2600; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 32.75; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3600; // Wheel RPM for far position
+		public static double FAR_SHOOT_RPM = 3550; // Wheel RPM for far position
 		
 		public static double MAINTAIN_RPM = (CLOSE_SHOOT_RPM + FAR_SHOOT_RPM) / 2; // avg speed
 		
@@ -385,6 +385,7 @@ public class Settings {
 	public static class Field {
 		public static double WIDTH = 144.0; // inches
 		public static double BALL_MASS_KG = .076; // kg
+		
 		
 		public static Pose FAR_LAUNCH_ZONE_FRONT_CORNER = new Pose(72, 24);
 		public static Pose FAR_LAUNCH_ZONE_LEFT_CORNER = new Pose(50, 0);
@@ -451,7 +452,7 @@ public class Settings {
 		 */
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 99, Math.toRadians(140.59));
-			public static final Pose CLOSE_SHOOT_AUTO = new Pose(55.6, 83.7, Math.toRadians(130.0));
+			public static final Pose CLOSE_SHOOT_AUTO = new Pose(59, 83.7, Math.toRadians(130.0));
 			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(111.75));
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(12.44, 62, Math.toRadians(150));
@@ -472,8 +473,8 @@ public class Settings {
 		public static class Samples {
 			public static class GateAndEating {
 				public static final Pose EAT_FROM_EMPTY_DIRECTLY = new Pose(32, 16);
-				public static Pose EMPTY_GATE = new Pose(12.44, 64, Math.toRadians(160));
-				public static Pose EMPTY_GATE_MOVE_BACK = new Pose(12.44, 59, Math.toRadians(155));
+				public static Pose EMPTY_GATE = new Pose(14, 64, Math.toRadians(155));
+				public static Pose EMPTY_GATE_MOVE_BACK = new Pose(14, 55, Math.toRadians(155));
 			}
 			
 			/**
@@ -563,7 +564,7 @@ public class Settings {
 	@Configurable
 	public static class Deploy {
 		public static boolean INTAKE = true;
-		public static boolean LIMELIGHT = true;
+		public static boolean LIMELIGHT = false;
 		public static boolean TRANSFER = true;
 		public static boolean TRAJECTORY_ENGINE = true;
 		public static boolean LAUNCHER = TRAJECTORY_ENGINE && true;

@@ -72,7 +72,7 @@ public class MainOp extends OpMode {
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
 		mechanisms.drivetrain.follower.setStartingPose(MatchState.getTeleOpStartingPose());
 		mechanisms.drivetrain.switchToManual();
-		setupLogging();
+//		setupLogging();
 		// Show whether we're using stored pose or fallback
 		Pose storedPose = MatchState.getStoredPose();
 		if (storedPose != null) {

@@ -113,7 +113,7 @@ public enum AutonomousRuntime {
 					
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
-					.launch()
+					.KRAKATOA()
 					
 					// Get ball set I
 					.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
@@ -128,7 +128,7 @@ public enum AutonomousRuntime {
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
 							Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
-					.launch()
+					.KRAKATOA()
 					
 					// Get ball set II
 					.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
@@ -144,7 +144,7 @@ public enum AutonomousRuntime {
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preset2")
 					
-					.launch()
+					.KRAKATOA()
 					
 					// Park
 					.endPickup()
@@ -161,7 +161,7 @@ public enum AutonomousRuntime {
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
 					
-					.launch()
+					.KRAKATOA()
 					
 					// Get ball set I (Preset3 for close sequence)
 					.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
@@ -176,7 +176,7 @@ public enum AutonomousRuntime {
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 							Settings.Positions.ControlPoints.FROM_PRESET3_TO_CLOSE, "Launch Preset3")
 					
-					.launch()
+					.KRAKATOA()
 					
 					// Get ball set II (Preset2 for close sequence)
 					.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
@@ -191,7 +191,7 @@ public enum AutonomousRuntime {
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 							Settings.Positions.ControlPoints.FROM_PRESET2_TO_CLOSE, "Launch Preset2")
 					
-					.launch()
+					.KRAKATOA()
 					
 					// Park
 					.endPickup()
@@ -219,7 +219,7 @@ public enum AutonomousRuntime {
 					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
 							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR, "Launch Preset1")
 					.KRAKATOA()
-					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the damm bot")
+					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the bot")
 					.wait(.5)
 					
 					//first HP pick and shoot
@@ -228,11 +228,10 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
 							"Prep Human Player")
 					.prepLaunch()
-					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
-							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP_UP,
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT,
 							"Prep Human Player")
 					.KRAKATOA()
-					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the damm bot")
+					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the bot")
 					.wait(.5)
 					
 					
@@ -244,8 +243,7 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
 							"Prep Human Player")
 					.prepLaunch()
-					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
-							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP_UP,
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT,
 							"Prep Human Player")
 					.KRAKATOA()
 					
