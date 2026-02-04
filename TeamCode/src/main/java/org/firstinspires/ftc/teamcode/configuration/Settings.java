@@ -170,7 +170,7 @@ public class Settings {
 	public static class Transfer {
 		public static final double FIRING_POSITION_TICKS = 900;
 		public static final double INCREMENT_TICKS = FIRING_POSITION_TICKS / 1.5;
-		public static final double DECREMENT_TICKS = -FIRING_POSITION_TICKS / 1.5;
+		public static final double DECREMENT_TICKS = -FIRING_POSITION_TICKS / 2.5;
 		public static double SPEED = 1.0;
 		public static double CRAWL_SPEED = 0.3;
 		public static double CRAWL_TICKS = FIRING_POSITION_TICKS * 3;

@@ -209,7 +209,7 @@ public class SortedLaunchAction implements AutonomousAction {
 	}
 	
 	private void startRetrieve() {
-		transfer.move(DECREMENT_TICKS / 2);
+		transfer.move(DECREMENT_TICKS);
 		currentBallColor = Artifact.Color.NONE;
 		timer.resetTimer();
 		state = State.RETRIEVING;
