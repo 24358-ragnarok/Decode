@@ -224,7 +224,7 @@ public class Settings {
 		public static final double VELOCITY_ALPHA = 0.6; // EMA smoothing factor (0-1), lower = more smoothing
 		public static double GATE_FIRE_POSITION_CLOSE = 0.388;
 		public static double GATE_FIRE_POSITION_FAR = 0.404;
-		public static double GATE_CLOSED_POSITION = 0.444;
+		public static double GATE_CLOSED_POSITION = 0.452;
 		public static long GATE_COOLDOWN_MS = 500;
 		public static long MAX_SPEED_ERROR = 50;
 		// Pitch servo calibration (physical limits)
@@ -564,7 +564,7 @@ public class Settings {
 	@Configurable
 	public static class Deploy {
 		public static boolean INTAKE = true;
-		public static boolean LIMELIGHT = false;
+		public static boolean LIMELIGHT = true;
 		public static boolean TRANSFER = true;
 		public static boolean TRAJECTORY_ENGINE = true;
 		public static boolean LAUNCHER = TRAJECTORY_ENGINE && true;

@@ -212,7 +212,7 @@ public class MainOp extends OpMode {
 						drivetrain.switchToManual();
 					}
 				}
-				if (mainController.wasJustPressed(Controller.Control.LEFT_BUMPER)) {
+				if (mainController.wasJustPressed(Controller.Control.LEFT_BUMPER) && mechanisms.limelightManager != null) {
 					drivetrain.goTo(drivetrain.follower.getPose().withHeading(drivetrain.follower.getHeading() + mechanisms.limelightManager.estimateHeadingToGoal()));
 				} else if (mainController.wasJustReleased(Controller.Control.LEFT_BUMPER)) {
 					drivetrain.switchToManual();

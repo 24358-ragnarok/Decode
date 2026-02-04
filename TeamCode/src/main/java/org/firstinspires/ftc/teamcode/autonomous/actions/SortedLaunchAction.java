@@ -73,19 +73,13 @@ public class SortedLaunchAction implements AutonomousAction {
 		if (intake != null) {
 			intake.crawl();
 		}
-		if (swap != null) {
-			swap.moveToHold();
-		}
 	}
 	
 	@Override
 	public boolean execute(MechanismManager mechanisms) {
-		if (transfer == null || launcher == null || intake == null) {
+		if (transfer == null || launcher == null || intake == null || swap == null) {
 			return true;
 		}
-		
-		// Keep launcher spun/aimed during the sequence
-		launcher.ready();
 		
 		switch (state) {
 			case SEARCHING:
@@ -138,6 +132,7 @@ public class SortedLaunchAction implements AutonomousAction {
 		
 		// Timeout: no ball found after SEARCH_TIMEOUT_MS
 		if (timer.getElapsedTime() > SEARCH_TIMEOUT_MS) {
+			transfer.freeze();
 			// Check if swap has a ball we should retrieve
 			if (swap.hasHeldArtifact()) {
 				startRetrieve();
@@ -165,13 +160,15 @@ public class SortedLaunchAction implements AutonomousAction {
 			// if we can store and look for color, do so
 			if (desired != Artifact.Color.NONE && currentBallColor != desired && mayStore) {
 				// Store current ball then retrieve
-				startStore();
+				swap.moveToHold();
+				state = State.STORING;
 				return;
 			}
 		}
 		
 		// Swap has not triggered any action; we are good to fire
-		startFire();
+		launcher.openDynamic();
+		state = State.OPEN_GATE;
 	}
 	
 	private void handleOpenGate() {
@@ -212,13 +209,14 @@ public class SortedLaunchAction implements AutonomousAction {
 	}
 	
 	private void startRetrieve() {
-		transfer.move(DECREMENT_TICKS * 3);
+		transfer.move(DECREMENT_TICKS / 2);
 		currentBallColor = Artifact.Color.NONE;
+		timer.resetTimer();
 		state = State.RETRIEVING;
 	}
 	
 	private void continueRetrieve() {
-		if (!transfer.isBusy() && currentBallColor == Artifact.Color.NONE) {
+		if (!transfer.isBusy() && timer.getElapsedTime() > 300 && currentBallColor == Artifact.Color.NONE) {
 			currentBallColor = swap.takeHeldArtifact().color;
 			swap.moveToTransfer();
 		}
@@ -226,16 +224,6 @@ public class SortedLaunchAction implements AutonomousAction {
 			mayStore = false;
 			state = State.DECIDE;
 		}
-	}
-	
-	private void startFire() {
-		launcher.openDynamic();
-		state = State.OPEN_GATE;
-	}
-	
-	private void startStore() {
-		swap.moveToHold();
-		state = State.STORING;
 	}
 	
 	private void addShotToClassifier(Artifact.Color color) {
@@ -256,7 +244,6 @@ public class SortedLaunchAction implements AutonomousAction {
 	private void finishLaunch() {
 		if (launcher != null) {
 			launcher.stop();
-			swap.moveToHold();
 			launcher.close();
 		}
 	}

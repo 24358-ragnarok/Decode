@@ -106,6 +106,37 @@ public enum AutonomousRuntime {
 					.build();
 		}
 	},
+	TEST("Sorter Tester") {
+		@Override
+		public AutonomousSequence buildFarSequence() {
+			return new SequenceBuilder()
+					// Scan from far pose
+					.prepLaunch()
+					.scanObelisk()
+					
+					.sortedLaunch()
+					
+					.startPickup()
+					.wait(5.0)
+					.sortedLaunch()
+					.build();
+		}
+		
+		@Override
+		public AutonomousSequence buildCloseSequence() {
+			return new SequenceBuilder()
+					// Scan from far pose
+					.prepLaunch()
+					.scanObelisk()
+					
+					.sortedLaunch()
+					
+					.startPickup()
+					.wait(5.0)
+					.sortedLaunch()
+					.build();
+		}
+	},
 	CLASSIC("Classic 9 Ball") {
 		@Override
 		public AutonomousSequence buildFarSequence() {
