@@ -281,6 +281,7 @@ public class Controller extends Gamepad {
 		OVERRIDE_CLEAR,
 		AIM,
 		LAUNCH,
+		LOCK_GATE,
 		LAUNCHER_STEEPNESS_AXIS,
 		LAUNCHER_ROTATION_AXIS,
 		PARK_EXTEND_1,

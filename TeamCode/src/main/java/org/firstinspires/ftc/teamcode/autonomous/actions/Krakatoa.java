@@ -104,7 +104,7 @@ public class Krakatoa implements AutonomousAction {
 		if (interrupted && hasLauncher) {
 			PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
 			if (launcher != null) {
-				launcher.close();
+				launcher.lock();
 			}
 		}
 		// Otherwise, launcher continues running for next action

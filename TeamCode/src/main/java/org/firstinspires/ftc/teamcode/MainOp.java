@@ -233,6 +233,8 @@ public class MainOp extends OpMode {
 				launcher.openDynamic();
 			} else if (subController.wasJustReleased(Controller.Action.LAUNCH)) {
 				launcher.close();
+			} else if (subController.wasJustReleased(Controller.Action.LOCK_GATE)) {
+				launcher.lock();
 			}
 		}
 		

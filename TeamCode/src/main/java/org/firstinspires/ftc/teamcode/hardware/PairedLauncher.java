@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.DEF
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_CLOSED_POSITION;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_FIRE_POSITION_CLOSE;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_FIRE_POSITION_FAR;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.GATE_LOCK_POSITION;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.MAX_SPEED_ERROR;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.VELOCITY_ALPHA;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Launcher.rpmToTicksPerSec;
@@ -110,6 +111,10 @@ public class PairedLauncher extends Mechanism {
 	
 	public void close() {
 		gateServo.setPosition(GATE_CLOSED_POSITION);
+	}
+	
+	public void lock() {
+		gateServo.setPosition(GATE_LOCK_POSITION);
 	}
 	
 	public boolean isBusy() {

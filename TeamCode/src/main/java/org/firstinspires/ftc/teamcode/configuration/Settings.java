@@ -62,6 +62,7 @@ public class Settings {
 			// Secondary Controller (Operator)
 			actionControlMap.put(Controller.Action.AIM, Controller.Control.LEFT_TRIGGER);
 			actionControlMap.put(Controller.Action.LAUNCH, Controller.Control.RIGHT_TRIGGER);
+			actionControlMap.put(Controller.Action.LOCK_GATE, Controller.Control.RIGHT_STICK_BUTTON);
 			actionControlMap.put(Controller.Action.LAUNCHER_STEEPNESS_AXIS, Controller.Control.RIGHT_STICK_Y);
 			actionControlMap.put(Controller.Action.LAUNCHER_ROTATION_AXIS, Controller.Control.RIGHT_STICK_X);
 			actionControlMap.put(Controller.Action.INTAKE_IN, Controller.Control.CROSS);
@@ -225,6 +226,7 @@ public class Settings {
 		public static double GATE_FIRE_POSITION_CLOSE = 0.388;
 		public static double GATE_FIRE_POSITION_FAR = 0.404;
 		public static double GATE_CLOSED_POSITION = 0.452;
+		public static double GATE_LOCK_POSITION = 0.55;
 		public static long GATE_COOLDOWN_MS = 500;
 		public static long MAX_SPEED_ERROR = 50;
 		// Pitch servo calibration (physical limits)
@@ -588,7 +590,7 @@ public class Settings {
 		
 		public static double SLOW_SPEED = 0.4;
 		public static double LAUNCH_EXIT_TIME_MS = 200;
-		public static double KRAKATOA_TIME_MS = 900;
+		public static double KRAKATOA_TIME_MS = 1000;
 		public static double SEARCH_TIMEOUT_MS = 500; // Time to search before assuming empty
 		
 		/**
