@@ -10,6 +10,7 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.PoseHistory;
 
+@SuppressWarnings("ClassWithoutConstructor")
 public class Drawing {
 	public static final double ROBOT_RADIUS = (Settings.Robot.WIDTH + Settings.Robot.LENGTH) / 4;
 	private static final FieldManager panelsField = PanelsField.INSTANCE.getField();
@@ -31,7 +32,7 @@ public class Drawing {
 	
 	/**
 	 * This draws everything that will be used in the Follower's telemetryDebug() method. This takes
-	 * a Follower as an input, so an instance of the DashbaordDrawingHandler class is not needed.
+	 * a Follower as an input, so an instance of the DashboardDrawingHandler class is not needed.
 	 *
 	 * @param follower Pedro Follower instance.
 	 */
@@ -56,6 +57,7 @@ public class Drawing {
 	 * @param pose  the Pose to draw the robot at
 	 * @param style the parameters used to draw the robot with
 	 */
+	@SuppressWarnings("MethodWithMultipleReturnPoints")
 	public static void drawRobot(Pose pose, Style style) {
 		if (pose == null || Double.isNaN(pose.getX()) || Double.isNaN(pose.getY()) || Double.isNaN(pose.getHeading())) {
 			return;
@@ -151,6 +153,7 @@ public class Drawing {
 	 *
 	 * @param poseTracker the PoseHistory to get the pose history from
 	 */
+	@SuppressWarnings("unused")
 	public static void drawPoseHistory(PoseHistory poseTracker) {
 		drawPoseHistory(poseTracker, robotLook);
 	}

@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.configuration.MatchState;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
+@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutNoArgConstructor", "MethodWithMultipleReturnPoints"})
 public class PairedLauncher extends Mechanism {
 	private final ServoImplEx verticalServo;
 	private final DcMotorEx rightMotor;
@@ -61,6 +62,7 @@ public class PairedLauncher extends Mechanism {
 	/**
 	 * Helper to update PIDF coefficients at runtime (e.g., from a dashboard)
 	 */
+	@SuppressWarnings("unused")
 	public void updatePIDFCoefficients(double kP, double kI, double kD, double kF) {
 		leftMotor.setVelocityPIDFCoefficients(kP, kI, kD, kF);
 		rightMotor.setVelocityPIDFCoefficients(kP, kI, kD, kF);

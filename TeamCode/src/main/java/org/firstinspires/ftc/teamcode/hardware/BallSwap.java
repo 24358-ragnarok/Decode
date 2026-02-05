@@ -5,8 +5,10 @@ import static org.firstinspires.ftc.teamcode.configuration.Settings.Swap.HOLDING
 
 import org.firstinspires.ftc.teamcode.software.game.Artifact;
 
+@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutNoArgConstructor"})
 public class BallSwap extends Mechanism {
 	private final TimelockedServo servo;
+	@SuppressWarnings({"FieldCanBeLocal", "unused"})
 	private final MechanismManager mechanisms;
 	private SwapState state;
 	private Artifact heldArtifact = Artifact.NONE;
@@ -25,6 +27,7 @@ public class BallSwap extends Mechanism {
 	public final void update() {
 	}
 	
+	@SuppressWarnings("unused")
 	public final void swap() {
 		if (state == SwapState.GRABBING) {
 			moveToHold();
@@ -43,6 +46,7 @@ public class BallSwap extends Mechanism {
 		state = SwapState.HOLDING;
 	}
 	
+	@SuppressWarnings("MethodWithMultipleReturnPoints")
 	public void storeArtifact(Artifact artifact) {
 		if (artifact == null) {
 			return;

@@ -26,6 +26,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * These values should be tuned using the Pedro Pathing tuning OpModes
  * before use in competition.
  */
+@SuppressWarnings("ClassWithoutConstructor")
 public class Constants {
 	public static final FollowerConstants followerConstants = new FollowerConstants()
 			.mass(13.8)

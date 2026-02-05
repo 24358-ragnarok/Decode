@@ -18,6 +18,7 @@ import java.util.EnumMap;
  * This centralized approach makes tuning and adjustments more efficient.
  * The class is organized into logical static inner classes for clarity.
  */
+@SuppressWarnings("ClassWithoutConstructor")
 @Configurable
 public class Settings {
 	public static class Robot {
@@ -29,10 +30,12 @@ public class Settings {
 	/**
 	 * Maps controller inputs to robot actions for TeleOp.
 	 */
+	@SuppressWarnings("PublicStaticCollectionField")
 	@Configurable
 	public static class Controls {
 		public static final EnumMap<Controller.Action, Controller.Control> actionControlMap = new EnumMap<>(
 				Controller.Action.class);
+		@SuppressWarnings("PublicStaticArrayField")
 		public static final Controller.Action[] gotoActions = {
 				Controller.Action.GOTO_CLOSE_SHOOT,
 				Controller.Action.GOTO_FAR_SHOOT,
@@ -83,6 +86,7 @@ public class Settings {
 	 * Each HardwareConfig stores both the device type and string name,
 	 * allowing for type-safe hardware retrieval via the get() method.
 	 */
+	@SuppressWarnings({"ClassWithTooManyFields", "unused"})
 	@Configurable
 	public static class Hardware {
 		// Drive motors
@@ -115,7 +119,9 @@ public class Settings {
 				"extenderRight");
 		
 		// Sensors
+		@SuppressWarnings("PublicStaticArrayField")
 		public static final String[] COLOR_RANGEFINDER_1 = {"crf1_0", "crf1_1"};
+		@SuppressWarnings("PublicStaticArrayField")
 		public static final String[] COLOR_RANGEFINDER_2 = {"crf2_0", "crf2_1"};
 		public static final HardwareConfig COLOR_SENSOR_LEFT = new HardwareConfig(RevColorSensorV3.class,
 				"colorLeft");
@@ -216,8 +222,9 @@ public class Settings {
 	 * - kI: Integral - use sparingly, eliminates steady-state error
 	 * - kD: Derivative - dampens oscillation, typically 10x kP
 	 *
-	 * @noinspection PointlessBooleanExpression
+	 *
 	 */
+	@SuppressWarnings("ClassWithTooManyFields")
 	@Configurable
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
@@ -316,6 +323,7 @@ public class Settings {
 	 * <p>
 	 * Documentation: https://docs.brushlandlabs.com/sensors/color-rangefinder/
 	 */
+	@SuppressWarnings("JavadocLinkAsPlainText")
 	@Configurable
 	public static class ColorSensor {
 		// Purple HSV hue range (160-190 degrees scaled to 0-255)
@@ -355,6 +363,7 @@ public class Settings {
 	 * Settings for the advanced Trajectory Engine.
 	 * Controls zone-based interpolation and calibration data loading.
 	 */
+	@SuppressWarnings("HardcodedFileSeparator")
 	@Configurable
 	public static class TrajectoryEngine {
 		// If robot is within this distance (inches) of a preset position, use the
@@ -384,6 +393,7 @@ public class Settings {
 	@Configurable
 	public static class Field {
 		public static double WIDTH = 144.0; // inches
+		@SuppressWarnings("unused")
 		public static double BALL_MASS_KG = .076; // kg
 		
 		
@@ -423,6 +433,7 @@ public class Settings {
 		/**
 		 * Reset/reset positions.
 		 */
+		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class Reset {
 			public static final Pose HUMAN_PLAYER_ZONE = new Pose(144 - (Robot.WIDTH / 2), Robot.LENGTH / 2,
 					Math.toRadians(90));
@@ -433,6 +444,7 @@ public class Settings {
 		/**
 		 * Goal positions for scoring.
 		 */
+		@SuppressWarnings({"InnerClassTooDeeplyNested", "unused"})
 		public static class Towers {
 			public static final Pose RED_GOAL = new Pose(130.0, 130.0, Math.toRadians(225));
 			public static final Pose BLUE_GOAL = new Pose(14.0, 130.0, Math.toRadians(315));
@@ -450,10 +462,12 @@ public class Settings {
 		 * TeleOp operational positions (BLUE alliance reference).
 		 * These are used for goto commands during driver control.
 		 */
+		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 99, Math.toRadians(140.59));
 			public static final Pose CLOSE_SHOOT_AUTO = new Pose(59, 83.7, Math.toRadians(130.0));
 			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(111.75));
+			@SuppressWarnings("unused")
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(12.44, 62, Math.toRadians(150));
 			public static final Pose PARK = new Pose(106, 32, Math.toRadians(180));
@@ -462,6 +476,7 @@ public class Settings {
 		/**
 		 * Autonomous starting positions.
 		 */
+		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class AutoStart {
 			public static final Pose FAR = new Pose(59.00, Robot.LENGTH / 2, Math.toRadians(90));
 			public static final Pose CLOSE = new Pose(24, 127, Math.toRadians(145));
@@ -470,7 +485,9 @@ public class Settings {
 		/**
 		 * Sample pickup locations organized by preset groups.
 		 */
+		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class Samples {
+			@SuppressWarnings("unused")
 			public static class GateAndEating {
 				public static final Pose EAT_FROM_EMPTY_DIRECTLY = new Pose(32, 16);
 				public static Pose EMPTY_GATE = new Pose(14, 64, Math.toRadians(155));
@@ -480,6 +497,7 @@ public class Settings {
 			/**
 			 * First preset group (closest to wall).
 			 */
+			@SuppressWarnings("unused")
 			public static class Preset1 {
 				public static final Pose PREP = new Pose(44, 34, Math.toRadians(180));
 				public static final Pose GRAB_1 = new Pose(36.0, 34, Math.toRadians(180));
@@ -492,7 +510,9 @@ public class Settings {
 			 */
 			public static class Preset2 {
 				public static final Pose PREP = new Pose(44, 58, Math.toRadians(180));
+				@SuppressWarnings("unused")
 				public static final Pose GRAB_1 = new Pose(36.0, 58, Math.toRadians(180));
+				@SuppressWarnings("unused")
 				public static final Pose GRAB_2 = new Pose(30.0, 58, Math.toRadians(180));
 				public static final Pose END = new Pose(25, 58, Math.toRadians(180));
 				public static final Pose END_AND_EMPTY_GATE = new Pose(16, 62, Math.toRadians(180));
@@ -501,6 +521,7 @@ public class Settings {
 			/**
 			 * Third preset group (farthest from wall).
 			 */
+			@SuppressWarnings("unused")
 			public static class Preset3 {
 				public static final Pose PREP = new Pose(44, 84, Math.toRadians(180));
 				public static final Pose GRAB_1 = new Pose(36.0, 84, Math.toRadians(180));
@@ -509,7 +530,9 @@ public class Settings {
 			}
 			
 			public static class HumanPlayerPreset {
+				@SuppressWarnings("unused")
 				public static final Pose PREP = new Pose(10.0, 40, Math.toRadians(-90));
+				@SuppressWarnings("unused")
 				public static final Pose PREP_END = new Pose(10,5, Math.toRadians(-90));
 				public static final Pose END = new Pose(7.0, 21, Math.toRadians(180));
 				public static final Pose END_First = new Pose(5,6,Math.toRadians(180));
@@ -519,6 +542,7 @@ public class Settings {
 		/**
 		 * Control points for curved autonomous paths.
 		 */
+		@SuppressWarnings({"ClassWithTooManyFields", "InnerClassTooDeeplyNested", "unused"})
 		public static class ControlPoints {
 			// From sample areas to shooting positions
 			public static final Pose TURN_BOT = new Pose(53.4, 16.9, Math.toRadians(180));
@@ -545,6 +569,7 @@ public class Settings {
 		/**
 		 * Parking positions for end of autonomous.
 		 */
+		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class Park {
 			public static final Pose FAR = Samples.Preset1.PREP; // Reuse a safe position
 			public static final Pose CLOSE = new Pose(60,   110, Math.toRadians(150));
@@ -602,6 +627,7 @@ public class Settings {
 		 * When an action's timeout is exceeded, it will be immediately ended with
 		 * interrupted=true.
 		 */
+		@SuppressWarnings({"ClassWithTooManyFields", "InnerClassTooDeeplyNested", "unused"})
 		@Configurable
 		public static class ActionTimeouts {
 			// Path actions
@@ -634,6 +660,7 @@ public class Settings {
 			 *                        "LaunchAction")
 			 * @return Timeout in seconds (0 = no timeout)
 			 */
+			@SuppressWarnings("MethodWithMultipleReturnPoints")
 			public static double getTimeout(String actionClassName) {
 				try {
 					java.lang.reflect.Field field = ActionTimeouts.class.getField(actionClassName);

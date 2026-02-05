@@ -37,6 +37,7 @@ import java.util.function.Consumer;
  * - Centralized lifecycle management (init, update, stop)
  * - Automatic dependency resolution between mechanisms
  */
+@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutNoArgConstructor", "MethodWithMultipleReturnPoints"})
 public class MechanismManager {
 	private static final LynxModule.BlinkerPolicy HUB_BLINKER_POLICY = new BlinkyBlinky();
 	public final Drivetrain drivetrain;
@@ -89,6 +90,7 @@ public class MechanismManager {
 		LynxModule.blinkerPolicy = HUB_BLINKER_POLICY;
 	}
 	
+	@SuppressWarnings({"OverlyLongMethod", "OverlyComplexMethod", "DefaultNotLastCaseInSwitch", "UnnecessaryLocalVariable"})
 	public void setHubColors(PresetColor c) {
 		ArrayList<Blinker.Step> p = new ArrayList<>();
 		int maxPatternLength = allHubs.get(0).getBlinkerPatternMaxLength();
@@ -334,6 +336,7 @@ public class MechanismManager {
 		MORSE
 	}
 	
+	@SuppressWarnings("ClassWithoutConstructor")
 	private static class BlinkyBlinky implements LynxModule.BlinkerPolicy {
 		private static final int DEFAULT_CYCLE_MS = 2500;
 		

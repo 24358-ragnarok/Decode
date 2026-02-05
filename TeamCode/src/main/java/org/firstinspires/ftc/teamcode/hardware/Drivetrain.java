@@ -18,6 +18,7 @@ import java.util.Map;
  * It abstracts away direct motor control in favor of the Follower API for
  * both manual (tele-op) and autonomous movement.
  */
+@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutNoArgConstructor"})
 public class Drivetrain extends Mechanism {
 	public final Follower follower;
 	// Define field-centric poses for autonomous targets.
@@ -84,6 +85,7 @@ public class Drivetrain extends Mechanism {
 	 * @param strafePower Left/right strafe power (-1.0 to 1.0).
 	 * @param rotation    Rotational power (-1.0 to 1.0).
 	 */
+	@SuppressWarnings("MethodWithMultipleReturnPoints")
 	public void manual(double drivePower, double strafePower, double rotation) {
 		if (state != State.MANUAL) {
 			return; // Automation is handling driving, so ignore manual input.
@@ -112,6 +114,7 @@ public class Drivetrain extends Mechanism {
 	 * @param offsetHeading The robot's heading offset from the target. Positive is
 	 *                      clockwise.
 	 */
+	@SuppressWarnings("unused")
 	public void interpolateToOffset(double offsetX, double offsetY, double offsetHeading) {
 		Pose currentPose = follower.getPose();
 		double currentHeading = currentPose.getHeading();
@@ -140,6 +143,7 @@ public class Drivetrain extends Mechanism {
 	 *
 	 * @param targetPose The absolute target pose.
 	 */
+	@SuppressWarnings("MethodWithMultipleReturnPoints")
 	public void goTo(Pose targetPose) {
 		if (follower.isBusy() && follower.getCurrentPath().endPose() == targetPose) {
 			return;
@@ -149,6 +153,7 @@ public class Drivetrain extends Mechanism {
 		follower.holdPoint(targetPose, false);
 	}
 	
+	@SuppressWarnings("unused")
 	public void rotateTo(double angle) {
 		if (!follower.isTurning()) {
 			
@@ -161,6 +166,7 @@ public class Drivetrain extends Mechanism {
 	 * Switches the drivetrain to manual (tele-op) control mode.
 	 * This will stop any active path following.
 	 */
+	@SuppressWarnings("MethodWithMultipleReturnPoints")
 	public void switchToManual() {
 		if (state == State.MANUAL) {
 			return;
@@ -207,6 +213,7 @@ public class Drivetrain extends Mechanism {
 	 * @param action The controller action to convert
 	 * @return The corresponding Position, or null if not a GOTO action
 	 */
+	@SuppressWarnings("MethodWithMultipleReturnPoints")
 	public Position actionToPosition(Controller.Action action) {
 		switch (action) {
 			case GOTO_CLOSE_SHOOT:
@@ -228,6 +235,7 @@ public class Drivetrain extends Mechanism {
 	 * @param action The action to check
 	 * @return true if the action is a GOTO action
 	 */
+	@SuppressWarnings("unused")
 	public boolean isGotoAction(Controller.Action action) {
 		return actionToPosition(action) != null;
 	}

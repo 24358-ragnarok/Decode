@@ -29,6 +29,7 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
  * after Auto.
  * Handles controller profile selection and robot operation during matches.
  */
+@SuppressWarnings({"ClassWithTooManyFields", "ClassHasNoToStringMethod", "ClassWithoutConstructor", "unused", "FieldCanBeLocal", "HardcodedFileSeparator", "OverlyLongMethod"})
 @Photon
 @TeleOp(name = "Run: RAGNAROK", group = ".Competition")
 public class MainOp extends OpMode {
@@ -147,6 +148,7 @@ public class MainOp extends OpMode {
 	 * Handles drivetrain movement, launcher controls, intake operations, and
 	 * telemetry updates.
 	 */
+	@SuppressWarnings({"MethodWithMoreThanThreeNegations", "OverlyComplexMethod"})
 	private void processControllerInputs() {
 		// Refresh gamepad state FIRST (required for edge detection to work)
 		mainController.update();
@@ -298,6 +300,7 @@ public class MainOp extends OpMode {
 		}
 	}
 	
+	@SuppressWarnings({"OverlyLongLambda", "CodeBlock2Expr"})
 	private void setupLogging() {
 		// Set up lazy evaluation for frequently-accessed but expensive operations
 		// These are only evaluated when telemetry is actually transmitted
