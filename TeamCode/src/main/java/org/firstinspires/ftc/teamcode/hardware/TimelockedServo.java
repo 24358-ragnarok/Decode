@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
  * Wrapper around ServoImplEx that enforces a simple time-based busy state after
  * a command.
  */
+@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutNoArgConstructor"})
 public class TimelockedServo {
 	private final ServoImplEx delegate;
 	private final long cooldownMs;
@@ -32,6 +33,7 @@ public class TimelockedServo {
 		return timer.getElapsedTime() < cooldownMs;
 	}
 	
+	@SuppressWarnings("unused")
 	public ServoImplEx getDelegate() {
 		return delegate;
 	}

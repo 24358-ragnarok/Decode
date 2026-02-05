@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
  * Ball detection and sorting logic is handled externally by SortedLaunchAction
  * using the ColorUnifier at the swap position.
  */
+@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutNoArgConstructor"})
 public class VerticalWheelTransfer extends Mechanism {
 	public final ColorUnifier colorUnifier;
 	private final DcMotorEx motor;

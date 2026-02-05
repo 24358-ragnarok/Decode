@@ -29,6 +29,7 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
  * The old state machine approach (600+ lines, lots of duplication) has been
  * replaced with a clean, maintainable structure (~150 lines).
  */
+@SuppressWarnings({"HardcodedFileSeparator", "ClassHasNoToStringMethod", "ClassWithoutConstructor", "unused"})
 @Photon
 @Autonomous(name = "Run: The Boonstra Special", group = ".Competition", preselectTeleOp = "Run: RAGNAROK")
 public class MainAuto extends OpMode {
@@ -84,6 +85,7 @@ public class MainAuto extends OpMode {
 	 * Runs once, when the driver presses PLAY after having pressed INIT and
 	 * configured the robot.
 	 */
+	@SuppressWarnings("CodeBlock2Expr")
 	@Override
 	public void start() {
 		// Initialize all mechanisms
@@ -158,6 +160,7 @@ public class MainAuto extends OpMode {
 	/**
 	 * Comprehensive telemetry logging - optimized with lazy evaluation.
 	 */
+	@SuppressWarnings("OverlyLongLambda")
 	private void setupLogging() {
 		logging.addDataLazy("Classifier", MatchState::getClassifier);
 		logging.addDataLazy("Current Position", () -> mechanisms.drivetrain.follower.getPose());

@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 
+@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutNoArgConstructor"})
 public class Lever extends Mechanism {
 	private final ServoImplEx leftExtender;
 	private final ServoImplEx rightExtender;

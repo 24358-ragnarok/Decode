@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
  * MatchConfigurationWizard provides an interface for configuring match settings
  * during the init_loop phase of autonomous programs.
  */
+@SuppressWarnings({"MethodWithMultipleReturnPoints", "ClassWithoutNoArgConstructor", "ClassHasNoToStringMethod", "HardcodedFileSeparator"})
 public class MatchConfigurationWizard {
 	private final Gamepad gamepad1;
 	private final UnifiedLogging logging;

@@ -12,8 +12,10 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
  * motor.
  * Supports intake, outtake, and stop operations with state tracking.
  */
+@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutNoArgConstructor"})
 public class FlexVectorIntake extends Mechanism {
 	private final DcMotorEx motor;
+	@SuppressWarnings({"FieldCanBeLocal", "unused"})
 	private final MechanismManager mechanisms;
 	public IntakeState state;
 	

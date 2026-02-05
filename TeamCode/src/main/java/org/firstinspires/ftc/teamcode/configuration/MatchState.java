@@ -19,6 +19,7 @@ import java.util.List;
  * store itself, ensuring type safety and easy access from any OpMode without
  * needing to pass a HashMap.
  */
+@SuppressWarnings({"ClassWithTooManyMethods", "ClassWithoutConstructor", "MethodWithMultipleReturnPoints", "unused"})
 public class MatchState {
 
 	// --- Private Static Storage ---
@@ -91,6 +92,7 @@ public class MatchState {
 	/**
 	 * Empties all artifacts from the classifier, but keeps the Motif.
 	 */
+	@SuppressWarnings("unused")
 	public static void emptyClassifierBalls() {
 		if (classifier != null) {
 			// Re-create the classifier, preserving the motif but using an empty ball array
@@ -129,6 +131,7 @@ public class MatchState {
 	 *
 	 * @return A List of Artifact.Color, empty if motif is unknown.
 	 */
+	@SuppressWarnings("unused")
 	public static List<Artifact.Color> nextThreeArtifactsNeeded() {
 		List<Artifact.Color> nextThree = new ArrayList<>();
 		if (classifier == null)

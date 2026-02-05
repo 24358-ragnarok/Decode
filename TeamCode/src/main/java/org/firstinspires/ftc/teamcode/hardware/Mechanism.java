@@ -9,6 +9,7 @@ package org.firstinspires.ftc.teamcode.hardware;
  * 2. update() - Called repeatedly during robot operation
  * 3. stop() - Called once when the robot is stopped
  */
+@SuppressWarnings("ClassWithoutConstructor")
 public abstract class Mechanism {
 	
 	/**

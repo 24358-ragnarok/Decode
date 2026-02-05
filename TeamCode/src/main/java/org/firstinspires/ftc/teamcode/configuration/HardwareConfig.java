@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.hardware.TimelockedServo;
  * name.
  * This allows for type-safe hardware retrieval from the HardwareMap.
  */
+@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutNoArgConstructor", "SuspiciousGetterSetter"})
 public class HardwareConfig {
 	private final Class<?> deviceType;
 	private final String deviceName;
@@ -65,6 +66,7 @@ public class HardwareConfig {
 	 *
 	 * @return The device type class
 	 */
+	@SuppressWarnings("unused")
 	public Class<?> getType() {
 		return deviceType;
 	}

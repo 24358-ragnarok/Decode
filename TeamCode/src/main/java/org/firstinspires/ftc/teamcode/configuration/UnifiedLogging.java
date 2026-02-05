@@ -26,6 +26,7 @@ import java.util.Map;
  * transmission occurs
  * - Optimized transmission interval to reduce overhead
  */
+@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutNoArgConstructor", "unused"})
 public class UnifiedLogging {
 	public final Telemetry driverStation;
 	public final TelemetryManager panels;
