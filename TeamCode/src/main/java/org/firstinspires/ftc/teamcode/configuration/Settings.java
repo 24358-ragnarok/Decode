@@ -230,10 +230,10 @@ public class Settings {
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static final double VELOCITY_ALPHA = 0.6; // EMA smoothing factor (0-1), lower = more smoothing
-		public static double GATE_FIRE_POSITION_CLOSE = 0.388;
-		public static double GATE_FIRE_POSITION_FAR = 0.404;
-		public static double GATE_CLOSED_POSITION = 0.452;
-		public static double GATE_LOCK_POSITION = 0.55;
+		public static double GATE_FIRE_POSITION_CLOSE = 0.185;
+		public static double GATE_FIRE_POSITION_FAR = 0.250;
+		public static double GATE_CLOSED_POSITION = 0.345;
+		public static double GATE_LOCK_POSITION = 0.465;
 		public static long GATE_COOLDOWN_MS = 500;
 		public static long MAX_SPEED_ERROR = 50;
 		// Pitch servo calibration (physical limits)

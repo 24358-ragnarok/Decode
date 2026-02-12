@@ -29,7 +29,8 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
  * after Auto.
  * Handles controller profile selection and robot operation during matches.
  */
-@SuppressWarnings({"ClassWithTooManyFields", "ClassHasNoToStringMethod", "ClassWithoutConstructor", "unused", "FieldCanBeLocal", "HardcodedFileSeparator", "OverlyLongMethod"})
+@SuppressWarnings({"ClassWithTooManyFields", "ClassHasNoToStringMethod", "ClassWithoutConstructor", "unused",
+		"FieldCanBeLocal", "HardcodedFileSeparator", "OverlyLongMethod"})
 @Photon
 @TeleOp(name = "Run: RAGNAROK", group = ".Competition")
 public class MainOp extends OpMode {
@@ -47,7 +48,7 @@ public class MainOp extends OpMode {
 	private BallSwap swap;
 	private Lever lever;
 	private Timer speedTimer;
-	
+
 	/**
 	 * Runs when "init" is pressed on the Driver Station.
 	 * Initializes all robot systems, controllers, and telemetry for TeleOp
@@ -65,7 +66,7 @@ public class MainOp extends OpMode {
 		launcher = mechanisms.get(PairedLauncher.class);
 		swap = mechanisms.get(BallSwap.class);
 		lever = mechanisms.get(Lever.class);
-		
+
 		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower,
 				PanelsGamepad.INSTANCE.getFirstManager());
 		subController = new Controller(gamepad2, mechanisms.drivetrain.follower,
@@ -73,7 +74,12 @@ public class MainOp extends OpMode {
 		logging = new UnifiedLogging(telemetry, PanelsTelemetry.INSTANCE.getTelemetry());
 		mechanisms.drivetrain.follower.setStartingPose(MatchState.getTeleOpStartingPose());
 		mechanisms.drivetrain.switchToManual();
-//		setupLogging();
+		
+		mechanisms.ifValid(mechanisms.get(PairedLauncher.class), launcher -> {
+			launcher.openFar();
+		});
+		
+		// setupLogging();
 		// Show whether we're using stored pose or fallback
 		Pose storedPose = MatchState.getStoredPose();
 		if (storedPose != null) {
@@ -86,7 +92,7 @@ public class MainOp extends OpMode {
 				MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE ? MechanismManager.PresetColor.BLUE
 						: MechanismManager.PresetColor.RED);
 	}
-	
+
 	/**
 	 * Runs after "init" and before "start" repeatedly.
 	 */
@@ -95,7 +101,7 @@ public class MainOp extends OpMode {
 		logging.drawDebug(mechanisms.drivetrain.follower);
 		logging.update();
 	}
-	
+
 	/**
 	 * Runs when "start" is pressed on the Driver Station.
 	 */
@@ -107,7 +113,7 @@ public class MainOp extends OpMode {
 		MatchState.clearStoredPose();
 		logging.enableRetainedMode();
 	}
-	
+
 	/**
 	 * Runs repeatedly after "start" is pressed on the Driver Station, during the
 	 * actual game.
@@ -214,8 +220,10 @@ public class MainOp extends OpMode {
 						drivetrain.switchToManual();
 					}
 				}
-				if (mainController.wasJustPressed(Controller.Control.LEFT_BUMPER) && mechanisms.limelightManager != null) {
-					drivetrain.goTo(drivetrain.follower.getPose().withHeading(drivetrain.follower.getHeading() + mechanisms.limelightManager.estimateHeadingToGoal()));
+				if (mainController.wasJustPressed(Controller.Control.LEFT_BUMPER)
+						&& mechanisms.limelightManager != null) {
+					drivetrain.goTo(drivetrain.follower.getPose().withHeading(
+							drivetrain.follower.getHeading() + mechanisms.limelightManager.estimateHeadingToGoal()));
 				} else if (mainController.wasJustReleased(Controller.Control.LEFT_BUMPER)) {
 					drivetrain.switchToManual();
 				}
@@ -229,8 +237,9 @@ public class MainOp extends OpMode {
 			} else {
 				launcher.setRPM(MAINTAIN_RPM);
 				launcher.spinUp();
-				// 				launcher.stop();
+				// launcher.stop();
 			}
+			telemetry.addData("thing", subController.getProcessedValue(Controller.Action.LAUNCH));
 			if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
 				launcher.openDynamic();
 			} else if (subController.wasJustReleased(Controller.Action.LAUNCH)) {
