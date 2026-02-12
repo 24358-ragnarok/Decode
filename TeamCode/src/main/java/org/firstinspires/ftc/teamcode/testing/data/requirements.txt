@@ -11,7 +11,7 @@ numpy==2.3.3
 packaging==25.0
 pandas==2.3.2
 pathspec==0.12.1
-pillow==11.3.0
+pillow==12.1.1
 platformdirs==4.4.0
 plotly==6.3.0
 pyparsing==3.2.5
