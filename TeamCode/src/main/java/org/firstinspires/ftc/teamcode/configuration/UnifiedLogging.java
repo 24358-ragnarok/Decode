@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.configuration;
 
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Robot.LOGGING_INTERVAL;
+
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
@@ -45,7 +47,7 @@ public class UnifiedLogging {
 		
 		// Optimize telemetry settings
 		driverStation.setAutoClear(false); // We'll manage clearing manually
-		driverStation.setMsTransmissionInterval(100); // Update every 100ms (was default 250ms)
+		driverStation.setMsTransmissionInterval(LOGGING_INTERVAL); // Update every 100ms (was default 250ms)
 	}
 	
 	/**

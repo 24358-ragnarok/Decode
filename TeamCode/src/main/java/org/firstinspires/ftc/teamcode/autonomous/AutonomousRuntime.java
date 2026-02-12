@@ -29,12 +29,14 @@ public enum AutonomousRuntime {
 					.sortedLaunch()
 					
 					// Get ball set I
+					.startPickup()
 					.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
 							"Prep Preset 1",
 							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR)
-					.startPickup()
+					
 					
 					.moveTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
+					.endPickup()
 					
 					// Launch ball set I (sorted)
 					.prepLaunch()
@@ -43,20 +45,19 @@ public enum AutonomousRuntime {
 					.sortedLaunch()
 					
 					// Get ball set II
+					.startPickup()
 					.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
 							"Prep Preset2",
 							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
-					.startPickup()
 					
 					.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
+					.endPickup()
 					
 					// Launch ball set II (sorted)
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preset2")
 					.sortedLaunch()
 					
-					// Park
-					.endPickup()
 					.moveTo(Settings.Positions.Park.FAR, "Park")
 					.endAt(Settings.Positions.Park.FAR)
 					.build();
@@ -65,8 +66,6 @@ public enum AutonomousRuntime {
 		@Override
 		public AutonomousSequence buildCloseSequence() {
 			return new SequenceBuilder()
-					// Scan from close pose
-					
 					.prepLaunch()
 					.moveTo(Settings.Positions.Towers.CLOSE_SCAN, "Scan (Close)")
 					.scanObelisk()
@@ -76,10 +75,10 @@ public enum AutonomousRuntime {
 					.sortedLaunch()
 					
 					// Get ball set I (Preset3 for close sequence)
-					.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
 					.startPickup()
-					
+					.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
 					.moveTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
+					.endPickup()
 					
 					// Launch ball set I (sorted)
 					.prepLaunch()
@@ -88,10 +87,10 @@ public enum AutonomousRuntime {
 					.sortedLaunch()
 					
 					// Get ball set II (Preset2 for close sequence)
-					.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
 					.startPickup()
-					
+					.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
 					.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
+					.endPickup()
 					
 					// Launch ball set II (sorted)
 					.prepLaunch()
@@ -99,8 +98,6 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.FROM_PRESET2_TO_CLOSE, "Launch Preset2")
 					.sortedLaunch()
 					
-					// Park
-					.endPickup()
 					.moveTo(Settings.Positions.Park.CLOSE, "Park")
 					.endAt(Settings.Positions.Park.CLOSE)
 					.build();
@@ -141,19 +138,17 @@ public enum AutonomousRuntime {
 		@Override
 		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
-					
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
 					.KRAKATOA()
 					
 					// Get ball set I
+					.startPickup()
 					.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
 							"Prep Preset 1",
 							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR)
-					.startPickup()
-					
 					.moveTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
-					// .endPickup()
+					.endPickup()
 					
 					// Launch ball set I
 					.prepLaunch()
@@ -162,14 +157,13 @@ public enum AutonomousRuntime {
 					.KRAKATOA()
 					
 					// Get ball set II
+					.startPickup()
 					.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
 							"Prep Preset2",
 							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
 					.startPickup()
-					
 					.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
-					
-					// .endPickup()
+					.endPickup()
 					
 					// Launch ball set II
 					.prepLaunch()
@@ -178,7 +172,6 @@ public enum AutonomousRuntime {
 					.KRAKATOA()
 					
 					// Park
-					.endPickup()
 					.moveTo(Settings.Positions.Park.FAR, "Park")
 					.endAt(Settings.Positions.Park.FAR)
 					.build();
@@ -187,20 +180,15 @@ public enum AutonomousRuntime {
 		@Override
 		public AutonomousSequence buildCloseSequence() {
 			return new SequenceBuilder()
-					
-					// Launch preload
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
-					
 					.KRAKATOA()
 					
 					// Get ball set I (Preset3 for close sequence)
-					.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
 					.startPickup()
-					
+					.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
 					.moveTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
-					
-					// .endPickup()
+					.endPickup()
 					
 					// Launch ball set I
 					.prepLaunch()
@@ -210,12 +198,10 @@ public enum AutonomousRuntime {
 					.KRAKATOA()
 					
 					// Get ball set II (Preset2 for close sequence)
-					.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
 					.startPickup()
-					
+					.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
 					.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
-					
-					// .endPickup()
+					.endPickup()
 					
 					// Launch ball set II
 					.prepLaunch()
@@ -225,13 +211,12 @@ public enum AutonomousRuntime {
 					.KRAKATOA()
 					
 					// Park
-					.endPickup()
 					.moveTo(Settings.Positions.Park.CLOSE, "Park")
 					.endAt(Settings.Positions.Park.CLOSE)
 					.build();
 		}
 	},
-	BEST("[CB] Closest two presets and loop eat combined combined auto") {
+	BEST("[CB] Closest two presets and loop eat") {
 		@Override
 		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
@@ -246,6 +231,7 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR, "Prep Preset 1")
 					
 					// Launch ball set I
+					.endPickup()
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
 							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR, "Launch Preset1")
@@ -259,13 +245,13 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
 							"Prep Human Player")
 					.prepLaunch()
+					.endPickup()
+					
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT,
 							"Prep Human Player")
 					.KRAKATOA()
 					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the bot")
 					.wait(.5)
-					
-					
 					
 					
 					// pick from HP and shoot
@@ -274,6 +260,7 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
 							"Prep Human Player")
 					.prepLaunch()
+					.endPickup()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT,
 							"Prep Human Player")
 					.KRAKATOA()
@@ -284,12 +271,12 @@ public enum AutonomousRuntime {
 					.moveTo(Settings.Positions.Samples.HumanPlayerPreset.END,
 							"Prep Human Player")
 					.prepLaunch()
+					.endPickup()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Human player to far shoot")
 					.KRAKATOA()
 					
 					
 					// Park
-					.endPickup()
 					.moveTo(Settings.Positions.Park.FAR, "Park")
 					.endAt(Settings.Positions.Park.FAR)
 					.build();
@@ -306,8 +293,7 @@ public enum AutonomousRuntime {
 					.startPickup()
 					.moveCurveToVia(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
 							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Prep Preset2")
-					
-					// .endPickup()
+					.endPickup()
 					
 					// Launch ball set I
 					.prepLaunch()
@@ -323,6 +309,7 @@ public enum AutonomousRuntime {
 							.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
 									"Curve to empty gate")
 							.wait(1.2)
+							.endPickup()
 							.prepLaunch()
 							.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 									EMPTY_GATE_APPROACH,
@@ -333,7 +320,7 @@ public enum AutonomousRuntime {
 					.startPickup()
 					.moveCurveToVia(Settings.Positions.Samples.Preset3.END,
 							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset3")
-					
+					.endPickup()
 					
 					// Launch ball set II
 					.prepLaunch()
@@ -341,18 +328,15 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset2")
 					.KRAKATOA()
 					
-					.endPickup()
-					
 					.moveTo(Settings.Positions.Park.CLOSE, "Park")
 					.endAt(Settings.Positions.Park.CLOSE)
 					.build();
 		}
 	},
-	SOLO("18 Ball Solo Auto Close only") {
+	SOLO("18 Ball Solo Auto, close only") {
 		@Override
 		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
-					
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
 					.launch()
@@ -362,7 +346,7 @@ public enum AutonomousRuntime {
 					.moveSplineTo(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
 							"Prep Preset 1",
 							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
-					// .endPickup()
+					.endPickup()
 					
 					// Launch ball set I
 					.prepLaunch()
@@ -371,19 +355,16 @@ public enum AutonomousRuntime {
 					.launch()
 					
 					// Get ball set II
+					.startPickup()
 					.moveSplineTo(Settings.Positions.Samples.Preset2.PREP,
 							"Prep Preset2",
 							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
-					.startPickup()
-					
 					.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
-					
-					// .endPickup()
+					.endPickup()
 					
 					// Launch ball set II
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preset2")
-					
 					.launch()
 					
 					// Park
@@ -398,15 +379,13 @@ public enum AutonomousRuntime {
 			return new SequenceBuilder()
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO, "Launch Preload")
-					
 					.KRAKATOA()
 					
 					// Get ball set I (Preset2 for close sequence)
 					.startPickup()
 					.moveCurveToVia(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
 							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Prep Preset2")
-					
-					// .endPickup()
+					.endPickup()
 					
 					// Launch ball set I
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
@@ -419,6 +398,7 @@ public enum AutonomousRuntime {
 							"Curve to empty gate")
 					.moveTo(EMPTY_GATE_MOVE_BACK, "Move back from the gate empty")
 					.wait(.7)
+					.endPickup()
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
 							EMPTY_GATE_APPROACH,
 							"Launch Direct Eat")
@@ -429,6 +409,7 @@ public enum AutonomousRuntime {
 							"Curve to empty gate")
 					.moveTo(EMPTY_GATE_MOVE_BACK, "Move back from the gate empty")
 					.wait(.7)
+					.endPickup()
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
 							EMPTY_GATE_APPROACH,
 							"Launch Direct Eat")
@@ -437,89 +418,11 @@ public enum AutonomousRuntime {
 					// Get ball set II (Preset3 for close sequence)
 					.startPickup()
 					.moveTo(Settings.Positions.Samples.Preset3.END, "Launch Preset3")
-					
+					.endPickup()
 					
 					// Launch ball set II
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO, "Launch Preset2")
 					.KRAKATOA()
-					
-					.endPickup()
-					
-					.moveTo(Settings.Positions.Park.CLOSE, "Park")
-					.endAt(Settings.Positions.Park.CLOSE)
-					.build();
-		}
-	},
-	CONNER("Conner's 15 ball secured close auto") {
-		
-		@Override
-		public boolean supportsFar() {
-			return false; // Only Close sequence is implemented
-		}
-		@Override
-		public AutonomousSequence buildFarSequence() {
-			throw new UnsupportedOperationException("Far sequence not supported for CONNER runtime");
-		}
-		
-		@Override
-		public AutonomousSequence buildCloseSequence() {
-			return new SequenceBuilder()
-					.prepLaunch()
-					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
-					
-					.KRAKATOA()
-					
-					// Get ball set I (Preset2 for close sequence)
-					.startPickup()
-					.moveCurveToVia(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
-							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Prep Preset2")
-					
-					// .endPickup()
-					
-					// Launch ball set I
-					.prepLaunch()
-					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Launch Preset3")
-					
-					.KRAKATOA()
-					
-					// Get balls from eat and shoot
-					.startPickup()
-					.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
-							"Curve to empty gate")
-					.wait(.5)
-					.prepLaunch()
-					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-							EMPTY_GATE_APPROACH,
-							"Launch Direct Eat")
-					.KRAKATOA()
-					
-					// Get ball set II (Preset3 for close sequence)
-					.startPickup()
-					.moveCurveToVia(Settings.Positions.Samples.Preset3.END,
-							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset3")
-					
-					
-					// Launch ball set II
-					.prepLaunch()
-					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset2")
-					.KRAKATOA()
-					
-					
-					// Loop: Get balls from HP and launch until 5 seconds left
-					.loopUntilSecondsLeft(4.0, loop -> loop
-							.startPickup()
-							.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
-									"Curve to empty gate")
-							.wait(.5)
-							.prepLaunch()
-							.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-									EMPTY_GATE_APPROACH,
-									"Launch Direct Eat")
-							.KRAKATOA())
-					
-					.endPickup()
 					
 					.moveTo(Settings.Positions.Park.CLOSE, "Park")
 					.endAt(Settings.Positions.Park.CLOSE)

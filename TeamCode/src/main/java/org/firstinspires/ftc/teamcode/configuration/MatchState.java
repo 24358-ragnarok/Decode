@@ -61,8 +61,8 @@ public class MatchState {
 	public static void reset() {
 		classifier = Classifier.empty();
 		allianceColor = AllianceColor.BLUE;
-		autoStartingPosition = AutoStartingPosition.FAR;
-		autonomousRuntime = AutonomousRuntime.BEST;
+		autoStartingPosition = AutoStartingPosition.CLOSE;
+		autonomousRuntime = AutonomousRuntime.SORTED;
 		storedPose = null;
 	}
 	

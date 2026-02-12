@@ -24,6 +24,7 @@ public class Settings {
 	public static class Robot {
 		public static final double WIDTH = 16.25;
 		public static final double LENGTH = 17.00;
+		public static final int LOGGING_INTERVAL = 20; // TODO: increase during championship
 		
 	}
 	
@@ -230,10 +231,10 @@ public class Settings {
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static final double VELOCITY_ALPHA = 0.6; // EMA smoothing factor (0-1), lower = more smoothing
-		public static double GATE_FIRE_POSITION_CLOSE = 0.185;
-		public static double GATE_FIRE_POSITION_FAR = 0.250;
-		public static double GATE_CLOSED_POSITION = 0.345;
-		public static double GATE_LOCK_POSITION = 0.465;
+		public static double GATE_FIRE_POSITION_CLOSE = 0.08;
+		public static double GATE_FIRE_POSITION_FAR = 0.135;
+		public static double GATE_CLOSED_POSITION = 0.216;
+		public static double GATE_LOCK_POSITION = 0.300;
 		public static long GATE_COOLDOWN_MS = 500;
 		public static long MAX_SPEED_ERROR = 50;
 		// Pitch servo calibration (physical limits)
@@ -341,7 +342,7 @@ public class Settings {
 		
 		// Normalized RGB thresholds (values centered around 1.0)
 		public static double GREEN_THRESHOLD = 1.4; // Normalized green channel threshold for GREEN detection
-		public static double BLUE_THRESHOLD = 1.2; // Normalized blue channel threshold for PURPLE detection
+		public static double BLUE_THRESHOLD = 1.1; // Normalized blue channel threshold for PURPLE detection
 	}
 	
 	@Configurable
@@ -616,7 +617,7 @@ public class Settings {
 		public static double SLOW_SPEED = 0.4;
 		public static double LAUNCH_EXIT_TIME_MS = 200;
 		public static double KRAKATOA_TIME_MS = 1000;
-		public static double SEARCH_TIMEOUT_MS = 500; // Time to search before assuming empty
+		public static double SEARCH_TIMEOUT_MS = 750; // Time to search before assuming empty
 		
 		/**
 		 * Per-action timeout configuration.

@@ -79,7 +79,7 @@ public class MainOp extends OpMode {
 			launcher.openFar();
 		});
 		
-		// setupLogging();
+		setupLogging();
 		// Show whether we're using stored pose or fallback
 		Pose storedPose = MatchState.getStoredPose();
 		if (storedPose != null) {
@@ -239,7 +239,6 @@ public class MainOp extends OpMode {
 				launcher.spinUp();
 				// launcher.stop();
 			}
-			telemetry.addData("thing", subController.getProcessedValue(Controller.Action.LAUNCH));
 			if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
 				launcher.openDynamic();
 			} else if (subController.wasJustReleased(Controller.Action.LAUNCH)) {

@@ -131,7 +131,7 @@ public class Classifier {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Classifier Motif: ").append(motif.toString()).append("\n");
+		sb.append("Motif: ").append(motif.toString()).append("\n");
 		sb.append("Stored Balls (").append(ballCount).append("/").append(MAX_CAPACITY).append("): [");
 		
 		for (int i = 0; i < ballCount; i++) {

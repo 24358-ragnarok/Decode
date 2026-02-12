@@ -62,6 +62,6 @@ public class Motif {
 	
 	@Override
 	public String toString() {
-		return "Motif: [" + this.state[0].color + ", " + this.state[1].color + ", " + this.state[2].color + "]";
+		return "[" + this.state[0].color + ", " + this.state[1].color + ", " + this.state[2].color + "]";
 	}
 }

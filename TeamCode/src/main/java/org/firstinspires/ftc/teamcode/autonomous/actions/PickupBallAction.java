@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous.actions;
 import org.firstinspires.ftc.teamcode.autonomous.AutonomousAction;
 import org.firstinspires.ftc.teamcode.hardware.FlexVectorIntake;
 import org.firstinspires.ftc.teamcode.hardware.MechanismManager;
+import org.firstinspires.ftc.teamcode.hardware.PairedLauncher;
 import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
 
 /**
@@ -34,13 +35,17 @@ public class PickupBallAction implements AutonomousAction {
 		
 		// Start intake motor to pull samples in
 		FlexVectorIntake intake = mechanisms.get(FlexVectorIntake.class);
-		
+		PairedLauncher launcher = mechanisms.get(PairedLauncher.class);
 		VerticalWheelTransfer transfer = mechanisms.get(VerticalWheelTransfer.class);
+		
 		if (intake != null) {
 			intake.in();
 		}
 		if (transfer != null) {
 			transfer.crawl();
+		}
+		if (launcher != null) {
+			launcher.lock();
 		}
 	}
 	
