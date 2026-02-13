@@ -232,7 +232,7 @@ public class Settings {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static final double VELOCITY_ALPHA = 0.6; // EMA smoothing factor (0-1), lower = more smoothing
 		public static double GATE_FIRE_POSITION_CLOSE = 0.08;
-		public static double GATE_FIRE_POSITION_FAR = 0.135;
+		public static double GATE_FIRE_POSITION_FAR = 0.085;
 		public static double GATE_CLOSED_POSITION = 0.216;
 		public static double GATE_LOCK_POSITION = 0.300;
 		public static long GATE_COOLDOWN_MS = 500;
@@ -354,8 +354,8 @@ public class Settings {
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 43.6; // Launch angle from horizontal for close position
 		public static double CLOSE_SHOOT_RPM = 2600; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 32.75; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3550; // Wheel RPM for far position
+		public static double FAR_SHOOT_PITCH_DEGREES = 35.75; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 3350; // Wheel RPM for far position
 		
 		public static double MAINTAIN_RPM = (CLOSE_SHOOT_RPM + FAR_SHOOT_RPM) / 2; // avg speed
 		

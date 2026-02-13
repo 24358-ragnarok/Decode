@@ -30,6 +30,10 @@ public class PairedLauncher extends Mechanism {
 	// Time-averaged velocity readings (exponential moving average)
 	private double averagedRightRPM = 0;
 	private double averagedLeftRPM = 0;
+	// Bang-bang settings
+	private static final double DEFAULT_BANG_BANG_POWER = 1.0;
+	private double bangBangPower = DEFAULT_BANG_BANG_POWER;
+	
 	
 	public PairedLauncher(
 			MechanismManager mechanisms,
@@ -50,14 +54,14 @@ public class PairedLauncher extends Mechanism {
 		// Apply PIDF coefficients for velocity control from Settings
 		// Rev SDK expects kF such that velocityControlFeedforward = kF * targetVelocityTicksPerSec
 		// Use the KF value from Settings; tune as needed.
-		leftMotor.setVelocityPIDFCoefficients(Settings.Launcher.LAUNCHER_LEFT_KP,
-				Settings.Launcher.LAUNCHER_LEFT_KI,
-				Settings.Launcher.LAUNCHER_LEFT_KD,
-				Settings.Launcher.LAUNCHER_LEFT_KF);
-		rightMotor.setVelocityPIDFCoefficients(Settings.Launcher.LAUNCHER_RIGHT_KP,
-				Settings.Launcher.LAUNCHER_RIGHT_KI,
-				Settings.Launcher.LAUNCHER_RIGHT_KD,
-				Settings.Launcher.LAUNCHER_RIGHT_KF);
+//		leftMotor.setVelocityPIDFCoefficients(Settings.Launcher.LAUNCHER_LEFT_KP,
+//				Settings.Launcher.LAUNCHER_LEFT_KI,
+//				Settings.Launcher.LAUNCHER_LEFT_KD,
+//				Settings.Launcher.LAUNCHER_LEFT_KF);
+//		rightMotor.setVelocityPIDFCoefficients(Settings.Launcher.LAUNCHER_RIGHT_KP,
+//				Settings.Launcher.LAUNCHER_RIGHT_KI,
+//				Settings.Launcher.LAUNCHER_RIGHT_KD,
+//				Settings.Launcher.LAUNCHER_RIGHT_KF);
 	}
 
 	/**
@@ -182,6 +186,25 @@ public class PairedLauncher extends Mechanism {
 		}
 		if (averagedRightRPM < 0) {
 			averagedRightRPM = 0;
+		}
+		
+		// Bang-bang control: apply open-loop power until each motor reaches targetRPM within tolerance
+		if (state != LauncherState.ACTIVE) {
+			double targetRPM = ticksPerSecToRPM(targetTPS);
+			
+			// Right motor
+			if (averagedRightRPM < targetRPM - MAX_SPEED_ERROR) {
+				rightMotor.setPower(bangBangPower);
+			} else {
+				rightMotor.setPower(0.0);
+			}
+			
+			// Left motor
+			if (averagedLeftRPM < targetRPM - MAX_SPEED_ERROR) {
+				leftMotor.setPower(bangBangPower);
+			} else {
+				leftMotor.setPower(0.0);
+			}
 		}
 	}
 	
