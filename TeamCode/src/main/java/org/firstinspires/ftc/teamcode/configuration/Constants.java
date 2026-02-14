@@ -30,16 +30,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Constants {
 	public static final FollowerConstants followerConstants = new FollowerConstants()
 			.mass(13.8)
-			.forwardZeroPowerAcceleration(-36.00)
-			.lateralZeroPowerAcceleration(-73.00)
+			.forwardZeroPowerAcceleration(-40.19)
+			.lateralZeroPowerAcceleration(-64.00)
 			
-			.translationalPIDFCoefficients(new PIDFCoefficients(0.13, 0.00001, 0.02, 0.02))
+			.translationalPIDFCoefficients(new PIDFCoefficients(0.13, 0.001, 0.02, 0.02))
 			.secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.1, 0.0001, 0.02, 0.02))
 			
 			.headingPIDFCoefficients(new PIDFCoefficients(0.7, 0.001, 0.05, 0.03))
 			.secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.65, 0.001, 0.015, 0.02))
 			
-			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.65, 0.0, 0.2, 0.6, 0.0))
+			.drivePIDFCoefficients(new FilteredPIDFCoefficients(0.65, 0.0, 0.05, 0.6, 0.0))
 			.secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.15, 0.0, 0.01, 0.6, 0.0))
 			
 			.centripetalScaling(0.0003)
@@ -59,7 +59,7 @@ public class Constants {
 			.leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
 			.rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
 			.rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-			.xVelocity(88.0).yVelocity(61.0)
+			.xVelocity(89.28).yVelocity(56.43)
 			.useVoltageCompensation(false)
 			.nominalVoltage(13)
 			.useBrakeModeInTeleOp(false);
@@ -91,10 +91,11 @@ public class Constants {
 			0.01,
 			0.01,
 			0.001,
-			200,
-			2.2,
+			50,
+			1.25,
 			10,
-			0.75);
+			1
+	);
 	
 	/**
 	 * Factory method to create a configured Follower instance.

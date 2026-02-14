@@ -70,9 +70,6 @@ public class SortedLaunchAction implements AutonomousAction {
 		if (transfer != null) {
 			transfer.freeze();
 		}
-		if (intake != null) {
-			intake.crawl();
-		}
 	}
 	
 	@Override

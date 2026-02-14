@@ -231,7 +231,7 @@ public class Settings {
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static final double VELOCITY_ALPHA = 0.6; // EMA smoothing factor (0-1), lower = more smoothing
-		public static double GATE_FIRE_POSITION_CLOSE = 0.08;
+		public static double GATE_FIRE_POSITION_CLOSE = 0.06;
 		public static double GATE_FIRE_POSITION_FAR = 0.085;
 		public static double GATE_CLOSED_POSITION = 0.216;
 		public static double GATE_LOCK_POSITION = 0.300;
@@ -354,8 +354,9 @@ public class Settings {
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 43.6; // Launch angle from horizontal for close position
 		public static double CLOSE_SHOOT_RPM = 2600; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 35.75; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3350; // Wheel RPM for far position
+		public static double FAR_SHOOT_PITCH_DEGREES = 32.75; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 3420; // Wheel RPM for far position
+		
 		
 		public static double MAINTAIN_RPM = (CLOSE_SHOOT_RPM + FAR_SHOOT_RPM) / 2; // avg speed
 		
@@ -481,8 +482,8 @@ public class Settings {
 		 */
 		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class AutoStart {
-			public static final Pose FAR = new Pose(59.00, Robot.LENGTH / 2, Math.toRadians(90));
-			public static final Pose CLOSE = new Pose(24, 127, Math.toRadians(145));
+			public static final Pose FAR = new Pose(56.26, Robot.LENGTH / 2, Math.toRadians(90));
+			public static final Pose CLOSE = new Pose(22.17, 124.69, Math.toRadians(145));
 		}
 		
 		/**
@@ -502,22 +503,22 @@ public class Settings {
 			 */
 			@SuppressWarnings("unused")
 			public static class Preset1 {
-				public static final Pose PREP = new Pose(44, 34, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(36.0, 34, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(30.0, 34, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 32, Math.toRadians(180));
+				public static final Pose PREP = new Pose(44, 35.67, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(36.0, 35.67, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 35.67, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 35.67, Math.toRadians(180));
 			}
 			
 			/**
 			 * Second preset group (middle).
 			 */
 			public static class Preset2 {
-				public static final Pose PREP = new Pose(44, 58, Math.toRadians(180));
+				public static final Pose PREP = new Pose(44, 59.5, Math.toRadians(180));
 				@SuppressWarnings("unused")
-				public static final Pose GRAB_1 = new Pose(36.0, 58, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(36.0, 59.5, Math.toRadians(180));
 				@SuppressWarnings("unused")
-				public static final Pose GRAB_2 = new Pose(30.0, 58, Math.toRadians(180));
-				public static final Pose END = new Pose(25, 58, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 59.5, Math.toRadians(180));
+				public static final Pose END = new Pose(25, 59.5, Math.toRadians(180));
 				public static final Pose END_AND_EMPTY_GATE = new Pose(16, 62, Math.toRadians(180));
 			}
 			
@@ -526,10 +527,10 @@ public class Settings {
 			 */
 			@SuppressWarnings("unused")
 			public static class Preset3 {
-				public static final Pose PREP = new Pose(44, 84, Math.toRadians(180));
-				public static final Pose GRAB_1 = new Pose(36.0, 84, Math.toRadians(180));
-				public static final Pose GRAB_2 = new Pose(30.0, 84, Math.toRadians(180));
-				public static final Pose END = new Pose(20, 84, Math.toRadians(180));
+				public static final Pose PREP = new Pose(44, 84.6, Math.toRadians(180));
+				public static final Pose GRAB_1 = new Pose(36.0, 84.6, Math.toRadians(180));
+				public static final Pose GRAB_2 = new Pose(30.0, 84.6, Math.toRadians(180));
+				public static final Pose END = new Pose(20, 84.6, Math.toRadians(180));
 			}
 			
 			public static class HumanPlayerPreset {
@@ -616,7 +617,7 @@ public class Settings {
 		
 		public static double SLOW_SPEED = 0.4;
 		public static double LAUNCH_EXIT_TIME_MS = 200;
-		public static double KRAKATOA_TIME_MS = 1000;
+		public static double KRAKATOA_TIME_MS = 1500;
 		public static double SEARCH_TIMEOUT_MS = 750; // Time to search before assuming empty
 		
 		/**

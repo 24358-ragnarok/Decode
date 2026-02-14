@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.autonomous.actions.LoopAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ParallelAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PickupBallAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PrepareLaunchAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.SafePickupPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ScanAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SlowLinearPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SortedLaunchAction;
@@ -60,6 +61,11 @@ public class SequenceBuilder {
 	 */
 	public SequenceBuilder moveTo(Pose targetPose, String name) {
 		sequence.addAction(new LinearPathAction(targetPose, name));
+		return this;
+	}
+	
+	public SequenceBuilder moveToWithIntakeStop(Pose targetPose, String name) {
+		sequence.addAction(new SafePickupPathAction(targetPose, name));
 		return this;
 	}
 	

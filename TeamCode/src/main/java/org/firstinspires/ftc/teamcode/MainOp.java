@@ -75,10 +75,6 @@ public class MainOp extends OpMode {
 		mechanisms.drivetrain.follower.setStartingPose(MatchState.getTeleOpStartingPose());
 		mechanisms.drivetrain.switchToManual();
 		
-		mechanisms.ifValid(mechanisms.get(PairedLauncher.class), launcher -> {
-			launcher.openFar();
-		});
-		
 		setupLogging();
 		// Show whether we're using stored pose or fallback
 		Pose storedPose = MatchState.getStoredPose();

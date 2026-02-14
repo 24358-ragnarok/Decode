@@ -147,8 +147,7 @@ public enum AutonomousRuntime {
 					.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
 							"Prep Preset 1",
 							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR)
-					.moveTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
-					.endPickup()
+					.moveToWithIntakeStop(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
 					
 					// Launch ball set I
 					.prepLaunch()
@@ -162,8 +161,7 @@ public enum AutonomousRuntime {
 							"Prep Preset2",
 							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
 					.startPickup()
-					.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
-					.endPickup()
+					.moveToWithIntakeStop(Settings.Positions.Samples.Preset2.END, "End Preset2")
 					
 					// Launch ball set II
 					.prepLaunch()

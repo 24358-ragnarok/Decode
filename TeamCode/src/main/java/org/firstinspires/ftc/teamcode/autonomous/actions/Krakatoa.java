@@ -48,10 +48,6 @@ public class Krakatoa implements AutonomousAction {
 			VerticalWheelTransfer transfer = mechanisms.get(VerticalWheelTransfer.class);
 			transfer.freeze();
 		}
-		if (hasIntake) {
-			FlexVectorIntake intake = mechanisms.get(FlexVectorIntake.class);
-			intake.crawl();
-		}
 		krakaTimer.resetTimer();
 	}
 	
