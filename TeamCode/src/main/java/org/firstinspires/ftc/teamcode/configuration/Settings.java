@@ -231,9 +231,9 @@ public class Settings {
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static final double VELOCITY_ALPHA = 0.6; // EMA smoothing factor (0-1), lower = more smoothing
-		public static double GATE_FIRE_POSITION_CLOSE = 0.06;
-		public static double GATE_FIRE_POSITION_FAR = 0.085;
-		public static double GATE_CLOSED_POSITION = 0.216;
+		public static double GATE_FIRE_POSITION_CLOSE = 0.05;
+		public static double GATE_FIRE_POSITION_FAR = 0.07;
+		public static double GATE_CLOSED_POSITION = 0.16;
 		public static double GATE_LOCK_POSITION = 0.300;
 		public static long GATE_COOLDOWN_MS = 500;
 		public static long MAX_SPEED_ERROR = 50;
@@ -470,7 +470,7 @@ public class Settings {
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(58, 99, Math.toRadians(140.59));
 			public static final Pose CLOSE_SHOOT_AUTO = new Pose(59, 83.7, Math.toRadians(130.0));
-			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(111.75));
+			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(113.75));
 			@SuppressWarnings("unused")
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(12.44, 62, Math.toRadians(150));
@@ -617,7 +617,7 @@ public class Settings {
 		
 		public static double SLOW_SPEED = 0.4;
 		public static double LAUNCH_EXIT_TIME_MS = 200;
-		public static double KRAKATOA_TIME_MS = 1500;
+		public static double KRAKATOA_TIME_MS = 1000;
 		public static double SEARCH_TIMEOUT_MS = 750; // Time to search before assuming empty
 		
 		/**

@@ -229,7 +229,6 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR, "Prep Preset 1")
 					
 					// Launch ball set I
-					.endPickup()
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
 							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR, "Launch Preset1")
@@ -243,7 +242,6 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
 							"Prep Human Player")
 					.prepLaunch()
-					.endPickup()
 					
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT,
 							"Prep Human Player")
@@ -258,7 +256,6 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
 							"Prep Human Player")
 					.prepLaunch()
-					.endPickup()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT,
 							"Prep Human Player")
 					.KRAKATOA()
@@ -269,7 +266,6 @@ public enum AutonomousRuntime {
 					.moveTo(Settings.Positions.Samples.HumanPlayerPreset.END,
 							"Prep Human Player")
 					.prepLaunch()
-					.endPickup()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Human player to far shoot")
 					.KRAKATOA()
 					
@@ -381,9 +377,8 @@ public enum AutonomousRuntime {
 					
 					// Get ball set I (Preset2 for close sequence)
 					.startPickup()
-					.moveCurveToVia(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
+					.moveCurveToVia(Settings.Positions.Samples.Preset2.END,
 							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Prep Preset2")
-					.endPickup()
 					
 					// Launch ball set I
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
@@ -396,7 +391,6 @@ public enum AutonomousRuntime {
 							"Curve to empty gate")
 					.moveTo(EMPTY_GATE_MOVE_BACK, "Move back from the gate empty")
 					.wait(.7)
-					.endPickup()
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
 							EMPTY_GATE_APPROACH,
 							"Launch Direct Eat")
@@ -407,7 +401,6 @@ public enum AutonomousRuntime {
 							"Curve to empty gate")
 					.moveTo(EMPTY_GATE_MOVE_BACK, "Move back from the gate empty")
 					.wait(.7)
-					.endPickup()
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
 							EMPTY_GATE_APPROACH,
 							"Launch Direct Eat")
@@ -416,7 +409,6 @@ public enum AutonomousRuntime {
 					// Get ball set II (Preset3 for close sequence)
 					.startPickup()
 					.moveTo(Settings.Positions.Samples.Preset3.END, "Launch Preset3")
-					.endPickup()
 					
 					// Launch ball set II
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO, "Launch Preset2")
