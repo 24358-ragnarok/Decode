@@ -147,12 +147,13 @@ public enum AutonomousRuntime {
 					.moveSplineTo(Settings.Positions.Samples.Preset1.PREP,
 							"Prep Preset 1",
 							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR)
-					.moveToWithIntakeStop(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
+					.moveTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
 					
 					// Launch ball set I
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
 							Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
+					.wait(.5)
 					.KRAKATOA()
 					
 					// Get ball set II
@@ -161,12 +162,12 @@ public enum AutonomousRuntime {
 							"Prep Preset2",
 							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
 					.startPickup()
-					.moveToWithIntakeStop(Settings.Positions.Samples.Preset2.END, "End Preset2")
+					.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
 					
 					// Launch ball set II
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preset2")
-					
+					.wait(.5)
 					.KRAKATOA()
 					
 					// Park
@@ -180,13 +181,13 @@ public enum AutonomousRuntime {
 			return new SequenceBuilder()
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
+					.wait(.5)
 					.KRAKATOA()
 					
 					// Get ball set I (Preset3 for close sequence)
 					.startPickup()
 					.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
 					.moveTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
-					.endPickup()
 					
 					// Launch ball set I
 					.prepLaunch()
@@ -199,7 +200,6 @@ public enum AutonomousRuntime {
 					.startPickup()
 					.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
 					.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
-					.endPickup()
 					
 					// Launch ball set II
 					.prepLaunch()

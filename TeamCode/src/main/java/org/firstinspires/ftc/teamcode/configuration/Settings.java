@@ -231,10 +231,10 @@ public class Settings {
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static final double VELOCITY_ALPHA = 0.6; // EMA smoothing factor (0-1), lower = more smoothing
-		public static double GATE_FIRE_POSITION_CLOSE = 0.05;
-		public static double GATE_FIRE_POSITION_FAR = 0.07;
+		public static double GATE_FIRE_POSITION_CLOSE = 0.04;
+		public static double GATE_FIRE_POSITION_FAR = 0.03;
 		public static double GATE_CLOSED_POSITION = 0.16;
-		public static double GATE_LOCK_POSITION = 0.300;
+		public static double GATE_LOCK_POSITION = 0.16;
 		public static long GATE_COOLDOWN_MS = 500;
 		public static long MAX_SPEED_ERROR = 50;
 		// Pitch servo calibration (physical limits)
@@ -352,7 +352,7 @@ public class Settings {
 		 * These values are used when AIM is called based on which position is closer.
 		 */
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 43.6; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2600; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_RPM = 2750; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 32.75; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 3420; // Wheel RPM for far position
@@ -468,9 +468,9 @@ public class Settings {
 		 */
 		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class TeleOp {
-			public static final Pose CLOSE_SHOOT = new Pose(58, 99, Math.toRadians(140.59));
+			public static final Pose CLOSE_SHOOT = new Pose(54.92, 86.55, Math.toRadians(130.6));
 			public static final Pose CLOSE_SHOOT_AUTO = new Pose(59, 83.7, Math.toRadians(130.0));
-			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(113.75));
+			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(112.75));
 			@SuppressWarnings("unused")
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(12.44, 62, Math.toRadians(150));
