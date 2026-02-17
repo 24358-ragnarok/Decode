@@ -1,18 +1,19 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Sound.DUEL;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Sound.PUMPKIN;
 
 import android.graphics.Color;
 
 import androidx.annotation.Nullable;
 
+import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-import org.firstinspires.ftc.robotcore.external.android.AndroidSoundPool;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.software.ColorRangefinder;
 import org.firstinspires.ftc.teamcode.software.ColorSensor;
@@ -20,8 +21,7 @@ import org.firstinspires.ftc.teamcode.software.ColorUnifier;
 import org.firstinspires.ftc.teamcode.software.LimelightManager;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -51,7 +51,7 @@ public class MechanismManager {
 	public final LimelightManager limelightManager;
 	public final TrajectoryEngine trajectoryEngine;
 	public final HardwareMap hardwareMap;
-	public final AndroidSoundPool sfx = new AndroidSoundPool();
+	public final SoundPlayer sfx = SoundPlayer.getInstance();
 	private final List<LynxModule> allHubs;
 	/**
 	 * Elapsed time since OpMode start (in seconds).
@@ -63,9 +63,8 @@ public class MechanismManager {
 		hardwareMap = hw;
 		allHubs = hardwareMap.getAll(LynxModule.class);
 		LynxModule.blinkerPolicy = HUB_BLINKER_POLICY;
-		preloadSounds();
-		
 		drivetrain = new Drivetrain(hw);
+		play(PUMPKIN);
 		
 		// Load trajectory engine calibration data from files
 		// This must happen before creating the trajectory engine instance
@@ -92,17 +91,9 @@ public class MechanismManager {
 		}
 	}
 	
-	private void preloadSounds() {
-		for (Field field : Settings.Sound.class.getDeclaredFields()) {
-			if (Modifier.isStatic(field.getModifiers())
-					&& field.getType() == String.class) {
-				try {
-					String value = (String) field.get(null);
-					sfx.preloadSound(value);
-				} catch (IllegalAccessException e) {
-					throw new RuntimeException(e);
-				}
-			}
+	public void play(File f) {
+		if (sfx != null && Settings.Deploy.SFX) {
+			sfx.play(hardwareMap.appContext, f, 1.0f, 0, 1.0f);
 		}
 	}
 	
@@ -278,7 +269,7 @@ public class MechanismManager {
 	 * Initializes all available mechanisms.
 	 */
 	public void start() {
-		sfx.play(DUEL);
+		play(DUEL);
 		setHubColors(PresetColor.RAINBOW);
 		for (Mechanism m : mechanismArray) {
 			if (m != null) {

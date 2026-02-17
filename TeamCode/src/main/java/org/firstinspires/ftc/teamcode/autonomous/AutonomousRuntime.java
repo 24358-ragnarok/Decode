@@ -36,7 +36,6 @@ public enum AutonomousRuntime {
 					
 					
 					.moveTo(Settings.Positions.Samples.Preset1.END, "Grab Preset 1 Ball 3")
-					.endPickup()
 					
 					// Launch ball set I (sorted)
 					.prepLaunch()
@@ -51,7 +50,6 @@ public enum AutonomousRuntime {
 							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
 					
 					.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
-					.endPickup()
 					
 					// Launch ball set II (sorted)
 					.prepLaunch()
@@ -78,7 +76,6 @@ public enum AutonomousRuntime {
 					.startPickup()
 					.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
 					.moveTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
-					.endPickup()
 					
 					// Launch ball set I (sorted)
 					.prepLaunch()
@@ -90,7 +87,6 @@ public enum AutonomousRuntime {
 					.startPickup()
 					.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
 					.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
-					.endPickup()
 					
 					// Launch ball set II (sorted)
 					.prepLaunch()
@@ -287,7 +283,6 @@ public enum AutonomousRuntime {
 					.startPickup()
 					.moveCurveToVia(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
 							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Prep Preset2")
-					.endPickup()
 					
 					// Launch ball set I
 					.prepLaunch()
@@ -303,7 +298,6 @@ public enum AutonomousRuntime {
 							.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
 									"Curve to empty gate")
 							.wait(1.2)
-							.endPickup()
 							.prepLaunch()
 							.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 									EMPTY_GATE_APPROACH,
@@ -314,7 +308,6 @@ public enum AutonomousRuntime {
 					.startPickup()
 					.moveCurveToVia(Settings.Positions.Samples.Preset3.END,
 							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset3")
-					.endPickup()
 					
 					// Launch ball set II
 					.prepLaunch()
@@ -340,7 +333,6 @@ public enum AutonomousRuntime {
 					.moveSplineTo(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
 							"Prep Preset 1",
 							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
-					.endPickup()
 					
 					// Launch ball set I
 					.prepLaunch()
@@ -354,7 +346,6 @@ public enum AutonomousRuntime {
 							"Prep Preset2",
 							Settings.Positions.ControlPoints.PRESET_2_APPROACH_FAR)
 					.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
-					.endPickup()
 					
 					// Launch ball set II
 					.prepLaunch()

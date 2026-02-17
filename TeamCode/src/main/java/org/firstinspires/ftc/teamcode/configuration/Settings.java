@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.teamcode.software.Controller;
 
+import java.io.File;
 import java.util.EnumMap;
 
 /**
@@ -28,8 +29,8 @@ public class Settings {
 	}
 	
 	public static class Sound {
-		public static final String PUMPKIN = "pumpkin.mp3";
-		public static final String DUEL = "duel.mp3";
+		public static final File PUMPKIN = new File("/sdcard/FIRST/blocks/sounds/pumpkin.wav");
+		public static final File DUEL = new File("/sdcard/FIRST/blocks/sounds/duel.wav");
 	}
 	
 	/**
@@ -604,6 +605,7 @@ public class Settings {
 		
 		public static boolean SWAP = true;
 		public static boolean LEVER = false;
+		public static boolean SFX = true;
 	}
 	
 	public static class Swap {

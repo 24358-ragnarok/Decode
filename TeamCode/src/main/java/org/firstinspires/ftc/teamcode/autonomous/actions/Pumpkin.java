@@ -37,7 +37,7 @@ public class Pumpkin implements AutonomousAction {
 		hasLauncher = mechanisms.get(PairedLauncher.class) != null;
 		hasTransfer = mechanisms.get(VerticalWheelTransfer.class) != null;
 		hasIntake = mechanisms.get(FlexVectorIntake.class) != null;
-		mechanisms.sfx.play(PUMPKIN);
+		mechanisms.play(PUMPKIN);
 		state = State.WAITING_TO_FIRE;
 		krakaTimer = new Timer();
 		
