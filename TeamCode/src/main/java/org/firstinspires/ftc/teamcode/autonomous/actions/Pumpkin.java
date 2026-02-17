@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous.actions;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Autonomous.KRAKATOA_TIME_MS;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Sound.PUMPKIN;
 
 import com.pedropathing.util.Timer;
 
@@ -24,7 +25,7 @@ import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
  * The action maintains the launcher in a ready state (spinning and aimed)
  * throughout the launch sequence.
  */
-public class Krakatoa implements AutonomousAction {
+public class Pumpkin implements AutonomousAction {
 	private boolean hasTransfer;
 	private boolean hasLauncher;
 	private boolean hasIntake;
@@ -36,6 +37,7 @@ public class Krakatoa implements AutonomousAction {
 		hasLauncher = mechanisms.get(PairedLauncher.class) != null;
 		hasTransfer = mechanisms.get(VerticalWheelTransfer.class) != null;
 		hasIntake = mechanisms.get(FlexVectorIntake.class) != null;
+		mechanisms.sfx.play(PUMPKIN);
 		state = State.WAITING_TO_FIRE;
 		krakaTimer = new Timer();
 		

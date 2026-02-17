@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Sound.DUEL;
+
 import android.graphics.Color;
 
 import androidx.annotation.Nullable;
@@ -10,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
+import org.firstinspires.ftc.robotcore.external.android.AndroidSoundPool;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 import org.firstinspires.ftc.teamcode.software.ColorRangefinder;
 import org.firstinspires.ftc.teamcode.software.ColorSensor;
@@ -17,6 +20,8 @@ import org.firstinspires.ftc.teamcode.software.ColorUnifier;
 import org.firstinspires.ftc.teamcode.software.LimelightManager;
 import org.firstinspires.ftc.teamcode.software.TrajectoryEngine;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -46,8 +51,8 @@ public class MechanismManager {
 	public final LimelightManager limelightManager;
 	public final TrajectoryEngine trajectoryEngine;
 	public final HardwareMap hardwareMap;
+	public final AndroidSoundPool sfx = new AndroidSoundPool();
 	private final List<LynxModule> allHubs;
-	
 	/**
 	 * Elapsed time since OpMode start (in seconds).
 	 * Updated by autonomous sequence before each action update.
@@ -58,6 +63,8 @@ public class MechanismManager {
 		hardwareMap = hw;
 		allHubs = hardwareMap.getAll(LynxModule.class);
 		LynxModule.blinkerPolicy = HUB_BLINKER_POLICY;
+		preloadSounds();
+		
 		drivetrain = new Drivetrain(hw);
 		
 		// Load trajectory engine calibration data from files
@@ -82,6 +89,20 @@ public class MechanismManager {
 		// efficiency
 		for (LynxModule hub : allHubs) {
 			createHub(hub);
+		}
+	}
+	
+	private void preloadSounds() {
+		for (Field field : Settings.Sound.class.getDeclaredFields()) {
+			if (Modifier.isStatic(field.getModifiers())
+					&& field.getType() == String.class) {
+				try {
+					String value = (String) field.get(null);
+					sfx.preloadSound(value);
+				} catch (IllegalAccessException e) {
+					throw new RuntimeException(e);
+				}
+			}
 		}
 	}
 	
@@ -257,6 +278,7 @@ public class MechanismManager {
 	 * Initializes all available mechanisms.
 	 */
 	public void start() {
+		sfx.play(DUEL);
 		setHubColors(PresetColor.RAINBOW);
 		for (Mechanism m : mechanismArray) {
 			if (m != null) {

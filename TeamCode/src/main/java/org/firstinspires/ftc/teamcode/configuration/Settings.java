@@ -25,7 +25,11 @@ public class Settings {
 		public static final double WIDTH = 16.25;
 		public static final double LENGTH = 17.00;
 		public static final int LOGGING_INTERVAL = 20; // TODO: increase during championship
-		
+	}
+	
+	public static class Sound {
+		public static final String PUMPKIN = "pumpkin.mp3";
+		public static final String DUEL = "duel.mp3";
 	}
 	
 	/**
@@ -421,7 +425,7 @@ public class Settings {
 			return new Pose(
 					WIDTH - bluePose.getX(), // Mirror X coordinate
 					bluePose.getY(), // Y stays the same
-					Math.PI - bluePose.getHeading() // Mirror heading across x axis
+					Math.PI - bluePose.getHeading() // Mirror heading across x-axis
 			);
 		}
 	}
@@ -537,9 +541,9 @@ public class Settings {
 				@SuppressWarnings("unused")
 				public static final Pose PREP = new Pose(10.0, 40, Math.toRadians(-90));
 				@SuppressWarnings("unused")
-				public static final Pose PREP_END = new Pose(10,5, Math.toRadians(-90));
+				public static final Pose PREP_END = new Pose(10, 5, Math.toRadians(-90));
 				public static final Pose END = new Pose(7.0, 21, Math.toRadians(180));
-				public static final Pose END_First = new Pose(5,6,Math.toRadians(180));
+				public static final Pose END_First = new Pose(5, 6, Math.toRadians(180));
 			}
 		}
 		
@@ -576,7 +580,7 @@ public class Settings {
 		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class Park {
 			public static final Pose FAR = Samples.Preset1.PREP; // Reuse a safe position
-			public static final Pose CLOSE = new Pose(60,   110, Math.toRadians(150));
+			public static final Pose CLOSE = new Pose(60, 110, Math.toRadians(150));
 			public static final Pose FAR_SAFE_PARK_POSE = new Pose(35.86206896551724, 12.505747126436786,
 					Math.toRadians(90));
 			public static final Pose CLOSE_SAFE_PARK_POSE = new Pose(48, 130, Math.toRadians(90));

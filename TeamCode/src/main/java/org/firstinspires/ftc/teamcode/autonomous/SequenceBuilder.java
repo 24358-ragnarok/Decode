@@ -5,13 +5,13 @@ import com.pedropathing.geometry.Pose;
 import org.firstinspires.ftc.teamcode.autonomous.actions.CurvePathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.EndAtAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.EndPickupAction;
-import org.firstinspires.ftc.teamcode.autonomous.actions.Krakatoa;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LaunchAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LinearPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.LoopAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ParallelAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PickupBallAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.PrepareLaunchAction;
+import org.firstinspires.ftc.teamcode.autonomous.actions.Pumpkin;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SafePickupPathAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.ScanAction;
 import org.firstinspires.ftc.teamcode.autonomous.actions.SlowLinearPathAction;
@@ -189,8 +189,8 @@ public class SequenceBuilder {
 		return this;
 	}
 	
-	public SequenceBuilder KRAKATOA() {
-		sequence.addAction(new Krakatoa());
+	public SequenceBuilder PUMPKIN() {
+		sequence.addAction(new Pumpkin());
 		return this;
 	}
 

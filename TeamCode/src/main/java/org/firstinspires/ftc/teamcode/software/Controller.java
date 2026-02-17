@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.configuration.Settings;
 
 /**
- * @noinspection CyclicClassDependency, DataFlowIssue
+ * @noinspection CyclicClassDependency
  * <br/>
  * The Controller class wraps around the FTC-provided
  * {@link Gamepad}.
