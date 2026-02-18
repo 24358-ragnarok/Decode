@@ -48,7 +48,7 @@ public class MainOp extends OpMode {
 	private BallSwap swap;
 	private Lever lever;
 	private Timer speedTimer;
-
+	
 	/**
 	 * Runs when "init" is pressed on the Driver Station.
 	 * Initializes all robot systems, controllers, and telemetry for TeleOp
@@ -66,7 +66,7 @@ public class MainOp extends OpMode {
 		launcher = mechanisms.get(PairedLauncher.class);
 		swap = mechanisms.get(BallSwap.class);
 		lever = mechanisms.get(Lever.class);
-
+		
 		mainController = new Controller(gamepad1, mechanisms.drivetrain.follower,
 				PanelsGamepad.INSTANCE.getFirstManager());
 		subController = new Controller(gamepad2, mechanisms.drivetrain.follower,
@@ -88,7 +88,7 @@ public class MainOp extends OpMode {
 				MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE ? MechanismManager.PresetColor.BLUE
 						: MechanismManager.PresetColor.RED);
 	}
-
+	
 	/**
 	 * Runs after "init" and before "start" repeatedly.
 	 */
@@ -97,7 +97,7 @@ public class MainOp extends OpMode {
 		logging.drawDebug(mechanisms.drivetrain.follower);
 		logging.update();
 	}
-
+	
 	/**
 	 * Runs when "start" is pressed on the Driver Station.
 	 */
@@ -109,7 +109,7 @@ public class MainOp extends OpMode {
 		MatchState.clearStoredPose();
 		logging.enableRetainedMode();
 	}
-
+	
 	/**
 	 * Runs repeatedly after "start" is pressed on the Driver Station, during the
 	 * actual game.
@@ -218,8 +218,11 @@ public class MainOp extends OpMode {
 				}
 				if (mainController.wasJustPressed(Controller.Control.LEFT_BUMPER)
 						&& mechanisms.limelightManager != null) {
-					drivetrain.goTo(drivetrain.follower.getPose().withHeading(
-							drivetrain.follower.getHeading() + mechanisms.limelightManager.estimateHeadingToGoal()));
+					double newHeading = mechanisms.limelightManager.estimateHeadingToGoal();
+					if (newHeading != 0.0) {
+						drivetrain.goTo(drivetrain.follower.getPose().withHeading(
+								drivetrain.follower.getHeading() + newHeading));
+					}
 				} else if (mainController.wasJustReleased(Controller.Control.LEFT_BUMPER)) {
 					drivetrain.switchToManual();
 				}
@@ -231,9 +234,12 @@ public class MainOp extends OpMode {
 			if (subController.getProcessedValue(Controller.Action.AIM) > 0.1) {
 				launcher.ready();
 			} else {
-				launcher.setRPM(MAINTAIN_RPM);
-				launcher.spinUp();
-				// launcher.stop();
+				if (Settings.Aiming.ALWAYS_SPIN_TELEOP) {
+					launcher.setRPM(MAINTAIN_RPM);
+					launcher.spinUp();
+				} else {
+					launcher.stop();
+				}
 			}
 			if (subController.wasJustPressed(Controller.Action.LAUNCH)) {
 				launcher.openDynamic();

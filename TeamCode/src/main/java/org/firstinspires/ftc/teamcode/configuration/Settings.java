@@ -361,6 +361,7 @@ public class Settings {
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 32.75; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 3420; // Wheel RPM for far position
+		public static boolean ALWAYS_SPIN_TELEOP = false;
 		
 		
 		public static double MAINTAIN_RPM = (CLOSE_SHOOT_RPM + FAR_SHOOT_RPM) / 2; // avg speed
@@ -605,7 +606,7 @@ public class Settings {
 		
 		public static boolean SWAP = true;
 		public static boolean LEVER = false;
-		public static boolean SFX = true;
+		public static boolean SFX = false;
 	}
 	
 	public static class Swap {

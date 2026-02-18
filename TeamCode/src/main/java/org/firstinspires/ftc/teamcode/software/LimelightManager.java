@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.software;
 
-import com.pedropathing.ftc.InvertedFTCCoordinates;
+import com.pedropathing.ftc.FTCCoordinates;
 import com.pedropathing.ftc.PoseConverter;
 import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
@@ -234,9 +234,9 @@ public class LimelightManager extends Mechanism {
 		limelight.updateRobotOrientation(headingDegrees);
 		currentResult = limelight.getLatestResult();
 		
-		Pose3D apriltag = currentResult.getBotpose_MT2();
+		Pose3D apriltag = currentResult.getBotpose();
 		Pose2D converted = new Pose2D(DistanceUnit.METER, apriltag.getPosition().x, apriltag.getPosition().y, AngleUnit.DEGREES, apriltag.getOrientation().getYaw());
-		Pose ftcStandard = PoseConverter.pose2DToPose(converted, InvertedFTCCoordinates.INSTANCE);
+		Pose ftcStandard = PoseConverter.pose2DToPose(converted, FTCCoordinates.INSTANCE);
 		
 		return ftcStandard.getAsCoordinateSystem(PedroCoordinates.INSTANCE);
 	}
@@ -251,7 +251,7 @@ public class LimelightManager extends Mechanism {
 			for (LLResultTypes.FiducialResult fid : currentResult.getFiducialResults()) {
 				if (fid.getFiducialId() ==
 						(MatchState.getAllianceColor() == MatchState.AllianceColor.BLUE ? 20 : 24)) {
-					return Math.toRadians(fid.getTargetXDegrees());
+					return Math.toRadians(-fid.getTargetXDegrees());
 				}
 			}
 		}
