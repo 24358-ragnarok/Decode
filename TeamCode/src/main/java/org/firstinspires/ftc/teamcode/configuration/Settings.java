@@ -236,8 +236,8 @@ public class Settings {
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static final double VELOCITY_ALPHA = 0.6; // EMA smoothing factor (0-1), lower = more smoothing
-		public static double GATE_FIRE_POSITION_CLOSE = 0.04;
-		public static double GATE_FIRE_POSITION_FAR = 0.03;
+		public static double GATE_FIRE_POSITION_CLOSE = 0.03;
+		public static double GATE_FIRE_POSITION_FAR = 0.035;
 		public static double GATE_CLOSED_POSITION = 0.16;
 		public static double GATE_LOCK_POSITION = 0.16;
 		public static long GATE_COOLDOWN_MS = 500;
@@ -357,11 +357,11 @@ public class Settings {
 		 * These values are used when AIM is called based on which position is closer.
 		 */
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 43.6; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2750; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_RPM = 2600; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 32.75; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3420; // Wheel RPM for far position
-		public static boolean ALWAYS_SPIN_TELEOP = false;
+		public static double FAR_SHOOT_PITCH_DEGREES = 34.75; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 3670; // Wheel RPM for far position
+		public static boolean ALWAYS_SPIN_TELEOP = true;
 		
 		
 		public static double MAINTAIN_RPM = (CLOSE_SHOOT_RPM + FAR_SHOOT_RPM) / 2; // avg speed
@@ -500,8 +500,8 @@ public class Settings {
 			@SuppressWarnings("unused")
 			public static class GateAndEating {
 				public static final Pose EAT_FROM_EMPTY_DIRECTLY = new Pose(32, 16);
-				public static Pose EMPTY_GATE = new Pose(14, 64, Math.toRadians(155));
-				public static Pose EMPTY_GATE_MOVE_BACK = new Pose(14, 55, Math.toRadians(155));
+				public static Pose EMPTY_GATE = new Pose(6.37, 60.6, Math.toRadians(143));
+				public static Pose EMPTY_GATE_MOVE_BACK = new Pose(6.37, 55.27, Math.toRadians(143));
 			}
 			
 			/**
@@ -546,6 +546,7 @@ public class Settings {
 				public static final Pose PREP_END = new Pose(10, 5, Math.toRadians(-90));
 				public static final Pose END = new Pose(7.0, 21, Math.toRadians(180));
 				public static final Pose END_First = new Pose(5, 6, Math.toRadians(180));
+				public static final Pose END_First_Secure_preload = new Pose(12, 6, Math.toRadians(180));
 			}
 		}
 		
@@ -559,6 +560,7 @@ public class Settings {
 			public static final Pose FROM_FAR_SHOOT_TO_HP = new Pose(70.4, 5);
 			public static final Pose FROM_FAR_SHOOT_TO_HP_UP = new Pose(70.4, 20);
 			public static final Pose PRESET_1_APPROACH_FAR = new Pose(75, 38);
+			public static final Pose PRESET_1_END_TO_FAR_SHOOT = new Pose(50, 30);
 			public static final Pose FROM_PRESET2_TO_CLOSE = new Pose(64, 56);
 			public static final Pose PRESET_2_APPROACH_FAR = new Pose(65, 59);
 			
@@ -566,7 +568,7 @@ public class Settings {
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2 = new Pose(41, 59);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3 = new Pose(96, 81);
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
-			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END = new Pose(65.4, 59);
+			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END = new Pose(65.4, 57);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3_END = new Pose(81, 81);
 			public static final Pose EMPTY_GATE_APPROACH = new Pose(42.5, 64.3);
 			public static Pose HUMAN_PLAYER = new Pose(55, 27);

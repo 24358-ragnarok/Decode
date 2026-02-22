@@ -227,7 +227,7 @@ public enum AutonomousRuntime {
 					// Launch ball set I
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
-							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR, "Launch Preset1")
+							Settings.Positions.ControlPoints.PRESET_1_END_TO_FAR_SHOOT, "Launch Preset1")
 					.PUMPKIN()
 					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the bot")
 					.wait(.5)
@@ -244,8 +244,6 @@ public enum AutonomousRuntime {
 					.PUMPKIN()
 					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the bot")
 					.wait(.5)
-					
-					
 					// pick from HP and shoot
 					.startPickup()
 					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.END_First,
@@ -353,7 +351,6 @@ public enum AutonomousRuntime {
 					.launch()
 					
 					// Park
-					.endPickup()
 					.moveTo(Settings.Positions.Park.FAR, "Park")
 					.endAt(Settings.Positions.Park.FAR)
 					.build();
