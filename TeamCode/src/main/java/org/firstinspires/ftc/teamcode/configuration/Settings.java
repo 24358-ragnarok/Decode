@@ -236,8 +236,8 @@ public class Settings {
 	public static class Launcher {
 		public static final double TICKS_PER_REVOLUTION = 28.0;
 		public static final double VELOCITY_ALPHA = 0.6; // EMA smoothing factor (0-1), lower = more smoothing
-		public static double GATE_FIRE_POSITION_CLOSE = 0.03;
-		public static double GATE_FIRE_POSITION_FAR = 0.035;
+		public static double GATE_FIRE_POSITION_CLOSE = 0.04;
+		public static double GATE_FIRE_POSITION_FAR = 0.04;
 		public static double GATE_CLOSED_POSITION = 0.16;
 		public static double GATE_LOCK_POSITION = 0.16;
 		public static long GATE_COOLDOWN_MS = 500;
@@ -357,10 +357,10 @@ public class Settings {
 		 * These values are used when AIM is called based on which position is closer.
 		 */
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 43.6; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2600; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_RPM = 2800; // Wheel RPM for close position
 		
-		public static double FAR_SHOOT_PITCH_DEGREES = 34.75; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3670; // Wheel RPM for far position
+		public static double FAR_SHOOT_PITCH_DEGREES = 37.75; // Launch angle from horizontal for far position
+		public static double FAR_SHOOT_RPM = 3400; // Wheel RPM for far position
 		public static boolean ALWAYS_SPIN_TELEOP = true;
 		
 		
@@ -475,7 +475,7 @@ public class Settings {
 		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class TeleOp {
 			public static final Pose CLOSE_SHOOT = new Pose(54.92, 86.55, Math.toRadians(130.6));
-			public static final Pose CLOSE_SHOOT_AUTO = new Pose(59, 83.7, Math.toRadians(130.0));
+			public static final Pose CLOSE_SHOOT_AUTO = new Pose(55.73, 80.64, Math.toRadians(130.0));
 			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(112.75));
 			@SuppressWarnings("unused")
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
@@ -501,7 +501,7 @@ public class Settings {
 			public static class GateAndEating {
 				public static final Pose EAT_FROM_EMPTY_DIRECTLY = new Pose(32, 16);
 				public static Pose EMPTY_GATE = new Pose(6.37, 60.6, Math.toRadians(143));
-				public static Pose EMPTY_GATE_MOVE_BACK = new Pose(6.37, 55.27, Math.toRadians(143));
+				public static Pose EMPTY_GATE_MOVE_BACK = new Pose(6.37, 52.6, Math.toRadians(143));
 			}
 			
 			/**

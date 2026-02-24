@@ -189,7 +189,7 @@ public enum AutonomousRuntime {
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 							Settings.Positions.ControlPoints.FROM_PRESET3_TO_CLOSE, "Launch Preset3")
-					
+					.wait(.5)
 					.PUMPKIN()
 					
 					// Get ball set II (Preset2 for close sequence)
@@ -201,7 +201,7 @@ public enum AutonomousRuntime {
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 							Settings.Positions.ControlPoints.FROM_PRESET2_TO_CLOSE, "Launch Preset2")
-					
+					.wait(.5)
 					.PUMPKIN()
 					
 					// Park
