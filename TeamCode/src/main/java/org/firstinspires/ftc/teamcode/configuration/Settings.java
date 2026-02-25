@@ -489,7 +489,7 @@ public class Settings {
 		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class AutoStart {
 			public static final Pose FAR = new Pose(56.26, Robot.LENGTH / 2, Math.toRadians(90));
-			public static final Pose CLOSE = new Pose(22.17, 124.69, Math.toRadians(145));
+			public static final Pose CLOSE = new Pose(21.89, 123.24, Math.toRadians(55));
 		}
 		
 		/**
@@ -660,7 +660,7 @@ public class Settings {
 			
 			// Utility actions
 			public static double WaitAction = 0.0;
-			public static double ScanAction = 0.0;
+			public static double ScanAction = 3.0;
 			public static double StartAtAction = 0.0;
 			public static double EndAtAction = 0.0;
 			public static double ParallelAction = 0.0;
