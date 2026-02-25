@@ -360,7 +360,9 @@ public enum AutonomousRuntime {
 		public AutonomousSequence buildCloseSequence() {
 			return new SequenceBuilder()
 					.prepLaunch()
+					.startPickup()
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO, "Launch Preload")
+					.wait(.5)
 					.PUMPKIN()
 					
 					// Get ball set I (Preset2 for close sequence)
@@ -378,7 +380,7 @@ public enum AutonomousRuntime {
 					.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
 							"Curve to empty gate")
 					.moveTo(EMPTY_GATE_MOVE_BACK, "Move back from the gate empty")
-					.wait(.7)
+					.wait(.5)
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
 							EMPTY_GATE_APPROACH,
 							"Launch Direct Eat")
@@ -388,7 +390,7 @@ public enum AutonomousRuntime {
 					.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
 							"Curve to empty gate")
 					.moveTo(EMPTY_GATE_MOVE_BACK, "Move back from the gate empty")
-					.wait(.7)
+					.wait(.5)
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
 							EMPTY_GATE_APPROACH,
 							"Launch Direct Eat")

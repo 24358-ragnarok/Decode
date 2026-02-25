@@ -500,8 +500,8 @@ public class Settings {
 			@SuppressWarnings("unused")
 			public static class GateAndEating {
 				public static final Pose EAT_FROM_EMPTY_DIRECTLY = new Pose(32, 16);
-				public static Pose EMPTY_GATE = new Pose(6.37, 60.6, Math.toRadians(143));
-				public static Pose EMPTY_GATE_MOVE_BACK = new Pose(6.37, 52.6, Math.toRadians(143));
+				public static Pose EMPTY_GATE = new Pose(12, 60.6, Math.toRadians(147));
+				public static Pose EMPTY_GATE_MOVE_BACK = new Pose(12, 52.6, Math.toRadians(147));
 			}
 			
 			/**
@@ -584,7 +584,7 @@ public class Settings {
 		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class Park {
 			public static final Pose FAR = Samples.Preset1.PREP; // Reuse a safe position
-			public static final Pose CLOSE = new Pose(60, 110, Math.toRadians(150));
+			public static final Pose CLOSE = new Pose(57.2, 108, Math.toRadians(143));
 			public static final Pose FAR_SAFE_PARK_POSE = new Pose(35.86206896551724, 12.505747126436786,
 					Math.toRadians(90));
 			public static final Pose CLOSE_SAFE_PARK_POSE = new Pose(48, 130, Math.toRadians(90));
