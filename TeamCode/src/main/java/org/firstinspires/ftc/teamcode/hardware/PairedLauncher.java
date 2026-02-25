@@ -30,7 +30,6 @@ public class PairedLauncher extends Mechanism {
 	// Time-averaged velocity readings (exponential moving average)
 	private double averagedRightRPM = 0;
 	private double averagedLeftRPM = 0;
-	
 	public PairedLauncher(
 			MechanismManager mechanisms,
 			DcMotorEx launcherRight,
@@ -221,15 +220,13 @@ public class PairedLauncher extends Mechanism {
 	 * averaging out errors between motors.
 	 */
 	public boolean isAtSpeed() {
-		if (state != LauncherState.ACTIVE) {
-			return false;
-		}
 		
 		double targetRPM = ticksPerSecToRPM(targetTPS);
 		
 		// Check both motors separately - both must be within tolerance
-		double rightError = Math.abs(targetRPM - averagedRightRPM);
-		double leftError = Math.abs(targetRPM - averagedLeftRPM);
+		double ToleranceRPM = 300; // Tolerance in RPM (adjust as needed)
+		double rightError = Math.abs(targetRPM - ToleranceRPM);
+		double leftError = Math.abs(targetRPM - ToleranceRPM);
 		
 		return rightError < MAX_SPEED_ERROR && leftError < MAX_SPEED_ERROR;
 	}

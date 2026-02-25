@@ -67,10 +67,10 @@ public class Pumpkin implements AutonomousAction {
 		switch (state) {
 			case WAITING_TO_FIRE:
 				// Only transition to FIRING if we are ready
-				//if (launcher.isAtSpeed()) {
+//				if (launcher.isAtSpeed()) {
 					state = State.FIRING;
 					krakaTimer.resetTimer();
-				//}
+//				}
 				break;
 			
 			case FIRING:

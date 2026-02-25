@@ -357,10 +357,10 @@ public class Settings {
 		 * These values are used when AIM is called based on which position is closer.
 		 */
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 43.6; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2800; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_RPM = 2700; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 37.75; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3400; // Wheel RPM for far position
+		public static double FAR_SHOOT_RPM = 3350; // Wheel RPM for far position
 		public static boolean ALWAYS_SPIN_TELEOP = true;
 		
 		
