@@ -525,7 +525,7 @@ public class Settings {
 				@SuppressWarnings("unused")
 				public static final Pose GRAB_2 = new Pose(30.0, 59.5, Math.toRadians(180));
 				public static final Pose END = new Pose(25, 58, Math.toRadians(180));
-				public static final Pose END_AND_EMPTY_GATE = new Pose(16, 62, Math.toRadians(180));
+				public static final Pose END_AND_EMPTY_GATE = new Pose(18.13, 61, Math.toRadians(180));
 			}
 			
 			/**
@@ -560,6 +560,7 @@ public class Settings {
 			public static final Pose FROM_FAR_SHOOT_TO_HP = new Pose(70.4, 5);
 			public static final Pose FROM_FAR_SHOOT_TO_HP_UP = new Pose(70.4, 20);
 			public static final Pose PRESET_1_APPROACH_FAR = new Pose(75, 38);
+			public static final Pose PRESET_1_APPROACH_CLOSE = new Pose(67, 23);
 			public static final Pose PRESET_1_END_TO_FAR_SHOOT = new Pose(50, 30);
 			public static final Pose FROM_PRESET2_TO_CLOSE = new Pose(64, 56);
 			public static final Pose PRESET_2_APPROACH_FAR = new Pose(65, 59);
@@ -569,6 +570,7 @@ public class Settings {
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3 = new Pose(96, 81);
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END = new Pose(65.4, 58);
+			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END_MAKE_12_WORK = new Pose(65.4, 58);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3_END = new Pose(81, 81);
 			public static final Pose EMPTY_GATE_APPROACH = new Pose(42.5, 64.3);
 			public static Pose HUMAN_PLAYER = new Pose(55, 27);

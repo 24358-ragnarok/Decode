@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.ControlPoints.EMPTY_GATE_APPROACH;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END;
+import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.ControlPoints.PRESET_1_APPROACH_CLOSE;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.Samples.GateAndEating.EMPTY_GATE;
 import static org.firstinspires.ftc.teamcode.configuration.Settings.Positions.Samples.GateAndEating.EMPTY_GATE_MOVE_BACK;
 
@@ -130,7 +131,7 @@ public enum AutonomousRuntime {
 					.build();
 		}
 	},
-	CLASSIC("Classic 9 Ball") {
+	CLASSIC("Classic 12 Ball") {
 		@Override
 		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
@@ -176,36 +177,38 @@ public enum AutonomousRuntime {
 		public AutonomousSequence buildCloseSequence() {
 			return new SequenceBuilder()
 					.prepLaunch()
-					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
+					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO, "Launch Preload")
 					.wait(.5)
+					.startPickup()
 					.PUMPKIN()
 					
-					// Get ball set I (Preset3 for close sequence)
+					// Get ball set I (Preset2 for close sequence)
 					.startPickup()
-					.moveTo(Settings.Positions.Samples.Preset3.PREP, "Prep Preset3")
-					.moveTo(Settings.Positions.Samples.Preset3.END, "End Preset3")
+					.moveCurveToVia(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
+							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END_MAKE_12_WORK, "Prep Preset2")
 					
 					// Launch ball set I
-					.prepLaunch()
-					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-							Settings.Positions.ControlPoints.FROM_PRESET3_TO_CLOSE, "Launch Preset3")
-					.wait(.5)
+					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
+							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END_MAKE_12_WORK, "Launch Preset3")
 					.PUMPKIN()
 					
-					// Get ball set II (Preset2 for close sequence)
 					.startPickup()
-					.moveTo(Settings.Positions.Samples.Preset2.PREP, "Prep Preset2")
-					.moveTo(Settings.Positions.Samples.Preset2.END, "End Preset2")
+					.moveCurveToVia(Settings.Positions.Samples.Preset1.END,
+							PRESET_1_APPROACH_CLOSE, "Prep Preset2")
+					
+					// Launch ball set I
+					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
+							PRESET_1_APPROACH_CLOSE, "Launch Preset3")
+					.PUMPKIN()
+					
+					// Get ball set III (Preset3 for close sequence)
+					.startPickup()
+					.moveTo(Settings.Positions.Samples.Preset3.END, "Launch Preset3")
 					
 					// Launch ball set II
-					.prepLaunch()
-					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
-							Settings.Positions.ControlPoints.FROM_PRESET2_TO_CLOSE, "Launch Preset2")
-					.wait(.5)
+					.moveTo(Settings.Positions.Park.CLOSE, "Park")
 					.PUMPKIN()
 					
-					// Park
-					.moveTo(Settings.Positions.Park.CLOSE, "Park")
 					.endAt(Settings.Positions.Park.CLOSE)
 					.build();
 		}
