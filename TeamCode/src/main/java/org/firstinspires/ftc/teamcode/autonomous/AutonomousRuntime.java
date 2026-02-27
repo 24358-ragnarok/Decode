@@ -184,6 +184,8 @@ public enum AutonomousRuntime {
 					
 					// Get ball set I (Preset2 for close sequence)
 					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.Preset2.END,
+							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END, "Prep Preset2")
 					.moveCurveToVia(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
 							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END_MAKE_12_WORK, "Prep Preset2")
 					
