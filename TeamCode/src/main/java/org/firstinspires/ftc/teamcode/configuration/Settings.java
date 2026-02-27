@@ -253,11 +253,11 @@ public class Settings {
 		// PIDF coefficients for launcher wheel velocity control
 		// - Tune kF first to provide the base feedforward power for target RPM
 		// - Increase kP to improve response, add kD to dampen overshoot, kI to remove steady-state error
-		public static double LAUNCHER_RIGHT_KP = 30;
+		public static double LAUNCHER_RIGHT_KP = 35;
 		public static double LAUNCHER_RIGHT_KI = 0.0222;
 		public static double LAUNCHER_RIGHT_KD = 0.0;
 		public static double LAUNCHER_RIGHT_KF = 10.7;
-		public static double LAUNCHER_LEFT_KP = 30;
+		public static double LAUNCHER_LEFT_KP = 35;
 		public static double LAUNCHER_LEFT_KI = 0.0254;
 		public static double LAUNCHER_LEFT_KD = 0.0;
 		public static double LAUNCHER_LEFT_KF = 13.2;
@@ -477,6 +477,7 @@ public class Settings {
 			public static final Pose CLOSE_SHOOT = new Pose(54.92, 86.55, Math.toRadians(130.6));
 			public static final Pose CLOSE_SHOOT_AUTO = new Pose(58, 81, Math.toRadians(130.0));
 			public static final Pose FAR_SHOOT = new Pose(60, 18, Math.toRadians(112.75));
+			public static final Pose FAR_SHOOT_AUTO = new Pose(55, 18, Math.toRadians(111));
 			@SuppressWarnings("unused")
 			public static final Pose HUMAN_PLAYER = new Pose(30, 30, Math.toRadians(225));
 			public static final Pose GATE = new Pose(12.44, 62, Math.toRadians(150));
@@ -546,7 +547,8 @@ public class Settings {
 				public static final Pose PREP_END = new Pose(10, 5, Math.toRadians(-90));
 				public static final Pose END = new Pose(7.0, 21, Math.toRadians(180));
 				public static final Pose END_First = new Pose(5, 6, Math.toRadians(180));
-				public static final Pose END_First_Secure_preload = new Pose(12, 6, Math.toRadians(180));
+				public static final Pose END_First_Secure_preload = new Pose(28, 6, Math.toRadians(180));
+				public static final Pose END_First_Secure_preload1 = new Pose(26, 6, Math.toRadians(180));
 			}
 		}
 		
@@ -585,8 +587,8 @@ public class Settings {
 		 */
 		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class Park {
-			public static final Pose FAR = Samples.Preset1.PREP; // Reuse a safe position
-			public static final Pose CLOSE = new Pose(59.6, 101.7, Math.toRadians(143));
+			public static final Pose FAR = new Pose(53, 21.5, Math.toRadians(135));
+			public static final Pose CLOSE = new Pose(59.6, 101.7, Math.toRadians(145));
 			public static final Pose FAR_SAFE_PARK_POSE = new Pose(35.86206896551724, 12.505747126436786,
 					Math.toRadians(90));
 			public static final Pose CLOSE_SAFE_PARK_POSE = new Pose(48, 130, Math.toRadians(90));

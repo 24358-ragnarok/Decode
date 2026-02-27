@@ -321,6 +321,131 @@ public enum AutonomousRuntime {
 					.build();
 		}
 	},
+	
+	NORWALK("The norwalk, but with 12 balls and a backup plan if the eat doesn't work") {
+		@Override
+		public AutonomousSequence buildFarSequence() {
+			return new SequenceBuilder()
+					.prepLaunch()
+					.startPickup()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT_AUTO, "Launch Preload")
+					.wait(.5)
+					.PUMPKIN()
+					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the bot")
+					.wait(.5)
+					
+					//first HP pick and shoot
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.END_First,
+							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
+							"Prep Human Player")
+					.prepLaunch()
+					
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT_AUTO,
+							"Prep Human Player")
+					.PUMPKIN()
+					
+					// Get ball set I
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.Preset1.END,
+							Settings.Positions.ControlPoints.PRESET_1_APPROACH_FAR, "Prep Preset 1")
+					
+					// Launch ball set I
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT_AUTO, "Launch Preset1")
+					.wait(.5)
+					.PUMPKIN()
+					
+					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the bot")
+					.wait(.5)
+					// pick from HP and shoot
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.END_First_Secure_preload,
+							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
+							"Prep Human Player")
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT_AUTO,
+							"Prep Human Player")
+					.PUMPKIN()
+					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the bot")
+					.wait(.5)
+					
+					// HP pick and shoot
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.END_First_Secure_preload1,
+							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
+							"Prep Human Player")
+					.prepLaunch()
+					
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT_AUTO,
+							"Prep Human Player")
+					.PUMPKIN()
+					// pick from HP and shoot
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.END_First_Secure_preload1,
+							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
+							"Prep Human Player")
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT_AUTO,
+							"Prep Human Player")
+					.PUMPKIN()
+					
+					
+					// Park
+					.moveTo(Settings.Positions.Park.FAR, "Park")
+					.endAt(Settings.Positions.Park.FAR)
+					.build();
+		}
+		
+		@Override
+		public AutonomousSequence buildCloseSequence() {
+			return new SequenceBuilder()
+					.prepLaunch()
+					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
+					.PUMPKIN()
+					
+					// Get ball set I (Preset2 for close sequence)
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
+							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Prep Preset2")
+					
+					// Launch ball set I
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Launch Preset3")
+					
+					.PUMPKIN()
+					
+					
+					// Loop: Get balls from eat and launch until 6 seconds left
+					.loopUntilSecondsLeft(6, loop -> loop
+							.startPickup()
+							.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
+									"Curve to empty gate")
+							.wait(1.2)
+							.prepLaunch()
+							.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+									EMPTY_GATE_APPROACH,
+									"Launch Direct Eat")
+							.PUMPKIN())
+					
+					// Get ball set II (Preset3 for close sequence)
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.Preset3.END,
+							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset3")
+					
+					// Launch ball set II
+					.prepLaunch()
+					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
+							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset2")
+					.PUMPKIN()
+					
+					.moveTo(Settings.Positions.Park.CLOSE, "Park")
+					.endAt(Settings.Positions.Park.CLOSE)
+					.build();
+		}
+	},
+	
 	SOLO("18 Ball Solo Auto, close only") {
 		@Override
 		public AutonomousSequence buildFarSequence() {
