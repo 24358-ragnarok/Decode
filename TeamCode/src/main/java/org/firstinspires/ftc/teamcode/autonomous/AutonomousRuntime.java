@@ -186,12 +186,13 @@ public enum AutonomousRuntime {
 					.startPickup()
 					.moveCurveToVia(Settings.Positions.Samples.Preset2.END,
 							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END, "Prep Preset2")
-					.moveCurveToVia(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE,
-							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END_MAKE_12_WORK, "Prep Preset2")
+					.moveTo(Settings.Positions.Samples.Preset2.PREP, "prep empty gate")
+					.moveTo(Settings.Positions.Samples.Preset2.END_AND_EMPTY_GATE, "empty gate")
+					.wait(.5)
 					
 					// Launch ball set I
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
-							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END_MAKE_12_WORK, "Launch Preset3")
+							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END, "Launch Preset3")
 					.PUMPKIN()
 					
 					.startPickup()
@@ -201,6 +202,7 @@ public enum AutonomousRuntime {
 					// Launch ball set I
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
 							PRESET_1_APPROACH_CLOSE, "Launch Preset3")
+					.wait(.5)
 					.PUMPKIN()
 					
 					// Get ball set III (Preset3 for close sequence)
@@ -209,6 +211,7 @@ public enum AutonomousRuntime {
 					
 					// Launch ball set II
 					.moveTo(Settings.Positions.Park.CLOSE, "Park")
+					.wait(.5)
 					.PUMPKIN()
 					
 					.endAt(Settings.Positions.Park.CLOSE)
@@ -239,7 +242,7 @@ public enum AutonomousRuntime {
 					
 					//first HP pick and shoot
 					.startPickup()
-					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.END_First,
+					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.HUMAN_PLAYER_GRAB_1,
 							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
 							"Prep Human Player")
 					.prepLaunch()
@@ -251,7 +254,7 @@ public enum AutonomousRuntime {
 					.wait(.5)
 					// pick from HP and shoot
 					.startPickup()
-					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.END_First,
+					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.HUMAN_PLAYER_GRAB_1,
 							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
 							"Prep Human Player")
 					.prepLaunch()
@@ -338,7 +341,7 @@ public enum AutonomousRuntime {
 					
 					//first HP pick and shoot
 					.startPickup()
-					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.END_First,
+					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.HUMAN_PLAYER_GRAB_1,
 							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
 							"Prep Human Player")
 					.prepLaunch()

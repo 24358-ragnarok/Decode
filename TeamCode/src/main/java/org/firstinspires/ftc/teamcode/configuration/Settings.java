@@ -360,7 +360,7 @@ public class Settings {
 		public static double CLOSE_SHOOT_RPM = 2600; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 37.75; // Launch angle from horizontal for far position
-		public static double FAR_SHOOT_RPM = 3350; // Wheel RPM for far position
+		public static double FAR_SHOOT_RPM = 3320; // Wheel RPM for far position
 		public static boolean ALWAYS_SPIN_TELEOP = true;
 		
 		
@@ -526,7 +526,7 @@ public class Settings {
 				@SuppressWarnings("unused")
 				public static final Pose GRAB_2 = new Pose(30.0, 59.5, Math.toRadians(180));
 				public static final Pose END = new Pose(25, 58, Math.toRadians(180));
-				public static final Pose END_AND_EMPTY_GATE = new Pose(18.13, 61, Math.toRadians(180));
+				public static final Pose END_AND_EMPTY_GATE = new Pose(20, 63, Math.toRadians(180));
 			}
 			
 			/**
@@ -546,9 +546,9 @@ public class Settings {
 				@SuppressWarnings("unused")
 				public static final Pose PREP_END = new Pose(10, 5, Math.toRadians(-90));
 				public static final Pose END = new Pose(7.0, 21, Math.toRadians(180));
-				public static final Pose END_First = new Pose(5, 6, Math.toRadians(180));
-				public static final Pose END_First_Secure_preload = new Pose(28, 6, Math.toRadians(180));
-				public static final Pose END_First_Secure_preload1 = new Pose(26, 6, Math.toRadians(180));
+				public static final Pose HUMAN_PLAYER_GRAB_1 = new Pose(5, 10, Math.toRadians(180));
+				public static final Pose END_First_Secure_preload = new Pose(15, 10, Math.toRadians(180));
+				public static final Pose END_First_Secure_preload1 = new Pose(10, 10, Math.toRadians(180));
 			}
 		}
 		
@@ -559,7 +559,7 @@ public class Settings {
 		public static class ControlPoints {
 			// From sample areas to shooting positions
 			public static final Pose TURN_BOT = new Pose(53.4, 16.9, Math.toRadians(180));
-			public static final Pose FROM_FAR_SHOOT_TO_HP = new Pose(70.4, 5);
+			public static final Pose FROM_FAR_SHOOT_TO_HP = new Pose(70.4, 8);
 			public static final Pose FROM_FAR_SHOOT_TO_HP_UP = new Pose(70.4, 20);
 			public static final Pose PRESET_1_APPROACH_FAR = new Pose(75, 38);
 			public static final Pose PRESET_1_APPROACH_CLOSE = new Pose(67, 23);
@@ -572,7 +572,7 @@ public class Settings {
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3 = new Pose(96, 81);
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END = new Pose(65.4, 58);
-			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END_MAKE_12_WORK = new Pose(30, 61);
+			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END_MAKE_12_WORK = new Pose(65.4, 61);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3_END = new Pose(81, 81);
 			public static final Pose EMPTY_GATE_APPROACH = new Pose(42.5, 64.3);
 			public static Pose HUMAN_PLAYER = new Pose(55, 27);
@@ -588,7 +588,7 @@ public class Settings {
 		@SuppressWarnings("InnerClassTooDeeplyNested")
 		public static class Park {
 			public static final Pose FAR = new Pose(53, 21.5, Math.toRadians(135));
-			public static final Pose CLOSE = new Pose(59.6, 101.7, Math.toRadians(145));
+			public static final Pose CLOSE = new Pose(58.1, 101.7, Math.toRadians(145));
 			public static final Pose FAR_SAFE_PARK_POSE = new Pose(35.86206896551724, 12.505747126436786,
 					Math.toRadians(90));
 			public static final Pose CLOSE_SAFE_PARK_POSE = new Pose(48, 130, Math.toRadians(90));
