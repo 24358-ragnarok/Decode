@@ -31,7 +31,7 @@ import org.firstinspires.ftc.teamcode.software.game.Artifact;
  */
 @SuppressWarnings({"HardcodedFileSeparator", "ClassHasNoToStringMethod", "ClassWithoutConstructor", "unused"})
 @Photon
-@Autonomous(name = "Run: The Deepak Specials", group = ".Competition", preselectTeleOp = "Run: RAGNAROK")
+@Autonomous(name = "Run: The Goatpak Specials", group = ".Competition", preselectTeleOp = "Run: RAGNAROK")
 public class MainAuto extends OpMode {
 	
 	private final StringBuilder transferSlotsDisplayBuilder = new StringBuilder();

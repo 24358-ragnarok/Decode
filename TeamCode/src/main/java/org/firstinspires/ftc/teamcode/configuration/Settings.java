@@ -572,7 +572,7 @@ public class Settings {
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3 = new Pose(96, 81);
 			public static final Pose FROM_PRESET3_TO_FAR = new Pose(52, 37);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END = new Pose(65.4, 58);
-			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END_MAKE_12_WORK = new Pose(65.4, 58);
+			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET2_END_MAKE_12_WORK = new Pose(30, 61);
 			public static final Pose FROM_CLOSE_SHOOT_TO_PRESET3_END = new Pose(81, 81);
 			public static final Pose EMPTY_GATE_APPROACH = new Pose(42.5, 64.3);
 			public static Pose HUMAN_PLAYER = new Pose(55, 27);
