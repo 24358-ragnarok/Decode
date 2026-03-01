@@ -210,11 +210,12 @@ public enum AutonomousRuntime {
 					.moveTo(Settings.Positions.Samples.Preset3.END, "Launch Preset3")
 					
 					// Launch ball set II
-					.moveTo(Settings.Positions.Park.CLOSE, "Park")
+					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO, "Park")
 					.wait(.5)
 					.PUMPKIN()
 					
-					.endAt(Settings.Positions.Park.CLOSE)
+					.moveTo(Settings.Positions.Samples.Preset2.PREP)
+					.endAt(Settings.Positions.Samples.Preset2.PREP)
 					.build();
 		}
 	},
@@ -549,11 +550,17 @@ public enum AutonomousRuntime {
 			return new SequenceBuilder()
 					
 					.prepLaunch()
+					.startPickup()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
-					.launch()
+					.PUMPKIN()
 					
-					.moveTo(Settings.Positions.Park.FAR_SAFE_PARK_POSE, "Park")
-					.endAt(Settings.Positions.Park.FAR_SAFE_PARK_POSE)
+					.startPickup()
+					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.HUMAN_PLAYER_GRAB_1,
+							Settings.Positions.ControlPoints.FROM_FAR_SHOOT_TO_HP,
+							"Prep Human Player")
+					.moveTo(Settings.Positions.Samples.HumanPlayerPreset.END_First_Secure_preload, "Park")
+					
+					.endAt(Settings.Positions.Samples.HumanPlayerPreset.END_First_Secure_preload)
 					.build();
 		}
 		
@@ -574,6 +581,7 @@ public enum AutonomousRuntime {
 		@Override
 		public AutonomousSequence buildFarSequence() {
 			return new SequenceBuilder()
+					
 					
 					.moveTo(Settings.Positions.Park.FAR, "Park")
 					.endAt(Settings.Positions.Park.FAR)

@@ -66,7 +66,6 @@ public class Settings {
 			actionControlMap.put(Controller.Action.GOTO_GATE, Controller.Control.CIRCLE);
 			actionControlMap.put(Controller.Action.CANCEL_ASSISTED_DRIVING, Controller.Control.RIGHT_STICK_BUTTON);
 			actionControlMap.put(Controller.Action.SET_FOLLOWER, Controller.Control.PS);
-			actionControlMap.put(Controller.Action.TOGGLE_CENTRICITY, Controller.Control.LEFT_STICK_BUTTON);
 			
 			// Secondary Controller (Operator)
 			actionControlMap.put(Controller.Action.AIM, Controller.Control.LEFT_TRIGGER);
@@ -357,7 +356,7 @@ public class Settings {
 		 * These values are used when AIM is called based on which position is closer.
 		 */
 		public static double CLOSE_SHOOT_PITCH_DEGREES = 43.6; // Launch angle from horizontal for close position
-		public static double CLOSE_SHOOT_RPM = 2600; // Wheel RPM for close position
+		public static double CLOSE_SHOOT_RPM = 2580; // Wheel RPM for close position
 		
 		public static double FAR_SHOOT_PITCH_DEGREES = 37.75; // Launch angle from horizontal for far position
 		public static double FAR_SHOOT_RPM = 3320; // Wheel RPM for far position
@@ -546,8 +545,8 @@ public class Settings {
 				@SuppressWarnings("unused")
 				public static final Pose PREP_END = new Pose(10, 5, Math.toRadians(-90));
 				public static final Pose END = new Pose(7.0, 21, Math.toRadians(180));
-				public static final Pose HUMAN_PLAYER_GRAB_1 = new Pose(5, 10, Math.toRadians(180));
-				public static final Pose END_First_Secure_preload = new Pose(15, 10, Math.toRadians(180));
+				public static final Pose HUMAN_PLAYER_GRAB_1 = new Pose(5, 8.5, Math.toRadians(180));
+				public static final Pose END_First_Secure_preload = new Pose(18, 10, Math.toRadians(180));
 				public static final Pose END_First_Secure_preload1 = new Pose(10, 10, Math.toRadians(180));
 			}
 		}
