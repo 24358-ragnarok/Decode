@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.hardware.VerticalWheelTransfer;
  * The action maintains the launcher in a ready state (spinning and aimed)
  * throughout the launch sequence.
  */
-public class Pumpkin implements AutonomousAction {
+public class FastLaunchAction implements AutonomousAction {
 	private boolean hasTransfer;
 	private boolean hasLauncher;
 	private boolean hasIntake;

@@ -137,7 +137,7 @@ public enum AutonomousRuntime {
 			return new SequenceBuilder()
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
-					.PUMPKIN()
+					.fastLaunch()
 					
 					// Get ball set I
 					.startPickup()
@@ -151,7 +151,7 @@ public enum AutonomousRuntime {
 					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
 							Settings.Positions.ControlPoints.FROM_PRESET3_TO_FAR, "Launch Preset1")
 					.wait(.5)
-					.PUMPKIN()
+					.fastLaunch()
 					
 					// Get ball set II
 					.startPickup()
@@ -165,7 +165,7 @@ public enum AutonomousRuntime {
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preset2")
 					.wait(.5)
-					.PUMPKIN()
+					.fastLaunch()
 					
 					// Park
 					.moveTo(Settings.Positions.Park.FAR, "Park")
@@ -180,7 +180,7 @@ public enum AutonomousRuntime {
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO, "Launch Preload")
 					.wait(.5)
 					.startPickup()
-					.PUMPKIN()
+					.fastLaunch()
 					
 					// Get ball set I (Preset2 for close sequence)
 					.startPickup()
@@ -193,7 +193,7 @@ public enum AutonomousRuntime {
 					// Launch ball set I
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
 							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET2_END, "Launch Preset3")
-					.PUMPKIN()
+					.fastLaunch()
 					
 					.startPickup()
 					.moveCurveToVia(Settings.Positions.Samples.Preset1.END,
@@ -203,7 +203,7 @@ public enum AutonomousRuntime {
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
 							PRESET_1_APPROACH_CLOSE, "Launch Preset3")
 					.wait(.5)
-					.PUMPKIN()
+					.fastLaunch()
 					
 					// Get ball set III (Preset3 for close sequence)
 					.startPickup()
@@ -212,7 +212,7 @@ public enum AutonomousRuntime {
 					// Launch ball set II
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO, "Park")
 					.wait(.5)
-					.PUMPKIN()
+					.fastLaunch()
 					
 					.moveTo(Settings.Positions.Samples.Preset2.PREP)
 					.endAt(Settings.Positions.Samples.Preset2.PREP)
@@ -226,7 +226,7 @@ public enum AutonomousRuntime {
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Launch Preload")
 					.wait(.5)
-					.PUMPKIN()
+					.fastLaunch()
 					
 					// Get ball set I
 					.startPickup()
@@ -237,7 +237,7 @@ public enum AutonomousRuntime {
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.FAR_SHOOT,
 							Settings.Positions.ControlPoints.PRESET_1_END_TO_FAR_SHOOT, "Launch Preset1")
-					.PUMPKIN()
+					.fastLaunch()
 					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the bot")
 					.wait(.5)
 					
@@ -250,7 +250,7 @@ public enum AutonomousRuntime {
 					
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT,
 							"Prep Human Player")
-					.PUMPKIN()
+					.fastLaunch()
 					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the bot")
 					.wait(.5)
 					// pick from HP and shoot
@@ -261,7 +261,7 @@ public enum AutonomousRuntime {
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT,
 							"Prep Human Player")
-					.PUMPKIN()
+					.fastLaunch()
 					
 					
 					// again
@@ -270,7 +270,7 @@ public enum AutonomousRuntime {
 							"Prep Human Player")
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT, "Human player to far shoot")
-					.PUMPKIN()
+					.fastLaunch()
 					
 					
 					// Park
@@ -284,7 +284,7 @@ public enum AutonomousRuntime {
 			return new SequenceBuilder()
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
-					.PUMPKIN()
+					.fastLaunch()
 					
 					// Get ball set I (Preset2 for close sequence)
 					.startPickup()
@@ -296,7 +296,7 @@ public enum AutonomousRuntime {
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Launch Preset3")
 					
-					.PUMPKIN()
+					.fastLaunch()
 					
 					
 					// Loop: Get balls from eat and launch until 6 seconds left
@@ -309,7 +309,7 @@ public enum AutonomousRuntime {
 							.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 									EMPTY_GATE_APPROACH,
 									"Launch Direct Eat")
-							.PUMPKIN())
+							.fastLaunch())
 					
 					// Get ball set II (Preset3 for close sequence)
 					.startPickup()
@@ -320,7 +320,7 @@ public enum AutonomousRuntime {
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset2")
-					.PUMPKIN()
+					.fastLaunch()
 					
 					.moveTo(Settings.Positions.Park.CLOSE, "Park")
 					.endAt(Settings.Positions.Park.CLOSE)
@@ -336,7 +336,7 @@ public enum AutonomousRuntime {
 					.startPickup()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT_AUTO, "Launch Preload")
 					.wait(.5)
-					.PUMPKIN()
+					.fastLaunch()
 					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the bot")
 					.wait(.5)
 					
@@ -349,7 +349,7 @@ public enum AutonomousRuntime {
 					
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT_AUTO,
 							"Prep Human Player")
-					.PUMPKIN()
+					.fastLaunch()
 					
 					// Get ball set I
 					.startPickup()
@@ -360,7 +360,7 @@ public enum AutonomousRuntime {
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT_AUTO, "Launch Preset1")
 					.wait(.5)
-					.PUMPKIN()
+					.fastLaunch()
 					
 					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the bot")
 					.wait(.5)
@@ -372,7 +372,7 @@ public enum AutonomousRuntime {
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT_AUTO,
 							"Prep Human Player")
-					.PUMPKIN()
+					.fastLaunch()
 					.moveTo(Settings.Positions.ControlPoints.TURN_BOT, "Turns the bot")
 					.wait(.5)
 					
@@ -385,7 +385,7 @@ public enum AutonomousRuntime {
 					
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT_AUTO,
 							"Prep Human Player")
-					.PUMPKIN()
+					.fastLaunch()
 					// pick from HP and shoot
 					.startPickup()
 					.moveCurveToVia(Settings.Positions.Samples.HumanPlayerPreset.END_First_Secure_preload1,
@@ -394,7 +394,7 @@ public enum AutonomousRuntime {
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.FAR_SHOOT_AUTO,
 							"Prep Human Player")
-					.PUMPKIN()
+					.fastLaunch()
 					
 					
 					// Park
@@ -408,7 +408,7 @@ public enum AutonomousRuntime {
 			return new SequenceBuilder()
 					.prepLaunch()
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT, "Launch Preload")
-					.PUMPKIN()
+					.fastLaunch()
 					
 					// Get ball set I (Preset2 for close sequence)
 					.startPickup()
@@ -420,7 +420,7 @@ public enum AutonomousRuntime {
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Launch Preset3")
 					
-					.PUMPKIN()
+					.fastLaunch()
 					
 					
 					// Loop: Get balls from eat and launch until 6 seconds left
@@ -433,7 +433,7 @@ public enum AutonomousRuntime {
 							.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 									EMPTY_GATE_APPROACH,
 									"Launch Direct Eat")
-							.PUMPKIN())
+							.fastLaunch())
 					
 					// Get ball set II (Preset3 for close sequence)
 					.startPickup()
@@ -444,7 +444,7 @@ public enum AutonomousRuntime {
 					.prepLaunch()
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT,
 							Settings.Positions.ControlPoints.FROM_CLOSE_SHOOT_TO_PRESET3_END, "Launch Preset2")
-					.PUMPKIN()
+					.fastLaunch()
 					
 					.moveTo(Settings.Positions.Park.CLOSE, "Park")
 					.endAt(Settings.Positions.Park.CLOSE)
@@ -497,7 +497,7 @@ public enum AutonomousRuntime {
 					.moveTo(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO, "Launch Preload")
 					.wait(.5)
 					.startPickup()
-					.PUMPKIN()
+					.fastLaunch()
 					
 					// Get ball set I (Preset2 for close sequence)
 					.startPickup()
@@ -508,7 +508,7 @@ public enum AutonomousRuntime {
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
 							FROM_CLOSE_SHOOT_TO_PRESET2_END, "Launch Preset3")
 					
-					.PUMPKIN()
+					.fastLaunch()
 					
 					.startPickup()
 					.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
@@ -519,7 +519,7 @@ public enum AutonomousRuntime {
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
 							EMPTY_GATE_APPROACH,
 							"Launch Direct Eat")
-					.PUMPKIN()
+					.fastLaunch()
 					
 					.startPickup()
 					.moveCurveToVia(EMPTY_GATE, EMPTY_GATE_APPROACH,
@@ -530,7 +530,7 @@ public enum AutonomousRuntime {
 					.moveCurveToVia(Settings.Positions.TeleOp.CLOSE_SHOOT_AUTO,
 							EMPTY_GATE_APPROACH,
 							"Launch Direct Eat")
-					.PUMPKIN()
+					.fastLaunch()
 					
 					// Get ball set II (Preset3 for close sequence)
 					.startPickup()
@@ -538,7 +538,7 @@ public enum AutonomousRuntime {
 					
 					// Launch ball set II
 					.moveTo(Settings.Positions.Park.CLOSE, "Park")
-					.PUMPKIN()
+					.fastLaunch()
 					
 					.endAt(Settings.Positions.Park.CLOSE)
 					.build();

@@ -129,7 +129,6 @@ public class MainAuto extends OpMode {
 		// Update all mechanisms (sensors, motors, etc.)
 		mech.update();
 		// Update the autonomous sequence
-		// This single line replaces the entire state machine logic!
 		final AutonomousSequence sequence = autonomousSequence;
 		if (sequence != null) {
 			sequence.update(mech, realtime.getElapsedTimeSeconds());
